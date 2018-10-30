@@ -625,3 +625,33 @@ function recursiveRemoveDirectory($directory)
     }
     rmdir($directory);
 }
+
+// -- CUSTOM -- //
+
+function showError($text, $showInfo = FALSE) {
+    if($showInfo) {
+        $text = '<span class="glyphicon glyphicon-info-sign"></span> ' . $text;
+    }
+    return '<div class="alert alert-danger">' . clearfromtags($text) . '</div>';
+}
+
+function showWarning($text, $showInfo = FALSE) {
+    if($showInfo) {
+        $text = '<span class="glyphicon glyphicon-info-sign"></span> ' . $text;
+    }
+    return '<div class="alert alert-warning">' . clearfromtags($text) . '</div>';
+}
+
+function showInfo($text, $showInfo = TRUE) {
+    if($showInfo) {
+        $text = '<span class="glyphicon glyphicon-info-sign"></span> ' . $text;
+    }
+    return '<div class="alert alert-info"> ' . clearfromtags($text) . '</div>';
+}
+
+function showMessage($text, $showInfo = FALSE) {
+    if($showInfo) {
+        $text = '<span class="glyphicon glyphicon-info-sign"></span> ' . $text;
+    }
+    return '<div class="alert alert-success">' . clearfromtags($text) . '</div>';
+}

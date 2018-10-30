@@ -10,6 +10,7 @@ images/*
 install/*
 languages/*
 components/*
+node_modules/*
 !cups/*
 !cups/**/*.php
 !cups/**/*.html

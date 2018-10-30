@@ -27,6 +27,8 @@
 
 $language_array = array(
 
+    'register_team'=>'Team erstellen',
+
 /* do not edit above this line */
 
     'admin' => 'Administration',
