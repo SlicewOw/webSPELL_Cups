@@ -1,0 +1,261 @@
+/* HOME */
+.content_full_container	{ 
+    width: 100%; 
+    height: auto; 
+}
+.content_full_container_float { 
+    float: left; 
+    width: 100%; 
+    height: auto; 
+}
+.content_full_space { 
+    width: 100%; 
+    height: 20px; 
+}
+.content_full_space_float { 
+    float: left; 
+    width: 100%; 
+    height: 20px; 
+}
+.content_full_break { 
+    background: #CCC; 
+    width: 100%; 
+    height: 1px; 
+}
+.content_full_break_float { 
+    float: left; 
+    background: #CCC; 
+    width: 100%; 
+    height: 1px; 
+}
+
+@media (min-device-width: 481px) {
+	#content_home_left				{ float: left; width: 66%; height: auto; min-height: 100px; }
+	#content_home_right				{ float: left; width: 33%; height: auto; min-height: 100px; margin: 0 0 0 1%; }
+}
+@media (max-device-width: 480px) {
+	#content_home_left				{ width: 98%; height: auto; min-height: 100px; margin: 0 1%; }
+	#content_home_right				{ width: 98%; height: auto; min-height: 100px; margin: 0 1%; }
+}
+
+.content_home_right_title			{ background: #265da5; width: 100%; height: 30px; margin: 10px 0 0 0; padding: 0 0 0 4%; border: #999 1px solid; border-radius: 4px; }
+.content_home_right_container		{ background: #f3f3f3; width: 100%; height: auto; min-height: 30px; margin: 5px 0 0 0; padding: 0 2%; border-radius: 4px; }
+.content_blue_container				{ background: #265da5; width: 100%; height: auto; margin: 0 0 5px 0; padding: 0 0 0 2%; border-radius: 4px; }
+
+#cupSliderContainer > .list-group {
+    margin: 0;
+    border-radius: 0;
+}
+#cupSliderContainer > .list-group > .list-group-item:first-child {
+    border-radius: 0;
+}
+#cupSliderContainer > .list-group > .list-group-item:last-child {
+    border-radius: 0 0 0 3px;
+}
+
+#cupSliderMenu {
+    padding: 15px 30px 0 0;
+}
+
+/* FORM CONTAINER */
+.form_container						{ width: 100%; height: auto; }
+.form_input_container				{ width: 100%; height: auto; margin: 5px 0 0 0; }
+.form_input_info					{ float: left; width: 18%; height: 40px; margin: 0 2% 0 0; }
+.form_input_input					{ float: left; width: 80%; height: auto; min-height: 40px; }
+.form_input_input select			{ height: 40px; }
+.form_input_input textarea			{ width: 400px; min-width: 400px; max-width: 400px; height: auto; min-height: 40px; }
+input.input_checkbox				{ width: 30px; height: 30px; margin: 5px 0; }
+input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; margin: 0; padding: 0; border: #999 1px solid; border-radius: 4px; cursor: pointer; }
+.form_input_space					{ float: left; width: 100%; height: 20px; }
+
+/* CONTENT BUTTON */
+.content_button						{ float: left; background: #265da5; width: auto; height: 38px; margin: 0 10px 0 0; border: #999 1px solid; border-radius: 4px; }
+.content_button a					{ width: auto; height: 38px; padding: 5px 10px; display: block; } 
+
+/* CUP */
+.cup_container						{ background: #f3f3f3; width: 100%; height: auto; margin: 0 0 10px 0; padding: 1%; border-radius: 5px; }
+.cup_container ul					{ width: 95%; height: auto; margin: 0 0 0 5%; padding: 0; }
+.cup_container ul li				{ width: 100%; height: 20px; margin: 0; padding: 0; list-style-type: square; }
+.cup_container_menu					{ width: 100%; height: 40px; }
+.cup_container_menu ul				{ width: 100%; height: 40px; margin: 0; padding: 0; }
+.cup_container_menu ul li			{ float: left; background: #265da5; width: 18%; height: 40px; margin: 0 1%; padding: 0; list-style: none; border-radius: 4px; cursor: pointer; }
+.cup_container_menu ul li span		{ width: 100%; height: 40px; display: block; }
+.cup_container_left					{ float: left; width: 70%; height: auto; }
+.cup_container_left ul				{ width: 92%; height: auto; margin: 0 4%; padding: 0; }
+.cup_container_left ul li			{ width: 100%; height: 20px; margin: 0; padding: 0; list-style-type: square; }
+.cup_container_title				{ width: 100%; height: 30px; overflow: hidden; }
+.cup_container_info					{ width: 100%; height: 20px; overflow: hidden; }
+.cup_container_right				{ float: left; width: 30%; height: auto; min-height: 50px; }
+.cup_container_tab					{ width: 100%; height: auto; display: none; }
+.cup_details_rules					{ width: 100%; height: auto; }
+.cup_details_rules h1				{ width: 100%; height: auto; margin: 10px 0; }
+.cup_details_rules h2				{ width: 95%; height: auto; margin: 10px 0 0 5%; }
+.cup_details_rules h3				{ width: 90%; height: auto; margin: 10px 0 0 10%; }
+.cup_details_rules h4				{ width: 85%; height: auto; margin: 10px 0 0 15%; }
+
+/* BRACKETS */
+.cup_bracket_64						{ float: left; width: 15%; height: auto; }
+.cup_bracket_64_break				{ float: left; width: 2%; height: 100%; }
+#cup_bracket_64_line_32-16			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_64_32-16.png) repeat-y; min-height: 2850px; }
+#cup_bracket_64_line_16-8			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_64_16-8.png) repeat-y; margin: 45px 0 0 0; min-height: 2805px; }
+#cup_bracket_64_line_8-4			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_64_8-4.png) repeat-y; margin: 135px 0 0 0; min-height: 2715px; }
+#cup_bracket_64_line_4-2			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_64_4-2.png) repeat-y; margin: 315px 0 0 0; min-height: 2535px; }
+#cup_bracket_64_line_2-1			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_64_2-1.png) no-repeat; margin: 675px 0 0 0; min-height: 2175px; }
+.cup_bracket_64_break_32			{ width: 100%; height: 30px; }
+.cup_bracket_64_break_16_start		{ width: 100%; height: 45px; }
+.cup_bracket_64_break_16			{ width: 100%; height: 120px; }
+.cup_bracket_64_break_8_start		{ width: 100%; height: 135px; }
+.cup_bracket_64_break_8				{ width: 100%; height: 300px; }
+.cup_bracket_64_break_4_start		{ width: 100%; height: 315px; }
+.cup_bracket_64_break_4				{ width: 100%; height: 660px; }
+.cup_bracket_64_break_2_start		{ width: 100%; height: 675px; }
+.cup_bracket_64_break_2				{ width: 100%; height: 1380px; }
+.cup_bracket_64_break_1_start		{ width: 100%; height: 1405px; }
+.cup_bracket_match					{ background: rgba(0,0,0,0.01); width: 100%; height: 60px; border-radius: 4px; }
+.cup_bracket_64_match				{ width: 144px; height: 60px; }
+.cup_bracket_64_match a				{ width: 144px; height: 60px; display: block; }
+
+/* BRACKET 32 */
+.cup_bracket_32						{ float: left; width: 15%; height: auto; }
+.cup_bracket_32_break				{ float: left; width: 6%; }
+#cup_bracket_32_line_16-8			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_32_16-8.png) repeat-y; margin: 0; height: 100%; min-height: 1410px; }
+#cup_bracket_32_line_8-4			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_32_8-4.png) repeat-y; margin: 45px 0 0 0; height: 100%; min-height: 1320px; }
+#cup_bracket_32_line_4-2			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_32_4-2.png) repeat-y; margin: 135px 0 0 0; height: 100%; min-height: 1140px; }
+#cup_bracket_32_line_2-1			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_32_2-1.png) no-repeat; margin: 315px 0 0 0; height: 780px; }
+.cup_bracket_32_break_16			{ width: 100%; height: 30px; }
+.cup_bracket_32_break_8_start		{ width: 100%; height: 45px; }
+.cup_bracket_32_break_8				{ width: 100%; height: 120px; }
+.cup_bracket_32_break_4_start		{ width: 100%; height: 135px; }
+.cup_bracket_32_break_4				{ width: 100%; height: 300px; }
+.cup_bracket_32_break_2_start		{ width: 100%; height: 315px; }
+.cup_bracket_32_break_2				{ width: 100%; height: 660px; }
+.cup_bracket_32_break_1_start		{ width: 100%; height: 675px; }
+.cup_bracket_32_match				{ width: 144px; height: 60px; }
+.cup_bracket_32_match a				{ width: 144px; height: 60px; display: block; }
+
+/* BRACKET 16 */
+.cup_bracket_16						{ float: left; width: 22%; height: auto; }
+.cup_bracket_16_break				{ float: left; width: 38px; height: auto; }
+#cup_bracket_16_line_8-4			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_16_8-4.png) repeat-y; min-height: 690px; }
+#cup_bracket_16_line_4-2			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_16_4-2.png) repeat-y; margin: 45px 0 0 0; min-height: 600px; }
+#cup_bracket_16_line_2-1			{ background: url(https://images.myrisk-ev.de/cup/brackets/break_16_2-1.png) no-repeat; margin: 135px 0 0 0; min-height: 420px; }
+.cup_bracket_16_break_8				{ width: 100%; height: 30px; }
+.cup_bracket_16_break_4				{ width: 100%; height: 120px; }
+.cup_bracket_16_break_2				{ width: 100%; height: 300px; }
+.cup_bracket_16_break_4_start		{ width: 100%; height: 45px; }
+.cup_bracket_16_break_2_start		{ width: 100%; height: 135px; }
+.cup_bracket_16_break_1_start		{ width: 100%; height: 315px; }
+.cup_bracket_16_match				{ width: 212px; height: 60px; }
+.cup_bracket_16_match a				{ width: 212px; height: 60px; display: block; }
+
+/* BRACKET 8 */
+.cup_bracket_8						{ float: left; width: 22%; height: auto; }
+.cup_bracket_8_break				{ float: left; width: 38px; height: auto; }
+#cup_bracket_8_line_4-2				{ background: url(https://images.myrisk-ev.de/cup/brackets/break_8_4-2.png) repeat-y; min-height: 330px; }
+#cup_bracket_8_line_2-1				{ background: url(https://images.myrisk-ev.de/cup/brackets/break_8_2-1.png) no-repeat; margin: 45px 0 0 0; min-height: 285px; }
+.cup_bracket_8_break_4				{ width: 100%; height: 30px; }
+.cup_bracket_8_break_2				{ width: 100%; height: 120px; }
+.cup_bracket_8_break_2_start		{ width: 100%; height: 45px; }
+.cup_bracket_8_break_1_start		{ width: 100%; height: 135px; }
+.cup_bracket_8_match				{ width: 212px; height: 60px; }
+.cup_bracket_8_match a				{ width: 212px; height: 60px; display: block; }
+
+/* BRACKET MATCH */
+.cup_bracket_match:hover			{ background: rgba(38,93,165,0.1); }
+span.cup_bracket_match_team_home	{ position: absolute; width: 100px; height: 20px; margin: 0 0 0 10px; overflow: hidden; display: block; }
+span.cup_bracket_match_score_home	{ position: absolute; width: 34px; height: 20px; margin: 0 0 0 110px; display: block; }
+span.cup_bracket_match_team_vs		{ position: absolute; width: 100px; height: 20px; margin: 20px 0 0 10px; display: block; }
+span.cup_bracket_match_team_id		{ position: absolute; width: 54px; height: 20px; margin: 20px 0 0 90px; display: block; }
+span.cup_bracket_match_team_oppo	{ position: absolute; width: 100px; height: 20px; margin: 40px 0 0 10px; overflow: hidden; display: block; }
+span.cup_bracket_match_score_oppo	{ position: absolute; width: 34px; height: 20px; margin: 40px 0 0 110px; display: block; }
+
+/* MATCHES */
+.cup_match_container				{ float: left; background: #f3f3f3; width: 100%; height: auto; margin: 0 0 10px 0; padding: 1%; border-radius: 5px; }
+.cup_match_left						{ float: left; width: 60%; height: auto; padding: 1%; border-radius: 5px; }
+.cup_match_container_left			{ float: left; width: 40%; height: 180px; }
+.cup_match_container_center			{ float: left; width: 20%; height: 40px; margin: 70px 0; }
+.cup_match_container_right			{ float: left; width: 40%; height: 180px; }
+.cup_match_right					{ float: left; width: 39%; height: auto; margin: 0 0 0 1%; border-radius: 5px; }
+
+/* TEAMS */
+.teams_spacer						{ width: 100%; height: 20px; }
+.team_container						{ float: left; background: #CCC; width: 200px; height: 220px; margin: 10px 25px 10px 20px; border-radius: 3px; }
+.team_container a					{ width: 200px; height: 220px; display: block; }
+img.teams_list_logo					{ position: absolute; width: 180px; height: 180px; margin: 10px 0 0 10px; }
+span.teams_list_name				{ position: absolute; width: 200px; height: 30px; margin: 190px 0 0 0; }
+.teams_panel_container				{ background: #f3f3f3; width: 100%; height: 90px; padding: 5px 0; border-radius: 5px; }
+.teams_panel_name					{ float: left; width: 66%; height: 40px; margin: 0 0 0 2%; } 
+.teams_panel_admin					{ float: left; width: 30%; height: 40px; margin: 0 2% 0 0; } 
+.teams_panel_join_txt				{ float: left; width: 8%; height: 40px; margin: 0 2% 0 0; } 
+.teams_panel_join					{ float: left; width: 90%; height: 40px; } 
+.teams_panel_join input				{ width: 95%; height: 30px; margin: 5px 5% 0 0; padding: 0; } 
+.teams_details_head					{ background: #f3f3f3; width: 100%; height: 60px; padding: 5px 2%; border-radius: 5px; }
+.teams_details_head_title			{ width: 100%; height: 30px; }
+.teams_details_head_info			{ width: 100%; height: 20px; }
+.teams_details_container			{ width: 100%; height: auto; }
+.teams_details_left					{ float: left; background: #f3f3f3; width: 28%; height: auto; margin: 0 2% 0 0; padding: 5px 0; border-radius: 5px; }
+.teams_details_logo					{ width: 180px; height: 180px; margin: 0 auto; }
+.teams_details_logo img				{ width: 180px; height: 180px; }
+.teams_details_right				{ float: left; background: #f3f3f3; width: 70%; height: auto; padding: 5px 0; border-radius: 5px; }
+.teams_details_member				{ width: 90%; height: 30px; margin: 0 5%; }
+.teams_details_member_info			{ float: left; width: 60%; height: 30px; }
+.teams_details_member_admin			{ float: left; width: 40%; height: 30px; }
+
+/* PROFILE */
+.profile_container					{ width: 100%; height: auto; }
+.profile_title						{ width: 100%; height: 40px; margin: 0 0 10px 0; }
+.profile_container ul				{ float: left; width: 33%; height: auto; margin: 0; padding: 0; }
+.profile_container ul li			{ width: 99%; margin: 0 1% 10px 0; padding: 0 0 0 2%; list-style: none; }
+li.profile_list_title				{ background: #265da5; height: 30px; border: #999 1px solid; border-radius: 4px; }
+li.profile_list_menu				{ background: #f3f3f3; height: 30px; border-radius: 4px; }
+.profile_container_left				{ float: left; width: 49%; height: auto; margin: 0 1% 0 0; }
+.profile_container_right			{ float: left; width: 49%; height: auto; margin: 0 0 0 1%; }
+.profile_container_title			{ background: #265da5; width: 100%; height: 40px; margin: 0 0 10px 0; padding: 0 3%; border: #999 1px solid; border-radius: 4px; }
+.profile_info_container				{ background: #f3f3f3; width: 100%; height: 40px; margin: 0 0 10px 0; border-radius: 3px; }
+.profile_info_container_game		{ float: left; width: 50%; height: 40px; margin: 0 0 0 2%; }
+.profile_info_container_value		{ float: left; width: 47%; height: 40px; margin: 0 0 0 1%; }
+
+/* NEWS */
+.news_container_small				{ background: #f3f3f3; width: 100%; height: auto; margin: 10px 0; padding: 10px 0; border-radius: 4px; }
+.news_title_small					{ width: 94%; height: auto; min-height: 40px; margin: 0 3%; }
+.news_content_small					{ width: 94%; height: 180px; margin: 0 3% 10px 3%; overflow: hidden; }
+.news_content_small p				{ float: left; }
+@media (min-device-width: 481px) {
+	.news_info_small				{ width: 94%; height: 30px; margin: 0 3%; }
+	.news_info_poster_small			{ float: left; width: 50%; height: 30px; }
+	.news_info_social_small			{ float: left; width: 30%; height: 30px; }
+	.news_info_more_small			{ float: left; width: 20%; height: 30px; }
+}
+@media (max-device-width: 480px) {
+	.news_info_small				{ width: 94%; height: auto; min-height: 90px; margin: 0 3%; }
+	.news_info_poster_small			{ width: 100%; height: auto; min-height: 30px; }
+	.news_info_social_small			{ width: 100%; height: auto; min-height: 30px; }
+	.news_info_more_small			{ width: 100%; height: 30px; }
+}
+.news_info_more_small a				{ background: #265da5; width: 100%; height: 28px; margin: 0; padding: 0; border: #999 1px solid; border-radius: 4px; display: block; }
+
+/* Support Tickets */
+.ticket_list						{ background: #f3f3f3; width: 100%; height: auto; padding: 2%; border-radius: 5px; }
+.ticket_list ul						{ width: 100%; height: auto; margin: 0; padding: 0; }
+.ticket_list ul	li					{ float: left; background: #265da5; width: 32%; height: 40px; margin: 0 1% 0 0; padding: 0; border: #999 1px solid; border-radius: 4px; list-style: none; cursor: pointer; }
+.ticket_list_left					{ float: left; width: 70%; height: auto; }
+.ticket_list_title					{ width: 100%; height: 20px; }
+.ticket_list_info					{ width: 100%; height: 16px; }
+.ticket_list_right					{ float: left; width: 30%; height: auto; }
+.ticket_list_text					{ float: left; width: 100%; height: auto; margin: 10px 0 0 0; }
+.ticket_space						{ width: 100%; height: 10px; }
+.ticket_list_archive				{ background: #f3f3f3; width: 98%; height: 16px; margin: 0 0 5px 0; padding: 1%; border-radius: 5px; }
+.ticket_list_left_archive			{ float: left; width: 70%; height: 16px; overflow: hidden; }
+.ticket_list_right_archive			{ float: left; width: 30%; height: 16px; }
+
+select.ticket_form_invisble			{ display: none; }
+select.ticket_form_visble			{ margin: 0 0 20px 0; }
+
+/* ADMIN */
+ul.cup_admin_menu					{ width: 90%; height: auto; margin: 0 10% 0 0; padding: 0; }
+li.cup_admin_menu_list				{ width: 100%; height: auto; margin: 0 0 5px 0; padding: 0; list-style: none; }
+li.cup_admin_menu_list span			{ width: 100%; height: 30px; margin: 0; padding: 0; }
+li.cup_admin_menu_list span a		{ background: #265da5; width: 100%; height: 30px; margin: 0 0 5px 0; padding: 0 0 0 5%; border-radius: 4px; display: block; }
+ul.cup_admin_submenu				{ width: 100%; height: auto; margin: 0; padding: 0; }
+li.cup_admin_submenu_list			{ background: #eeeeee; width: 100%; height: 30px; margin: 0 0 5px 0; padding: 0; border-radius: 4px; list-style: none; }
+li.cup_admin_submenu_list a			{ width: 95%; height: 30px; padding: 0 0 0 5%; display: block; }
