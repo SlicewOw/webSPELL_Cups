@@ -10,6 +10,9 @@ images/*
 install/*
 languages/*
 components/*
+!cups/*
+!cups/**/*.php
+!cups/**/*.html
 
 # webSPELL #
 ############

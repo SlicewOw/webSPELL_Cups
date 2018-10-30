@@ -5,5 +5,6 @@ Feel free to use this add-on for webSPELL 4.3, but be aware that we (myRisk e.V)
 
 # Installation
 {WiP}
+* Steam API Key: open /src/func/cup.php and set Steam API key (search for "$steam_api_key")
 
 
