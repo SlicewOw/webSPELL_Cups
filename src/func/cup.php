@@ -1,6 +1,33 @@
 <?php
 
 /* Adminzugang */
+
+function iscupadmin($user_id) {
+
+    if (!validate_int($user_id)) {
+        return FALSE;
+    }
+
+    global $_database;
+
+    $selectQuery = mysqli_query(
+        $_database,
+        "SELECT
+                `userID`
+            FROM `" . PREFIX . "user_groups`
+            WHERE (`cup` = 1 OR `super` = 1) AND `userID` = " . $user_id
+    );
+
+    if (!$selectQuery) {
+        return FALSE;
+    }
+
+    $ergebnis = mysqli_num_rows($selectQuery);
+
+    return ($ergebnis == 1) ? TRUE : FALSE;
+
+}
+
 function isinteam($userID, $teamID, $admin) {
 
     global $_database;
