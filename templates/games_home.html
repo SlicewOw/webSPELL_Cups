@@ -1,0 +1,190 @@
+<div class="pull-right">
+    <button type="button" class="btn btn-info btn-sm white darkshadow" 
+            data-toggle="modal" 
+            data-target="#add_game">
+        %new_game%
+    </button>
+</div>
+<div class="clear"></div>
+<br />
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+        <a href="#active_games" aria-controls="active_games" 
+           role="tab" 
+           data-toggle="tab">
+            %active_games%
+        </a>
+    </li>
+    <li role="presentation">
+        <a href="#inactive_games" aria-controls="inactive_games" 
+           role="tab" 
+           data-toggle="tab">
+            %inactive_games%
+        </a>
+    </li>
+</ul>
+<br />
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="active_games">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">%games%</h1>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <th>#</th>
+                    <th>%icons%</th>
+                    <th>%game_name%</th>
+                    <th>%game_short%</th>
+                    <th>%game_tag%</th>
+                    <th>%actions%</th>
+                </thead>
+                <tbody>
+                    $active_games
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="inactive_games">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">%games%</h1>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <th>#</th>
+                    <th>%icons%</th>
+                    <th>%game_name%</th>
+                    <th>%game_short%</th>
+                    <th>%game_tag%</th>
+                    <th>%actions%</th>
+                </thead>
+                <tbody>
+                    $inactive_games
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add_game"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="modalTitle">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalTitle">%new_game%</h4>
+            </div>
+            <div class="modal-body">
+                $add_game
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function setActiveMode(game_id) {
+    'use strict';
+
+    var div_id = "#activeMode_" + game_id;
+
+    $(div_id).attr('disabled', 'disabled');
+
+    $.get(
+        "ajax.php?site=admin_games",
+        {
+            action : 'setActiveMode',
+            game_id : game_id
+        },
+        function (data, status) {
+
+            if (status === "success") {
+
+                var varData = JSON.parse(data);
+                if (varData.status) {
+
+                    if (varData.value === 1) {
+                        $(div_id).attr('class', 'btn btn-success btn-xs');
+                        $(div_id).html('%active%');
+                    } else {
+                        $(div_id).attr('class', 'btn btn-danger btn-xs');
+                        $(div_id).html('%inactive%');
+                    }
+
+                }
+
+                $(div_id).removeAttr('disabled');
+
+            }
+
+        }
+    );
+
+}
+
+function editGame(game_id) {
+    'use strict';
+
+    $.get(
+        "ajax.php?site=admin_games",
+        {
+            action : 'getDetails',
+            game_id : game_id
+        },
+        function (data, status) {
+
+            if (status === "success") {
+
+                var varData = JSON.parse(data);
+                if (varData.status) {
+
+                    $("#modalTitle").html('%edit_game%');
+
+                    $("input[name=name]").val(varData.data.name);
+                    $("input[name=short]").val(varData.data.short);
+                    $("input[name=tag]").val(varData.data.tag);
+
+                    $("#game_icon").html(varData.data.icon);
+
+                    $("input[name=game_id]").val(varData.data.gameID);
+
+                    $("#submitButton").attr('name', 'saveedit');
+
+                    $('#add_game').modal('show');
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+$(document).ready(function() {
+
+    $('#add_game').on('hidden.bs.modal', function (e) {
+
+        $("#modalTitle").html('%add_game%');
+
+        $("input[name=name]").val('');
+        $("input[name=short]").val('');
+        $("input[name=tag]").val('');
+
+        $("#game_icon").html('');
+        $("#game_image").html('');
+
+        $("#slider_tab").html('');
+        $("#slider_bg").html('');
+
+        $("input[name=game_id]").val('0');
+
+        $("#submitButton").attr('name', 'save');
+
+    })
+
+});
+
+</script>

@@ -1,0 +1,24 @@
+<tr>
+    <td>$gameID</td>
+    <td>$pic</td>
+    <td>$name</td>
+    <td>$short</td>
+    <td>$tag</td>
+    <td>
+        <button type="button" id="activeMode_$gameID"
+                class="$active_class"
+                onclick="setActiveMode($gameID);">
+            $active_txt
+        </button>
+        <button type="button"
+                class="btn btn-default btn-xs"
+                onclick="editGame($gameID);">
+            %edit%
+        </button>
+        <button type="button"
+                class="btn btn-default btn-xs"
+                onclick="MM_confirm('%really_delete%', '$delete_url')">
+            %delete%
+        </button>
+    </td>
+</tr>

@@ -655,3 +655,15 @@ function showMessage($text, $showInfo = FALSE) {
     }
     return '<div class="alert alert-success">' . clearfromtags($text) . '</div>';
 }
+
+function getoutput($text) {
+    $text = htmlnl($text);
+    $text = nl2br($text);
+    $text = htmlspecialchars_decode($text, ENT_QUOTES);
+    $text = str_replace(
+        array('&lt;', '&gt;'),
+        array('<', '>'),
+        $text
+    );
+    return $text;
+}

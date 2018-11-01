@@ -193,6 +193,54 @@ function getAge($user_id) {
 
 }
 
+function getGame($game_id, $cat = '') {
+
+    global $_database, $image_url, $dir_global;
+
+    if (validate_int($game_id)) {
+        $whereClause = '`gameID` = ' . $game_id;
+    } else {
+        $whereClause = '`tag` = \'' . getinput($game_id) . '\'';
+    }
+
+    $get = mysqli_fetch_array(
+        mysqli_query(
+            $_database,
+            "SELECT
+                    COUNT(gameID) AS `exist`,
+                    a.*
+                FROM `" . PREFIX . "games` a
+                WHERE " . $whereClause
+        )
+    );
+
+    if ($get['exist'] != 1) {
+        return (empty($cat)) ? array() : '';
+    }
+
+    if (file_exists($dir_global . 'images/games/' . $get['tag'] . '.gif')) {
+        $icon = $image_url . '/games/' . $get['tag'] . '.gif';
+    } else {
+        $icon = '';
+    }
+
+    $returnArray = array(
+        "id" => $get['gameID'],
+        "name" => $get['name'],
+        "tag" => $get['tag'],
+        "short" => $get['short'],
+        "icon" => $icon,
+        "pic" => $get['pic']
+    );
+
+    if (empty($cat) || ($cat == 'all')) {
+        return $returnArray;
+    } else {
+        return $returnArray[$cat];
+    }
+
+}
+
 /* Adminzugang */
 
 function iscupadmin($user_id) {
