@@ -72,6 +72,18 @@ input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; m
 .content_button						{ float: left; background: #265da5; width: auto; height: 38px; margin: 0 10px 0 0; border: #999 1px solid; border-radius: 4px; }
 .content_button a					{ width: auto; height: 38px; padding: 5px 10px; display: block; } 
 
+/**
+ * Navigation
+ **/
+.cup-main-navigation {
+    margin: 0;
+    padding: 10px 0;
+    border-radius: 0px;
+}
+.cup-main-navigation > div > div > ul > li {
+    font-size: 12px;
+}
+
 /* CUP */
 .cup_container						{ background: #f3f3f3; width: 100%; height: auto; margin: 0 0 10px 0; padding: 1%; border-radius: 5px; }
 .cup_container ul					{ width: 95%; height: auto; margin: 0 0 0 5%; padding: 0; }

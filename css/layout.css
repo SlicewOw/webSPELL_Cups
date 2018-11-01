@@ -45,12 +45,12 @@ body {
     height: 3px;
 }
 .linie_2 {
-    background: #81a0c8;
+    background: #556B2F;
     width: 100%;
     height: 3px;
 }
 .linie_3 {
-    background: #191919;
+    background: #556B2F;
     width: 100%;
     height: 1px;
 }
@@ -143,7 +143,7 @@ body {
 
     /* FOOTER */
     #footer_navigation_body {
-        background: #5176a6;
+        background: #BCEE68;
         width: 100%;
         height: 120px;
     }
@@ -168,7 +168,7 @@ body {
 
     /* COPYRIGHT */
     #copyright {
-        background: #265da5;
+        background: #2E8B57;
         width: 100%;
         height: auto;
         min-height: 40px;
@@ -248,7 +248,7 @@ body {
 
     /* FOOTER */
     #footer_navigation {
-        background: #5176a6;
+        background: #1E90FF;
         width: 100%;
         height: auto;
         min-height: 120px;
@@ -269,7 +269,7 @@ body {
 
     /* COPYRIGHT */
     #copyright {
-        background: #265da5;
+        background: #87CEFA;
         width: 100%;
         height: auto;
         min-height: 40px;

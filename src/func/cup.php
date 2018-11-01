@@ -1,5 +1,198 @@
 <?php
 
+/**
+ * General
+ **/
+
+function getParentIdByValue($value_name, $isIntegerParentId = TRUE) {
+
+    global $_language;
+
+    $_language->readModule('cups', true);
+
+    if (!isset($_GET[$value_name])) {
+        return -1;
+    }
+
+    if ($isIntegerParentId) {
+
+        if (!validate_int($_GET[$value_name], true)) {
+            throw new \Exception($_language->module['unknown_unique_id_type']);
+        }
+
+    }
+
+    return (int)$_GET[$value_name];
+
+}
+
+function checkIfContentExists($primary_id, $primary_name, $table) {
+
+    try {
+
+        if (!isset($primary_id)) {
+            return FALSE;
+        }
+
+        if (!validate_int($primary_id, true)) {
+
+            if ($primary_id == 0) {
+                return FALSE;
+            }
+
+            throw new \Exception('unknown_parameter_primary_id');
+
+        }
+
+        if (!isset($primary_name) || empty($primary_name)) {
+            throw new \Exception('unknown_parameter_primary_name');
+        }
+
+        if (!isset($table) || empty($table)) {
+            throw new \Exception('unknown_parameter_table');
+        }
+
+        global $_database;
+
+        $whereClauseArray = array();
+        $whereClauseArray[] = '`' . $primary_name . '` = ' . $primary_id;
+
+        $whereClause = implode(' AND ', $whereClauseArray);
+
+        $query = mysqli_query(
+            $_database,
+            "SELECT
+                    COUNT(*) AS `exist`
+                FROM `" . PREFIX . $table . "`
+                WHERE " . $whereClause
+        );
+
+        if (!$query) {
+            throw new \Exception('query_failed (table=' . $table . ', ' . $whereClause . ')');
+        }
+
+        $checkIf = mysqli_fetch_array($query);
+
+        if (!$checkIf['exist']) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+
+    } catch (Exception $e) {
+        return FALSE;
+    }
+
+}
+
+function updateUserVisitorStatistic($user_id) {
+
+    if (!validate_int($user_id, true)) {
+        return;
+    }
+
+    global $userID, $_database;
+
+    if (($userID == $user_id) || ($userID < 1)) {
+        return;
+    }
+
+    $updateQuery = mysqli_query(
+        $_database,
+        "UPDATE `" . PREFIX . "user`
+            SET visits = visits + 1
+            WHERE userID = " . $user_id
+    );
+
+    $whereClauseArray = array();
+    $whereClauseArray[] = '`userID` = ' . $user_id;
+    $whereClauseArray[] = '`visitor` = ' . $userID;
+
+    $whereClause = implode(' AND ', $whereClauseArray);
+
+    $selectQuery = mysqli_query(
+        $_database,
+        "SELECT 
+                `visitID` 
+            FROM `" . PREFIX . "user_visitors`
+            WHERE " . $whereClause
+    );
+
+    if (!$selectQuery) {
+        return;
+    } else {
+
+        $rowExists = mysqli_num_rows($selectQuery);
+
+        $date = time();
+
+        if ($rowExists == 1) {
+
+            $updateQuery = mysqli_query(
+                $_database,
+                "UPDATE `" . PREFIX . "user_visitors` 
+                    SET date = " . $date . "
+                    WHERE " . $whereClause
+            );
+
+        } else {
+
+            $insertQuery = mysqli_query(
+                $_database,
+                "INSERT INTO `" . PREFIX . "user_visitors` 
+                    (
+                        userID, 
+                        visitor, 
+                        date
+                    )
+                    VALUES 
+                    (
+                        " . $user_id . ", 
+                        " . $userID . ", 
+                        " . $date . "
+                    )"
+            );
+
+        }
+
+    }
+
+}
+
+function getAge($user_id) {
+
+    if (!validate_int($user_id, true)) {
+        return 0;
+    }
+
+    global $_database;
+
+    $get = mysqli_fetch_array(
+        mysqli_query(
+            $_database,
+            "SELECT
+                    `birthday`,
+                    DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(birthday)), '%Y') 'age'
+                FROM `" . PREFIX . "user`
+                WHERE userID = " . (int)$user_id
+        )
+    );
+
+    $age = (int) $get['age'];
+
+    $birthday = strtotime($get['birthday']);
+    if (date('Y', $birthday) == 2000) {
+
+        if ((date('d', $birthday) == date('d')) && (date('m', $birthday) == date('m'))) {
+            $age++;
+        }
+
+    }
+
+    return (int) $age;
+
+}
+
 /* Adminzugang */
 
 function iscupadmin($user_id) {
