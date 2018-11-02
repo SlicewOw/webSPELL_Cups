@@ -14,7 +14,7 @@ $getAction = (isset($_GET['action'])) ?
 
 $dir_cup = __DIR__ . '/cup/php/';
 
-$image_url = '';
+$image_url = __DIR__ . '/images/';
 $admin_url = 'admin/admincenter.php';
 
 global $loggedin;

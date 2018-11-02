@@ -267,6 +267,185 @@ function getuserlist($selected = '') {
     return $users;
 }
 
+function getPlayerPosition($position, $cat = '', $game_id = NULL, $addPublicOption = FALSE, $idAsAttribute = FALSE) {
+
+    /*
+     * $game_id : NULL, wenn Game nicht beruecksichtigt werden soll
+     *				  	>=0, wenn Game einbezogen werden soll
+     */
+
+    global $_database;
+
+    if (empty($cat) || ($cat == 'name') || ($cat == 'tag')) {
+
+        $whereClauseArray = array();
+
+        $whereClauseArray[] = (validate_int($position, true)) ? 
+            'positionID = ' . (int)$position : 'tag = \'' . $position . '\'';
+
+        if (validate_int($game_id, true)) {
+            $whereClauseArray[] = 'game_id = ' . $game_id;
+        } else if (!validate_int($position, true)) {
+            $whereClauseArray[] = 'game_id IS NULL';
+        }
+
+        $whereClause = implode(' AND ', $whereClauseArray);
+
+        $selectQuery = mysqli_query(
+            $_database, 
+            "SELECT 
+                    `name`, 
+                    `tag`, 
+                    `game_id` 
+                FROM `" . PREFIX . "user_position_static` 
+                WHERE " . $whereClause
+        );
+
+        if (!$selectQuery) {
+            return '';
+        }
+
+        $ds = mysqli_fetch_array($selectQuery);
+
+        if ($cat == 'tag') {
+            return $ds['tag'];
+        }
+
+        $returnValue = $ds['name'];
+
+        if (validate_int($ds['game_id'], true)) {
+            $returnValue .= ' ' . getGame($ds['game_id'], 'short');
+        }
+
+        return $returnValue;
+
+    } else if ($cat == 'list') {
+
+        $returnValue = '';
+
+        if ($addPublicOption) {
+            $returnValue .= '<option value="0">Public</option>';
+        }
+
+        $whereClauseArray = array();
+        if (is_null($game_id)) {
+            $whereClauseArray[] = 'game_id IS NULL';
+        }
+
+        $whereClause = (validate_array($whereClauseArray, true)) ?
+            'WHERE ' . implode(' AND ', $whereClauseArray) : '';
+
+        $query = mysqli_query(
+            $_database, 
+            "SELECT 
+                    `positionID`,
+                    `tag`, 
+                    `name`, 
+                    `game_id` 
+                FROM `" . PREFIX . "user_position_static` 
+                " . $whereClause . "
+                ORDER BY `sort` ASC"
+        );
+
+        if (!$query) {
+            return '<option value="0">Query failed.</option>';
+        }
+
+        while ($ds = mysqli_fetch_array($query)) {
+
+            $option = $ds['name'];
+            if(!is_null($ds['game_id']) && ($ds['game_id'] > 0)) {
+                $option .= ' (' . getGame($ds['game_id'], 'short') . ')';
+            }
+
+            $optionValue = ($idAsAttribute) ?
+                $ds['positionID'] : $ds['tag'];
+
+            $returnValue .= '<option value="' . $optionValue . '">' . $option . '</option>';
+
+        }
+
+        $returnValue = selectOptionByValue($returnValue, $position);
+
+        return $returnValue;
+
+    } else if ($cat == 'id') {
+
+        if (empty($position) || (strlen($position) != 2)) {
+            return 0;
+        }
+
+        if (validate_int($game_id, true)) {
+            $whereClause = ' AND game_id = ' . $game_id;
+        } else {
+            $whereClause = ' AND game_id IS NULL';
+        }
+
+        $ds = mysqli_fetch_array(
+            mysqli_query(
+                $_database, 
+                "SELECT positionID FROM `".PREFIX."user_position_static` 
+                    WHERE tag = '" . $position . "'" . $whereClause
+            )
+        );
+
+        $returnValue = $ds['positionID'];
+        return $returnValue;
+
+    } else if ($cat == 'array') {
+
+        $basicArray = array(
+            'id' => 0,
+            'name' => '',
+            'tag' => '',
+            'game_id' => 0,
+            'sort' => 0
+        );
+
+        $whereClauseArray = array();
+
+        if (validate_int($position, true)) {
+            $whereClauseArray[] = '`positionID` = ' . $position;
+        } else if (strlen($position) == 2) {
+            $whereClauseArray[] = '`tag` = \'' . $position . '\'';
+        } else {
+            throw new \Exception('unknown_parameter_position');
+        }
+
+        if (validate_int($game_id, true)) {
+            $whereClauseArray[] = '`game_id` = ' . $game_id;
+        } else {
+            $whereClauseArray[] = '`game_id` IS NULL';
+        }
+
+        $whereClause = implode(' AND ', $whereClauseArray);
+
+        $selectQuery = mysqli_query(
+            $_database, 
+            "SELECT * FROM `" . PREFIX . "user_position_static` 
+                WHERE " . $whereClause
+        );
+
+        if (!$selectQuery) {
+            return $basicArray;
+        }
+
+        $ds = mysqli_fetch_array($selectQuery);
+
+        $basicArray['id'] = $ds['positionID'];
+        $basicArray['name'] = $ds['name'];
+        $basicArray['tag'] = $ds['tag'];
+        $basicArray['game_id'] = $ds['game_id'];
+        $basicArray['sort'] = $ds['sort'];
+
+        return $basicArray;
+
+    } else {
+        return FALSE;
+    }
+
+}
+
 /* Adminzugang */
 
 function iscupadmin($user_id) {

@@ -1,5 +1,10 @@
 <?php
 
+$errorNotifyPath = __DIR__ . '/error_notify.php';
+if (file_exists($errorNotifyPath)) {
+    include($errorNotifyPath);
+}
+
 $invalide = array('\\', '/', '/\/', ':', '.');
 $getSite = str_replace($invalide, ' ', $getSite);
 

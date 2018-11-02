@@ -128,7 +128,7 @@ $getAction = (isset($_GET['action'])) ?
 
 $dir_cup = __DIR__ . '/../cup/php/';
 
-$image_url = '';
+$image_url = '../images/';
 $admin_url = 'admin/admincenter.php';
 
 ?>
@@ -169,11 +169,19 @@ $admin_url = 'admin/admincenter.php';
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <link href="../css/flipclock.css" rel="stylesheet">
+    <link href="../css/pnotify.custom.min.css" rel="stylesheet">
+    <link href="../css/cup.css" rel="stylesheet">
     <link href="../css/font.css" rel="stylesheet">
     <link href="../css/layout.css" rel="stylesheet">
     <link href="../css/pages.css" rel="stylesheet">
 
-    <script src="../js/google_graphs.js"></script>
+    <?php
+    foreach ($components['js'] as $component) {
+        echo '<script src="../' . $component . '"></script>';
+    }
+    ?>
+    <script src="../js/ckeditor.js"></script>
 
   </head>
 
@@ -195,7 +203,7 @@ $admin_url = 'admin/admincenter.php';
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
-                
+
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -210,7 +218,7 @@ $admin_url = 'admin/admincenter.php';
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
-               
+
                 <!-- /.dropdown -->
 
                 <!-- /.dropdown -->
@@ -219,7 +227,7 @@ $admin_url = 'admin/admincenter.php';
                         <i class="fa fa-times"></i> Logout <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        
+
                         <li><a href="../index.php"><i class="fa fa-undo"></i> Back to Website</a>
                         </li>
                         <li class="divider"></li>
@@ -228,7 +236,7 @@ $admin_url = 'admin/admincenter.php';
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
-               
+
                 <!-- /.dropdown -->
 
             </ul>
@@ -239,26 +247,24 @@ $admin_url = 'admin/admincenter.php';
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
 
-        
- 
                     <ul class="nav" id="side-menu">
                         <li class="sidebar-search">
                             <div class="input-group custom-search-form">
-                                
-                                
+
+
                                 <div class="profile_pic">
                 <?php echo $l_avatar ?>
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
                 <h2><?php echo $username ?></h2>
-        
+
               </div>
-                           
+
                             </div>
                             <!-- /input-group -->
                         </li>
-                        
+
                         <li>
                             <a href="#"><i class="fa fa-area-chart"></i> <?php echo $_language->module['main_panel']; ?><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -266,11 +272,11 @@ $admin_url = 'admin/admincenter.php';
                                     <li><a href="admincenter.php?site=page_statistic"><?php echo $_language->module['page_statistics']; ?></a></li>
                                     <li><a href="admincenter.php?site=visitor_statistic"><?php echo $_language->module['visitor_statistics']; ?></a></li>
                                        <?php echo admincenternav(1); ?>
-                                                                        
+
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        
+
                         <?php if (iscupadmin($userID)) { ?>
                         <li>
                             <a href="#"><i class="fa fa-trophy"></i> <?php echo $_language->module['cup_administration']; ?><span class="fa arrow"></span></a>
@@ -286,6 +292,7 @@ $admin_url = 'admin/admincenter.php';
                                 <li><a href="admincenter.php?site=cup&amp;mod=support"><?php echo $_language->module['support']; ?></a></li>
                                 <li><a href="admincenter.php?site=cup&amp;mod=admin_team"><?php echo $_language->module['admins']; ?></a></li>
                                 <li><a href="admincenter.php?site=cup&amp;mod=awards"><?php echo $_language->module['awards']; ?></a></li>
+                                <li><a href="admincenter.php?site=member_positions"><?php echo $_language->module['member_positions']; ?></a></li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -304,8 +311,8 @@ $admin_url = 'admin/admincenter.php';
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        
-        
+
+
                         <?php } if (ispageadmin($userID)) { ?>
                         <li>
                             <a href="#"><i class="fa fa-warning"></i> <?php echo $_language->module['spam']; ?><span class="fa arrow"></span></a>
@@ -318,7 +325,7 @@ $admin_url = 'admin/admincenter.php';
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                       
+
                         <?php }if(isnewsadmin($userID) || isfileadmin($userID) || ispageadmin($userID)) { ?>
                         <li>
                             <a href="#"><i class="fa fa-indent"></i> <?php echo $_language->module['rubrics']; ?><span class="fa arrow"></span></a>
@@ -335,9 +342,9 @@ $admin_url = 'admin/admincenter.php';
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                       
 
-                        <?php } if(ispageadmin($userID)) { ?>   
+
+                        <?php } if(ispageadmin($userID)) { ?>
                         <li>
                             <a href="#"><i class="fa fa-pencil-square"></i> <?php echo $_language->module['settings']; ?><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -351,7 +358,7 @@ $admin_url = 'admin/admincenter.php';
                                 <li><a href="admincenter.php?site=database"><?php echo $_language->module['database']; ?></a></li>
                                 <li><a href="admincenter.php?site=update&amp;action=update"><?php echo $_language->module['update_webspell']; ?></a></li>
                                 <li><a href="admincenter.php?site=email"><?php echo $_language->module['email']; ?></a></li>
-                            
+
                         <?php echo admincenternav(5); ?>
                         </ul>
                             <!-- /.nav-second-level -->
@@ -389,7 +396,7 @@ $admin_url = 'admin/admincenter.php';
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
- 
+
                         <?php
                         } if (isgalleryadmin($userID)) {
                         ?>
@@ -410,24 +417,24 @@ $admin_url = 'admin/admincenter.php';
                             <a href="#"><i class="fa fa-arrow-right"></i> <?php echo $_language->module['plugin_base']; ?><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                             <li><a href="admincenter.php?site=plugin-manager"><?php echo $_language->module['plugin_manages']; ?></a></li>
-                            
+
                                 <?php echo admincenternav(9); ?>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
 
-                                
+
                         <?php echo addonnav(); ?>
                         </li>
                         <?php
                         } ?>
-                       
+
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
         <!-- Copy -->
         <div class="copy">
-        <em>&nbsp;&copy; 2016 webspell-nor.de&nbsp;Admin Template by <a href="http://designperformance.de/" target="_blank">T-Seven</a></em>
+        <em>&nbsp;&copy; 2016 webspell-nor.de<br />Admin Template by <a href="http://designperformance.de/" target="_blank">T-Seven</a></em>
         </div>
             </div>
             <!-- /.navbar-static-side -->
@@ -435,35 +442,40 @@ $admin_url = 'admin/admincenter.php';
 
         <div id="page-wrapper">
             <div class="row">
-                
+
                 <!-- /.col-lg-12 -->
                 <div class="col-lg-12">
                 <br>
-                <?php
-    if (isset($site) && $site!="news") {
-        $invalide = array('\\','/','//',':','.');
-        $site = str_replace($invalide, ' ', $site);
-        if (file_exists($site.'.php')) {
-            include($site.'.php');
-        } else {
-			// Load Plugins-Admin-File (if exists)
-			chdir("../");
-			$plugin = $load->plugin_data($site,0,true);
-			$plugin_path = $plugin['path'];
-			if(file_exists($plugin_path."admin/".$plugin['admin_file'].".php")) {		
-				include($plugin_path."admin/".$plugin['admin_file'].".php");
-			} else {
-				chdir("admin");
-			echo "<b>Modul [or] Plugin Not found</b><br /><br />";
-				include('overview.php');
-			}
-        }
-    } else {
-        include('overview.php');
-    }
+<?php
 
-    
-    ?>
+$errorNotifyPath = __DIR__ . '/../error_notify.php';
+if (file_exists($errorNotifyPath)) {
+    include($errorNotifyPath);
+}
+
+if (isset($site) && $site!="news") {
+    $invalide = array('\\','/','//',':','.');
+    $site = str_replace($invalide, ' ', $site);
+    if (file_exists($site.'.php')) {
+        include($site.'.php');
+    } else {
+        // Load Plugins-Admin-File (if exists)
+        chdir("../");
+        $plugin = $load->plugin_data($site,0,true);
+        $plugin_path = $plugin['path'];
+        if(file_exists($plugin_path."admin/".$plugin['admin_file'].".php")) {
+            include($plugin_path."admin/".$plugin['admin_file'].".php");
+        } else {
+            chdir("admin");
+        echo "<b>Modul [or] Plugin Not found</b><br /><br />";
+            include('overview.php');
+        }
+    }
+} else {
+    include('overview.php');
+}
+
+?>
 
             </div>
             </div>
@@ -478,9 +490,9 @@ $admin_url = 'admin/admincenter.php';
     <link rel="stylesheet" type="text/css" media="all" href="../components/admin/css/style-nav.css">
     <link href="../components/admin/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     <script src="../components/admin/js/bootstrap-colorpicker.js"></script>
-    <script>  
-        jQuery(function($) { 
-            $('#cp1').colorpicker(); 
+    <script>
+        jQuery(function($) {
+            $('#cp1').colorpicker();
             $('#cp2').colorpicker();
             $('#cp3').colorpicker();
             $('#cp4').colorpicker();
@@ -505,9 +517,9 @@ $admin_url = 'admin/admincenter.php';
             $('#cp23').colorpicker();
             $('#cp24').colorpicker();
             $(document).ready(function(){
-                $('[data-toggle="tooltip"]').tooltip(); 
+                $('[data-toggle="tooltip"]').tooltip();
             });
-        }); 
+        });
     </script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../components/bootstrap/bootstrap.min.js"></script>
@@ -518,12 +530,18 @@ $admin_url = 'admin/admincenter.php';
     <!-- Custom Theme JavaScript -->
     <script src="../components/admin/js/page.js"></script>
 
-<script src="../components/admin/js/index.js"></script>
-<script>
+    <script src="../components/admin/js/index.js"></script>
+
+    <script>
         var calledfrom='admin';
     </script>
+
     <script src="../js/bbcode.js"></script>
-<script src="../components/admin/js/bootstrap-switch.js"></script>
+    <script src="../components/admin/js/bootstrap-switch.js"></script>
+
+    <script src="../js/pnotify.custom.min.js"></script>
+    <script src="../js/cup_functions.js"></script>
+    <script src="../js/google_graphs.js"></script>
 
 </body>
 </html>

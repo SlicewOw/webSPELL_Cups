@@ -32,21 +32,28 @@ class Language
     private $language_path = 'languages/';
     public function setLanguage($to, $admin = false, $pluginpath=false)
     {
+
         if ($admin) {
-            $this->language_path = '../'.$this->language_path;
+            $this->language_path = '../' . $this->language_path;
+        } else if (!is_dir($this->language_path)) {
+            $this->language_path = '../' . $this->language_path;
         }
+
         if ($pluginpath) {
-            $this->language_path = $pluginpath.$this->language_path;
+            $this->language_path = $pluginpath . $this->language_path;
         }
-		if($admin AND $pluginpath) {
-			$this->language_path = "../".$pluginpath."languages/";	
-		}
+
+        if ($admin AND $pluginpath) {
+            $this->language_path = "../" . $pluginpath . "languages/";
+        }
+
         $langs = array();
         foreach (new \DirectoryIterator($this->language_path) as $fileInfo) {
             if ($fileInfo->isDot() === false && $fileInfo->isDir() === true) {
                 $langs[ ] = $fileInfo->getFilename();
             }
         }
+
         if (in_array($to, $langs)) {
             $this->language = $to;
             $this->language_path = 'languages/';
@@ -54,6 +61,7 @@ class Language
         } else {
             return false;
         }
+
     }
     public function getRootPath()
     {

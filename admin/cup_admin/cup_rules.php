@@ -12,34 +12,34 @@ try {
 
         try {
 
-            if(isset($_POST['submitAddRule']) || isset($_POST['submitEditRule'])) {
+            if (isset($_POST['submitAddRule']) || isset($_POST['submitEditRule'])) {
 
                 $name = isset($_POST['name']) ?
                     getinput($_POST['name']) : '';
 
-                if(empty($name)) {
+                if (empty($name)) {
                     throw new \Exception($_language->module['error_rule_no_name']);
                 }
 
                 $ruletext = isset($_POST['ruletext']) ?
                     getinput($_POST['ruletext']) : '';
 
-                if(empty($ruletext)) {
+                if (empty($ruletext)) {
                     throw new \Exception($_language->module['error_rule_no_text']);
                 }
 
                 $game_id = (isset($_POST['game']) && validate_int($_POST['game'])) ?
                     (int)$_POST['game'] : 0;
 
-                if($game_id < 1) {
+                if ($game_id < 1) {
                     throw new \Exception($_language->module['error_rule_no_game']);
                 }
 
-                if(isset($_POST['submitAddRule'])) {
+                if (isset($_POST['submitAddRule'])) {
 
                     $saveQuery = mysqli_query(
                         $_database,
-                        "INSERT INTO ".PREFIX."cups_rules 
+                        "INSERT INTO `" . PREFIX . "cups_rules`
                             (
                                 `name`,
                                 `gameID`,
@@ -56,7 +56,7 @@ try {
                     );
 
                     if (!$saveQuery) {
-                        throw new \Exception();
+                        throw new \Exception($_language->module['query_insert_failed']);
                     }
 
                     $rule_id = mysqli_insert_id($_database);
@@ -66,22 +66,22 @@ try {
                     $rule_id = (isset($_POST['rule_id']) && validate_int($_POST['rule_id'])) ?
                         (int)$_POST['rule_id'] : 0;
 
-                    if($rule_id < 1) {
+                    if ($rule_id < 1) {
                         throw new \Exception($_language->module['unknown_rule_id']);
                     }
 
                     $updateQuery = mysqli_query(
                         $_database,
-                        "UPDATE ".PREFIX."cups_rules 
-                            SET name = '" . $name . "', 
+                        "UPDATE `" . PREFIX . "cups_rules`
+                            SET name = '" . $name . "',
                                 gameID = " . $game_id . ",
-                                text = '" . $ruletext . "', 
-                                date = " . time() . " 
+                                text = '" . $ruletext . "',
+                                date = " . time() . "
                             WHERE ruleID = " . $rule_id
                     );
 
                     if (!$updateQuery) {
-                        throw new \Exception();
+                        throw new \Exception($_language->module['query_update_failed']);
                     }
 
                 }
@@ -165,13 +165,14 @@ try {
             $ergebnis = mysqli_query(
                 $_database,
                 "SELECT
-                        a.ruleID AS ruleID,
-                        a.name AS name,
-                        a.date AS date,
-                        b.short AS game
-                    FROM `".PREFIX."cups_rules` a
-                    JOIN `".PREFIX."games` b ON a.gameID = b.gameID
-                    ORDER BY a.gameID ASC, a.name ASC"
+                        a.`ruleID` AS `ruleID`,
+                        a.`name` AS `name`,
+                        a.`date` AS `date`,
+                        b.`short` AS `game`,
+                        b.`name` AS `game_name`
+                    FROM `" . PREFIX . "cups_rules` a
+                    JOIN `" . PREFIX . "games` b ON a.`gameID` = b.`gameID`
+                    ORDER BY a.`gameID` ASC, a.`name` ASC"
             );
 
             if (mysqli_num_rows($ergebnis) > 0) {
@@ -182,7 +183,8 @@ try {
 
                     $data_array = array();
                     $data_array['$name'] = $ds['name'];
-                    $data_array['$game'] = $ds['game'];
+                    $data_array['$game'] = (!empty($ds['game'])) ?
+                        $ds['game'] : $ds['game_name'];
                     $data_array['$date'] = getformatdatetime($ds['date']);
                     $data_array['$rule_id'] = $ds['ruleID'];
                     $content .= $GLOBALS["_template_cup"]->replaceTemplate("cup_rules_list", $data_array);
