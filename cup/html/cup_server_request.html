@@ -1,0 +1,61 @@
+<div class="list-group-item center" id="request_container">
+	<button class="btn btn-info btn-xl white darkshadow" 
+            id="requestServerButton" 
+            onclick="requestServer();">
+		%server_request%
+	</button>
+</div>
+<div id="serverStatusMessage"></div>
+<script type="text/javascript">
+	
+var container = $("#request_container");
+var statusContainer = $("#serverStatusMessage");
+		
+function pending() {
+	statusContainer.attr('class', 'list-group-item center');
+	statusContainer.html('<img src="$image_url/loader.gif" alt="Pending.." />');
+}
+	
+function requestServer() {
+
+	pending();
+	
+	$("#requestServerButton").attr('disabled', 'disabled');
+
+    $.get(
+        "ajax.php?site=cup_match_bot",
+        {
+            q : 'setmatch_-_$cupID_-_$matchID'
+        },
+        function (data, status) {
+            
+            var varData = JSON.parse(data);
+			if (varData.status) {
+				
+				statusContainer.css('display', 'none');
+								
+				var text = '';
+				text += '<div class="list-group-item">';
+				text += 'connect ' + varData.data.ip;
+				if (varData.data.password !== '') {
+					text += ';password ' + varData.data.password;
+				}
+				text += '</div>';
+				
+				container.html(text);
+				
+			} else {
+				
+				statusContainer.css('display', 'block');
+				statusContainer.attr('class', 'list-group-item');
+				statusContainer.html('no server available (' + varData.message + ')');
+				$("#requestServerButton").removeAttr('disabled');
+				
+			}
+            
+        }
+    );
+    
+}
+	
+</script>

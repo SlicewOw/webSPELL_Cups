@@ -1,0 +1,136 @@
+$info_gameacc
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="panel-title">Gameaccounts</h1>
+    </div>
+    <div class="list-group">    			
+$gameaccounts
+    </div>
+</div> 
+<form method="post">
+    <div class="panel panel-default">  
+        <div class="panel-heading">
+            <h1 class="panel-title">%add_gameaccount%</h1>
+        </div>
+        <div class="panel-body">           
+            <div class="form-group">
+            	<label>Game</label>
+                <select id="gameaccount_select" name="game_id" 
+                        class="form-control" 
+                        onchange="showGameaccountInfo(this.value);">
+                    $games
+                </select>
+            </div>      
+            <div class="form-group">
+            	<label>Gameaccount ID *</label>
+                <input type="text" name="id" 
+                       value="$id" 
+                       id="gameaccount_info" 
+                       placeholder="https://steamcommunity.com/id/mustermann" 
+                       class="form-control" 
+                       required="required" />
+            </div>
+        </div>
+        <div class="panel-footer">
+        	<button type="submit" name="submitAddGameaccount" 
+                    class="btn btn-info btn-sm white darkshadow">
+                %save%
+            </button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+
+$("button[name=cancelValidationCSGO]").click(function(e) {
+	
+	e.preventDefault();
+	
+	var index = $("input[name=index]").val();
+	
+	var container = $("#gameaccountContainer" + index);
+	container.css('display', 'none');
+		
+	$("#validateCSGOAccountButton").removeAttr('disabled');
+	$("#submitValidationCSGO").attr('disabled', 'disabled');
+	
+});	
+	
+function showGameaccountInfo(game_id) {
+
+	var gameCheck, text;
+
+	if ((game_id == 1) || (game_id == 6) || (game_id == 61)) {
+		gameCheck = true;
+		text = 'https://steamcommunity.com/id/mustermann';
+	} else {
+		gameCheck = false;
+	}
+
+	if (gameCheck == true) {
+		$("#gameaccount_info").attr('placeholder', text);
+	} else {
+		$("#gameaccount_info").attr('placeholder', '');
+	}
+
+}
+function validateCSGOAccount(index) {
+	"use strict";
+	
+	$("#validateCSGOAccountButton").attr('disabled', 'disabled');
+	$("button[name=cancelValidationCSGO]").removeAttr('disabled');
+	
+	var container = $("#gameaccountContainer" + index),
+        varData;
+
+	container.css('display', 'block');
+	$("#validationText").css('display', 'none');
+	$("#validationPending").css('display', 'block');
+
+    $.get(
+        "ajax.php?site=gameaccount_validate",
+        {
+            game : 'csg'
+        },
+        function (data, status) {
+        
+            try {
+
+                varData = JSON.parse(data);
+                if (varData.status) {
+
+                    $("#gameacc_id").val(varData.data.gameaccount_id);
+
+                    $("#accountName").html(varData.data.name);
+                    $("#accountID").html(varData.data.steam_id);
+
+                    $("#accountLink").attr('href', varData.data.steamcommunity_url);
+                    $("#accountLink").html(varData.data.steamcommunity_url);
+
+                    $("#validationPending").css('display', 'none');
+                    $("#validationText").css('display', 'block');
+
+                    $("#submitValidationCSGO").removeAttr('disabled');
+
+                } else {
+
+                    var errorMessage = "<div class=\"alert alert-danger\">";
+
+                    $.each(varData.error, function (index, value) {
+                        errorMessage += value + "<br />";
+                    });
+
+                    errorMessage += "</div>";
+
+                    $("#validationPending").html(errorMessage);
+
+                }
+
+            } catch (err) {
+                $("#validationPending").html('<div class="alert alert-danger">%contact_webmaster%</div>');
+            }
+
+        }
+    );
+	
+}
+</script>

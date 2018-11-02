@@ -1,0 +1,64 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h1 class="panel-title">%upcoming_cup%</h1>
+    </div>
+    <div class="row">
+        <div id="cupSliderContainer" class="col-sm-8">
+            $upcomingCup
+        </div>
+        <div id="cupSliderMenu" class="col-sm-4">
+            <div class="list-group">
+                $upcomingCupList
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">%past_cups%</h1>
+            </div>
+            <div class="list-group">
+                $pastCups
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function changeCup(cup_id) {
+
+    var container = $("#cupSliderContainer");
+
+    $(".cupList").attr('class', 'cupList list-group-item');
+
+    $.get(
+        "ajax.php?site=cup_slider",
+        {
+            cup_id : cup_id
+        },
+        function (data, status) {
+
+            if (status === "success") {
+
+                var varData = JSON.parse(data);
+                if (varData.status) {
+
+                    $("#cupSliderContainer").fadeOut('slow', function() {
+                        $("#cupSliderContainer").html(varData.html);
+                        $("#cupSliderContainer").fadeIn('slow');
+                    });
+
+                    $("#cupList" + cup_id).attr('class', 'cupList list-group-item alert-info');
+
+                } else {
+                    showMultipleNotifies(varData.message, 'error');
+                }
+
+            }
+
+        }
+    );
+
+}
+</script>

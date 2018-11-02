@@ -1,0 +1,192 @@
+<form method="post">
+	<div class="list-group-item$loggedin_color">
+		$loggedin_status
+	</div>
+	<div class="list-group-item$cupRegister_color" id="cupRegister">
+		$cupRegister_status
+		 <span id="cupInfoContainer"></span>
+	</div>
+	<div class="list-group-item$createTeam_color" id="createTeam">
+		 <div id="teamStatusContainer">
+			 $createTeam_status
+		 </div>
+		 <span id="teamInfoContainer"></span>
+	</div>
+	<div class="list-group-item$policyConfirm_color" id="policyConfirm">
+		<div id="policyStatusContainer">
+			$policyConfirm_status
+			<br /><br />
+			<button type="submit" id="confirmPolicyButton" 
+                    name="confirmPolicyButton" 
+                    class="btn btn-sm btn-info white darkshadow" 
+                    disabled="disabled">
+				%confirm%
+			</button>
+		</div>
+		<div id="policyInfoContainer" style="display: none;">
+			%update_policyConfirm%
+			<br /><br />
+			<button type="submit" name="submitRegisterLogoff" 
+                    id="submitRegisterLogoff" 
+                    class="btn btn-sm btn-info white darkshadow" 
+                    disabled="disabled">
+				%logoff%
+			</button>
+		</div>
+	</div>
+	<div class="list-group-item$checkIn_color" id="checkInContainer">
+		$checkIn_status
+	</div>
+</form>
+<script type="text/javascript">
+    
+var cupRegister = $("#cupRegister"),
+    createTeam = $("#createTeam"),
+    policyConfirm = $("#policyConfirm"),
+    cupContainer = $("#cupInfoContainer"),
+    teamContainer = $("#teamInfoContainer");
+
+function updateCupRegister(action) {
+    'use strict';
+	
+	var cup_id = parseInt($("#cupCupID").val());
+	if (cup_id > 0) {
+
+		if (action === "cup") {
+			updateCupInfo(cup_id);
+		}
+			
+		cupRegister.attr('class', 'list-group-item status-ok');	
+		
+		createTeam.attr('class', 'list-group-item status-error');	
+		$("#cupTeamID").removeAttr('disabled');
+			
+		var team_id = parseInt($("#cupTeamID").val());
+		if ((team_id > 0) && (action === "team")) {
+            updateTeamInfo(team_id, cup_id);
+		} else {
+			teamContainer.html('');
+		}
+		
+	} else {
+		
+		cupRegister.attr('class', 'list-group-item status-error');	
+		$("#cupInfoContainer").html('');
+		
+		createTeam.attr('class', 'list-group-item status-disable');	
+		$("#cupTeamID").attr('disabled', 'disabled');
+
+		$("#policyStatusContainer").css('display', 'block');
+		$("#policyInfoContainer").css('display', 'none');
+
+		$("#confirmPolicyButton").attr('disabled', 'disabled');
+		$("#submitRegisterLogoff").attr('disabled', 'disabled');
+
+		policyConfirm.attr('class', 'list-group-item status-disable');
+		
+	}
+	
+}
+function updateTeamInfo(team_id, cup_id) {
+    'use strict';
+
+	teamContainer.html('');
+	
+    $.get(
+        "ajax.php?site=cup_register",
+        {
+            action : 'team_update',
+            team_id : team_id,
+            cup_id : cup_id
+        },
+        function (data, status) {
+            
+            if (status === "success") {
+                
+                var varData = JSON.parse(this.responseText);
+                if(varData.status) {
+
+                    teamContainer.html(varData.html);
+
+                    createTeam.attr('class', 'list-group-item' + varData.styles.createTeam.color);
+
+                    if (varData.styles.createTeam.status) {
+
+                        $("#confirmPolicyButton").removeAttr('disabled');
+                        policyConfirm.attr('class', 'list-group-item' + varData.styles.policyConfirm.color);
+
+                    } else {
+
+                        $("#confirmPolicyButton").attr('disabled', 'disabled');
+
+                    }
+
+                }
+
+            }
+            
+        }
+    );
+	
+}
+function updateCupInfo(cup_id) {
+
+	cupContainer.html('');
+	
+    $.get(
+        "ajax.php?site=cup_register",
+        {
+            action : 'cup_update',
+            cup_id : cup_id
+        },
+        function (data, status) {
+            
+            if (status === "success") {
+                
+                var varData = JSON.parse(this.responseText);
+                if(varData.status) {
+
+                    cupContainer.html(varData.html);
+
+                    if(varData.team_details.isRegistered) {
+
+                        $("#teamStatusContainer").css('display', 'none');
+
+                        teamContainer.html(varData.team_details.html);
+                        createTeam.attr('class', 'list-group-item status-ok');
+
+                        $("#policyStatusContainer").css('display', 'none');
+                        $("#policyInfoContainer").css('display', 'block');
+
+                        $("#submitRegisterLogoff").removeAttr('disabled');
+
+                        policyConfirm.attr('class', 'list-group-item status-ok');
+
+                        $("#checkInContainer").attr('class', 'list-group-item status-error');
+
+                    } else {
+
+                        $("#teamStatusContainer").css('display', 'block');
+
+                        $("#policyStatusContainer").css('display', 'block');
+                        $("#policyInfoContainer").css('display', 'none');
+
+                        $("#submitRegisterLogoff").attr('disabled', 'disabled');
+
+                        policyConfirm.attr('class', 'list-group-item status-disable');
+
+                        $("#checkInContainer").attr('class', 'list-group-item status-disable');
+
+                    }
+                        
+                    $("#confirmPolicyButton").attr('disabled', 'disabled');
+
+                }
+
+            }
+            
+        }
+    );
+	
+}
+</script>

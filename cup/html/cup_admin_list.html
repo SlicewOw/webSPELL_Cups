@@ -1,0 +1,16 @@
+<tr>
+	<td>$name</td>
+	<td id="userPosition$user_id">$position</td>
+	<td>$date</td>
+	<td>
+		<button type="button" class="btn btn-info btn-xs white darkshadow" name="editAdmin$user_id" onclick="editAdmin($user_id);">
+			%edit%
+		</button>
+		<button type="button" class="btn btn-default btn-xs" name="deleteAdmin$user_id" onclick="deleteAdmin($user_id, '$name');">
+			%delete%
+		</button>
+	</td>
+</tr>
+<tr>
+	<td id="userDescription$user_id" colspan="4">$description</td>
+</tr>

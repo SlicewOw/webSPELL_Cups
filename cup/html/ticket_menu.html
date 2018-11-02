@@ -1,0 +1,202 @@
+<div class="pull-right">
+    <span id="ticketCounter" class="btn btn-default btn-sm">
+        <img src="$image_url/loader.gif" alt="pending.." />
+    </span>
+    <button type="button" name="updateTicketContent" 
+            class="btn btn-danger btn-sm white darkshadow btn-support-update">
+        Update Content
+    </button>
+    <button type="button" name="autoUpdate" 
+            data-toggle="button" 
+            aria-pressed="false" 
+            autocomplete="off" 
+            class="btn btn-info btn-sm white darkshadow btn-support-update">
+        Auto Update
+    </button>
+    <a href="$archive_url"
+       class="btn btn-default btn-sm">
+        %archive%
+    </a>
+</div>
+<div class="clear"></div>
+<br />
+<div class="btn-group btn-group-justified" role="group">
+	<div class="btn-group" role="group">
+		<a href="$ticket_url1" id="ticketTab1" 
+           class="center btn btn-sm $ticket_status1">
+            %ticket_status_1%
+        </a>
+	</div>
+	<div class="btn-group" role="group">
+		<a href="$ticket_url2" id="ticketTab2" 
+           class="center btn btn-sm $ticket_status2">
+            %ticket_status_2%
+        </a>
+	</div>
+	<div class="btn-group" role="group">
+		<a href="$ticket_url3" id="ticketTab3" 
+           class="center btn btn-sm $ticket_status3">
+            %ticket_status_3%
+        </a>
+	</div>
+	<div class="btn-group" role="group">
+		<a href="$ticket_url4" id="ticketTab4" 
+           class="center btn btn-sm $ticket_status4">
+            %ticket_add%
+        </a>
+	</div>
+</div>
+<script type="text/javascript">
+
+var ticketIntervall;
+var ticketStatus = $status;
+	
+function ticketCounter() {
+	
+	var counter = 30;
+	ticketIntervall = setInterval(function() {
+	
+		if (counter <= 0) {
+			
+            $("#ticketCounter").fadeOut('slow', function() {
+                $("#ticketCounter").html('<img src="$image_url/loader.gif" alt="" />');
+                $("#ticketCounter").fadeIn('slow');
+            });
+
+			updateSupport();
+			
+		} else {
+			
+			if (counter === 1) {
+				
+				$("#ticketCounter").html(
+					'Auto-Refresh in 1 Sekunde'
+				);
+				
+			} else {
+				
+				$("#ticketCounter").html(
+					'Auto-Refresh in ' +
+					counter +
+					' Sekunden'
+				);
+				
+			}
+			
+			counter--;
+            
+		}
+		
+	}, 1000);
+	
+}	
+	
+function updateSupport() {
+	
+	clearInterval(ticketIntervall);
+	
+    $("button[name=updateTicketContent]").attr('disabled', 'disabled');
+    
+	$("#ticketContainer").html(
+		'<tr><td colspan="7">' +
+		'<img src="$image_url/loader.gif" alt="" />' +
+		'</td></tr>'
+	);
+		
+	var ticketCategory = parseInt($("#ticketCategory").val()),
+        ticketHistorie = parseInt($("#ticketHistorie").val()),
+        varData;
+
+	$("#ticketCounter").css('display', '');
+    
+    $.get(
+		"ajax.php?site=admin_cup_support", 
+		{
+			action : 'update',
+            status : ticketStatus,
+            cat : ticketCategory,
+            pastTime : ticketHistorie
+		},
+		function (data, status){
+            
+			varData = JSON.parse(data);
+			if (varData.status) {
+                
+                $("#ticketContainer").fadeOut('slow', function() {
+                    $("#ticketContainer").html(varData.html);
+                    $("#ticketContainer").fadeIn('slow');
+                });
+                
+			} else {
+				showMultipleNotifies(varData.message, 'error');
+			}
+
+			if ($("button[name=autoUpdate]").attr('aria-pressed') === "true") {
+				ticketCounter();
+			} else {
+				$("#ticketCounter").css('display', 'none');
+			}
+            
+            $("button[name=updateTicketContent]").removeAttr('disabled');
+			
+		}
+	);
+    	
+}	
+	
+function takeTicket(ticket_id) {
+
+	$("#ticket_" + ticket_id).attr('disabled', 'disabled');
+
+	$.post(
+		"ajax.php?site=admin_cup_support&action=admin_take", 
+		{
+			ticket_id 	: ticket_id,
+			admin_id 	: $user_id
+		},
+		function (data, status) {
+
+			var varData = data;
+			if (varData.status) {
+				
+				$("#ticket_" + ticket_id).css('display', 'none');
+				
+				$("#ticketAdmin_" + ticket_id).html(varData.data.username);
+				
+			} else {
+
+				showMultipleNotifies(varData.message, 'error');
+				$("#ticket_" + ticket_id).removeAttr('disabled');
+				
+			}
+			
+		},
+		"json"
+	);
+
+}
+	
+var updateSupportContainer = $updateSupportContainer;
+    
+$(document).ready(function () {
+	
+    $("button[name=autoUpdate]").click(function (e) {
+        e.preventDefault();
+        updateSupport();
+    });
+
+    $("button[name=updateTicketContent]").click(function (e) {
+        e.preventDefault();
+        updateSupport();	
+    });	  
+			
+    if (updateSupportContainer) {
+        updateSupport();
+    } else {
+        $("button[name=updateTicketContent]").attr('disabled', 'disabled');
+        $("#ticketCounter").css('display', 'none');
+    }
+    
+});	
+</script>
+<br /><br />

@@ -1,0 +1,109 @@
+<div class="pull-right">
+    $admin
+</div>
+<div class="clear"></div>
+<br />
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="pull-left">
+            <h1 class="panel-title">$name</h1>
+        </div>
+        <div class="pull-right grey">%created% $date</div>
+        <div class="clear"></div>
+    </div>
+    <div class="panel-body">
+        <form method="post">
+            <div class="form-group">
+                <label>%join_link%</label>
+                <input type="text" name="text" id="quickjoin" value="$link" class="form-control" readonly="readonly" />
+            </div>
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm" type="button" name="copyToClipboard">
+                    %copy_to_clipboard%
+                </button>
+            </div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-default btn-sm" name="changePassword">
+                    %change_password%
+                </button>
+            </div>
+            <div class="clear"></div>
+        </form>
+    </div>
+    <hr />
+    <div class="panel-body">
+        <form method="post">
+            <div class="row">
+                $teamSocials
+            </div>
+            <button class="btn btn-default btn-sm" type="submit" name="submitTeamSocials">%save%</button>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var old_password = '$password';
+
+    $("button[name=changePassword]").click(function(e) {
+
+        e.preventDefault();
+
+        var btn = $(this);
+        btn.attr('disabled', 'disabled');
+
+        $.post(
+            "ajax.php?site=cup_teams",
+            {
+                action  : 'changePassword',
+                team_id : $team_id
+            },
+            function(data, status){
+
+                if(status === "success") {
+
+                    var varData = JSON.parse(data),
+                        new_password;
+                    if(varData.password !== "") {
+
+                        new_password = varData.password;
+                        
+                        var quickjoin = $("#quickjoin").val();
+                        quickjoin = quickjoin.replace(old_password, new_password);
+
+                        $("#quickjoin").val(quickjoin);
+
+                        old_password = new_password;
+
+                    }
+
+                }
+
+                btn.removeAttr('disabled');
+
+            }
+        );
+
+    });
+
+    $("button[name=copyToClipboard]").click(function(e) {
+
+        e.preventDefault();
+
+        var copyCommandSupported = document.queryCommandSupported('copy');
+        if (copyCommandSupported) {
+
+            document.getElementById('quickjoin').select();
+
+            try {
+                var successful = document.execCommand('copy');
+            } catch (err) {
+                console.log('Oops, unable to copy');
+            }
+
+        } else {
+            console.log('copy is not supported');
+        }
+
+    });
+
+</script>

@@ -1,0 +1,133 @@
+<div class="panel panel-default" id="mapvote">
+	<div class="panel-heading">
+    	<h1 class="panel-title">Map-Veto</h1>
+    </div>
+	<div class="panel-body">
+        <div class="form-inline" id="map_container">
+            $map_veto
+        </div>
+    </div>
+    <div class="panel-footer$footerInfo" id="info_container">
+    	<div class="pull-left" id="status_container">
+        	<span class="glyphicon glyphicon-info-sign"></span> $map_vote_info
+        </div>
+    	<div class="pull-right right" id="timer"></div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    
+var interval, 
+    dataArray,
+    mapvote = $("#mapvote"),
+    map_container = $("#map_container"),
+    info_container = $("#info_container"),
+    status_container = $("#status_container"),
+    timer = $("#timer"),
+    cup_id = $cup_id,
+    match_id = $match_id;
+	
+function voteMap(map, team_id) {
+    'use strict';
+	
+	$(".mapButton").attr('disabled', 'disabled');
+	
+	clearInterval(interval);
+	
+    $.post(
+        "ajax.php?site=cup_mapvote",
+        {
+            action : 'voteMap',
+            map : map,
+            cup_id : cup_id,
+            match_id : match_id,
+            team_id : team_id
+        },
+        function (data, status) {
+            
+            dataArray = JSON.parse(data);
+            if (dataArray.status) {
+                
+                if (dataArray.veto.status == 'finished') {
+
+                    mapvote.css('display', 'none');
+                    window.location.reload();
+
+                } else {
+
+                    map_container.html(dataArray.veto.maps);
+                    info_container.attr('class', 'panel-footer alert-info');
+                    status_container.html(dataArray.veto.info);
+
+                    voteMapUpdate(map, team_id);
+
+                }
+
+            } else {
+                showMultipleNotifies(dataArray.error, 'error');
+            }
+            
+        }
+    );
+	
+}
+function voteMapUpdate(map, team_id) {
+		
+	var counter = 10;
+	interval = setInterval(function() {
+		
+		counter--;
+		if (counter <= 0) {
+			
+			timer.html("");
+			
+            $.get(
+                "ajax.php?site=cup_mapvote",
+                {
+                    action : 'updateMaps',
+                    cup_id : cup_id,
+                    match_id : match_id
+                },
+                function (data, status) {
+                    
+                    clearInterval(interval);
+                    
+					dataArray = JSON.parse(data);
+                    if (dataArray.status) {
+                        
+                        if (dataArray.veto.status === 'finished') {
+
+                            mapvote.css('display', 'none');
+                            window.location.reload();
+
+                        } else {
+
+                            map_container.html(dataArray.veto.maps);
+                            status_container.html(dataArray.veto.info);
+                            if (dataArray.veto.status === 'waiting') {
+
+                                info_container.attr('class', 'panel-footer alert-info');
+                                voteMapUpdate(map, team_id);
+
+                            } else {
+                                info_container.attr('class', 'panel-footer');	
+                            }
+
+                        }
+                        
+                    } else {
+                        showMultipleNotifies(dataArray.error, 'error');
+                    }
+                    
+                }
+            );
+			
+		} else {
+			timer.html("Refresh in: " + counter + " sec");
+		}
+		
+	}, 1000);
+
+}
+</script>    
+      

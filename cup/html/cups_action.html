@@ -1,0 +1,145 @@
+<form method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">$title</h1>
+        </div>
+        <div class="panel-body">
+        	$error
+           	<div class="row">
+           		<div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Cupname *</label>
+                        <input name="cupname" type="text" value="$cupname" class="form-control" required />
+                    </div>
+				</div>
+           		<div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Cup unsichtbar?</label>
+                        <select name="admin_visible" class="form-control">$admin_only</select>
+                    </div>
+				</div>
+			</div>
+           	<div class="row">
+           		<div class="col-sm-4">
+                    <div class="form-group">
+                        <label>%priority%</label>
+                        <select name="priority" class="form-control">$priority</select>
+                    </div>
+				</div>
+           		<div class="col-sm-4">
+                    <div class="form-group">
+                        <label>%registration%</label>
+                        <select name="registration" class="form-control">$registration</select>
+                    </div>
+				</div>
+           		<div class="col-sm-4">
+                    <div class="form-group">
+                        <label>%elimination%</label>
+                        <select name="elimination" class="form-control">$elimination</select>
+                    </div>
+				</div>
+			</div>
+           	<div class="row">
+           		<div class="col-sm-6">
+                    <div class="form-group">
+                        <label>%checkin_date%</label>
+                        <div class="form-inline">
+                            <input name="date_checkin" type="date" class="form-control" value="$date_checkin" /> - 
+                            <select name="hour_ci" class="form-control">$hours_ci</select> : 
+                            <select name="minute_ci" class="form-control">$minutes_ci</select>
+                        </div>
+                    </div>
+				</div>
+           		<div class="col-sm-6">
+                    <div class="form-group">
+                        <label>%start_date%</label>
+                        <div class="form-inline">
+                            <input name="date_start" type="date" class="form-control" value="$date_start" /> - 
+                            <select name="hour" class="form-control">$hours_sd</select> : 
+                            <select name="minute" class="form-control">$minutes_sd</select>
+                        </div>
+                    </div>
+				</div>
+			</div>
+			<hr />
+           	<div class="row">
+           		<div class="col-sm-3">
+                    <div class="form-group">
+                        <label>%game%</label>
+                        <select id="game" name="game" class="form-control">$games</select>
+                    </div>
+				</div>
+           		<div class="col-sm-2">
+                    <div class="form-group">
+                        <label>%mode%</label>
+                        <select name="mode" class="form-control">$mode</select>
+                    </div>
+				</div>
+           		<div class="col-sm-2">
+                    <div class="form-group">
+                        <label>%size%</label>
+                        <select name="size" id="size" class="form-control">$size</select>
+                    </div>
+				</div>
+           		<div class="col-sm-3">
+                    <div class="form-group">
+                        <label>%rules%</label>
+                        <select name="ruleID" class="form-control">$rules</select>
+                    </div>
+				</div>
+           		<div class="col-sm-2">
+                    <div class="form-group">
+                        <label>%max_penalty%</label>
+                        <select name="max_pps" class="form-control">$pps</select>
+                    </div>
+				</div>
+			</div>
+            <hr />
+           	<div class="row">
+           		<div class="col-sm-6">
+					<div class="form-group">
+						<label>1. %preis%</label>
+						<input type="text" name="preis[1]" value="$preis1" class="form-control" />
+					</div>
+				</div>
+           		<div class="col-sm-6">
+					<div class="form-group">
+						<label>2. %preis%</label>
+						<input type="text" name="preis[2]" value="$preis2" class="form-control" />
+					</div>
+				</div>
+           		<div class="col-sm-6">
+					<div class="form-group">
+						<label>3. %preis%</label>
+						<input type="text" name="preis[3]" value="$preis3" class="form-control" />
+					</div>
+				</div>
+           		<div class="col-sm-6">
+					<div class="form-group">
+						<label>4. %preis%</label>
+						<input type="text" name="preis[4]" value="$preis4" class="form-control" />
+					</div>
+				</div>
+           		<div class="col-sm-6">
+					<div class="form-group">
+						<label>5. %preis%</label>
+						<input type="text" name="preis[5]" value="$preis5" class="form-control" />
+					</div>
+				</div>
+           		<div class="col-sm-6">
+					<div class="form-group">
+						<label>6. %preis%</label>
+						<input type="text" name="preis[6]" value="$preis6" class="form-control" />
+					</div>
+				</div>
+			</div>
+        </div>
+        <div class="panel-footer">
+        	<input name="cupID" type="hidden" value="$cupID" />
+        	<input type="hidden" id="max_rounds" name="max_rounds" value="5" />
+            <button type="submit" name="$postName" class="btn btn-info btn-sm white darkshadow">
+                %save%
+            </button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,102 @@
+<button type="button" onclick="showSteamIDFinder();" 
+        class="btn btn-info btn-sm white darkshadow">
+    SteamID Finder
+</button>
+<br /><br />
+<div class="clear"></div>
+<div class="full_content" id="SteamIDFinder" style="display: none;">
+	<form method="post">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">SteamID Finder</h1>
+            </div>
+            <div class="panel-body">
+            	<div class="form-group">
+                	<label>SteamID / Steam64 ID / Steam Community URL</label>
+                    <input type="text" name="search_value" 
+                           id="SteamIDValue" 
+                           class="form-control" 
+                           placeholder="https://steamcommunity.com/id/slicewow" 
+                           required="required" />
+                </div>
+            </div>
+            <div class="list-group" id="steamListContainer"></div>
+            <div class="panel-footer">
+            	<div class="float_content_50_left">
+                    <button type="submit" id="SteamIDFinderSubmit" 
+                            class="btn btn-info btn-sm white darkshadow">
+                        %finde_account%
+                    </button>  
+                </div>     
+            	<div class="float_content_50_right right">
+                    <button type="submit" style="display: none;" 
+                            id="saveToGameaccount" 
+                            class="btn btn-success btn-sm white darkshadow">
+                        %save_account%
+                    </button>   
+                </div>    
+				<div class="clear"></div>    
+            </div>
+        </div>
+    </form>	
+</div>
+<script type="text/javascript">
+function showSteamIDFinder() {
+
+	var varState = $("#SteamIDFinder").css('display');
+	if (varState === 'none') {
+		$("#SteamIDFinder").css('display', 'block');
+	} else {
+		$("#SteamIDFinder").css('display', 'none');
+	}
+	
+}
+$(document).ready(function () {
+    
+	$("#SteamIDFinderSubmit").click(function (e) {
+        
+		e.preventDefault();
+        
+		$("#searchResults").css('display', 'none');
+		var value = $("#SteamIDValue").val();
+		if (value !== "") {
+		
+            $.get(
+                "ajax.php?site=gameaccount_find",
+                {
+                    state : 'extern',
+                    value : value
+                },
+                function (data, status) {
+                    
+                    if (status === "success") {
+                        
+                        var varData = JSON.parse(data);
+                        if (varData.results > 0) {
+                            $("#steamListContainer").html(varData.htmlData);
+                            //$("#saveToGameaccount").css('display', 'block');
+                        } else {
+                            $("#steamListContainer").html('<div class="list-group-item">%unknown_gameaccount%</div>');
+                            //$("#saveToGameaccount").css('display', 'none');
+                        }   
+                        
+                    }
+                    
+                }
+            );
+		
+		}
+		
+    });
+	
+	$("#saveToGameaccount").click(function(e) {
+		
+		e.preventDefault();
+		
+		var steam_id = $("#hidden_SteamID").val();
+		var steam64_id = $("#hidden_Steam64_ID").val();
+		
+    });
+	
+});
+</script>

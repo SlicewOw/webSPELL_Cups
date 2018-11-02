@@ -1,0 +1,27 @@
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+        <a href="#penalties-user" aria-controls="penalties-user" 
+           role="tab" 
+           data-toggle="tab">
+            %user% <span class="badge">$user_counter</span>
+        </a>
+    </li>
+    <li role="presentation">
+        <a href="#penalties-team" aria-controls="penalties-team" 
+           role="tab" 
+           data-toggle="tab">
+            Teams <span class="badge">$team_counter</span>
+        </a>
+    </li>
+</ul>
+<br />
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" 
+         id="penalties-user">
+        $userPenalties
+    </div>
+    <div role="tabpanel" class="tab-pane" 
+         id="penalties-team">
+        $teamPenalties
+    </div>
+</div>

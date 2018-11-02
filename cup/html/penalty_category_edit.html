@@ -1,0 +1,31 @@
+<div class="form_container">
+    <form method="post" name="add" action="admincenter.php?site=cup&amp;mod=penalty&amp;admin=edit_category&amp;id=$reasonID">
+        <div class="form_input_container lh_fourty center">$error</div>
+    	<div class="form_input_container">
+            <div class="form_input_info lh_fourty">Name DE:</div>
+            <div class="form_input_input"><input type="text" name="name_de" value="$name_de" class="form-control" /></div>
+            <div class="clear"></div>
+        </div>
+    	<div class="form_input_container">
+            <div class="form_input_info lh_fourty">Name UK:</div>
+            <div class="form_input_input"><input type="text" name="name_uk" value="$name_uk" class="form-control" /></div>
+            <div class="clear"></div>
+        </div>
+    	<div class="form_input_container">
+            <div class="form_input_info lh_fourty">%penalty%:</div>
+            <div class="form_input_input"><select name="points" class="form-control">$points</select></div>
+            <div class="clear"></div>
+        </div>
+    	<div class="form_input_container">
+            <div class="form_input_info lh_fourty">%penalty_lifetime%?</div>
+            <div class="form_input_input"><input type="checkbox" name="lifetime" class="input_checkbox" value="1"$checked /></div>
+            <div class="clear"></div>
+        </div>
+        <div class="form_input_space"></div>
+    	<div class="form_input_container">
+            <div class="form_input_info"></div>
+            <div class="form_input_input"><input type="submit" name="add" class="btn btn-primary white darkshadow" value="%save%" /></div>
+            <div class="clear"></div>
+        </div>
+    </form>
+</div>

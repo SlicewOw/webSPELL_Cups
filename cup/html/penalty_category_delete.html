@@ -1,0 +1,31 @@
+<div class="form_container">
+    <form method="post" name="add" action="admincenter.php?site=cup&amp;mod=penalty&amp;admin=delete_category&amp;id=$reasonID">
+        <div class="form_input_container lh_fourty center">$error</div>
+    	<div class="form_input_container">
+            <div class="form_input_info lh_fourty">Name DE:</div>
+            <div class="form_input_input lh_fourty">$name_de</div>
+            <div class="clear"></div>
+        </div>
+    	<div class="form_input_container">
+            <div class="form_input_info lh_fourty">Name UK:</div>
+            <div class="form_input_input lh_fourty">$name_uk</div>
+            <div class="clear"></div>
+        </div>
+    	<div class="form_input_container">
+            <div class="form_input_info lh_fourty">%penalty%:</div>
+            <div class="form_input_input lh_fourty">$points</div>
+            <div class="clear"></div>
+        </div>
+    	<div class="form_input_container">
+            <div class="form_input_info lh_fourty">%penalty_lifetime%?</div>
+            <div class="form_input_input lh_fourty">$lifetime</div>
+            <div class="clear"></div>
+        </div>
+        <div class="form_input_space"></div>
+    	<div class="form_input_container">
+            <div class="form_input_info"></div>
+            <div class="form_input_input"><input type="submit" name="add" class="btn btn-primary white darkshadow" value="%delete%" /></div>
+            <div class="clear"></div>
+        </div>
+    </form>
+</div>

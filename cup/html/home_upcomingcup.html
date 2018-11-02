@@ -1,0 +1,22 @@
+<div class="list-group">
+	<div class="list-group-item sixteen bold">$cupName</div>
+	<div class="list-group-item">
+		<div  style="margin: 0 auto;">
+			<div id="counterUpcomingCup"></div>
+			<p>Status: <span class="bold">$status</span></p>
+		</div>
+    </div>
+	$detailList
+</div>
+<script type="text/javascript">
+var clock;
+$(document).ready(function () {
+
+	clock = new FlipClock($('#counterUpcomingCup'), $timeLeft, {
+		clockFace: 'DailyCounter',
+		autoStart: true,
+		countdown: true
+	});
+	
+});
+</script>

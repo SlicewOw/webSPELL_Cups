@@ -1,0 +1,82 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="pull-left">
+            <h1 class="panel-title">Cup Awards</h1>
+        </div>
+        <div class="pull-right">
+            <button type="button" name="homeButton" 
+                    class="btn btn-default btn-xs">
+                Home
+            </button>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <th>#</th>
+            <th>Name</th>
+            <th>Award</th>
+            <th>Value</th>
+            <th>%received_by%</th>
+            <th>Admin</th>
+        </thead>
+        <tbody id="awardContainer"></tbody>
+    </table>
+</div>
+<script type="text/javascript">
+
+function getCupAwards(action, award_id) {
+    'use strict';
+
+    $("#awardContainer").html(
+        '<tr>' +
+        '<td colspan="6">' +
+        '<img src="$image_url/loader.gif" alt="" />' +
+        '</td>' +
+        '</tr>'
+    );
+
+    $.get(
+        "ajax.php?site=admin_cup_awards",
+        {
+            action : action,
+            award_id : award_id
+        },
+        function (data, status) {
+
+            if (status === "success") {
+
+                var varData = JSON.parse(data);
+
+                if (varData.status) {
+
+                    $("#awardContainer").fadeOut('slow', function() {
+                        $("#awardContainer").html(varData.html);
+                        $("#awardContainer").fadeIn('slow');
+
+                } else {
+                    showMultipleNotifies(varData.message, 'error');
+                }
+
+            }
+
+        }
+    );
+
+}
+
+function showDetails(award_id) {
+    getCupAwards('details', award_id);
+}
+
+$(document).ready(function() {
+
+    getCupAwards('home', 0);
+
+    $("button[name=homeButton]").click(function() {
+        getCupAwards('home', 0);
+    });
+
+});
+
+</script>

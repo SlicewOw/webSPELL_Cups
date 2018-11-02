@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label>Cup</label>
+            <select name="cupID" 
+                    class="form-control" 
+                    onchange="ticketUpdate(this.value, 'cup', 'matchID', '');">
+                $cups
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label>Match</label>
+            <select name="matchID" id="matchID" 
+                    class="form-control"
+                    onchange="ticketUpdate(this.value, 'match', 'teams', '');">
+                $matches
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label>Team</label>
+            <select name="teams" id="teams" 
+                    class="form-control"
+                    onchange="ticketUpdate(this.value, 'team', 'player', '');">
+                $teams
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label>%player%</label>
+            <select name="player" id="player" 
+                    class="form-control">
+                $users
+            </select>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label>%subject% *</label>
+    <input name="name" type="text" value="$name" 
+           class="form-control" 
+           placeholder="%subject%" 
+           required="required" />
+</div>
+<div class="form-group">
+    <label>Text *</label>
+    <textarea name="text" 
+              class="form-control">$text</textarea>
+</div>
+<div class="form-group">
+    <label>Screenshot</label>
+    <input type="file" name="screenshot" 
+           class="form-control" />
+</div>

@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+	<div class="panel-heading">%penalty%</div>
+	<div class="list-group">
+    	<div class="list-group-item">
+        	Admin:
+            <span class="pull-right">$adminname</span>
+        </div>
+    	<div class="list-group-item">
+        	%date%:
+            <span class="pull-right">$date</span>
+        </div>
+    	<div class="list-group-item">
+        	%penalty_duration%:
+            <span class="pull-right">$duration</span>
+        </div>
+    	<div class="list-group-item">
+        	Team:
+            <span class="pull-right">$teamname</span>
+        </div>
+    	<div class="list-group-item">
+        	User:
+            <span class="pull-right">$username</span>
+        </div>
+    	<div class="list-group-item">
+        	%penalty_category%:
+            <span class="pull-right">$category</span>
+        </div>
+    </div>
+    <div class="panel-body">
+    	<h2>%comment%</h2>
+        <br />
+    	<p>$text</p>
+    </div>
+    <div class="panel-footer"><a class="btn btn-primary white darkshadow" href="admincenter.php?site=cup&amp;mod=penalty&amp;admin=edit&amp;id=$ppID">%edit%</a> <a class="btn btn-primary white darkshadow" href="admincenter.php?site=cup&amp;mod=penalty&amp;admin=delete&amp;id=$ppID">%delete%</a></div>
+</div>

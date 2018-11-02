@@ -1,0 +1,227 @@
+<?php
+
+try {
+
+    $_language->readModule('cups', false, true);
+
+    if(!$loggedin || !iscupadmin($userID)) {
+        throw new \Exception($_language->module['login']);   
+    }
+
+    $maxPreise = 6;	
+
+    if (validate_array($_POST, true)) {
+
+        $parent_url = 'admincenter.php?site=cup&mod=cup&action=add';
+
+        try {
+
+            if( isset($_POST['add']) ) {
+
+                if(!isset($_POST['cupname']) || empty($_POST['cupname'])) {
+                    throw new \Exception($_language->module['cup_no_name']);   
+                }
+
+                $cupname = getinput($_POST['cupname']);
+
+                $priority = (isset($_POST['priority'])) ? 
+                    $_POST['priority'] : 'normal';
+
+                $registration = (isset($_POST['registration'])) ? 
+                    $_POST['registration'] : 'open';
+
+                $elimination = (isset($_POST['elimination'])) ? 
+                    $_POST['elimination'] : 'single';
+
+                $date_checkin = strtotime($_POST['date_checkin']);
+                $date_checkin += ((int)$_POST['hour_ci'] * 3600);
+                $date_checkin += ((int)$_POST['minute_ci'] * 60);
+                
+                $date_start = strtotime($_POST['date_start']);
+                $date_start += ((int)$_POST['hour'] * 3600);
+                $date_start += ((int)$_POST['minute'] * 60);
+                                    
+                $game_tag = (isset($_POST['game']) && (strlen($_POST['game']) < 4)) ? 
+                    $_POST['game'] : 'csg';
+
+                $gameArray = getGame($game_tag);
+
+                $mode = (isset($_POST['mode'])) ? $_POST['mode'] : '5on5';
+
+                $rule_id = (isset($_POST['ruleID']) && validate_int($_POST['ruleID'])) ?
+                    (int)$_POST['ruleID'] : 0;
+
+                $size = (isset($_POST['size']) && validate_int($_POST['size'])) ?
+                    (int)$_POST['size'] : 32;
+
+                $pps = (isset($_POST['max_pps']) && is_numeric($_POST['max_pps'])) ?
+                    (int)$_POST['max_pps'] : 12;
+
+                $admin_visible 	= (isset($_POST['admin_visible']) && is_numeric($_POST['admin_visible'])) ?
+                    (int)$_POST['admin_visible'] : 0;
+
+                $insertQuery = mysqli_query(
+                    $_database,
+                    "INSERT INTO `".PREFIX."cups` 
+                        (
+                            `priority`,
+                            `name`, 
+                            `registration`,
+                            `checkin_date`, 
+                            `start_date`, 
+                            `game`, 
+                            `gameID`, 
+                            `elimination`,
+                            `mode`, 
+                            `ruleID`, 
+                            `max_size`, 
+                            `max_penalty`, 
+                            `admin_visible` 
+                        ) 
+                        VALUES 
+                        (
+                            '" . $priority . "', 
+                            '" . $cupname . "', 
+                            '" . $registration . "', 
+                            " . $date_checkin . ", 
+                            " . $date_start . ", 
+                            '" . $game_tag . "', 
+                            " . $gameArray['id'] . ", 
+                            '" . $elimination . "', 
+                            '" . $mode . "', 
+                            " . $rule_id . ", 
+                            " . $size . ", 
+                            " . $pps . ", 
+                            " . $admin_visible . "
+                        )"
+                );
+
+                if(!$insertQuery) {
+                    throw new \Exception($_language->module['error_insert_query_failed']);
+                }
+
+                $cup_id = mysqli_insert_id($_database);
+
+                //
+                // Preise speichern
+                for($x=1;$x<($maxPreise + 1);$x++) {
+
+                    if(isset($_POST['preis'][$x])) {
+
+                        $preis = $_POST['preis'][$x];
+                        if(!empty($preis)) {
+
+                            $insertQuery = mysqli_query(
+                                $_database,
+                                "INSERT INTO `".PREFIX."cups_preise` 
+                                    (
+                                        `cupID`, 
+                                        `preis`, 
+                                        `platzierung`
+                                    ) 
+                                    VALUES 
+                                    (
+                                        " . $cup_id . ", 
+                                        '".$preis."', 
+                                        " . $x . "
+                                    )"
+                            );
+
+                        }
+
+                    }
+
+                }
+
+                $parent_url = 'admincenter.php?site=cup&mod=cup&action=cup&id=' . $cup_id;
+
+            }
+
+        } catch(Exception $e) {
+            $_SESSION['errorArray'][] = $e->getMessage();
+        }
+
+        header('Location: ' . $parent_url);
+
+    } else {
+
+        $cupOptions = getCupOption();
+
+        $admin_only = '<option value="1">'.$_language->module['yes'].'</option><option value="0" selected="selected">'.$_language->module['no'].'</option>';
+
+        $days = date('d');
+        $months = date('n');
+        $years = date('Y');
+
+        $hours_ci = '';
+        for( $i=0; $i<25; $i++ ) {
+            $sel = '';
+            if($i == 19) { $sel = ' selected="selected"'; }
+            $hours_ci .= '<option value="'.$i.'"'.$sel.'>'.$i.'</option>';
+        }
+
+        $hours = '';
+        for( $i=0; $i<25; $i++ ) {
+            $sel = '';
+            if($i == 20) { $sel = ' selected="selected"'; }
+            $hours .= '<option value="'.$i.'"'.$sel.'>'.$i.'</option>';
+        }
+
+        $minutes = '<option value="0">00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>';
+
+        $games = getGamesAsOptionList('csg');
+
+        $rules = getrules(0, 'list', true);
+
+        $mode = str_replace(
+            'value="5on5"',
+            'value="5on5" selected="selected"',
+            $cupOptions['mode']
+        );
+
+        $size = str_replace(
+            'value="32"',
+            'value="32" selected="selected"',
+            $cupOptions['size']
+        );
+
+        $penalty = str_replace(
+            'value="12"',
+            'value="12" selected="selected"',
+            $cupOptions['penalty']
+        );
+
+        $data_array = array();
+        $data_array['$title'] 			= $_language->module['cup_add'];
+        $data_array['$cupID'] 			= 0;
+        $data_array['$error'] 			= '';
+        $data_array['$cupname'] 		= '';
+        $data_array['$admin_only'] 		= $admin_only;
+        $data_array['$priority'] 		= $cupOptions['priority'];
+        $data_array['$registration'] 	= $cupOptions['registration'];
+        $data_array['$elimination'] 	= $cupOptions['elimination'];
+        $data_array['$date_checkin'] 	= $years . '-' . $months . '-' . $days;
+        $data_array['$hours_ci'] 		= $hours;
+        $data_array['$minutes_ci'] 		= $minutes;
+        $data_array['$date_start']  	= $years . '-' . $months . '-' . $days;
+        $data_array['$hours_sd'] 		= $hours;
+        $data_array['$minutes_sd'] 		= $minutes;
+        $data_array['$games'] 			= $games;
+        $data_array['$mode'] 			= $mode;
+        $data_array['$size'] 			= $size;
+        $data_array['$rules'] 			= $rules;
+        $data_array['$pps'] 			= $penalty;
+
+        for($x=1;$x<($maxPreise + 1);$x++) {
+            $data_array['$preis'.$x] = '';
+        }
+
+        $data_array['$postName'] 			= 'add';
+        $cups_add = $GLOBALS["_template_cup"]->replaceTemplate("cups_action", $data_array);
+        echo $cups_add;
+
+    }
+    
+} catch (Exception $e) {
+    echo showError($e->getMessage());
+}

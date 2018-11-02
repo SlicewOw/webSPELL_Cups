@@ -1,0 +1,64 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h1 class="panel-title">%banned_accounts%</h1>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<th>#</th>
+				<th>%unique_id%</th>
+				<th>%reason%</th>
+				<th>Admin</th>
+			</thead>
+			$content
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+$("button[name=deleteBannedAccount]").click(function(e) {
+    
+    e.preventDefault();
+    
+    var idStr = this.id;
+    var idArray = idStr.split('_');
+    
+    if(idArray.length === 2) {
+       
+        var banned_id = idArray[1];
+        
+        $.post(
+            "ajax.php?site=admin_gameaccounts", 
+            {
+                action      : 'deleteBannedAccount',
+                banned_id   : banned_id
+            },
+            function(data, status){
+                
+                if(status === "success") {
+                    
+                    var varData = JSON.parse(data);
+                    
+                    var notifyState;
+                    if(varData.status) {
+                        
+                        $("#bannedAccount_" + banned_id).css('display', 'none');
+                        
+                        notifyState = 'success';
+                        
+                    } else {
+                        notifyState = 'error';
+                    }
+                    
+                    showMultipleNotifies(varData.message, notifyState);
+                    
+                } else {
+                    showNotify('%error_getting_data%', '', 'error');
+                }
+                
+            }
+        );
+        
+    }
+    
+});
+</script>

@@ -1,0 +1,133 @@
+$scoreInfo
+<div class="row">
+    <div class="col-sm-6">
+        <form method="post">
+            <div class="panel panel-default">
+                <div class="panel-heading">%match_confirm%</div>
+                <div class="panel-body">
+                    $error_score
+                    <div class="row">
+                        <div class="col-sm-6 right">
+                            <label>$team1_name</label><br />
+                            <div class="form-inline">
+                                <input type="number" min="0" max="40" 
+                                       name="team1_score" 
+                                       value="$ergebnis1" 
+                                       class="form-control cup-match-score" 
+                                       required="required" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>$team2_name</label><br />
+                            <div class="form-inline">
+                                <input type="number" min="0" max="40" 
+                                       name="team2_score" 
+                                       value="$ergebnis2" 
+                                       class="form-control cup-match-score" 
+                                       required="required" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6 right">
+                            <span>Default Win <input type="checkbox" name="team1_defwin" class="cup-match-defwin" /></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span><input type="checkbox" name="team2_defwin" class="cup-match-defwin" /> Default Win</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input type="hidden" name="team" value="$team" />
+                    <input type="hidden" name="match_id" value="$matchID" />
+                    <button type="submit" name="submitMatchScore" 
+                            class="btn btn-info btn-sm white darkshadow">
+                        %save%
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-6">
+        <form method="post" enctype="multipart/form-data">
+            <div class="panel panel-default" id="screenshots">
+                <div class="panel-heading">Screenshot Upload</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>%category%</label>
+                        <select name="screenshot_category" 
+                               class="form-control">
+                            $screenshotCategories
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Screenshot</label>
+                        <input type="file" name="screenshot_status" 
+                               class="form-control" 
+                               accept="image/*" />
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input type="hidden" name="match_id" value="$matchID" />
+                    <button type="submit" name="submitScreenUpload" 
+                            class="btn btn-info btn-sm white darkshadow">
+                        %save%
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+var scoreIsEditable = $scoreEditable;
+
+function updateMatchScore(isEditable) {
+
+    if (isEditable) {
+        $(".cup-match-score").removeAttr('disabled');
+    } else {
+        $(".cup-match-score").attr('disabled', 'disabled');
+    }
+
+}
+
+$(document).ready(function () {
+
+    if (!scoreIsEditable) {
+
+        updateMatchScore(scoreIsEditable);
+
+        if (scoreIsEditable) {
+            $(".cup-match-defwin").removeAttr('disabled');
+        } else {
+            $(".cup-match-defwin").attr('disabled', 'disabled');
+        }
+
+        $("button[name=submitMatchScore]").attr('disabled', 'disabled');
+
+    }
+
+    $("input[name=team1_defwin]").click(function () {
+
+        if (this.checked) {
+            updateMatchScore(false);
+            $("input[name=team2_defwin]").removeAttr('checked');
+        } else {
+            updateMatchScore(true);
+        }
+
+    });
+
+    $("input[name=team2_defwin]").click(function () {
+
+        if (this.checked) {
+            updateMatchScore(false);
+            $("input[name=team1_defwin]").removeAttr('checked');
+        } else {
+            updateMatchScore(true);
+        }
+
+    });
+
+});
+
+</script>

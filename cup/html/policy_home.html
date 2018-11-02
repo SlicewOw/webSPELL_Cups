@@ -1,0 +1,24 @@
+<form method="post">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="pull-left">
+				<h1 class="panel-title">%policy%</h1>
+			</div>
+			<div class="pull-right">
+				$date
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="panel-body">
+        	<textarea name="policy" id="policy" class="form-control">$content</textarea>
+		</div>
+		<div class="panel-footer">
+            <button type="submit" name="submitPolicy" class="btn btn-info btn-sm white darkshadow">
+				%save%
+			</button>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+	CKEDITOR.replace( 'policy' );
+</script>

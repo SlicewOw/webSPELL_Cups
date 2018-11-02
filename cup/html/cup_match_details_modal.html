@@ -1,0 +1,257 @@
+<div class="modal fade" id="cup-match-details-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Match Details</h4>
+			</div>
+			<div class="modal-body">
+				<ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+						<a href="#home" aria-controls="home" 
+                           role="tab" 
+                           data-toggle="tab">
+                            Server
+                        </a>
+					</li>
+                    <li role="presentation">
+                        <a href="#player" aria-controls="player" 
+                           role="tab" 
+                           data-toggle="tab">
+                            Player
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#team1_details" aria-controls="team1_details" 
+                           role="tab" 
+                           data-toggle="tab" 
+                           class="team1_name"></a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#team2_details" aria-controls="team2_details" 
+                           role="tab" 
+                           data-toggle="tab" 
+                           class="team2_name"></a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#match_settings" aria-controls="match_settings" 
+                           role="tab" 
+                           data-toggle="tab" 
+                           class="match_settings">
+                            Settings
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#mapvote_status" onclick="updateMapVote();" 
+                           aria-controls="mapvote_status" 
+                           role="tab" 
+                           data-toggle="tab" 
+                           class="mapvote_status">
+                            Map-Vote
+                        </a>
+                    </li>
+                </ul>
+                <br />
+                <div id="matchDetailsLoader">
+                    <img src="$image_url/loader.gif" alt="loading..." />
+                </div>
+                <div id="tabContentContainer" class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="home">
+        				$serverSettings
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="player">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h1 class="panel-title team1_name"></h1>
+                                    </div>
+                                    <div class="list-group" id="team1_ListContainer"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h1 class="panel-title team2_name"></h1>
+                                    </div>
+                                    <div class="list-group" id="team2_ListContainer"></div>
+                                </div>
+                            </div>
+                        </div>		
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="team1_details">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h1 class="panel-title team1_name"></h1>
+							</div>
+							<table class="table table-striped" id="team1_DetailsContainer"></table>
+						</div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="team2_details">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h1 class="panel-title team2_name"></h1>
+							</div>
+							<table class="table table-striped" id="team2_DetailsContainer"></table>
+						</div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="match_settings">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h1 class="panel-title">Match Settings</h1>
+							</div>
+							<div class="panel-body" id="matchSettings_container"></div>
+						</div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="mapvote_status">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h1 class="panel-title">Map-Vote</h1>
+							</div>
+							<div class="panel-body" id="mapvote_container"></div>
+						</div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm" 
+                        data-dismiss="modal">
+					%close%
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+var match_id;
+
+function updateMapVote() {
+    "use strict";
+
+    match_id = $("#match_id").val();
+
+    $("#mapvote_container").html('<img src="$image_url/loader.gif" alt="" />');
+
+    $.get(
+        "ajax.php?site=admin_cup_match_details",
+        {
+            action : 'mapvote',
+            match_id : match_id
+        },
+        function (data, status) {
+			
+            if (status === "success") {
+                
+                var varData = JSON.parse(data);
+
+                if (varData.status) {
+                
+                    $("#mapvote_container").fadeOut('slow', function() {
+                        $("#mapvote_container").html(varData.text);
+                        $("#mapvote_container").fadeIn('slow');
+                    });
+                    
+                } else {
+                    showMultipleNotifies(varData.message, 'error');
+                }
+
+            }
+            
+        }
+    );
+
+}
+
+function openAdminDetails(match_id) {
+    "use strict";
+
+    var cup_url;
+
+    $.get(
+        "ajax.php?site=admin_cup_match_details",
+        {
+            match_id : match_id
+        },
+        function (data, status) {
+			
+            if (status === "success") {
+                
+                $("#matchDetailsLoader").css('display', 'none');
+                $("#tabContentContainer").css('display', 'block');
+
+                $('#cup-match-details-modal').modal('show');
+                
+                var varData = JSON.parse(data);
+
+                if (varData.status) {
+                    
+                    $("#cup_admin_details_match").css('visibility', 'visible');
+                    cup_url = "admincenter.php?site=cup&mod=cup&action=cup&id=" + varData.cup_id + "&page=bracket#cup_round_" + varData.cup_round;
+                    $("#matchDetailsForm").attr("action", cup_url);
+                    $("#match_server").attr("value", varData.server.server.ip);
+                    $("#match_pw").attr("value", varData.server.server.pw);
+                    $("#match_rcon").attr("value", varData.server.server.rcon);
+                    $("#match_gotv").attr("value", varData.server.gotv.ip);
+                    $("#match_gotv_pw").attr("value", varData.server.gotv.pw);
+                    $("#match_id").attr("value", match_id);
+
+                    var listGroupItem, 
+                        playerName, 
+                        playerSteamID,
+                        x, 
+                        n, 
+                        anzPlayer;
+
+                    for (x = 1; x < 3; x++) {
+
+                        $(".team" + x + "_name").html(varData.player["team" + x].details.name);
+
+                        listGroupItem = "";
+
+                        anzPlayer = varData.player["team" + x].list.length;
+                        for (n = 0; n < anzPlayer; n++) {
+
+                            playerName = varData.player["team" + x].list[n].nickname;
+
+                            if (varData.player["team" + x].list[n].position === "1") {
+                                playerName += " (Admin)";
+                            }
+
+                            playerSteamID = varData.player["team" + x].list[n].steam_id;
+
+                            listGroupItem += "<div class=\"list-group-item\">";
+                            listGroupItem += playerName;
+                            listGroupItem += "<span class=\"pull-right\">" + playerSteamID + "</span>";
+                            listGroupItem += "</div>";
+
+                        }
+                        
+                        $("#team" + x + "_ListContainer").html(listGroupItem);
+                        $("#team" + x + "_DetailsContainer").html(varData.details["team" + x]);
+                        
+                        $("#matchSettings_container").html(varData.settings.html);
+
+                    }
+                    
+                } else {
+                    $("#matchDetailsLoader").css('display', 'block');
+                    $("#tabContentContainer").css('display', 'none');
+                }
+
+            }
+            
+        }
+    );
+
+}
+
+function closeAdminDetails() {
+    "use strict";
+	$('#cup-match-details-modal').modal('hide');
+    return true;
+}
+
+</script>

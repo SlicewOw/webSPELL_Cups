@@ -1,0 +1,59 @@
+<hr />
+<form method="post">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label>Map 1</label>
+                <select name="map[]"
+                        class="form-control">
+                    $mapList
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label>Map 2</label>
+                <select name="map[]"
+                        class="form-control">
+                    $mapList
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label>Map 3</label>
+                <select name="map[]"
+                        class="form-control">
+                    $mapList
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label>Map 4</label>
+                <select name="map[]"
+                        class="form-control">
+                    $mapList
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label>Decider</label>
+                <select name="map[]"
+                        class="form-control">
+                    $mapList
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="pull-right">
+        <input type="hidden" name="match_id" value="$match_id" />
+        <input type="hidden" name="runde" value="$runde" />
+        <button type="submit" name="submitMapsByAdmin"
+                class="btn btn-success btn-sm white darkshadow">
+            %save%
+        </button>
+    </div>
+    <div class="clear"></div>
+</form>

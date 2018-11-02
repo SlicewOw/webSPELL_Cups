@@ -1,0 +1,133 @@
+<div class="pull-left">
+    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#add-penalty">
+        %add_penalty%
+    </button>
+    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#add-category">
+        %add_category%
+    </button>
+</div>
+<div class="pull-right">
+    <a href="admincenter.php?site=cup&amp;mod=penalty" class="btn btn-sm $overviewMenu">
+        %overview%
+    </a>
+    <a href="admincenter.php?site=cup&amp;mod=penalty&amp;action=category" class="btn btn-sm $categoryMenu">
+        %category%
+    </a>
+</div>
+<div class="clear"></div>
+<br />
+<form method="post">
+    <div class="modal fade" id="add-penalty" tabindex="-1" role="dialog" aria-labelledby="add-penalty-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="add-penalty-label">%add_penalty%</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>User</label>
+                                <select name="user_id" class="form-control penalty-select">
+                                    $users
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Team</label>
+                                <select name="team_id" class="form-control penalty-select">
+                                    $teams
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>%reason%</label>
+                        <select name="reason_id" class="form-control">
+                            $reasons
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>%comment% *</label>
+                        <textarea name="comment" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="penalty_id" value="0" />
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                        %close%
+                    </button>
+                    <button type="submit" name="submitAddPenalty" class="btn btn-info btn-sm white darkshadow">
+                        %save%
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+$(".penalty-select").change(function() {
+
+    var select = $(this);
+
+    if(select.val() > 0) {
+
+        $(".penalty-select").attr('disabled', 'disabled');
+        select.removeAttr('disabled');
+
+    } else {
+        $(".penalty-select").removeAttr('disabled');
+    }
+
+});
+</script>
+<form method="post">
+    <div class="modal fade" id="add-category" tabindex="-1" role="dialog" aria-labelledby="add-category-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="add-category-label">%add_category%</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Name DE *</label>
+                                <input type="text" name="name_de" value="" class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Name UK *</label>
+                                <input type="text" name="name_uk" value="" class="form-control" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>%penalty%</label>
+                        <select name="points" class="form-control">
+                            $points
+                        </select>
+                    </div>
+                    <span><input type="checkbox" name="lifetime" class="input_checkbox" value="1" /> %penalty_lifetime%</span>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="reason_id" value="0" />
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                        %close%
+                    </button>
+                    <button type="submit" name="submitAddCategory" class="btn btn-info btn-sm white darkshadow">
+                        %save%
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

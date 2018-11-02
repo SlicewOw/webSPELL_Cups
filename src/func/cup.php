@@ -241,6 +241,32 @@ function getGame($game_id, $cat = '') {
 
 }
 
+function getuserlist($selected = '') {
+    global $_database;
+
+    $users = '<option value="0">-- / --</option>';
+    $user_id = mysqli_query(
+        $_database, 
+        "SELECT userID, nickname FROM ".PREFIX."user 
+            WHERE banned IS NULL 
+            ORDER BY nickname ASC"
+    );
+
+    while ($ds = mysqli_fetch_array($user_id)) {
+        $users .= '<option value="'.$ds['userID'].'">'.$ds['nickname'].' (#'.$ds['userID'].')</option>';
+    }
+
+    if(!empty($selected)) {
+        $users = str_replace(
+            'value="'.$selected.'"', 
+            'value="'.$selected.'" selected="selected"', 
+            $users
+        );
+    }
+
+    return $users;
+}
+
 /* Adminzugang */
 
 function iscupadmin($user_id) {
@@ -2109,17 +2135,17 @@ function getPenaltyCategories($selected = 0) {
 
     $returnValue = '';
     while ($get = mysqli_fetch_array($ds)) {
-        
+
         $name = $get['name_de'];
-        
+
         if ($get['lifetime'] == 1) {
             $name .= ' (' . $_language->module['lifetime'] . ')';
         } else {
             $name .= ' (' . $get['points'] . ' ' . $_language->module['penalties'] . ')';
         }
-        
+
         $returnValue .= '<option value="' . $get['reasonID'] . '">' . $name . '</option>"';
-        
+
     }
 
     $returnValue = selectOptionByValue($returnValue, $selected);

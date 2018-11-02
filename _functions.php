@@ -630,30 +630,30 @@ function recursiveRemoveDirectory($directory)
 
 function showError($text, $showInfo = FALSE) {
     if($showInfo) {
-        $text = '<span class="glyphicon glyphicon-info-sign"></span> ' . $text;
+        $text = '<span class="fa fa-info-circle"></span> ' . $text;
     }
-    return '<div class="alert alert-danger">' . clearfromtags($text) . '</div>';
+    return '<div class="alert alert-danger">' . getoutput($text) . '</div>';
 }
 
 function showWarning($text, $showInfo = FALSE) {
     if($showInfo) {
-        $text = '<span class="glyphicon glyphicon-info-sign"></span> ' . $text;
+        $text = '<span class="fa fa-info-circle"></span> ' . $text;
     }
-    return '<div class="alert alert-warning">' . clearfromtags($text) . '</div>';
+    return '<div class="alert alert-warning">' . getoutput($text) . '</div>';
 }
 
 function showInfo($text, $showInfo = TRUE) {
     if($showInfo) {
-        $text = '<span class="glyphicon glyphicon-info-sign"></span> ' . $text;
+        $text = '<span class="fa fa-info-circle"></span> ' . $text;
     }
-    return '<div class="alert alert-info"> ' . clearfromtags($text) . '</div>';
+    return '<div class="alert alert-info"> ' . getoutput($text) . '</div>';
 }
 
 function showMessage($text, $showInfo = FALSE) {
     if($showInfo) {
-        $text = '<span class="glyphicon glyphicon-info-sign"></span> ' . $text;
+        $text = '<span class="fa fa-info-circle"></span> ' . $text;
     }
-    return '<div class="alert alert-success">' . clearfromtags($text) . '</div>';
+    return '<div class="alert alert-success">' . getoutput($text) . '</div>';
 }
 
 function getoutput($text) {
@@ -666,4 +666,20 @@ function getoutput($text) {
         $text
     );
     return $text;
+}
+
+function selectOptionByValue($options, $selected_value, $checkIfValueIsInteger = TRUE) {
+
+    if ($checkIfValueIsInteger && !validate_int($selected_value, true)) {
+        return $options;
+    }
+
+    $options = str_replace(
+        'value="' . $selected_value . '"',
+        'value="' . $selected_value . '" selected="selected"',
+        $options
+    );
+
+    return $options;
+
 }

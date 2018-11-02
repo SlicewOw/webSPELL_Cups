@@ -1,0 +1,33 @@
+<form method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">Map Pool %delete%</h1>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" class="form-control" value="$name" readonly />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>%game%</label>
+                        <input type="text" name="game" class="form-control" value="$game" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Maps</label>
+                $mapList	             
+            </div>
+        </div>
+        <div class="panel-footer">
+            <input type="hidden" name="mappool_id" value="$mappool_id" />
+            <button type="submit" name="submitDeleteMapPool" class="btn btn-info btn-sm white darkshadow">
+                %delete%
+            </button>
+        </div>
+    </div>
+</form>

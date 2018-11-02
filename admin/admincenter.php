@@ -173,6 +173,8 @@ $admin_url = 'admin/admincenter.php';
     <link href="../css/layout.css" rel="stylesheet">
     <link href="../css/pages.css" rel="stylesheet">
 
+    <script src="../js/google_graphs.js"></script>
+
   </head>
 
 <body>

@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-sm-8">
+        <form method="post">    
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">%activate_gameaccount%</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>User</label>
+                        <input type="text" name="username" 
+                               readonly 
+                               class="form-control" 
+                               value="$nickname" />
+                    </div>
+                    <div class="form-group">
+                        <label>%date%</label>
+                        <input type="text" name="date" 
+                               readonly 
+                               class="form-control" 
+                               value="$date" />
+                    </div>
+                    <div class="form-group">
+                        <label>Game</label>
+                        <input type="text" name="category" 
+                               readonly 
+                               class="form-control" 
+                               value="$game" />
+                    </div>
+                    <div class="form-group">
+                        <label>Value</label>
+                        <input type="text" name="value" 
+                               readonly 
+                               class="form-control" 
+                               value="$value" />
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input type="hidden" name="user_id" value="$user_id" />
+                    <input type="hidden" name="gameaccount_id" value="$gameacc_id" />
+                    <button type="submit" name="submitGameaccActive" 
+                            class="btn btn-info btn-sm white darkshadow">
+                        %activate%
+                    </button> 
+                    <button type="submit" name="deleteGameaccActive" 
+                            onclick="return confirm('%confirm_delete%');" 
+                            class="btn btn-default btn-sm">
+                        %delete%
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-4">  
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h1 class="panel-title">%previous_gameaccounts%</h1>
+            </div>
+            <table class="table table-striped">
+                <tbody>
+                    $gameaccountList
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

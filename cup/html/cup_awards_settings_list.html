@@ -1,0 +1,21 @@
+<tr>
+    <td>$award_id</td>
+    <td id="cat_$award_id_name">$name</td>
+    <td id="cat_$award_id_desc">$description</td>
+    <td>$icon</td>
+    <td id="cat_$award_id_type">$active_column</td>
+    <td id="cat_$award_id_value">$value</td>
+    <td>
+        <button type="button" onclick="editCategory($award_id);" class="btn btn-default btn-xs">
+            %edit%
+        </button>
+        <button type="button" class="btn btn-default btn-xs" onclick="MM_confirm('%really_delete_category%', 'admincenter.php?site=cup&mod=awards&settings&action=deleteCategory&award_id=$award_id')">
+            %delete%
+        </button>
+    </td>
+    <td>
+        <select name="sort[]" class="form-control">
+            $sort
+        </select>
+    </td>
+</tr>

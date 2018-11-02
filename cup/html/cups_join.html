@@ -1,0 +1,50 @@
+<form name="post" method="post">
+    <div class="panel panel-default">
+    	<div class="panel-heading">
+        	<h1 class="panel-title">%join_cup%</h1>
+        </div>
+    	<div class="panel-body">
+        	$error
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="form-group">
+						<label>Cup</label>
+						<input type="text" value="$cupname" class="form-control" readonly />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Check-In</label>
+                        <input type="text" value="$checkin" class="form-control" readonly />
+                    </div>
+				</div>
+				<div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Start</label>
+                        <input type="text" value="$start" class="form-control" readonly />
+                    </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="form-group"$showTeams>
+						<label>Team</label>
+						<select name="team" class="form-control">$teams</select>
+					</div>
+				</div>
+			</div>
+        </div>
+        <div class="panel-footer">
+			<div class="pull-left">
+				<input type="hidden" name="cup_id" value="$cupID" />
+				<input type="submit" name="submitCupJoin" class="btn btn-info btn-sm white darkshadow"$submitButtonStatus value="%subscribe%" />
+			</div>
+			<div class="pull-right">
+				<a href="index.php?site=teams&amp;action=add" class="btn btn-success btn-sm white darkshadow">%team_add%</a>
+			</div>
+			<div class="clear"></div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,30 @@
+<form method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">Informationen</div>
+        <div class="list-group">
+            <span class="list-group-item">$game</span>
+            $cup_maps
+            <span class="list-group-item">%mode%: $mode</span>
+            <span class="list-group-item">Check-In: $date_checkin</span>
+            <span class="list-group-item">Start: $date_start</span>
+            <span class="list-group-item">Teams: $teams_registered / $size</span>
+            <span class="list-group-item">Best&auml;tigte Teams: $teams_checkedin / $size</span>
+            <span class="list-group-item">%max_penalty%: $pps_max</span>
+            <div class="list-group-item">
+                Hits: $hits_total
+                <span class="pull-right">(Home: $hits_home / Teams: $hits_teams / %groupstage%: $hits_groups / Bracket: $hits_bracket / %rules%: $hits_rules)</span>
+            </div>
+        </div>
+        <div class="panel-body">
+            <label>%description%</label>
+            <textarea name="cupDescription" 
+                      class="form-control">$description</textarea>
+        </div>
+        <div class="panel-footer">
+            <button type="submit" name="submitCupDescription" 
+                    class="btn btn-info btn-sm white darkshadow">
+                %save%
+            </button>
+        </div>
+    </div>
+</form>

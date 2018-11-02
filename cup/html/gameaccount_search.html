@@ -1,0 +1,291 @@
+<div class="row">
+    <div class="col-sm-6">
+        <div class="pull-left clearfix">
+            <a href="admincenter.php?site=cup&mod=gameaccounts" 
+               class="btn btn-sm $isOverview">
+                %overview%
+            </a>
+            <a href="admincenter.php?site=cup&mod=gameaccounts&action=multiaccounts" 
+               class="btn btn-sm $isMultiaccount">
+                Multiaccounts
+            </a>
+            <a href="admincenter.php?site=cup&mod=gameaccounts&action=bannedaccounts" 
+               class="btn btn-sm $isBannedaccount">
+                %banned_accounts%
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="pull-right clearfix">
+            <button type="button" class="btn btn-danger btn-sm white darkshadow"
+                    data-toggle="modal" 
+                    data-target="#add-banned-account">
+                %add_banned_account%
+            </button>
+            <button onclick="showSteamIDFinder();" 
+                    class="btn btn-success btn-sm white darkshadow">
+                SteamID Finder
+            </button>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="pull-right clearfix">
+            <div class="form-group">
+                <input type="text" class="form-control" 
+                       placeholder="1:0:123456" 
+                       onkeyup="findGameaccount(this.value);" />
+            </div>
+        </div>
+    </div>
+</div>
+<form method="post">
+    <div class="modal fade" id="add-banned-account" tabindex="-1" role="dialog" aria-labelledby="add-banned-account-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" 
+                            data-dismiss="modal" 
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="add-banned-account-label">
+                        %add_banned_account%
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>%game%</label>
+                                <select name="bannedGame" class="form-control">
+                                    $games
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Value *</label>
+                                <input type="text" name="bannedValue" 
+                                       id="bannedValue" 
+                                       class="form-control"
+                                       placeholder="https://steamcommunity.com/id/slicewuff"
+                                       required="required" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>%description%</label>
+                                <textarea name="bannedInfo" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-info">%description_is_public%</div>
+                </div>
+                <div class="modal-footer clearfix">
+                    <div class="pull-left">
+                        <button type="button" name="addDefaultSteamURL"
+                                class="btn btn-default btn-sm">
+                            %add_steam_url%
+                        </button>
+                    </div>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-default btn-sm" 
+                                data-dismiss="modal">
+                            %close%
+                        </button>
+                        <button type="submit" name="submitBannedAccount"
+                                class="btn btn-success btn-sm white darkshadow">
+                            %save%
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div id="SteamIDFinder" style="display: none;">
+	<form method="post">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">SteamID Finder</h1>
+            </div>
+            <div class="panel-body">
+            	<div class="form-group">
+                	<label>SteamID / Steam64 ID / Steam Community URL *</label>
+                    <input type="text" name="search_value" id="SteamIDValue" 
+                           class="form-control" 
+                           placeholder="https://steamcommunity.com/id/slicewow" 
+                           required="required" />
+                </div>
+            </div>
+            <div class="list-group" id="steamListContainer"></div>
+            <div class="panel-footer">
+                <div class="pull-left">
+                    <button type="submit" id="SteamIDFinderSubmit" 
+                            class="btn btn-info btn-sm white darkshadow">
+                        %finde_account%
+                    </button>            
+                </div>
+				<div class="pull-right">
+                    <button type="button" name="setSteamCommunityURL" 
+                            class="btn btn-default btn-sm">
+                        %set_steamcommunityurl%
+                    </button>            
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </form>	
+</div>
+<div id="searchResults" style="display: none;">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h1 class="panel-title">%search_results%</h1>
+		</div>
+		<table class="table table-striped">
+			<thead>
+				<th style="width: 5%;">#</th>
+				<th style="width: 20%;">Gameaccount ID</th>
+				<th style="width: 20%;">User</th>
+				<th style="width: 20%;">%game%</th>
+				<th style="width: 10%;">Value</th>
+				<th style="width: 5%;">Aktiv?</th>
+				<th style="width: 20%;">Admin</th>
+			</thead>
+			<tbody id="resultContainer"></tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function () {
+    
+	$("#SteamIDFinderSubmit").click(function (e) {
+        
+		e.preventDefault();
+        
+		$("#searchResults").css('display', 'none');
+        
+		var value = $("#SteamIDValue").val(),
+            varData;
+        
+		if (value !== "") {
+		
+            $.get(
+                "ajax.php?site=gameaccount_find",
+                {
+                    state : 'extern',
+                    value : value
+                },
+                function (data, status) {
+
+                    if (status === "success") {
+
+                        varData = JSON.parse(data);
+                        if (varData.results > 0) {
+                            $("#steamListContainer").html(varData.htmlData);
+                        } else {
+                            $("#steamListContainer").html('<div class="list-group-item">%no_gameaccount%</div>');
+                        }
+
+                    }
+
+                }
+            );
+		
+		}
+		
+    });
+        
+    $("button[name=setSteamCommunityURL]").click(function (e) {
+        e.preventDefault();
+        setSteamURL('SteamIDValue');
+        $("button[name=setSteamCommunityURL]").blur();
+    });
+    
+    $("button[name=addDefaultSteamURL]").click(function (e) {
+        e.preventDefault();
+        setSteamURL('bannedValue')
+        $("button[name=addDefaultSteamURL]").blur();
+    });
+    
+});
+    
+function setSteamURL(container_id) {
+    $("#" + container_id).val('https://steamcommunity.com/id/');
+    $("#" + container_id).focus();
+}    
+    
+function showSteamIDFinder() {
+
+	var varState = $("#SteamIDFinder").css('display');
+	if (varState === 'none') {
+		$("#SteamIDFinder").css('display', 'block');
+	} else {
+		$("#SteamIDFinder").css('display', 'none');
+	}
+	
+}
+function findGameaccount(value) {
+	
+	if(value.length > 2) {
+	
+		$("#SteamIDFinder").css('display', 'none');
+        
+        if (value.toLowerCase() !== 'system') {
+           
+            $.get(
+                "ajax.php?site=gameaccount_find", 
+                {
+                    state : 'intern',
+                    value : value     
+                },
+                function (data, status) {
+
+                    $("#searchResults").css('display', 'block');
+
+                    try {
+
+                        var varData = JSON.parse(data);
+
+                        if (varData.results > 10) {
+                            
+                            $("#resultContainer").html(
+                                '<tr><td colspan="7"><div class="alert alert-info">%too_much_accounts% (' + varData.results + ')</div></td></tr>'
+                            );
+                            
+                        } else if (varData.results > 0) {
+                            
+                            $("#resultContainer").fadeOut('slow', function() {
+                                $("#resultContainer").html(varData.htmlData);
+                                $("#resultContainer").fadeIn('slow');
+                            });
+
+                        } else {
+                            $("#resultContainer").html('<tr><td colspan="7">%no_gameaccount%</td></tr>');
+                        }
+
+                    } catch (err) {
+                        $("#resultContainer").html('<tr><td colspan="7"><div class="alert alert-danger">' + err.message + '</div></td></tr>');
+                    }
+
+                }
+            );
+
+        } else {
+            $("#resultContainer").html('<tr><td colspan="7"><div class="alert alert-danger">%search_failed%</div></td></tr>');
+        }
+        
+	} else {
+        
+        $("#resultContainer").fadeOut('slow', function() {
+            $("#resultContainer").html('');
+            $("#resultContainer").fadeIn('slow');
+        });
+
+		$("#searchResults").css('display', 'none');
+        
+	}
+	
+}
+</script>
+<br />

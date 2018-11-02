@@ -1,0 +1,29 @@
+<form method="post">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Admin</div>
+        <div class="panel-body">
+        	$error_score
+        	<div class="form-inline">
+            	<input type="number" min="0" max="40" name="team1_score" value="$ergebnis1" class="form-control" />
+                : 
+                <input type="number" min="0" max="40" name="team2_score" value="$ergebnis2" class="form-control" />
+            </div>
+        </div>
+        <div class="list-group">
+            <div class="list-group-item">
+            	<label>Default Win</label><br />
+                <p><input type="radio" name="admin_defwin" value="0" checked="checked" /> %no_action%</p>
+                <p><input type="radio" name="admin_defwin" value="1" /> Team 1</p>
+                <p><input type="radio" name="admin_defwin" value="2" /> Team 2</p>
+                <p><input type="radio" name="admin_defwin" value="3" /> %no_winner%</p>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <input type="hidden" name="team" value="admin" />
+        	<input type="hidden" name="match_id" value="$matchID" />
+        	<input type="submit" name="submitAdminWinner" class="btn btn-info btn-sm white darkshadow" value="%save%" />
+        	<input type="submit" name="submitMapvoteReset" class="btn btn-default btn-sm" value="Map-Vote reset" />
+        	<input type="submit" name="submitMatchReset" class="btn btn-default btn-sm" value="Match reset" />
+        </div>
+    </div>
+</form>

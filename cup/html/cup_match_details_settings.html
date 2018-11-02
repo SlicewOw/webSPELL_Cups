@@ -1,0 +1,133 @@
+<div class="row">
+	<div class="col-sm-6">
+		<div class="form-group">
+			<label>Format</label>
+			<select name="format" class="form-control">
+				$settingForm
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="form-group">
+			<label>Map-Vote</label>
+			<select name="map_vote" class="form-control">
+				$settingMapVote
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="form-group">
+			<label>%date%</label>
+			<input type="date" name="date_start" class="form-control" value="$match_date" />
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="form-group">
+			<label>%date%</label>
+			<div class="form-inline">
+				<select name="hour" class="form-control">$hours</select> : 
+				<select name="minute" class="form-control">$minutes</select>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="form-group">
+			<label>Match aktiv?</label>
+			<select name="match_active" class="form-control">
+				$settingMatchActive
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="form-group">
+			<label>%comments%?</label>
+			<select name="match_comments" class="form-control">
+				$settingComments
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="form-group">
+			<label>Admin only?</label>
+			<select name="match_admin" class="form-control">
+				$settingAdminMatch
+			</select>
+		</div>
+	</div>
+</div>
+<hr />
+<div class="row">
+	<div class="col-sm-6">
+		<div class="form-group">
+			<label>Team 1 %confirmed%?</label>
+			<select name="team1_confirmed" class="form-control">
+				$settingTeam1Confirmed
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="form-group">
+			<label>Team 2 %confirmed%?</label>
+			<select name="team2_confirmed" class="form-control">
+				$settingTeam2Confirmed
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="form-group">
+			<label>Admin %confirmed%?</label>
+			<select name="admin_confirmed" class="form-control">
+				$settingAdminConfirmed
+			</select>
+		</div>
+	</div>
+</div>
+<hr />
+<button type="button" name="submitMatchSettings" class="btn btn-info btn-sm white darkshadow">
+	%save%
+</button>
+<script type="text/javascript">
+$("button[name=submitMatchSettings]").click(function(e) {
+
+	e.preventDefault();
+		
+	$("button[name=submitMatchSettings]").attr('disabled', 'disabled');
+	
+	$.post(
+		"ajax.php?site=admin_cup_match_details&action=saveMatchSettings&match_id=$match_id", 
+		{
+			format			: $("select[name=format]").val(),
+			date_start		: $("input[name=date_start]").val(),
+			hour			: $("select[name=hour]").val(),
+			minute			: $("select[name=minute]").val(),
+			map_vote		: $("select[name=map_vote]").val(),
+			match_active	: $("select[name=match_active]").val(),
+			match_comments	: $("select[name=match_comments]").val(),
+			match_admin		: $("select[name=match_admin]").val(),
+			team1_confirmed : $("select[name=team1_confirmed]").val(),
+			team2_confirmed : $("select[name=team2_confirmed]").val(),
+			admin_confirmed : $("select[name=admin_confirmed]").val()
+		}, 
+		function(data, status){
+			
+			if(status === "success") {
+				
+				var varData = JSON.parse(data),
+                    alert_type;
+				if(varData.status) {
+					alert_type = 'success';
+				} else {
+					alert_type = 'error';
+				}
+                
+                showMultipleNotifies(varData.message, alert_type);
+				
+				$("button[name=submitMatchSettings]").removeAttr('disabled');
+				
+			}
+			
+		}
+	);
+	
+});
+</script>

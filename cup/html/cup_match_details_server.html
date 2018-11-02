@@ -1,0 +1,81 @@
+<form method="post" id="matchDetailsForm">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label>Server IP</label>
+				<input type="text" class="form-control" id="match_server" name="match_server" value="" />
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label>Passwort</label>
+				<input type="text" class="form-control" id="match_pw" name="match_pw" value="" />
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label>RCON Password</label>
+				<input type="text" class="form-control" id="match_rcon" name="match_rcon" value="" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label>GOTV IP</label>
+				<input type="text" class="form-control" id="match_gotv" name="match_gotv" value="" />
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label>GOTV Passwort</label>
+				<input type="text" class="form-control" id="match_gotv_pw" name="match_gotv_pw" value="" />
+			</div>
+		</div>
+	</div>
+	<input type="hidden" name="match_id" id="match_id" value="" />
+	<button type="submit" name="submitMatchServer" class="btn btn-info btn-sm darkshadow">
+		%save%
+	</button>
+</form>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$("button[name=submitMatchServer]").click(function(e) {
+		
+		e.preventDefault();
+		
+		var match_id = $("#match_id").val();
+		
+		$("button[name=submitMatchServer]").attr('disabled', 'disabled');
+		
+		$.post(
+			"ajax.php?site=admin_cup_match_details&action=saveMatchServer&match_id=" + match_id,
+			{
+				server_ip		: $("input[name=match_server]").val(),
+				server_pw		: $("input[name=match_pw]").val(),
+				server_rcon		: $("input[name=match_rcon]").val(),
+				gotv_ip			: $("input[name=match_gotv]").val(),
+				gotv_pw			: $("input[name=match_gotv_pw]").val()
+			},
+			function(data, status){
+				
+				var varData = JSON.parse(data),
+                    alert_type;
+				if(varData.status) {
+					alert_type = 'success';
+				} else {
+					alert_type = 'error';
+				}
+                
+                showMultipleNotifies(varData.message, alert_type);
+				
+				$("button[name=submitMatchServer]").removeAttr('disabled');
+				
+			}
+		);
+		
+	});
+	
+});
+</script>

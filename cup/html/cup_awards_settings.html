@@ -1,0 +1,32 @@
+<form method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">Cup Awards - %categories%</h1>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <th>#</th>
+                <th>Name</th>
+                <th>%description%</th>
+                <th>%icon%</th>
+                <th>%active_column%</th>
+                <th>%value%</th>
+                <th>%actions%</th>
+                <th>%sort%</th>
+            </thead>
+            <tbody>
+                $awardCategoryList
+            </tbody>
+        </table>
+        <div class="panel-footer">
+            <input type="hidden" name="settings" value="1" />
+            <input type="hidden" name="categoryList" value="$categorySortList" />
+            <div class="pull-right">
+                <button type="submit" name="sortCategories" class="btn btn-info btn-sm white darkshadow">
+                    %sort%
+                </button>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</form>

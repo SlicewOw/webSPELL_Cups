@@ -1,0 +1,25 @@
+<form method="post" action="index.php?site=gameaccount&amp;action=edit&amp;gID=$gameaccID">
+    <div class="panel panel-default">  
+        <div class="panel-heading">
+            <h1 class="panel-title">%edit_gameaccount%</h1>
+        </div>
+        <div class="panel-body">    
+        	$error       
+            <div class="form-group">
+            	<label>Game</label>
+                <input type="text" class="form-control" name="game" value="$game" readonly="readonly" />
+            </div>      
+            <div class="form-group">
+            	<label>Gameaccount ID</label>
+                <input type="text" class="form-control" name="id" value="$id" required="required" />
+            </div>
+        </div>
+        <div class="panel-footer">
+            <input type="hidden" name="game_tag" value="$game_tag" />
+        	<input type="hidden" name="gameaccount_id" value="$gameaccID" />
+        	<button type="submit" name="submitEditGameaccount" class="btn btn-info btn-sm white darkshadow">
+                %save%
+            </button>
+        </div>
+    </div>
+</form>

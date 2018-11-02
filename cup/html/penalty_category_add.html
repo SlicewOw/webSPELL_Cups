@@ -1,0 +1,18 @@
+<form method="post" action="admincenter.php?site=cup&amp;mod=penalty&amp;admin=add_category">
+    $error
+    <div class="form-group">
+        <label>Name DE</label>
+        <input type="text" name="name_de" value="" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Name UK</label>
+        <input type="text" name="name_uk" value="" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>%penalty%</label>
+        <select name="points" class="form-control">$points</select>
+    </div>
+    <span><input type="checkbox" name="lifetime" class="input_checkbox" value="1" /> %penalty_lifetime%</span>
+    <br /><br />
+    <input type="submit" name="add" class="btn btn-info btn-sm white darkshadow" value="%save%" />
+</form>

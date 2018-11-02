@@ -1,0 +1,126 @@
+<form method="post" enctype="multipart/form-data">
+    <div class="panel panel-default">
+        <div class="panel-body" id="ticketContainer">
+            <div class="form-group">
+            	<label>%category%</label>
+                <select name="categoryID" class="form-control">
+                	$categories
+                </select>
+            </div>
+            <hr />
+            <div id="ticketDetailsContainer"></div>
+        </div>
+        <div class="panel-footer">
+        	<button type="submit" name="submitAddAdminTicket" 
+                    class="btn btn-info btn-sm white darkshadow"
+                    disabled="disabled">
+                %save%
+            </button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    setDefaultMessage();
+    
+    $("select[name=categoryID]").change(function () {
+        
+        if ($("select[name=categoryID]").val() === "0") {
+            setDefaultMessage();
+            $("button[name=submitAddAdminTicket]").attr('disabled', 'disabled');
+        } else {
+            ticketUpdate('category', '', '');
+            $("button[name=submitAddAdminTicket]").removeAttr('disabled');
+        }
+        
+    });
+
+});
+
+function setDefaultMessage() {
+    $("#ticketDetailsContainer").html('<span class="italic grey">%select_ticket_category%</span>');
+}
+    
+function getMatchOptions(cup_id) {
+
+    if (cup_id > 0) {
+
+        ticketUpdate('matches', cup_id, 'select[name=selectMatchID]');
+        $("select[name=selectMatchID]").removeAttr('readonly');
+
+    } else {
+
+        $("select[name=selectMatchID]").html('');
+        $("select[name=selectMatchID]").attr('readonly', 'readonly');
+
+    }
+
+}
+
+function getTeamOptions(match_id) {
+
+    if (match_id > 0) {
+
+        ticketUpdate('match_teams', match_id, '');
+        $("select[name=selectMatchID]").removeAttr('readonly');
+
+    } else {
+
+        $("select[name=selectMatchID]").html('');
+        $("select[name=selectMatchID]").attr('readonly', 'readonly');
+
+    }
+
+}
+
+function ticketUpdate(category, value, insertDivID) {
+
+    $.get(
+        "ajax.php?site=admin_ticket",
+        {
+            ticket_type : $("select[name=categoryID]").val(),
+            category : category,
+            value : value
+        },
+        function (data, status) {
+            
+            var dataArray = JSON.parse(data),
+                content,
+                i;
+            
+            if (dataArray.status) {
+                
+                content = dataArray.html;
+
+                if (category === 'category') {
+
+                    $("#ticketDetailsContainer").fadeOut('slow', function() {
+                        $("#ticketDetailsContainer").html(content);
+                        $("#ticketDetailsContainer").fadeIn('slow');
+                    });
+
+                } else if (category === 'match_teams') {
+
+                    for (i = 1; i < 3; i++) {
+
+                        $("#team" + i + "_name").html(dataArray.data.team[i].name);
+                        $("input[name=team" + i + "_id]").val(dataArray.data.team[i].team_id);
+                        $("#team" + i + "_player").html(dataArray.data.player[i]);
+
+                    }
+
+                } else if (insertDivID !== '') {
+                    $(insertDivID).html(content);
+                }
+                
+            } else {
+                showMultipleNotifies(varData.message, 'error');
+            }
+            
+        }
+    );	
+	
+}
+</script>
