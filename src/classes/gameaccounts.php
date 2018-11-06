@@ -73,7 +73,7 @@ class gameaccount {
 
     public function setGameaccountID($gameaccount_id) {
 
-        if(is_null($gameaccount_id)|| !is_numeric($gameaccount_id) || ($gameaccount_id < 1)) {
+        if (is_null($gameaccount_id)|| !is_numeric($gameaccount_id) || ($gameaccount_id < 1)) {
             throw new \Exception($this->lang->module['error_gameaccount_id_type']);
         }
 
@@ -83,14 +83,14 @@ class gameaccount {
 
     public function setGame($game_id = null) {
 
-        if(is_null($game_id) || empty($game_id)) {
+        if (is_null($game_id) || empty($game_id)) {
             throw new \Exception($this->lang->module['error_gameaccount_game'] . ' (1)');
         }
 
-        if(!is_numeric($game_id)) {
+        if (!is_numeric($game_id)) {
 
             $gameIdLength = strlen($game_id);
-            if($gameIdLength < 2 || $gameIdLength > 3) {
+            if ($gameIdLength < 2 || $gameIdLength > 3) {
                 throw new \Exception($this->lang->module['error_gameaccount_game_tag']);
             }
 
@@ -98,11 +98,11 @@ class gameaccount {
 
             $game_id = getGame($game_tag, 'id');
 
-        } else if(!validate_int($game_id)) {
+        } else if (!validate_int($game_id)) {
             throw new \Exception($this->lang->module['error_gameaccount_game'] . ' (2)');
         }
 
-        if($game_id < 1) {
+        if ($game_id < 1) {
             throw new \Exception($this->lang->module['error_gameaccount_game'] . ' (3)');
         }
 
@@ -118,7 +118,7 @@ class gameaccount {
 
         //
         // Game ID exisitert?
-        if($checkIf['exist'] != 1) {
+        if ($checkIf['exist'] != 1) {
             throw new \Exception($this->lang->module['error_gameaccount_game']);
         }
 
@@ -140,9 +140,9 @@ class gameaccount {
 
         //
         // Setze Gameaccount Game Flags
-        if($this->game_tag == 'mc') {
+        if ($this->game_tag == 'mc') {
             $this->isMojangAccount = TRUE;
-        } else if($this->game_tag == 'lol') {
+        } else if ($this->game_tag == 'lol') {
             $this->isRiotAccount = TRUE;
         }
 
@@ -150,23 +150,23 @@ class gameaccount {
 
     public function setValue($var_value) {
 
-        if(is_null($var_value) || empty($var_value)) {
+        if (is_null($var_value) || empty($var_value)) {
             throw new \Exception($this->lang->module['error_gameaccount_value']);
         }
 
         //
         // Lösche Leerzeichen
-        $var_value = getinput($var_value);	
+        $var_value = getinput($var_value);
 
         //
         // Temporäres Value setzen
         $this->value_tmp = $var_value;
 
-        if($this->isSteamAccount()) {
+        if ($this->isSteamAccount()) {
 
             //
             // Kontrolle, ob korrekter Steam Gameaccount
-            if(!$this->checkSteamAccount()) {
+            if (!$this->checkSteamAccount()) {
                 throw new \Exception($this->lang->module['error_steam_value_url']);
             }
 
@@ -228,18 +228,22 @@ class gameaccount {
 
         $checkIf = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS `exist` FROM `".PREFIX."cups_gameaccounts_banned` 
+                $_database,
+                "SELECT
+                        COUNT(*) AS `exist`
+                    FROM `" . PREFIX . "cups_gameaccounts_banned`
                     WHERE " . $whereClause
             )
         );
 
-        if($checkIf['exist'] != 0) {
+        if ($checkIf['exist'] != 0) {
 
             $get = mysqli_fetch_array(
                 mysqli_query(
-                    $_database, 
-                    "SELECT `description` FROM `".PREFIX."cups_gameaccounts_banned` 
+                    $_database,
+                    "SELECT
+                            `description`
+                        FROM `" . PREFIX . "cups_gameaccounts_banned` 
                         WHERE " . $whereClause
                 )
             );
@@ -258,11 +262,11 @@ class gameaccount {
 
     public function setSteamIDUnique() {
 
-        if(!$this->isCheckedSteamAccount) {
+        if (!$this->isCheckedSteamAccount) {
             throw new \Exception($this->lang->module['error_gameaccount_value']);
         }
 
-        if(!validate_int($this->gameaccount_id)) {
+        if (!validate_int($this->gameaccount_id)) {
             throw new \Exception($this->lang->module['unknown_gameaccount']);
         }
 
@@ -274,9 +278,9 @@ class gameaccount {
                 "SELECT COUNT(*) AS `exist` FROM `".PREFIX."cups_gameaccounts_csgo`
                     WHERE `gameaccID` = " . $this->gameaccount_id
             )
-        );	
+        );
 
-        if($checkIf['exist'] != 1) {
+        if ($checkIf['exist'] != 1) {
 
             $query = mysqli_query(
                 $_database,
@@ -294,7 +298,7 @@ class gameaccount {
                     )"
             );
 
-        }	
+        }
 
         global $userID;
 
@@ -306,11 +310,11 @@ class gameaccount {
 
     public function isSteamAccount() {
 
-        if(is_null($this->game_tag)) {
-            return FALSE;    
+        if (is_null($this->game_tag)) {
+            return FALSE;
         }
 
-        if(is_null($this->value_tmp)) {
+        if (is_null($this->value_tmp)) {
             throw new \Exception($this->lang->module['error_gameaccount_value']);
         }
 
@@ -320,7 +324,7 @@ class gameaccount {
             'css'
         );
 
-        if(in_array($this->game_tag, $steamAccountArray)) {
+        if (in_array($this->game_tag, $steamAccountArray)) {
 
             //
             // Value in Großschreibung formatieren
@@ -338,17 +342,17 @@ class gameaccount {
 
     public function checkSteamAccount() {
 
-        if(is_null($this->value_tmp)) {
+        if (is_null($this->value_tmp)) {
             throw new \Exception($this->lang->module['error_gameaccount_value']);
         }
 
-        if(!$this->isSteamAccount) {
+        if (!$this->isSteamAccount) {
             return FALSE;
         }
 
         //
         // Steam Community Link
-        if(!validate_url($this->value_tmp)) {
+        if (!validate_url($this->value_tmp)) {
 
             if(strlen($this->value_tmp) == 17) {
                 $steam64_id = $this->value_tmp;
@@ -358,7 +362,7 @@ class gameaccount {
 
         }
 
-        if(!isset($steam64_id)) {
+        if (!isset($steam64_id)) {
 
             if(preg_match('/\/profiles\//i', $this->value_tmp)) {
                 $getTypeOfURL = 'profiles';
@@ -384,12 +388,12 @@ class gameaccount {
                 $value = $valueArray[$getIndex - 1];
             }
 
-            if($getTypeOfURL == 'profiles' && (strlen($value) == 17)) {
+            if ($getTypeOfURL == 'profiles' && (strlen($value) == 17)) {
 
                 $steam64_id = $value;
                 $steam64IdIsSet = TRUE;
 
-            } else if($getTypeOfURL == 'id') {
+            } else if ($getTypeOfURL == 'id') {
 
                 $final_community_url = 'https://steamcommunity.com/id/' . $value . '/?xml=1';
                 if($result = @file_get_contents($final_community_url)) {
@@ -404,11 +408,11 @@ class gameaccount {
 
             }
 
-            if(!isset($steam64IdIsSet)) {
+            if (!isset($steam64IdIsSet)) {
                 return FALSE;
-            } 
+            }
 
-            if(!isset($steam64_id)) {
+            if (!isset($steam64_id)) {
                 return FALSE;
             }
 
@@ -432,12 +436,12 @@ class gameaccount {
             throw new \Exception($this->lang->module['unknown_gameaccount']);
         }
 
-        $curl_url = 'https://api.mojang.com/users/profiles/minecraft/'.strtolower($this->value);
+        $curl_url = 'https://api.mojang.com/users/profiles/minecraft/' . strtolower($this->value);
 
         $accountData = getAPIData($curl_url);
         $accountData = json_decode($accountData, true);
 
-        if(isset($accountData['id']) && !empty($accountData['id'])) {
+        if (isset($accountData['id']) && !empty($accountData['id'])) {
 
             $unique_id = $accountData['id'];
 
@@ -453,19 +457,19 @@ class gameaccount {
                 global $_database;
 
                 $query = mysqli_query(
-                    $_database, 
-                    "INSERT INTO `".PREFIX."cups_gameaccounts_mc`
+                    $_database,
+                    "INSERT INTO `" . PREFIX . "cups_gameaccounts_mc`
                         (
-                            `gameaccID`, 
-                            `unique_id`, 
-                            `active`, 
+                            `gameaccID`,
+                            `unique_id`,
+                            `active`,
                             `date`
                         )
                         VALUES
                         (
-                            '".$this->gameaccount_id."', 
+                            '".$this->gameaccount_id."',
                             '".$unique_id_new."',
-                            0, 
+                            0,
                             ".time()."
                         )"
                 );
@@ -477,7 +481,9 @@ class gameaccount {
     }
 
     public function setRiotUnique() {
-
+        /**
+         * To Do
+         */
     }
 
     public function checkGameaccount() {
@@ -506,8 +512,10 @@ class gameaccount {
 
         $checkIf = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS exist FROM `".PREFIX."cups_gameaccounts` 
+                $_database,
+                "SELECT
+                        COUNT(*) AS `exist`
+                    FROM `" . PREFIX . "cups_gameaccounts`
                     WHERE category = '".$this->game_tag."' AND value = '".$this->value."' AND deleted = 0"
             )
         );
@@ -566,7 +574,7 @@ class gameaccount {
         $deletedSeen = ($userID != $get['userID']) ? 0 : 1;
 
         //
-        // Spieler: Aktive Strafpunkte?			
+        // Spieler: Aktive Strafpunkte?
         $get = mysqli_fetch_array(
             mysqli_query(
                 $_database, 
@@ -585,7 +593,7 @@ class gameaccount {
                 WHERE userID = '".$userID."' AND active = '1'"
         );
         while($get = mysqli_fetch_array($query)) {
-            $teamArray[] = $get['teamID'];	
+            $teamArray[] = $get['teamID'];
         }
 
         $whereClause = '';
@@ -615,14 +623,14 @@ class gameaccount {
                     `deleted` = 1,
                     `deleted_date` = ".time().",
                     `deleted_seen` = ".$deletedSeen."
-                WHERE gameaccID = ".$this->gameaccount_id
+                WHERE gameaccID = " . $this->gameaccount_id
         );
 
-        if ($query) {
-            $this->gameaccount_id = null;
-        } else {
+        if (!$query) {
             throw new \Exception($this->lang->module['query_failed_delete']);
         }
+
+        $this->gameaccount_id = null;
 
     }
 
@@ -669,63 +677,62 @@ class gameaccount {
             //
             // Neuer Gameaccount
             $query = mysqli_query(
-                $_database, 
-                "INSERT INTO `".PREFIX."cups_gameaccounts` 
+                $_database,
+                "INSERT INTO `" . PREFIX . "cups_gameaccounts`
                     (
-                        `userID`, 
-                        `date`, 
-                        `category`, 
+                        `userID`,
+                        `date`,
+                        `category`,
                         `value`,
                         `active`
-                    ) 
-                    VALUES 
+                    )
+                    VALUES
                     (
-                        ".$userID.", 
-                        ".time().", 
-                        '".$this->game_tag."', 
-                        '".$this->value."', 
+                        ".$userID.",
+                        ".time().",
+                        '".$this->game_tag."',
+                        '".$this->value."',
                         ".$this->isActive."
                     )"
             );
 
-            if($query) {
+            if (!$query) {
+                throw new \Exception($this->lang->module['query_failed_insert']);
+            }
+
+            //
+            // Gameaccount ID
+            $this->gameaccount_id = mysqli_insert_id($_database);
+
+            if($this->isSteamAccount) {
 
                 //
-                // Gameaccount ID
-                $this->gameaccount_id = mysqli_insert_id($_database);
+                // Speichere SteamID 64
+                $this->setSteamIDUnique();
 
-                if($this->isSteamAccount) {
+            } else if($this->isMojangAccount) {
 
-                    //
-                    // Speichere SteamID 64
-                    $this->setSteamIDUnique();
+                //
+                // Speichere Mojang ID
+                $this->setMojangUnique();
 
-                } else if($this->isMojangAccount) {
+            } else if($this->isRiotAccount) {
 
-                    //
-                    // Speichere Mojang ID
-                    $this->setMojangUnique();
+                //
+                // Speichere Riot ID
+                $this->setRiotUnique();
 
-                } else if($this->isRiotAccount) {
-
-                    //
-                    // Speichere Riot ID
-                    $this->setRiotUnique();
-
-                }
-
-            } else {
-                throw new \Exception($this->lang->module['query_failed_insert']);
             }
 
         }
 
-        if($redirect) {
+        if ($redirect) {
 
-            global $varPage;
+            $varPage = (mb_substr(basename($_SERVER[ 'REQUEST_URI' ]), 0, 15) != "admincenter.php") ?
+                'admin' : 'cup';
 
-            if($varPage == 'admin') {
-                $parent_url = 'index.php?site=cup_admin&mod=gameaccounts';
+            if ($varPage == 'admin') {
+                $parent_url = 'admincenter.php?site=cup&mod=gameaccounts';
             } else {
                 $parent_url = 'index.php?site=gameaccount';
             }

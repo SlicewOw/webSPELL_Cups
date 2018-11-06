@@ -1,7 +1,7 @@
 <?php
 
 try {
-    
+
     $_language->readModule('cups');
 
     $maxStatus = 3;
@@ -23,6 +23,9 @@ try {
         throw new \Exception($_language->module['login']);
     }
 
+    $varPage = (mb_substr(basename($_SERVER[ 'REQUEST_URI' ]), 0, 15) != "admincenter.php") ?
+        'admin' : 'cup';
+
     $temp_status 	= 1;
     $temp_status2 	= 1;
 
@@ -33,12 +36,12 @@ try {
         } else {
             $parent_url = 'index.php?site=support&action=details&id=' . $ticket_id;
         }
-        
+
         try {
-            
+
             if (isset($_POST['admin_submit'])) {
 
-                $admin_id = (isset($_POST['adminID']) && validate_int($_POST['adminID'])) ? 
+                $admin_id = (isset($_POST['adminID']) && validate_int($_POST['adminID'])) ?
                     (int)$_POST['adminID'] : 0;
 
                 if (($admin_id < 1) || !$cupAdminAcess) {
@@ -47,9 +50,9 @@ try {
 
                 $query = mysqli_query(
                     $_database,
-                    "UPDATE `" . PREFIX . "cups_supporttickets` 
+                    "UPDATE `" . PREFIX . "cups_supporttickets`
                         SET `take_date` = " . time() . ",
-                            `adminID` = " . $admin_id . ", 
+                            `adminID` = " . $admin_id . ",
                             `status` = 2
                         WHERE `ticketID` = " . $ticket_id
                 );
@@ -62,8 +65,8 @@ try {
 
                 $query = mysqli_query(
                     $_database,
-                    "UPDATE `" . PREFIX . "cups_supporttickets` 
-                        SET `closed_date` = " . time() . ", 
+                    "UPDATE `" . PREFIX . "cups_supporttickets`
+                        SET `closed_date` = " . time() . ",
                             `closed_by_id` = " . $userID . ",
                             `status` = " . $maxStatus . "
                         WHERE `ticketID` = " . $ticket_id
@@ -282,13 +285,13 @@ try {
             $admin .= '<form method="post">';
             $admin .= '<input type="hidden" name="ticketID" value="'.$ticket_id.'" />';
             $admin .= '<input type="submit" name="close_submit" class="btn btn-info btn-sm white darkshadow" value="'.$_language->module['ticket_close'].'" />';
-            $admin .= '</form>';	
+            $admin .= '</form>';
         } else {
-            $temp_status = 0;	
+            $temp_status = 0;
         }
 
         if (!empty($admin)) {
-            $admin .= '<br /><br />';	
+            $admin .= '<br /><br />';
         }
 
         $categoryName = $db['category_name'];
@@ -296,7 +299,7 @@ try {
         $ticket_name = '';
 
         if($categoryName == 'Match-Konflikt') {
-            $ticket_name .= 'Match-Konflikt - '.getteam($db['ticket_teamID'], 'name').' vs. '.getteam($db['ticket_opponentID'], 'name').' // ';		
+            $ticket_name .= 'Match-Konflikt - '.getteam($db['ticket_teamID'], 'name').' vs. '.getteam($db['ticket_opponentID'], 'name').' // ';
         }
 
         $ticket_name .= $db['ticket_name'];
@@ -375,8 +378,8 @@ try {
                     `date`, 
                     `userID`, 
                     `text` 
-                FROM `" . PREFIX . "cups_supporttickets_content` 
-                WHERE ticketID = " . $ticket_id . " 
+                FROM `" . PREFIX . "cups_supporttickets_content`
+                WHERE ticketID = " . $ticket_id . "
                 ORDER BY date ASC"
         );
 
@@ -387,9 +390,9 @@ try {
         while ($ds = mysqli_fetch_array($info)) {
 
             if ($ds['userID'] == 4) {
-                $panel_class = 'panel-info';	
+                $panel_class = 'panel-info';
             } else {
-                $panel_class = 'panel-default';	
+                $panel_class = 'panel-default';
             }
 
             $detailsArray = array();
@@ -449,7 +452,7 @@ try {
             $answers .= '<form method="post">';
             $answers .= '<input type="hidden" name="ticket_id" value="'.$ticket_id.'" />';
             $answers .= '<input type="submit" name="reopen_ticket" class="btn btn-info btn-sm white darkshadow" value="'.$_language->module['ticket_reopen'].'" />';
-            $answers .= '</form>';	
+            $answers .= '</form>';
 
         }
 
@@ -489,7 +492,7 @@ try {
             $data_array['$ticket_text'] = $ticket_text;
             $data_array['$answers'] = $answers;
             $data_array['$ticket_add_answer'] = $ticket_add_answer;
-                        
+
             if ($cupAdminAcess) {
 
                 $admin_info = '';
@@ -543,7 +546,7 @@ try {
         setTicketSeenDate($ticket_id, $userID, $cupAdminAcess);
 
     }
-    
+
 } catch (Exception $e) {
     echo showError($e->getMessage());
 }
