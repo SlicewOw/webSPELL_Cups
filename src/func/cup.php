@@ -446,6 +446,52 @@ function getPlayerPosition($position, $cat = '', $game_id = NULL, $addPublicOpti
 
 }
 
+function CommunityID2SteamID($communityid) {
+
+    $steamid = 'STEAM_1:';
+    $z = ($communityid - 76561197960265728) / 2;
+    $steamid.= ($z - floor($z) == 0.5) ? '1:' : '0:';
+    $steamid .= floor($z);
+    return $steamid;
+
+}
+
+function SteamID2CommunityID($steamid) {
+
+    try {
+
+        $parts = explode(
+            ':',
+            str_replace(
+                'STEAM_',
+                '' ,
+                strtoupper($steamid)
+            )
+        );
+
+        if (count($parts) != 3) {
+            throw new \Exception('wrong_steamid_format');
+        }
+
+        $unique_id = bcadd(bcadd(bcmul($parts[2] + '', '2'), '76561197960265728'), $parts[1] + '');
+
+        $checkArray = explode('.', $unique_id);
+        if (count($checkArray) > 1) {
+            $unique_id = $checkArray[0];
+        }
+
+        if (strlen($unique_id) != 17) {
+            throw new \Exception('wrong_steamid_length');
+        }
+
+        return $unique_id;
+
+    } catch (Exception $e) {
+        return -1;
+    }
+
+}
+
 /* Adminzugang */
 
 function iscupadmin($user_id) {
