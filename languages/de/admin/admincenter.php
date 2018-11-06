@@ -32,6 +32,7 @@ $language_array = Array(
     'cup_administration'=>'Cup Administration',
     'gameaccounts'=>'Gameaccounts',
     'mappool'=>'Map Pool',
+    'member_positions'=>'Mitglieder Positionen',
     'penalty'=>'Strafpunkte',
     'policy'=>'Nutzungsbedingungen',
     'rules'=>'Regeln',
