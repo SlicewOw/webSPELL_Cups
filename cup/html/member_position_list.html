@@ -1,0 +1,22 @@
+<tr>
+	<td>$name</td>
+	<td>$tag</td>
+	<td>$game</td>
+	<td>
+		<a class="btn btn-default btn-xs" 
+		   href="index.php?site=member_positions&amp;action=edit&amp;id=$position_id">
+			%edit%
+		</a>
+		<a class="btn btn-default btn-xs" 
+		   href="index.php?site=member_positions&amp;action=delete&amp;id=$position_id">
+			%delete%
+		</a>
+	</td>
+	<td>
+		<input type="number" class="form-control" 
+			   name="$position_id" 
+			   value="$sort" 
+			   min="1"
+			   max="400" />
+	</td>
+</tr>

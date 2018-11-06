@@ -1,0 +1,35 @@
+<div class="row">
+	<div class="col-sm-7">
+		<form method="post">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h1 class="panel-title">Position</h1>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<th>Name</th>
+							<th>Tag</th>
+							<th>%game%</th>
+							<th>Admin</th>
+							<th>%sort%</th>
+						</thead>
+						<tbody>
+							$positionList
+						</tbody>
+					</table>
+				</div>
+				<div class="panel-footer">
+					<input type="hidden" name="positionArray" value="$positionArray" />
+					<button type="submit" class="pull-right btn btn-info btn-sm white darkshadow" name="sort">
+						%sort%
+					</button>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="col-sm-5">
+		$add_position
+	</div>
+</div>
