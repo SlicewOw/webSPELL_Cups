@@ -1,68 +1,70 @@
-<form method="post" action="index.php?site=member_positions">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h1 class="panel-title">$title</h1>
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="form-group">
-						<label>Name *</label>
-						<input type="text" name="name" 
-							   value="$name"
-							   placeholder="Team Manager"
-							   class="form-control position-input"
-							   required="required" />
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label>Tag *</label>
-						<input type="text" name="tag" 
-							   value="$tag"
-							   placeholder="tm"
-							   class="form-control position-input"
-							   required="required" />
-					</div>
-				</div>
-				<div class="col-sm-8">
-					<div class="form-group">
-						<label>%game%</label>
-						<select name="game_id" class="form-control position-input">
-							$games
-						</select>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="panel-footer">
-			<input type="hidden" name="position_id" value="$position_id" />
-			<button type="submit" id="btnPositionSubmit" 
-					class="btn btn-info btn-sm white darkshadow" 
-					name="$postName">
-				%save%
-			</button>
-		</div>
-	</div>
+<form method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">$title</h1>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input type="text" name="name"
+                               value="$name"
+                               placeholder="Team Manager"
+                               class="form-control position-input"
+                               required="required" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>Tag *</label>
+                        <input type="text" name="tag"
+                               value="$tag"
+                               placeholder="tm"
+                               class="form-control position-input"
+                               required="required" />
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label>%game%</label>
+                        <select name="game_id"
+                                class="form-control position-input">
+                            $games
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <input type="hidden" name="position_id"
+                   value="$position_id" />
+            <button type="submit" id="btnPositionSubmit"
+                    class="btn btn-info btn-sm white darkshadow"
+                    name="$postName">
+                %save%
+            </button>
+        </div>
+    </div>
 </form>
 <script type="text/javascript">
-	
+
 $("input[name=tag]").keyup(function() {
-	
-	if($(this).val().length !== 2) {
-		$("input[name=tag]").css('border', '1px #FF0000 solid');
-	} else {
-		$("input[name=tag]").css('border', '');
-	}
-	
-});	
-	
+
+    if ($(this).val().length !== 2) {
+        $("input[name=tag]").css('border', '1px #FF0000 solid');
+    } else {
+        $("input[name=tag]").css('border', '');
+    }
+
+});
+
 $(document).ready(function() {
 
-	if($("#btnPositionSubmit").attr('name') === 'saveDeletePosition') {
-		$(".position-input").attr('readonly', 'readonly');
-		$("#btnPositionSubmit").html('%delete%');
-	}
+    if ($("#btnPositionSubmit").attr('name') === 'saveDeletePosition') {
+        $(".position-input").attr('readonly', 'readonly');
+        $("#btnPositionSubmit").html('%delete%');
+    }
 
 });
 </script>
