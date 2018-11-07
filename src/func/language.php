@@ -31,16 +31,20 @@ class Language {
 
     public $language = 'en';
     public $module = array();
+
+    private $base_path = __DIR__ . '/../../';
     private $language_path = 'languages/';
 
     public function setLanguage($to, $admin = false, $pluginpath=false) {
+
+        $this->language_path = $this->base_path . 'languages/';
 
         if ($pluginpath) {
             $this->language_path = $pluginpath . $this->language_path;
         }
 
         if ($admin AND $pluginpath) {
-            $this->language_path = __DIR__ . '/../../' . $pluginpath . 'languages/';
+            $this->language_path = $this->base_path . $pluginpath . 'languages/';
         }
 
         $langs = array();
@@ -48,6 +52,10 @@ class Language {
             if ($fileInfo->isDot() === false && $fileInfo->isDir() === true) {
                 $langs[] = $fileInfo->getFilename();
             }
+        }
+
+        if (count($langs) < 1) {
+            return false;
         }
 
         if (in_array($to, $langs)) {
@@ -69,9 +77,9 @@ class Language {
         global $default_language;
 
         if ($pluginpath) {
-            $langFolder = __DIR__ . '/../../' . $pluginpath . $this->language_path;
+            $langFolder = $this->base_path . $pluginpath . $this->language_path;
         } else {
-            $langFolder = __DIR__ . '/../../' . $this->language_path;
+            $langFolder = $this->base_path . $this->language_path;
         }
 
         if ($admin) {

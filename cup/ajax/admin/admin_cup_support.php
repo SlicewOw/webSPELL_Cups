@@ -14,7 +14,7 @@ try {
         throw new \Exception($_language->module['access_denied']);
     }
 
-    $ticketStatus = (isset($_GET['status']) && validate_int($_GET['status'], true)) ? 
+    $ticketStatus = (isset($_GET['status']) && validate_int($_GET['status'], true)) ?
         (int)$_GET['status'] : 0;
 
     if ($ticketStatus > 3) {
@@ -26,12 +26,12 @@ try {
     if ($ticketStatus > 0) {
 
         if ($getAction != 'update') {
-            throw new \Exception($_language->module['unknown_action']);   
+            throw new \Exception($_language->module['unknown_action']);
         }
 
         $whereClauseArray = array();
 
-        $pastTime = (isset($_GET['pastTime']) && validate_int($_GET['pastTime'])) ? 
+        $pastTime = (isset($_GET['pastTime']) && validate_int($_GET['pastTime'])) ?
             (int)$_GET['pastTime'] : 0;
 
         $whereClauseArray[] = '`status` = ' . $ticketStatus;
