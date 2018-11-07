@@ -24,33 +24,29 @@
 #                                                                        #
 ##########################################################################
 */
+
 namespace webspell;
-class Language
-{
+
+class Language {
+
     public $language = 'en';
     public $module = array();
     private $language_path = 'languages/';
-    public function setLanguage($to, $admin = false, $pluginpath=false)
-    {
 
-        if ($admin) {
-            $this->language_path = '../' . $this->language_path;
-        } else if (!is_dir($this->language_path)) {
-            $this->language_path = '../' . $this->language_path;
-        }
+    public function setLanguage($to, $admin = false, $pluginpath=false) {
 
         if ($pluginpath) {
             $this->language_path = $pluginpath . $this->language_path;
         }
 
         if ($admin AND $pluginpath) {
-            $this->language_path = "../" . $pluginpath . "languages/";
+            $this->language_path = __DIR__ . '/../../' . $pluginpath . 'languages/';
         }
 
         $langs = array();
         foreach (new \DirectoryIterator($this->language_path) as $fileInfo) {
             if ($fileInfo->isDot() === false && $fileInfo->isDir() === true) {
-                $langs[ ] = $fileInfo->getFilename();
+                $langs[] = $fileInfo->getFilename();
             }
         }
 
@@ -63,30 +59,33 @@ class Language
         }
 
     }
-    public function getRootPath()
-    {
+
+    public function getRootPath() {
         return $this->language_path;
     }
-    public function readModule($module, $add = false, $admin = false, $pluginpath=false)
-    {
+
+    public function readModule($module, $add = false, $admin = false, $pluginpath = false) {
+
         global $default_language;
-        if ($admin AND !$pluginpath) {
-            $langFolder = '../'.$this->language_path;
-            $folderPath = '%s%s/admin/%s.php';
-        } elseif ($admin AND $pluginpath) {
-            $langFolder = '../'.$pluginpath.$this->language_path;
-            $folderPath = '%s%s/admin/%s.php';
-        } elseif ($pluginpath) {
-            $langFolder = $pluginpath.$this->language_path;
-            $folderPath = '%s%s/%s.php';
+
+        if ($pluginpath) {
+            $langFolder = __DIR__ . '/../../' . $pluginpath . $this->language_path;
         } else {
-            $langFolder = $this->language_path;
+            $langFolder = __DIR__ . '/../../' . $this->language_path;
+        }
+
+        if ($admin) {
+            $folderPath = '%s%s/admin/%s.php';
+        } else {
             $folderPath = '%s%s/%s.php';
         }
+
         $languageFallbackTable = array(
-                            $this->language,
-                            $default_language,
-                            'en');
+            $this->language,
+            $default_language,
+            'en'
+        );
+
         $module = str_replace(array('\\', '/', '.'), '', $module);
         foreach ($languageFallbackTable as $folder) {
             $path = sprintf($folderPath, $langFolder, $folder, $module);
@@ -109,7 +108,7 @@ class Language
         }
 
         if ($admin && ($module != 'convenience')) {
-            $this->readModule('convenience', true, true);
+            $this->readModule('convenience', true, true, false);
         }
 
         return true;

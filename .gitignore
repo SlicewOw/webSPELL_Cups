@@ -9,8 +9,9 @@
 images/*
 install/*
 languages/*
-components/*
-node_modules/*
+_plugins/
+components/
+node_modules/
 !cups/*
 !cups/**/*.php
 !cups/**/*.html
