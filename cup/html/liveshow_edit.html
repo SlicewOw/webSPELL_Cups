@@ -1,0 +1,46 @@
+<form method="post">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h1 class="panel-title">%edit_liveshow%</h1>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="form-group">
+						<label>Twitch URL</label>
+						<input type="url" value="$twitch_id" name="twitch_id" class="form-control" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Facebook</label>
+						<input type="url" value="$facebook" name="facebook" class="form-control" />
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Twitter</label>
+						<input type="url" value="$twitter" name="twitter" class="form-control" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>YouTube</label>
+						<input type="url" value="$youtube" name="youtube" class="form-control" />
+					</div>
+				</div>
+				<div class="col-sm-6"></div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<input type="hidden" name="stream_id" value="$stream_id" />
+			<button type="submit" class="btn btn-info btn-sm white darkshadow" name="submit_edit">
+				%save%
+			</button>
+		</div>
+	</div>
+</form>

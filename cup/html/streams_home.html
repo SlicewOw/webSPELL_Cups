@@ -1,0 +1,108 @@
+<div class="pull-left">
+    <a href="index.php?site=streams" 
+       class="btn btn-info btn-sm white darkshadow">
+        %overview%
+    </a>
+</div>
+<div class="pull-right">
+    <a href="index.php?site=streams&amp;action=settings" 
+       class="btn btn-info btn-sm white darkshadow">
+        %settings%
+    </a>
+    <a href="index.php?site=streams&amp;action=add" 
+       class="btn btn-info btn-sm white darkshadow">
+        %add_stream%
+    </a>
+</div>
+<div class="clear"></div>
+<br />
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="panel-title">Streams</h1>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Plattform</th>
+            <th>%game%</th>
+            <th>%date%</th>
+            <th>%socials%</th>
+            <th>
+                %prio% 
+                <span class="glyphicon glyphicon-question-sign" 
+                      data-toggle="tooltip" 
+                      data-placement="bottom" 
+                      title="%prio_info%">
+                </span>
+            </th>
+            <th>Admin</th>
+        </thead>
+        <tbody>
+            $content
+        </tbody>
+    </table>
+    <div class="panel-footer">
+        <div class="pull-left">%anz_streams% $anzStreams</div>
+        <div class="pull-right">$cron_info</div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script>
+
+function updateStreamPrio(stream_id, prio) {
+    'use strict';
+
+    $.post(
+        "ajax.php?site=admin_streams",
+        {
+            action : 'updateStreamPrio',
+            stream_id : stream_id,
+            prio : prio
+        },
+        function (data, status) {
+
+            if (status === "success") {
+
+                var varData = JSON.parse(data),
+                    alert_type = "error";
+
+                if (varData.status) {
+                    alert_type = "success";
+                }
+
+                showMultipleNotifies(varData.message, alert_type);
+
+            }
+
+        }
+    );
+
+}
+
+$(document).ready(function () {
+
+    $("input[name=inputStreamPrio]").keyup(function () {
+
+        if (this.value === "") {
+            return;
+        }
+
+        var stream_id = convert2id(this.id, 2);
+        updateStreamPrio(stream_id, this.value);
+
+    });
+
+    $("input[name=inputStreamPrio]").change(function () {
+
+        if (this.value === "") {
+            return;
+        }
+
+        var stream_id = convert2id(this.id, 2);
+        updateStreamPrio(stream_id, this.value);
+
+    });
+
+});
+</script>

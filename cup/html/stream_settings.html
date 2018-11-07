@@ -1,0 +1,49 @@
+<div class="pull-left">
+    <a href="index.php?site=streams" class="btn btn-info btn-sm white darkshadow">
+        %overview%
+    </a>
+</div>
+<div class="pull-right">
+    <a href="index.php?site=streams&amp;action=settings" class="btn btn-info btn-sm white darkshadow">
+        %settings%
+    </a>
+    <a href="index.php?site=streams&amp;action=add" class="btn btn-info btn-sm white darkshadow">
+        %add_stream%
+    </a>
+</div>
+<div class="clear"></div>
+<br />
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="panel-title">%settings%</h1>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <th style="width: 10%;">ID</th>
+            <th style="width: 20%;">Name</th>
+            <th style="width: 10%;">Video-Embed?</th>
+            <th style="width: 10%;">Chat-Embed?</th>
+            <th style="width: 10%;">Icon</th>
+            <th style="width: 10%;">Streams</th>
+            <th style="width: 10%;">CronJobs</th>
+            <th style="width: 20%;">Admin</th>
+        </thead>
+        <tbody>
+            $tableList
+        </tbody>
+    </table>
+</div>
+<form method="post" enctype="multipart/form-data">
+    <div class="panel panel-default" id="settingsAdmin" style="display: none;">
+        <div class="panel-heading">
+            <h1 class="panel-title">%settings%</h1>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+function changeSetting(type_id, action) {
+	
+	$("#settingsAdmin").css('display', 'block');
+	
+}
+</script>

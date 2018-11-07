@@ -126,6 +126,9 @@ $getSite = (isset($_GET['site'])) ?
 $getAction = (isset($_GET['action'])) ?
     getinput($_GET['action']) : '';
 
+$getShow = (isset($_GET['show'])) ?
+    getinput($_GET['show']) : '';
+
 $dir_cup = __DIR__ . '/../cup/php/';
 
 $image_url = '../images/';
@@ -293,6 +296,7 @@ $admin_url = 'admin/admincenter.php';
                                 <li><a href="admincenter.php?site=cup&amp;mod=admin_team"><?php echo $_language->module['admins']; ?></a></li>
                                 <li><a href="admincenter.php?site=cup&amp;mod=awards"><?php echo $_language->module['awards']; ?></a></li>
                                 <li><a href="admincenter.php?site=member_positions"><?php echo $_language->module['member_positions']; ?></a></li>
+                                <li><a href="admincenter.php?site=streams">Streams</a></li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>

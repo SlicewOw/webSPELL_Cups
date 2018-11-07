@@ -1,0 +1,32 @@
+<tr>
+	<td>$title</td>
+	<td>
+		<a href="https://twitch.tv/$id" 
+		   class="blue" 
+		   target="_blank">
+			$id
+		</a>
+	</td>
+	<td>$plattform</td>
+	<td>$game</td>
+	<td>$date</td>
+	<td>$socials</td>
+	<td>
+        <input type="number" name="inputStreamPrio" value="$prio"
+               id="inputStreamPrio_$liv_id"
+               min="1" 
+               max="99999" 
+               class="form-control input-stream-prio" />
+    </td>
+	<td>
+		$activate_button
+		<a href="index.php?site=streams&amp;action=edit&amp;id=$liv_id" 
+		   class="btn btn-default btn-xs">
+			%edit%
+		</a>
+		<a href="index.php?site=streams&amp;action=del&amp;id=$liv_id" 
+		   class="btn btn-default btn-xs">
+			%delete%
+		</a>
+	</td>
+</tr>
