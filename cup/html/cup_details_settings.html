@@ -1,341 +1,137 @@
 <form method="post">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h1 class="panel-title">%settings_main%</h1>
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label>%register_format%</label>
-						<select name="register_format" class="form-control">
-							$registerFormat
-						</select>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label>%saved_cup%</label>
-						<select name="cup_saved" class="form-control">
-							$cupSaved
-						</select>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label>%admin_visible%</label>
-						<select name="admin_visible" class="form-control">
-							$adminOnly
-						</select>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="panel-heading">
-			<h1 class="panel-title">%settings_mapvote%</h1>
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label>Map-Vote</label>
-						<select name="map_vote_enable" class="form-control">
-							$mapVote
-						</select>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label>Map-Pool</label>
-						<select name="map_pool" class="form-control">
-							$mapPool
-						</select>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="panel-heading">
-			<h1 class="panel-title">%settings_format%</h1>
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				$matchRoundFormat
-			</div>
-		</div>
-		<div class="panel-heading">
-			<h1 class="panel-title">%settings_bot%</h1>
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label>Server</label>
-						<select name="server_enable" class="form-control">
-							$enableServer
-						</select>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label>CS:GO Bot</label>
-						<select name="bot_enable" class="form-control">
-							$csgoBot
-						</select>
-					</div>
-				</div>
-			</div>
-			<hr />
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>g_LiveConfig</label>
-                        <select disabled="disabled" name="g_LiveConfig" class="form-control botSettings">
-                        	$serverConfig
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">%settings_main%</h1>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>%register_format%</label>
+                        <select name="register_format" class="form-control">
+                            $registerFormat
                         </select>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>g_MaxRounds</label>
-                        <select disabled="disabled" name="g_MaxRounds" class="form-control botSettings">
-                        	$maxRounds
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>%saved_cup%</label>
+                        <select name="cup_saved" class="form-control">
+                            $cupSaved
                         </select>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>g_SteamCheck</label>
-                        <select disabled="disabled" name="g_SteamCheck" class="form-control botSettings">
-                            $g_SteamCheck
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>%admin_visible%</label>
+                        <select name="admin_visible" class="form-control">
+                            $adminOnly
                         </select>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>g_SteamForce</label>
-                        <select disabled="disabled" name="g_SteamForce" class="form-control botSettings">
-                            $g_SteamForce
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-heading">
+            <h1 class="panel-title">%settings_mapvote%</h1>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Map-Vote</label>
+                        <select name="map_vote_enable" class="form-control">
+                            $mapVote
                         </select>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>g_RoundScore</label>
-                        <select disabled="disabled" name="g_RoundScore" class="form-control botSettings">
-                        	$g_RoundScore
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Map-Pool</label>
+                        <select name="map_pool" class="form-control">
+                            $mapPool
                         </select>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>g_EseaStats</label>
-                        <select disabled="disabled" name="g_EseaStats" class="form-control botSettings">
-                            $g_EseaStats
-                        </select>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>g_CaptainVote</label>
-                        <select disabled="disabled" name="g_CaptainVote" class="form-control botSettings">
-                            $g_CaptainVote
-                        </select>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>g_KnifeRound</label>
-                        <select disabled="disabled" name="g_KnifeRound" class="form-control botSettings">
-                            $g_KnifeRound
-                        </select>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>g_PauseAfterKnife</label>
-                        <select disabled="disabled" name="g_PauseAfterKnife" class="form-control botSettings">
-                            $g_PauseAfterKnife
-                        </select>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>g_OvertimeEnabled</label>
-                        <select disabled="disabled" name="g_OvertimeEnabled" class="form-control botSettings">
-                            $g_OvertimeEnabled
-                        </select>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-                        <label>Overtime Settings</label>
-                        <select disabled="disabled" name="g_OvertimeRounds" class="form-control botSettings">
-                        	$otRounds
-                        </select>
-					</div>
-				</div>
-				<div class="col-sm-4"></div>
-			</div>
-		</div>
-		<div class="panel-footer">
-			<input type="hidden" name="game_tag" value="$cup_game" />
-			<button type="submit" class="btn btn-info btn-sm white darkshadow" name="submitCupSettings">
-				%save%
-			</button>
-		</div>
-	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-heading">
+            <h1 class="panel-title">%settings_format%</h1>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                $matchRoundFormat
+            </div>
+        </div>
+        <div class="panel-footer">
+            <input type="hidden" name="game_tag" value="$cup_game" />
+            <button type="submit" class="btn btn-info btn-sm white darkshadow"
+                    name="submitCupSettings">
+                %save%
+            </button>
+        </div>
+    </div>
 </form>
 <script type="text/javascript">
-	
+
 function updateMapVote() {
-	
-	var mapVoteEnable = $("select[name=map_vote_enable]").val();
-	if (mapVoteEnable === '1') {
-		$("select[name=map_pool]").removeAttr('disabled');
-	} else {
-		$("select[name=map_pool]").attr('disabled', 'disabled');
-	}
-	
-}
-	
-function updateServer() {
-	
-	var enableBot = false;
-	var enableSetting = false;
-	
-	var cupGameTag = $("input[name=game_tag]").val();
-	if (cupGameTag === 'csg') {
-		
-		var serverEnable = $("select[name=server_enable]").val();
-		if(serverEnable === '1') {
-		
-			$("select[name=bot_enable]").removeAttr('disabled');
-			enableBot = true;
-			
-			var botEnable = $("select[name=bot_enable]").val();
-			if(botEnable === '1') {
-				$(".botSettings").removeAttr('disabled');
-				enableSetting = true;
-			}
-			
-		}
 
-	}
-	
-	if (!enableBot) {
-		$("select[name=bot_enable]").attr('disabled', 'disabled');
-	}
-	
-	if (!enableSetting) {
-		$(".botSettings").attr('disabled', 'disabled');
-	}
-	
+    var mapVoteEnable = $("select[name=map_vote_enable]").val();
+    if (mapVoteEnable === '1') {
+        $("select[name=map_pool]").removeAttr('disabled');
+    } else {
+        $("select[name=map_pool]").attr('disabled', 'disabled');
+    }
+
 }
-	
+
 function saveCupSettings() {
-    
+
     $.post(
         "ajax.php?site=admin_cup_settings",
         {
-            action			: 'saveCupSettings',
-            cup_id 			: $cup_id,
-            registerFormat 	: $("select[name=register_format]").val(),
-            cupSaved		: $("select[name=cup_saved]").val(),
-            adminVisible 	: $("select[name=admin_visible]").val(),
-            mapVoteEnable	: $("select[name=map_vote_enable]").val(),
-            mapPool_id		: $("select[name=map_pool]").val(),
-            serverEnable	: $("select[name=server_enable]").val(),
-            botEnable		: $("select[name=bot_enable]").val()
+            action : 'saveCupSettings',
+            cup_id : $cup_id,
+            registerFormat : $("select[name=register_format]").val(),
+            cupSaved : $("select[name=cup_saved]").val(),
+            adminVisible : $("select[name=admin_visible]").val(),
+            mapVoteEnable : $("select[name=map_vote_enable]").val(),
+            mapPool_id : $("select[name=map_pool]").val()
         },
         function (data, status) {
 
             var varData = JSON.parse(data),
                 alert_type = 'error';
-            
+
             if ((status === "success") && (varData.status)) {
                 alert_type = 'success';
             }
-            
+
             showMultipleNotifies(varData.message, alert_type);
 
         }
     );
 
-} 
-	
-function saveBotSettings() {
-    
-    $.post(
-        "ajax.php?site=admin_cup_settings",
-        {
-            action				: 'saveBotSettings',
-            cup_id 				: $cup_id,
-            g_LiveConfig 		: $("select[name=g_LiveConfig]").val(),
-            g_MaxRounds			: $("select[name=g_MaxRounds]").val(),
-            g_SteamCheck 		: $("select[name=g_SteamCheck]").val(),
-            g_SteamForce		: $("select[name=g_SteamForce]").val(),
-            g_RoundScore		: $("select[name=g_RoundScore]").val(),
-            g_EseaStats			: $("select[name=g_EseaStats]").val(),
-            g_CaptainVote		: $("select[name=g_CaptainVote]").val(),
-            g_KnifeRound		: $("select[name=g_KnifeRound]").val(),
-            g_PauseAfterKnife	: $("select[name=g_PauseAfterKnife]").val(),
-            g_OvertimeEnabled	: $("select[name=g_OvertimeEnabled]").val(),
-            g_OvertimeRounds	: $("select[name=g_OvertimeRounds]").val()
-        },
-        function (data, status) {
+}
 
-            var varData = JSON.parse(data),
-                alert_type = 'error';
-            
-            if ((status === "success") && (varData.status)) {
-                alert_type = 'success';
-            }
-            
-            showMultipleNotifies(varData.message, alert_type);
-
-        }
-    );
-
-}    
-    
 $(document).ready(function() {
-	
-	$("select[name=map_vote_enable]").change(function() {
-		updateMapVote();
-	});
-	
-	$("select[name=server_enable]").change(function() {
-		updateServer();
-	});
-	
-	$("select[name=bot_enable]").change(function() {
-		updateServer();
-	});
-		
-	$("button[name=submitCupSettings]").click(function (e) {
 
-		e.preventDefault();
+    $("select[name=map_vote_enable]").change(function() {
+        updateMapVote();
+    });
 
-		$("button[name=submitCupSettings]").attr('disabled', 'disabled');
-        
+    $("button[name=submitCupSettings]").click(function (e) {
+
+        e.preventDefault();
+
+        $("button[name=submitCupSettings]").attr('disabled', 'disabled');
+
         saveCupSettings();
-        
-        if ($("select[name=bot_enable]").val() == "1") {
-            saveBotSettings();
-        }
 
         $("button[name=submitCupSettings]").removeAttr('disabled');
-		
-	});	
-	
-	updateMapVote();
-	updateServer();
-	
-});	
+
+    });
+
+    updateMapVote();
+
+});
 </script>

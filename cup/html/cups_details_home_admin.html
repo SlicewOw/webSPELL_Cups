@@ -1,100 +1,95 @@
 $error
 <div class="panel panel-default">
     <div class="panel-heading">
-    	<h1 class="panel-title">$cupname</h1>
+        <h1 class="panel-title">$cupname</h1>
     </div>
 </div>
 <div class="btn-group btn-group-justified" role="group">
     <div class="btn-group" role="group">
-    	<a href="$baseURL&amp;page=home" class="btn $navi_home btn-sm">
+        <a href="$baseURL&amp;page=home" class="btn $navi_home btn-sm">
             Details
         </a>
     </div>
     <div class="btn-group" role="group">
-    	<a href="$baseURL&amp;page=settings" class="btn $navi_settings btn-sm">
+        <a href="$baseURL&amp;page=settings" class="btn $navi_settings btn-sm">
             %settings%
         </a>
     </div>
     <div class="btn-group" role="group">
-    	<a href="$baseURL&amp;page=teams" class="btn $navi_teams btn-sm">
+        <a href="$baseURL&amp;page=teams" class="btn $navi_teams btn-sm">
             Teams
         </a>
     </div>
     $groupstage_navi
     <div class="btn-group" role="group">
-    	<a href="$baseURL&amp;page=bracket" class="btn $navi_bracket btn-sm">
+        <a href="$baseURL&amp;page=bracket" class="btn $navi_bracket btn-sm">
             Playoffs
         </a>
     </div>
     <div class="btn-group" role="group">
-    	<a href="$baseURL&amp;page=rules" class="btn $navi_rules btn-sm">
+        <a href="$baseURL&amp;page=rules" class="btn $navi_rules btn-sm">
             %rules%
-        </a>
-    </div>
-    <div class="btn-group" role="group">
-    	<a href="$baseURL&amp;page=activity" class="btn $navi_act btn-sm">
-            %activity_feed%
         </a>
     </div>
 </div>
 <br />
 $content
 <div class="btn-group btn-group-justified" role="group">
-	$cup_footer
+    $cup_footer
 </div>
 <script type="text/javascript">
 $("button[name=activeButtonsRound]").click(function (e) {
-	
-	e.preventDefault();
-	
-	var roundString = this.id;
-	var roundArray = roundString.split('_');
-	var round_id = roundArray[1];
-	
-	var value = $(".resetClass" + round_id).attr('disabled');
-	if (value === "disabled") {
-		$(".resetClass" + round_id).removeAttr('disabled');
-	} else {
-		$("#masterComment" + round_id).css('display', 'none');
-		$("#submitMasterComment" + round_id).attr('disabled', 'disabled');
-		$(".resetClass" + round_id).attr('disabled', 'disabled');
-	}
-	
+
+    e.preventDefault();
+
+    var roundString = this.id;
+    var roundArray = roundString.split('_');
+    var round_id = roundArray[1];
+
+    var value = $(".resetClass" + round_id).attr('disabled');
+    if (value === "disabled") {
+        $(".resetClass" + round_id).removeAttr('disabled');
+    } else {
+        $("#masterComment" + round_id).css('display', 'none');
+        $("#submitMasterComment" + round_id).attr('disabled', 'disabled');
+        $(".resetClass" + round_id).attr('disabled', 'disabled');
+    }
+
 });
-	
+
 $("button[name=addMasterComment]").click(function (e) {
 
-	e.preventDefault();
-	
-	var roundString = this.id;
-	var roundArray = roundString.split('_');
-	var round_id = roundArray[1];
-	
-	var value = $("#masterComment" + round_id).css('display');
-	if (value === "none") {
-		$("#submitMasterComment" + round_id).removeAttr('disabled');
-		$("#masterComment" + round_id).css('display', 'block');
-	} else {
-		$("#submitMasterComment" + round_id).attr('disabled', 'disabled');
-		$("#masterComment" + round_id).css('display', 'none');
-	}
-	
+    e.preventDefault();
+
+    var roundString = this.id;
+    var roundArray = roundString.split('_');
+    var round_id = roundArray[1];
+
+    var value = $("#masterComment" + round_id).css('display');
+    if (value === "none") {
+        $("#submitMasterComment" + round_id).removeAttr('disabled');
+        $("#masterComment" + round_id).css('display', 'block');
+    } else {
+        $("#submitMasterComment" + round_id).attr('disabled', 'disabled');
+        $("#masterComment" + round_id).css('display', 'none');
+    }
+
 });
-	
+
 $("button[name=updateRound]").click(function (e) {
-	
-	e.preventDefault();
-	
-	var roundString = this.id;
-	var roundArray = roundString.split('_');
-	var round_id = roundArray[1];
-	
-	var container = $("#cup_round_" + round_id + "_matches");
-	container.html(
-		'<div class="list-group-item">' +
-		'<img src="$image_url/loader.gif" alt="" />' +
-		'</div>'
-	);
+
+    e.preventDefault();
+
+    var roundString = this.id;
+    var roundArray = roundString.split('_');
+    var round_id = roundArray[1];
+
+    var container = $("#cup_round_" + round_id + "_matches");
+    container.html(
+        '<div class="list-group-item">' +
+        '<img src="$image_url/loader.gif" alt="" />' +
+        '</div>'
+    );
 
     $.get(
         "ajax.php?site=admin_cup_round_details",
@@ -103,26 +98,26 @@ $("button[name=updateRound]").click(function (e) {
             round_id : round_id
         },
         function (data, status) {
-            
+
             if (status === "success") {
-                
+
                 var varData = JSON.parse(data);
                 if (varData.status) {
-                    
+
                     container.fadeOut('slow', function() {
                         container.html(varData.html);
                         container.fadeIn('slow');
                     });
-                    
+
                 } else {
                     showMultipleNotifies(varData.message, 'error');
                 }
 
             }
-            
+
         }
     );
-	
+
 });
-	
+
 </script>

@@ -16,6 +16,8 @@ try {
     $mod = isset($_GET['mod']) ?
         getinput($_GET['mod']) : 'cup';
 
+    $cup_base_path = __DIR__ . '/../cup/php/';
+
     if ($mod == 'cup') {
 
         if ( $getAction == "add" ) {
@@ -39,7 +41,7 @@ try {
             include(__DIR__ . '/cup_admin/cup_admin_details.php');
         } else if ($getAction == "teamadd") {
             // Team zu einem Cup hinzufuegen (durch Admin)
-            include(__DIR__ . '/includes/cup_joincup.php');
+            include($cup_base_path . '/includes/cup_joincup.php');
         } else if ( $getAction == "adminadd" && isset($_GET['id']) ) {
             // Team zu einem Cup hinzufuegen (durch Admin)
             include(__DIR__ . '/cup_admin/cup_add_admin.php');

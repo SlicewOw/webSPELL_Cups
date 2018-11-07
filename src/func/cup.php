@@ -218,19 +218,12 @@ function getGame($game_id, $cat = '') {
         return (empty($cat)) ? array() : '';
     }
 
-    if (file_exists($dir_global . 'images/games/' . $get['tag'] . '.gif')) {
-        $icon = $image_url . '/games/' . $get['tag'] . '.gif';
-    } else {
-        $icon = '';
-    }
-
     $returnArray = array(
         "id" => $get['gameID'],
         "name" => $get['name'],
         "tag" => $get['tag'],
         "short" => $get['short'],
-        "icon" => $icon,
-        "pic" => $get['pic']
+        "icon" => getGameIcon($get['tag'], true)
     );
 
     if (empty($cat) || ($cat == 'all')) {

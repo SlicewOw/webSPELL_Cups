@@ -310,6 +310,7 @@ systeminc('func/captcha');
 
 systeminc('func/cup');
 systeminc('func/validation');
+systeminc('func/images');
 
 // -- LANGUAGE SYSTEM -- //
 
