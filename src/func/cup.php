@@ -492,6 +492,28 @@ function SteamID2CommunityID($steamid) {
 
 }
 
+function getuserposition($position_tag) {
+
+    if (empty($position_tag)) {
+        return '';
+    }
+
+    global $_database;
+
+    $get = mysqli_fetch_array(
+        mysqli_query(
+            $_database,
+            "SELECT
+                    `name`
+                FROM `" . PREFIX . "user_position_static`
+                WHERE tag = '" . $position_tag . "'"
+        )
+    );
+
+    return $get['name'];
+
+}
+
 /* Adminzugang */
 
 function iscupadmin($user_id) {
