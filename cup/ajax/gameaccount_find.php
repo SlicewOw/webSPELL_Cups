@@ -307,7 +307,7 @@ try {
                     )
                 );
 
-                $intern_url = 'index.php?site=cup_admin&amp;mod=gameaccounts&amp;action=log&amp;user_id=' . $get['userID'];
+                $intern_url = 'admincenter.php?site=cup&amp;mod=gameaccounts&amp;action=log&amp;user_id=' . $get['userID'];
                 $returnArray['htmlData'] .= '<a href="' . $intern_url . '" class="list-group-item">&raquo; '.getnickname($get['userID']).'</a>';
 
             }

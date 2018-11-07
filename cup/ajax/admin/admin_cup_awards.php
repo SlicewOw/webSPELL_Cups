@@ -122,7 +122,7 @@ try {
                     if($get['teamID'] > 0) {
                         $id = $get['teamID'];
                         $teamArray = getteam($id);
-                        $detail_url = 'index.php?site=cup_admin&amp;mod=teams&amp;action=active&amp;teamID='.$id;
+                        $detail_url = 'admincenter.php?site=cup&amp;mod=teams&amp;action=active&amp;teamID='.$id;
                     } else if($get['userID'] > 0) {
                         $id = $get['userID'];
                         $detail_url = '';
@@ -156,7 +156,7 @@ try {
                 for($x=0;$x<$anzStats;$x++) {
 
                     $id = $statsArray[$x]['id'];
-                    $detail_url = 'index.php?site=cup_admin&amp;mod=teams&amp;action=active&amp;teamID='.$id;
+                    $detail_url = 'admincenter.php?site=cup&amp;mod=teams&amp;action=active&amp;teamID='.$id;
 
                     $data_array = array();
                     $data_array['$n']           = ($x + 1);

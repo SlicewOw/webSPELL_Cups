@@ -90,7 +90,7 @@ try {
                 // Admin URL?
                 $url = ($getSite == 'support') ? 
                     'index.php?site=support&amp;action=details&amp;id=' . $ticket_id : 
-                    'index.php?site=cup_admin&amp;mod=support&amp;action=details&amp;id=' . $ticket_id;
+                    'admincenter.php?site=cup&amp;mod=support&amp;action=details&amp;id=' . $ticket_id;
 
                 $takeTicket = '';
                 if ($ticketStatus == 1) {

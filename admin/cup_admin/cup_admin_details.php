@@ -370,7 +370,7 @@ try {
 			$data_array = array();
 			$data_array['$image_url']       = $image_url;
 			$data_array['$error'] 			= $error;
-			$data_array['$baseURL']			= 'admincenter.php?site=cup_admin&amp;mod=cup&amp;action=cup&amp;id=' . $cup_id;
+			$data_array['$baseURL']			= 'admincenter.php?site=cup&amp;mod=cup&amp;action=cup&amp;id=' . $cup_id;
 			$data_array['$cupID'] 			= $cup_id;
 			$data_array['$cupname'] 		= $cupArray['name'];
 			$data_array['$navi_home'] 		= $navi_home;
