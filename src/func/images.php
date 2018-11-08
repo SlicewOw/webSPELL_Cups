@@ -85,6 +85,57 @@ function deleteImageFromDatabase($table_name, $column_banner_name, $column_activ
 }
 
 /**
+ * Sponsor
+ */
+function getSponsorImage($sponsor_id, $returnAsFullImageLink = TRUE, $backgroundColor = 'black') {
+
+    $default_image = '';
+
+    if (!validate_int($sponsor_id)) {
+        return $default_image;
+    }
+
+    global $_database, $image_url;
+
+    $query = mysqli_query(
+        $_database,
+        "SELECT
+                `banner`,
+                `banner_small`
+            FROM `" . PREFIX . "sponsors`
+            WHERE sponsorID = " . $sponsor_id
+    );
+
+    if (!$query) {
+        return $default_image;
+    }
+
+    $get = mysqli_fetch_array($query);
+
+    $selectBanner = ($backgroundColor == 'black') ?
+        'banner_small' : 'banner';
+
+    if (empty($get[ $selectBanner ])) {
+        return $default_image;
+    }
+
+    $imagePath = '/media/sponsors/' . $get[ $selectBanner ];
+    $filePath = __DIR__ . '/../../../images' . $imagePath;
+
+    if (!file_exists($filePath)) {
+        deleteImageFromDatabase('sponsors', $selectBanner, 'displayed', 'sponsorID', $sponsor_id);
+        return $default_image;
+    }
+
+    if ($returnAsFullImageLink) {
+        return $image_url . $imagePath;
+    } else {
+        return $get[ $selectBanner ];
+    }
+
+}
+
+/**
  * User
  */
 function getUserImage($category, $user_id, $returnCompleteImagePath = FALSE) {

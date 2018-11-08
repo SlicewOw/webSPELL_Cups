@@ -30,14 +30,18 @@ try {
     $time_now = time();
     $content = '';
 
-    if(empty($getPage)) {
+    $getPage = (isset($_GET['page'])) ?
+        getinput($_GET['page']) : 'home';
+
+    if (empty($getPage)) {
         $getPage = 'home';
     }
 
     //
     // Cup Details Content
-    if (file_exists(__DIR__ . '/../cup/includes/cup_details_' . $getPage . '.php')) {
-        include(__DIR__ . '/../cup/includes/cup_details_' . $getPage . '.php');
+    $contentFile = __DIR__ . '/../php/includes/cup_details_' . $getPage . '.php';
+    if (file_exists($contentFile)) {
+        include($contentFile);
     }
 
     //
@@ -68,7 +72,7 @@ try {
 
         }
 
-        $content .= '<div class="panel panel-default"><div class="panel-heading">Sponsoren</div><div class="panel-body">'.$content_sponsors.'<div class="clear"></div></div></div>';
+        $content .= '<div class="panel panel-default"><div class="panel-heading">Sponsoren</div><div class="panel-body">' . $content_sponsors . '<div class="clear"></div></div></div>';
 
     }
 
@@ -126,7 +130,7 @@ try {
             if(cup_checkin($cup_id, $userID, 'is_checked_in')) {
                 $link = '<div class="list-group-item alert-success center">'.$_language->module['enter_cup_checkin_ok'];
             } else {
-                $link = '<div class="list-group-item center"><input type="checkbox" id="checkin_box" name="checkin_box" onclick="checkbox('.$cup_id.');" /> Das Team best&auml;tigt die Nutzungsbedingungen gelesen zu haben.</div><div id="enter_cup_container"><span class="list-group-item alert-info center">Team Check-In</span></div>';
+                $link = '<div class="list-group-item center"><input type="checkbox" id="checkin_box" name="checkin_box" onclick="checkbox(' . $cup_id . ');" /> Das Team best&auml;tigt die Nutzungsbedingungen gelesen zu haben.</div><div id="enter_cup_container"><span class="list-group-item alert-info center">Team Check-In</span></div>';
             }
         } else if ($cupArray['phase'] == 'checkin') {
             if (cup_checkin($cup_id, $userID, 'is_registered')) {
