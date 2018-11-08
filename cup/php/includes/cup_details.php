@@ -251,16 +251,10 @@ try {
     // Update Hits
     setHits('cups', 'cupID', $cup_id, false);
 
-    //
-    // Socials
-    $parent_id = $cup_id;
-    include($dir_main . 'socials.php');
-
     $data_array = array();
     $data_array['$image_url'] = $image_url;
     $data_array['$error'] = $error;
     $data_array['$cupID'] = $cup_id;
-    $data_array['$socials'] = $socials;
     $data_array['$navTeams'] = ($cupArray['mode'] == '1on1') ? $_language->module['player'] : 'Teams';
     $data_array['$cupname'] = $cupArray['name'];
     $data_array['$navi_home'] = $navi_home;

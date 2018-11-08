@@ -12,9 +12,10 @@ $getSite = (isset($_GET['site'])) ?
 $getAction = (isset($_GET['action'])) ?
     getinput($_GET['action']) : '';
 
+$dir_main = __DIR__ . '/';
 $dir_cup = __DIR__ . '/cup/php/';
 
-$image_url = __DIR__ . '/images/';
+$image_url = './images/';
 $admin_url = 'admin/admincenter.php';
 
 global $loggedin;
@@ -46,6 +47,7 @@ if (!$userID) {
     <link href="./css/button.css.php" rel="styleSheet" type="text/css">
     <link href="./_stylesheet.css" rel="stylesheet">
 
+    <link href="./css/flipclock.css" rel="stylesheet">
     <link href="./css/font.css" rel="stylesheet">
     <link href="./css/layout.css" rel="stylesheet">
     <link href="./css/pages.css" rel="stylesheet">
@@ -54,7 +56,11 @@ if (!$userID) {
         echo '<script src="./' . $component . '"></script>';
     }
     ?>
-    <script src="./js/bbcode.js" type="text/javascript"></script>
+    <script src="./js/bbcode.js"></script>
+    <script src="./js/pnotify.custom.min.js"></script>
+    <script src="./js/jquery.countdown.js"></script>
+    <script src="./js/flipclock.min.js"></script>
+    <script src="./js/cup_functions.js"></script>
 
     <title><?php echo PAGETITLE; ?></title>
 
@@ -186,9 +192,7 @@ try {
 
     }
 
-} catch (Exception $e) {
-    setLog('Cup: ' . $e->getMessage(), __FILE__, 0, true, $e->getLine());
-}
+} catch (Exception $e) {}
 ?>
 <script src="./cup/js/cup_details_menu.js"></script>
 <script src="./cup/js/support_menu.js"></script>

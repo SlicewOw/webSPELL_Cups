@@ -4,6 +4,110 @@
  * General
  **/
 
+function setHits($table, $primary_key, $parent_id, $only_trending = FALSE) {
+
+    try {
+
+        if (empty($primary_key)) {
+            throw new \Exception('unknown_primary_key');
+        }
+
+        if (!validate_int($parent_id, true)) {
+            throw new \Exception('unknown_parent_id');
+        }
+
+        if (!is_bool($only_trending)) {
+            throw new \Exception('unknown_parameter_trending');
+        }
+
+        global $_database, $getSite;
+
+        $month = date('n');
+        $year = date('Y');
+
+        if ($table == 'cups_matches_playoff') {
+            $local_getSite = $table;
+        } else if ($getSite == 'sethits') {
+            $local_getSite = $table;
+        } else {
+            $local_getSite = $getSite;
+        }
+
+        $whereClauseArray = array();
+        $whereClauseArray[] = "site = '" . $local_getSite . "'";
+        $whereClauseArray[] = "parent_id = " . $parent_id;
+        $whereClauseArray[] = "month = " . $month;
+        $whereClauseArray[] = "year = " . $year;
+
+        $whereClause = implode(' AND ', $whereClauseArray);
+
+        $query = mysqli_query(
+            $_database,
+            "UPDATE `" . PREFIX . $table . "`
+                SET hits = hits + 1
+                WHERE `" . $primary_key . "` = " . $parent_id
+        );
+
+        if (!$query) {
+            throw new \Exception('update_query_failed');
+        }
+
+    } catch (Exception $e) {}
+
+}
+
+function setNotification($receiver_id, $parent_url, $parent_id, $message) {
+
+    if (!validate_int($receiver_id)) {
+        return;
+    }
+
+    if (empty($parent_url)) {
+        return;
+    }
+
+    if (!validate_int($parent_id)) {
+        return;
+    }
+
+    if (empty($message)) {
+        return;
+    }
+
+    //
+    // Receiver ID      = Empfänger
+    // Transmitter ID   = Sender
+
+    global $_database, $userID;
+
+    $saveQuery = mysqli_query(
+        $_database,
+        "INSERT INTO `" . PREFIX . "user_notifications`
+            (
+                `receiver_id`,
+                `transmitter_id`,
+                `parent_url`,
+                `parent_id`,
+                `date`,
+                `message`
+            )
+            VALUES
+            (
+                " . $receiver_id . ",
+                " . $userID . ",
+                '" . $parent_url . "',
+                " . $parent_id . ",
+                " . time() . ",
+                '" . $message . "'
+            )"
+    );
+
+    if (!$saveQuery) {
+        return FALSE;
+    }
+
+}
+
 function getParentIdByValue($value_name, $isIntegerParentId = TRUE) {
 
     global $_language;

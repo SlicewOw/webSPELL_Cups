@@ -1,45 +1,39 @@
 $error
 <div class="panel panel-default">
     <div class="panel-heading">
-    	<h1 class="panel-title">$cupname</h1>
+        <h1 class="panel-title">$cupname</h1>
     </div>
-	<div class="list-group">
-		<div class="list-group-item">
-			<div class="pull-right">$socials</div>
-			<div class="clear"></div>
-		</div>
-	</div>
 </div>
 <div class="btn-group btn-group-justified" role="group">
     <div class="btn-group" role="group">
-		<button id="btn_home" 
+        <button id="btn_home" 
                 onclick="getCupContent($cupID, 'home');" 
                 class="btn btn-sm $navi_home">
             Details
         </button>
-	</div>
+    </div>
     <div class="btn-group" role="group">
-		<button id="btn_teams" 
+        <button id="btn_teams" 
                 onclick="getCupContent($cupID, 'teams');" 
                 class="btn btn-sm $navi_teams">
             $navTeams
         </button>
-	</div>
+    </div>
     $groupstage_navi
     <div class="btn-group" role="group">
-		<button id="btn_playoffs" 
+        <button id="btn_playoffs" 
                 onclick="getCupContent($cupID, 'bracket');" 
                 class="btn btn-sm $navi_bracket">
             Playoffs
         </button>
-	</div>
+    </div>
     <div class="btn-group" role="group">
-		<button id="btn_rules" 
+        <button id="btn_rules" 
                 onclick="getCupContent($cupID, 'rules');" 
                 class="btn btn-sm $navi_rules">
             %rules%
         </button>
-	</div>
+    </div>
 </div>
 <br />
 <div class="full_content" id="cup_content"> 
@@ -50,38 +44,38 @@ $cup_footer
 function getCupContent(id, page) {
     'use strict';
 
-	$("#cup_content").html(
-		'<div class="panel panel-default">' +
-		'<div class="panel-body">' +
-		'<img src="$image_url/loader.gif" alt="" />' +
-		'</div>' +
-		'</div>'
-	);
+    $("#cup_content").html(
+        '<div class="panel panel-default">' +
+        '<div class="panel-body">' +
+        '<img src="$image_url/loader.gif" alt="" />' +
+        '</div>' +
+        '</div>'
+    );
 
-	var home_btn = document.getElementById("btn_home");
-	var teams_btn = document.getElementById("btn_teams");
-	//var groups_btn = document.getElementById("btn_groups");
-	var playoffs_btn = document.getElementById("btn_playoffs");
-	var rules_btn = document.getElementById("btn_rules");
+    var home_btn = document.getElementById("btn_home");
+    var teams_btn = document.getElementById("btn_teams");
+    //var groups_btn = document.getElementById("btn_groups");
+    var playoffs_btn = document.getElementById("btn_playoffs");
+    var rules_btn = document.getElementById("btn_rules");
 
-	home_btn.setAttribute('class', 'btn btn-default btn-sm');
-	teams_btn.setAttribute('class', 'btn btn-default btn-sm');
-	//groups_btn.setAttribute('class', 'btn btn-default btn-sm');
-	playoffs_btn.setAttribute('class', 'btn btn-default btn-sm');
-	rules_btn.setAttribute('class', 'btn btn-default btn-sm');
-	
-	if (page === 'home') {
-		home_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
-	} else if (page === 'teams') {
-		teams_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
-	} else if (page === 'groups') {
-		groups_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
-	} else if (page === 'bracket') {
-		playoffs_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
-	} else if (page === 'rules') {
-		rules_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
-	}
-	
+    home_btn.setAttribute('class', 'btn btn-default btn-sm');
+    teams_btn.setAttribute('class', 'btn btn-default btn-sm');
+    //groups_btn.setAttribute('class', 'btn btn-default btn-sm');
+    playoffs_btn.setAttribute('class', 'btn btn-default btn-sm');
+    rules_btn.setAttribute('class', 'btn btn-default btn-sm');
+
+    if (page === 'home') {
+        home_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
+    } else if (page === 'teams') {
+        teams_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
+    } else if (page === 'groups') {
+        groups_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
+    } else if (page === 'bracket') {
+        playoffs_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
+    } else if (page === 'rules') {
+        rules_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
+    }
+
     $.get(
         "ajax.php?site=cup_details",
         {
@@ -89,14 +83,14 @@ function getCupContent(id, page) {
             page : page
         },
         function (data, status) {
-        
+
             $("#cup_content").fadeOut('slow', function() {
                 $("#cup_content").html(data);
                 $("#cup_content").fadeIn('slow');
             });
-            
+
         }
     );
-	
+
 }
 </script>
