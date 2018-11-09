@@ -318,13 +318,13 @@ try {
 
             } else {
 
-                include($dir_cup.'admin/includes/gameaccount_log.php');
+                include(__DIR__ . '/includes/gameaccount_log.php');
 
             }
 
-        } else if (file_exists($dir_cup . 'admin/includes/gameaccount_' . $getAction . '.php')) {
+        } else if (file_exists(__DIR__ . '/includes/gameaccount_' . $getAction . '.php')) {
 
-            include($dir_cup . 'admin/includes/gameaccount_' . $getAction . '.php');
+            include(__DIR__ . '/includes/gameaccount_' . $getAction . '.php');
 
         } else {
 

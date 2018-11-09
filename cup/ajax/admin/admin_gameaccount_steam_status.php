@@ -6,27 +6,27 @@ $returnArray = array(
 );
 
 try {
-    
+
     $_language->readModule('gameaccounts', false, true);
-    
+
     if(!$loggedin || !iscupadmin($userID)) {
         throw new \Exception('access_denied');
     }
 
     $userArray = (isset($_GET['user_id'])) ? 
-		explode(',', $_GET['user_id']) : array();
-	
+        explode(',', $_GET['user_id']) : array();
+
     $anzUser = count($userArray);
     if($anzUser < 1) {
         throw new \Exception('unknwon_user_array');
     }
 
-    $steamImagePath = $dir_global . '/images/cup/steam/';
-    
+    $steamImagePath = __DIR__ . '/../../images/cup/steam/';
+
     for ($n = 0; $n < $anzUser; $n++) {
 
         try {
-            
+
             $user_id = (isset($userArray[$n]) && validate_int($userArray[$n])) ?
                 $userArray[$n] : 0;
 
@@ -40,7 +40,7 @@ try {
             );
 
             $gameaccount_list = '';
-			
+
             $query = mysqli_query(
                 $_database, 
                 "SELECT 
@@ -49,7 +49,7 @@ try {
                         `value`, 
                         `active` 
                     FROM `" . PREFIX . "cups_gameaccounts` 
-                    WHERE `userID` = " . $user_id . " AND `category` IN ('csg')       
+                    WHERE `userID` = " . $user_id . " AND `category` IN ('csg')
                     ORDER BY `active` DESC, `category` ASC, `date` DESC"
             );
             $anz = mysqli_num_rows($query);
@@ -57,16 +57,16 @@ try {
 
                 while($ds = mysqli_fetch_array($query)) {
 
-					$gameaccount_id = $ds['gameaccID'];
+                    $gameaccount_id = $ds['gameaccID'];
                     $steam64_id = $ds['value'];
 
                     $checkIf = mysqli_fetch_array(
                         mysqli_query(
                             $_database, 
                             "SELECT 
-									COUNT(*) AS exist 
-								FROM `" . PREFIX . "cups_gameaccounts_csgo`
-								WHERE `gameaccID` = " . $gameaccount_id
+                                    COUNT(*) AS exist 
+                                FROM `" . PREFIX . "cups_gameaccounts_csgo`
+                                WHERE `gameaccID` = " . $gameaccount_id
                         )
                     );
 
@@ -90,16 +90,16 @@ try {
                     }
 
                     if(!in_array($steam64_id, $csgoGameaccount['list'])) {
-                        
+
                         $csgoGameaccount['data'][] = array(
                             'gameaccID'		=> $gameaccount_id,
                             'active'		=> $ds['active'],
                             'game'		    => $ds['category'],
                             'steam_id'		=> $steam64_id
                         );
-                        
+
                         $csgoGameaccount['list'][] = $steam64_id;
-                        
+
                     }
 
                 }
@@ -110,7 +110,7 @@ try {
 
             $anzCSGOAccounts = count($csgoGameaccount['list']);
             if($anzCSGOAccounts > 0) {
-               
+
                 for($x=0;$x<$anzCSGOAccounts;$x++) {
 
                     $steam64_id = $csgoGameaccount['data'][$x]['steam_id'];
@@ -201,13 +201,13 @@ try {
             } else {
                 echo '<tr><td colspan="6">' . $_language->module['no_gameaccount'] . '</td></tr>';
             }
-            
-        } catch(Exception $e) {
+
+        } catch (Exception $e) {
             echo '<tr><td colspan="8" class="alert-danger">Etwas lief schief..</td></tr>';
         }
-        
+
     }
-    
+
 } catch(Exception $e) {
     echo '<tr><td colspan="8">' . $e->getMessage() . '</td></tr>';
 }
