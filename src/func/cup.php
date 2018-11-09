@@ -4,6 +4,46 @@
  * General
  **/
 
+function setPlayerLog($user_id, $parent_id, $text) {
+
+    if (!validate_int($user_id)) {
+        return;
+    }
+
+    if (!validate_int($parent_id)) {
+        return;
+    }
+
+    if (empty($text)) {
+        return;
+    }
+
+    $username = getnickname($user_id);
+
+    global $_database;
+
+    $saveQuery = mysqli_query(
+        $_database,
+        "INSERT INTO `" . PREFIX . "user_log`
+            (
+                `userID`,
+                `username`,
+                `date`,
+                `parent_id`,
+                `action`
+            )
+            VALUES
+            (
+                " . $user_id . ",
+                '" . $username . "',
+                " . time() . ",
+                " . $parent_id . ",
+                '" . $text . "'
+            )"
+    );
+
+}
+
 function setHits($table, $primary_key, $parent_id, $only_trending = FALSE) {
 
     try {
