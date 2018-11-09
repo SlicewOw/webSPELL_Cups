@@ -242,7 +242,7 @@ function getGameIcon($game_tag, $returnAsFullImageLink = TRUE) {
     if ($returnAsFullImageLink) {
         return $image_url . $imagePath;
     } else {
-        return $get[ 'picurl' ];
+        return $game_tag . '.gif';
     }
 
 }

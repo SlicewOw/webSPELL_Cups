@@ -129,9 +129,12 @@ $getAction = (isset($_GET['action'])) ?
 $getShow = (isset($_GET['show'])) ?
     getinput($_GET['show']) : '';
 
-$dir_cup = __DIR__ . '/../cup/php/';
 $cup_url = $hp_url;
 
+global $dir_cup;
+$dir_cup = __DIR__ . '/../cup/php/';
+
+global $image_url, $admin_url;
 $image_url = '../images/';
 $admin_url = 'admin/admincenter.php';
 

@@ -8,7 +8,7 @@ try {
         throw new \Exception($_language->module[ 'access_denied' ]);
     }
 
-    $filepath = "../../images/games/";
+    $filepath = "../images/games/";
 
     if (validate_array($_POST, true)) {
 
@@ -32,15 +32,16 @@ try {
 
                     $saveQuery = mysqli_query(
                         $_database,
-                        "INSERT INTO " . PREFIX . "games (
-                            name,
-                            short,
-                            tag
-                        ) VALUES (
-                            '" . $name . "',
-                            '" . $short . "',
-                            '" . $tag ."'
-                        )"
+                        "INSERT INTO `" . PREFIX . "games`
+                            (
+                                name,
+                                short,
+                                tag
+                            ) VALUES (
+                                '" . $name . "',
+                                '" . $short . "',
+                                '" . $tag ."'
+                            )"
                     );
 
                     if (!$saveQuery) {
@@ -82,71 +83,37 @@ try {
 
                     $upload = new \webspell\HttpUpload('icon');
                     if ($upload->hasFile()) {
-                        
-                        if ($upload->hasError() === false) {
-                            
+
+                        try {
+
+                            if ($upload->hasError() !== false) {
+                                throw new \Exception($upload->translateError());
+                            }
+
                             $mime_types = array('image/gif');
 
-                            if ($upload->supportedMimeType($mime_types)) {
-                                
-                                $imageInformation = getimagesize($upload->getTempFile());
-
-                                if (is_array($imageInformation)) {
-                                    
-                                    $file = $tag . ".gif";
-
-                                    if ($upload->saveAs($filepath . $file, true)) {
-                                        @chmod($filepath . $file, $new_chmod);
-                                    }
-                                    
-                                } else {
-                                    $errors[] = $_language->module['broken_image'];
-                                }
-                                
-                            } else {
-                                $errors[] = $_language->module['unsupported_image_type'];
+                            if (!$upload->supportedMimeType($mime_types)) {
+                                throw new \Exception($_language->module['unsupported_image_type']);
                             }
-                            
-                        } else {
-                            $errors[] = $upload->translateError();
-                        }
-                    }
-
-                }
-
-                if (isset($_FILES[ "game_image" ])) {
-
-                    $icon = $_FILES[ "game_image" ];
-                    $upload = new \webspell\HttpUpload('game_image');
-                    if ($upload->hasFile()) {
-                        
-                        if ($upload->hasError() === false) {
 
                             $imageInformation = getimagesize($upload->getTempFile());
 
-                            if (is_array($imageInformation)) {
-
-                                $image_ext = getImageType($icon);
-                                
-                                if (empty($image_ext)) {
-                                    throw new \Exception('empty_image_extension');
-                                }
-                                
-                                $file = $tag . "." . $image_ext;
-
-                                $filepath = "../../images/squadicons/";
-                                if ($upload->saveAs($filepath . $file, true)) {
-                                    @chmod($filepath . $file, $new_chmod);
-                                }
-
-                            } else {
-                                $errors[] = $_language->module['broken_image'];
+                            if (!is_array($imageInformation)) {
+                                throw new \Exception($_language->module['broken_image']);
                             }
 
-                        } else {
-                            $errors[] = $upload->translateError();
+                            $file = $tag . ".gif";
+
+                            if (!$upload->saveAs($filepath . $file, true)) {
+                                throw new \Exception($_language->module['broken_image']);
+                            }
+
+                            @chmod($filepath . $file, $new_chmod);
+
+                        } catch (Exception $e) {
+                            $errors[] = $e->getMessage();
                         }
-                        
+
                     }
 
                 }
@@ -186,7 +153,7 @@ try {
                 "DELETE FROM " . PREFIX . "games 
                     WHERE `gameID` = " . $game_id
             );
-            
+
             if (file_exists($filepath.$ds['tag'].".gif")) {
                 unlink($filepath.$ds['tag'].".gif");
             }
@@ -233,9 +200,9 @@ try {
                 "SELECT * FROM `" . PREFIX . "games` 
                     ORDER BY `active` DESC, `name` ASC"
             );
-            
+
             $anz = mysqli_num_rows($ergebnis);
-            
+
             if ($anz > 0) {
 
                 $active_games = '';
@@ -244,15 +211,12 @@ try {
                 while ($ds = mysqli_fetch_array($ergebnis)) {
 
                     $game_id = $ds[ 'gameID' ];
-                    
-                    $file = 'games/' . $ds['tag'] . '.gif';
-                    $pic = (file_exists('../../images/'.$file)) ? 
-                        '<img src="'.$image_url.'/'.$file.'" alt="" />' : '';
+                    $game_tag = $ds['tag'];
 
-                    $active_class = ($ds['active']) ? 
+                    $active_class = ($ds['active']) ?
                         'btn btn-success btn-xs' : 'btn btn-danger btn-xs';
 
-                    $active_txt = ($ds['active']) ? 
+                    $active_txt = ($ds['active']) ?
                         $_language->module[ 'active' ] : $_language->module[ 'inactive' ];
 
                     $edit_url = 'admincenter.php?site=games&amp;action=edit&amp;id=' . $game_id;
@@ -260,10 +224,10 @@ try {
 
                     $data_array = array();
                     $data_array['$gameID'] = $game_id;
-                    $data_array['$pic'] = $pic;
+                    $data_array['$pic'] = getGameIcon($game_tag, true);
                     $data_array['$name'] = $ds[ 'name' ];
                     $data_array['$short'] = $ds[ 'short' ];
-                    $data_array['$tag'] = $ds[ 'tag' ];
+                    $data_array['$tag'] = $game_tag;
                     $data_array['$active_class'] = $active_class;
                     $data_array['$active_txt'] = $active_txt;
                     $data_array['$edit_url'] = $edit_url;
@@ -277,21 +241,28 @@ try {
 
                 }
 
-            } else {
-                $active_games = '<tr><td colspan="5">' . $_language->module[ 'no_entries' ] . '</td></tr>';
-                $inactive_games = '<tr><td colspan="5">' . $_language->module[ 'no_entries' ] . '</td></tr>';
+            }
+
+            $no_entries = '<tr><td colspan="5">' . $_language->module[ 'no_entries' ] . '</td></tr>';
+
+            if (empty($active_games)) {
+                $active_games = $no_entries;
+            }
+
+            if (empty($inactive_games)) {
+                $inactive_games = $no_entries;
             }
 
             $data_array = array();
-            $data_array['$name'] 		= '';
-            $data_array['$short'] 		= '';
-            $data_array['$tag'] 		= '';
-            $data_array['$game_id'] 	= 0;
-            $data_array['$icon'] 		= '';
-            $data_array['$image'] 		= '';
-            $data_array['$ts_tab'] 		= '';
-            $data_array['$ts_bg'] 		= '';
-            $data_array['$postName'] 	= 'save';
+            $data_array['$name'] = '';
+            $data_array['$short'] = '';
+            $data_array['$tag'] = '';
+            $data_array['$game_id'] = 0;
+            $data_array['$icon'] = '';
+            $data_array['$image'] = '';
+            $data_array['$ts_tab'] = '';
+            $data_array['$ts_bg'] = '';
+            $data_array['$postName'] = 'save';
             $add_game = $GLOBALS["_template"]->replaceTemplate("game_add", $data_array);
 
             $data_array = array();

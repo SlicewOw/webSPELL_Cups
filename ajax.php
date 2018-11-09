@@ -14,6 +14,9 @@ try {
     $getAction = (isset($_GET['action'])) ?
         getinput($_GET['action']) : '';
 
+    global $image_url;
+    $image_url = $hp_url . '/images/';
+
     $fileLocation = '';
 
     $getAccess = TRUE;

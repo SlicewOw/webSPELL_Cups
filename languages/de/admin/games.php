@@ -30,6 +30,7 @@ $language_array = Array(
     'active_games'=>'aktive Spiele',
     'game_short'=>'Abk&uuml;rzung',
     'inactive_games'=>'inaktive Spiele',
+    'unknown_game'=>'unbekanntes Spiel',
 
 /* do not edit above this line */
 
