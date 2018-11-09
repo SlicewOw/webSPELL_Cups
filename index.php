@@ -17,6 +17,7 @@ $dir_cup = __DIR__ . '/cup/php/';
 
 $image_url = './images/';
 $admin_url = 'admin/admincenter.php';
+$cup_url = $hp_url;
 
 global $loggedin;
 if (!$userID) {

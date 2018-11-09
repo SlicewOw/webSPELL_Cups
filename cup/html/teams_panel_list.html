@@ -15,28 +15,25 @@
         <form method="post">
             <div class="form-group">
                 <label>%join_link%</label>
-                <input type="text" name="text" id="quickjoin" value="$link" class="form-control" readonly="readonly" />
+                <input type="text" name="text"
+                       id="quickjoin"
+                       value="$link"
+                       class="form-control"
+                       readonly="readonly" />
             </div>
             <div class="pull-left">
-                <button class="btn btn-default btn-sm" type="button" name="copyToClipboard">
+                <button type="button" class="btn btn-default btn-sm"
+                        name="copyToClipboard">
                     %copy_to_clipboard%
                 </button>
             </div>
             <div class="pull-right">
-                <button type="button" class="btn btn-default btn-sm" name="changePassword">
+                <button type="button" class="btn btn-default btn-sm"
+                        name="changePassword">
                     %change_password%
                 </button>
             </div>
             <div class="clear"></div>
-        </form>
-    </div>
-    <hr />
-    <div class="panel-body">
-        <form method="post">
-            <div class="row">
-                $teamSocials
-            </div>
-            <button class="btn btn-default btn-sm" type="submit" name="submitTeamSocials">%save%</button>
         </form>
     </div>
 </div>
