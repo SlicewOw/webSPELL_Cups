@@ -34,6 +34,10 @@ $language_array = array(
     'no_gameacc'=>'no gameaccount',
     'no_team'=>'no team',
     'no_write'=>'PM not possible',
+    'penalty'=>'penalty',
+    'penalty_until'=>'penalty active until',
+    'penalties'=>'penalties',
+    'write'=>'write a PM',
 
 /* do not edit above this line */
 
