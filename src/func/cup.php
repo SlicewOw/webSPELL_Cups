@@ -2022,11 +2022,11 @@ function gameaccount($userID, $value, $game) {
 function getCSGOAccountInfo($steam64_id, $multipleAccounts = FALSE) {
 
     $returnArray = array(
-        'status'            => FALSE,
-        'error'             => array(),
-        'steam_profile'		=> array(),
-        'vac_status'		=> array(),
-        'csgo_stats'		=> array()
+        'status' => FALSE,
+        'error' => array(),
+        'steam_profile' => array(),
+        'vac_status' => array(),
+        'csgo_stats' => array()
     );
 
     try {
@@ -2049,7 +2049,7 @@ function getCSGOAccountInfo($steam64_id, $multipleAccounts = FALSE) {
 
         //
         // Steam API Key
-        $steam_api_key = '';
+        include(__DIR__ . '/../../cup/settings.php');
 
         if (empty($steam_api_key)) {
             throw new \Exception('unknown_steam_api_key');

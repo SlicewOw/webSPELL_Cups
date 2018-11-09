@@ -13,7 +13,7 @@ Feel free to use this add-on for webSPELL NOR, but be aware that we (myRisk e.V)
 
 # Installation
 * {WiP}
-* Steam API Key: open /src/func/cup.php and set Steam API key (search for "$steam_api_key")
+* Steam API Key: copy /cup/settings.php.sample and remove .sample, fill in Steam API Key
 
 # Optional stuff
 
