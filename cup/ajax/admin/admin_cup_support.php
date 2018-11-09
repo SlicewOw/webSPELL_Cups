@@ -74,7 +74,7 @@ try {
         );
 
         if (!$ergebnis) {
-            throw new \Exception($_language->module['query_select_failed']);   
+            throw new \Exception($_language->module['query_select_failed']);
         }
 
         if (mysqli_num_rows($ergebnis) > 0) {
@@ -88,8 +88,8 @@ try {
 
                 //
                 // Admin URL?
-                $url = ($getSite == 'support') ? 
-                    'index.php?site=support&amp;action=details&amp;id=' . $ticket_id : 
+                $url = ($getSite == 'support') ?
+                    'index.php?site=support&amp;action=details&amp;id=' . $ticket_id :
                     'admincenter.php?site=cup&amp;mod=support&amp;action=details&amp;id=' . $ticket_id;
 
                 $takeTicket = '';
@@ -103,7 +103,7 @@ try {
                 $data_array['$n'] = $n++;
                 $data_array['$hp_url'] = $hp_url;
                 $data_array['$ticket_id'] = $ticket_id;
-                $data_array['$isNewAnswer'] = (getticket($ticket_id, 'new_answer_admin') > 0) ? ' class="alert-danger"' : '';	
+                $data_array['$isNewAnswer'] = (getticket($ticket_id, 'new_answer_admin') > 0) ? ' class="alert-danger"' : '';
                 $data_array['$url'] = $url;
                 $data_array['$name'] = $ds['name'];
                 $data_array['$user_id'] = $ds['userID'];
@@ -112,7 +112,7 @@ try {
                 $data_array['$category'] = getticket($ds['categoryID'], 'category');
                 $data_array['$date'] = getformatdatetime($ds['start_date']);
                 $data_array['$takeTicket'] = $takeTicket;
-                $returnArray['html'] .= $GLOBALS["_template_admin"]->replaceTemplate("ticket_list", $data_array);
+                $returnArray['html'] .= $GLOBALS["_template_cup"]->replaceTemplate("ticket_admin_list", $data_array);
 
             }
 
@@ -148,20 +148,20 @@ try {
             );
 
             if (!$query) {
-                throw new \Exception($_language->module['query_update_failed']); 
+                throw new \Exception($_language->module['query_update_failed']);
             }
 
             $insertQuery = mysqli_query(
                 $_database,
-                "INSERT INTO `" . PREFIX . "cups_supporttickets_status` 
+                "INSERT INTO `" . PREFIX . "cups_supporttickets_status`
                     (
                         `ticket_id`,
                         `primary_id`,
                         `admin`
-                    ) 
-                    VALUES 
+                    )
+                    VALUES
                     (
-                        " . $ticket_id . ", 
+                        " . $ticket_id . ",
                         " . $admin_id . ",
                         1
                     )"

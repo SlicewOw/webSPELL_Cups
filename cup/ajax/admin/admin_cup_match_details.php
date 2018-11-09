@@ -148,7 +148,7 @@ try {
 		$data_array['$pickedMaps']  = $pickedMaps;
 		$data_array['$bannedTeam1']  = $bannedMaps[1];
 		$data_array['$bannedTeam2']  = $bannedMaps[2];
-		$mapData = $GLOBALS["_template_admin"]->replaceTemplate("cup_match_details_maps", $data_array);
+		$mapData = $GLOBALS["_template_cup"]->replaceTemplate("cup_match_details_maps", $data_array);
 		$returnArray['text'] = $mapData;
 
         if ($get['cup_mappool'] > 0) {
@@ -157,7 +157,7 @@ try {
             $data_array['$mapList'] = getMapsAsOptions($get['cup_mappool']);
             $data_array['$match_id'] = $match_id;
             $data_array['$runde'] = $get['runde'];
-            $admin_set_maps = $GLOBALS["_template_admin"]->replaceTemplate("cup_match_details_maps_bo" . $getMapsToBePlayed, $data_array);
+            $admin_set_maps = $GLOBALS["_template_cup"]->replaceTemplate("cup_match_details_maps_bo" . $getMapsToBePlayed, $data_array);
             $returnArray['text'] .= $admin_set_maps;
                             
         }
@@ -405,7 +405,7 @@ try {
 					$teamTableHead = ($gameTag == 'csg') ?
 						'cup_match_details_gameaccount_csgo' : 'cup_match_details_gameaccount';
 					
-					$returnArray['details'][$team] = $GLOBALS["_template_admin"]->replaceTemplate(
+					$returnArray['details'][$team] = $GLOBALS["_template_cup"]->replaceTemplate(
 						$teamTableHead, 
 						array()
 					);
@@ -502,7 +502,7 @@ try {
 						$data_array['$date'] = '- / -';
                     }
 
-					$returnArray['details'][$team] .= $GLOBALS["_template_admin"]->replaceTemplate(
+					$returnArray['details'][$team] .= $GLOBALS["_template_cup"]->replaceTemplate(
 						$teamTableRow, 
 						$data_array
 					);
@@ -528,7 +528,7 @@ try {
 					$teamTableHead = ($gameTag == 'csg') ?
 						'cup_match_details_gameaccount_csgo' : 'cup_match_details_gameaccount';
 					
-					$returnArray['details'][$team] = $GLOBALS["_template_admin"]->replaceTemplate(
+					$returnArray['details'][$team] = $GLOBALS["_template_cup"]->replaceTemplate(
 						$teamTableHead, 
 						array()
 					);
@@ -609,7 +609,7 @@ try {
 
 						}
 						
-						$returnArray['details'][$team] .= $GLOBALS["_template_admin"]->replaceTemplate(
+						$returnArray['details'][$team] .= $GLOBALS["_template_cup"]->replaceTemplate(
 							$teamTableRow, 
 							$data_array
 						);
@@ -755,7 +755,7 @@ try {
 		$data_array['$settingTeam2Confirmed']	= $settingTeam2Confirmed;
 		$data_array['$settingAdminConfirmed']	= $settingAdminConfirmed;
 		$data_array['$settingAdminMatch']		= $settingAdminMatch;
-		$match_settings = $GLOBALS["_template_admin"]->replaceTemplate("cup_match_details_settings", $data_array);
+		$match_settings = $GLOBALS["_template_cup"]->replaceTemplate("cup_match_details_settings", $data_array);
 		$returnArray['settings']['html'] .= $match_settings;
 				
 	}

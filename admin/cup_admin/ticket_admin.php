@@ -3,7 +3,7 @@
 try {
 
     $_language->readModule('support', false, true);
-    
+
     if (!$loggedin || !iscupadmin($userID)) {
         throw new \Exception($_language->module['access_denied']);
     }
@@ -24,7 +24,7 @@ try {
     if ($status > 3) {
         $status = 3;
     }
-    
+
     $base_url = 'admincenter.php?site=cup&amp;mod=support&amp;action=admin&amp;status=';
 
     $url = ($getSite == 'support') ?
@@ -41,7 +41,7 @@ try {
         $ticketStatusArray[$status] = 'btn-info white darkshadow';
     }
 
-	$cat = isset($_GET['cat']) ? 
+    $cat = isset($_GET['cat']) ?
         getinput($_GET['cat']) : '';
 
     $data_array = array();
@@ -64,56 +64,56 @@ try {
         'false' : 'true';
     $ticket_menu = $GLOBALS["_template_cup"]->replaceTemplate("ticket_menu", $data_array);
     echo $ticket_menu;
-    
-	if ($getAction == 'details') {
-		
-		//
-		// Bestehendes Ticket
-		include($dir_cup . 'ticket_add_answer.php');
-		
-	} else if ($getAction == 'admin_add') {
-		
-		//
-		// Admin Ticket erstellen
-		include($dir_cup . 'ticket_add_admin.php');
-		
-	} else if ($getAction == 'archive') {
-		
-		//
-		// Admin Ticket erstellen
-		include(__DIR__ . '/includes/ticket_archive.php');
-		
-	} else {
 
-		$ticket_categories = '<option value="0">'.$_language->module['category'].'</option>';	
+    if ($getAction == 'details') {
+
+        //
+        // Bestehendes Ticket
+        include($dir_cup . 'ticket_add_answer.php');
+
+    } else if ($getAction == 'admin_add') {
+
+        //
+        // Admin Ticket erstellen
+        include($dir_cup . 'ticket_add_admin.php');
+
+    } else if ($getAction == 'archive') {
+
+        //
+        // Admin Ticket erstellen
+        include(__DIR__ . '/includes/ticket_archive.php');
+
+    } else {
+
+        $ticket_categories = '<option value="0">'.$_language->module['category'].'</option>';
         $ticket_categories .= getticketcategories($cat, false);
-		
-		$timeNow = time();
-		
+
+        $timeNow = time();
+
         // 60sec * 60min * 24h * 31d
         $milliSeconds = $timeNow - ((($x * 7) + 7) * 60 * 60 * 24);
 
-		$ticket_histories = '<option value="0">-- / --</option>';
-		for ($x = 0; $x < 20; $x++) {
-			
-			$timeScale = ((($x * 7) + 7) / 7) . ' Woche/-n';
-			
-			$ticket_histories .= '<option value="' . $milliSeconds . '">' . $timeScale . '</option>';
-			
-		}
-		
-		$data_array = array();
-		$data_array['$image_url'] = $image_url;
-		$data_array['$status'] = $status;
-		$data_array['$user_id'] = $userID;
-		$data_array['$ticket_categories'] = $ticket_categories;
-		$data_array['$ticket_histories'] = $ticket_histories;
-		$data_array['$status_title'] = $status_title;
-		$ticket_home_admin = $GLOBALS["_template_cup"]->replaceTemplate("ticket_admin_home", $data_array);
-		echo $ticket_home_admin;
-		
-	}
-    
+        $ticket_histories = '<option value="0">-- / --</option>';
+        for ($x = 0; $x < 20; $x++) {
+
+            $timeScale = ((($x * 7) + 7) / 7) . ' Woche/-n';
+
+            $ticket_histories .= '<option value="' . $milliSeconds . '">' . $timeScale . '</option>';
+
+        }
+
+        $data_array = array();
+        $data_array['$image_url'] = $image_url;
+        $data_array['$status'] = $status;
+        $data_array['$user_id'] = $userID;
+        $data_array['$ticket_categories'] = $ticket_categories;
+        $data_array['$ticket_histories'] = $ticket_histories;
+        $data_array['$status_title'] = $status_title;
+        $ticket_home_admin = $GLOBALS["_template_cup"]->replaceTemplate("ticket_admin_home", $data_array);
+        echo $ticket_home_admin;
+
+    }
+
 } catch (Exception $e) {
     echo showError($e->getMessage());
 }

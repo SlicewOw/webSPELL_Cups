@@ -98,7 +98,7 @@ try {
                     $data_array['$game'] = $get['game_name'];
                     $data_array['$value'] = $get['value'];
                     $data_array['$active'] = $active;
-                    $returnArray['htmlData'] .= $GLOBALS["_template_admin"]->replaceTemplate("gameaccount_find_list", $data_array);
+                    $returnArray['htmlData'] .= $GLOBALS["_template_cup"]->replaceTemplate("gameaccount_find_list", $data_array);
 
                     $returnArray['results']++;
 
@@ -171,7 +171,7 @@ try {
                 $data_array['$value'] = (is_null($get['value'])) ?
                     '' : $get['value'];
                 $data_array['$active'] = $active;
-                $returnArray['htmlData'] .= $GLOBALS["_template_admin"]->replaceTemplate("gameaccount_find_list", $data_array);
+                $returnArray['htmlData'] .= $GLOBALS["_template_cup"]->replaceTemplate("gameaccount_find_list", $data_array);
 
                 $returnArray['results']++;
 

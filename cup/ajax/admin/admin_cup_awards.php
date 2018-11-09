@@ -51,7 +51,7 @@ try {
             $data_array['$awardColumn'] = $awardColumn;
             $data_array['$awardValue']  = $awardValue;
             $data_array['$anz']         = $anz;
-            $returnArray['html'] .= $GLOBALS["_template_admin"]->replaceTemplate("cup_awards_row", $data_array);
+            $returnArray['html'] .= $GLOBALS["_template_cup"]->replaceTemplate("cup_awards_row", $data_array);
 
         }
 
@@ -98,7 +98,7 @@ try {
             $data_array['$awardColumn'] = $awardColumn;
             $data_array['$awardValue']  = $awardValue;
             $data_array['$anz']         = $anz;
-            $returnArray['html'] .= $GLOBALS["_template_admin"]->replaceTemplate("cup_awards_row", $data_array);
+            $returnArray['html'] .= $GLOBALS["_template_cup"]->replaceTemplate("cup_awards_row", $data_array);
 
             $query = mysqli_query(
                 $_database,
@@ -111,7 +111,7 @@ try {
             if($anzAwards > 0) {
 
                 $data_array = array();
-                $returnArray['html'] .= $GLOBALS["_template_admin"]->replaceTemplate("cup_awards_details_head", $data_array);
+                $returnArray['html'] .= $GLOBALS["_template_cup"]->replaceTemplate("cup_awards_details_head", $data_array);
 
                 $n = 1;
                 while($get = mysqli_fetch_array($query)) {
@@ -137,7 +137,7 @@ try {
                         $data_array['$name']        = $teamArray['name'];
                         $data_array['$date']        = ($get['date'] > 0) ? getformatdatetime($get['date']) : '';
                         $data_array['$detail_url']  = $detail_url;
-                        $returnArray['html'] .= $GLOBALS["_template_admin"]->replaceTemplate("cup_awards_details_row", $data_array);
+                        $returnArray['html'] .= $GLOBALS["_template_cup"]->replaceTemplate("cup_awards_details_row", $data_array);
 
                     }
 
@@ -151,7 +151,7 @@ try {
             if(is_array($statsArray) && ($anzStats > 0)) {
 
                 $data_array = array();
-                $returnArray['html'] .= $GLOBALS["_template_admin"]->replaceTemplate("cup_awards_stats_head", $data_array);
+                $returnArray['html'] .= $GLOBALS["_template_cup"]->replaceTemplate("cup_awards_stats_head", $data_array);
 
                 for($x=0;$x<$anzStats;$x++) {
 
@@ -165,7 +165,7 @@ try {
                     $data_array['$name']        = $statsArray[$x]['name'];
                     $data_array['$date']        = $statsArray[$x]['count'];
                     $data_array['$detail_url']  = $detail_url;
-                    $returnArray['html'] .= $GLOBALS["_template_admin"]->replaceTemplate("cup_awards_details_row", $data_array);
+                    $returnArray['html'] .= $GLOBALS["_template_cup"]->replaceTemplate("cup_awards_details_row", $data_array);
 
                 }
 
