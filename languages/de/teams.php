@@ -33,6 +33,7 @@ $language_array = Array(
     'image_response'=>'max 500x500px, quadratisch',
     'join_link'=>'Quickjoin',
     'leader_transfer_saved'=>'Team-Admin Rechte erfolgreich gespeichert',
+    'leave_team_ok'=>'Team erfolgreich verlassen.',
     'lifetime'=>'lebenslang',
     'login'=>'Du bist hier falsch.',
     'match_played'=>'gespielte Matches',

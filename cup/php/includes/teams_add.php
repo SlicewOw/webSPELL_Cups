@@ -69,6 +69,8 @@ try {
                 // Team speichern in DB
                 $team->saveTeam();
 
+                setPlayerLog($userID, $team->getTeamId(), 'cup_team_created');
+
                 unset($_SESSION['cup']);
 
                 $parent_url .= '&action=admin&id=' . $team->getTeamId();

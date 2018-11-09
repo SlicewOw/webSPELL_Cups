@@ -860,12 +860,12 @@ try {
     $createTableQuery = mysqli_query(
         $_database,
         "CREATE TABLE IF NOT EXISTS `" . PREFIX . "user_position_static` (
-        `positionID` int(11) NOT NULL,
-          `name` varchar(255) COLLATE latin1_german1_ci NOT NULL,
-          `tag` varchar(2) COLLATE latin1_german1_ci NOT NULL,
-          `game_id` int(11) DEFAULT NULL,
-          `sort` int(11) NOT NULL DEFAULT '1'
-        ) ENGINE=MyISAM"
+            `positionID` int(11) NOT NULL,
+              `name` varchar(255) COLLATE latin1_german1_ci NOT NULL,
+              `tag` varchar(2) COLLATE latin1_german1_ci NOT NULL,
+              `game_id` int(11) DEFAULT NULL,
+              `sort` int(11) NOT NULL DEFAULT '1'
+            ) ENGINE=MyISAM"
     );
 
     $alterTabelQuery = mysqli_query(
@@ -891,6 +891,17 @@ try {
             (1, 'Admin', NULL, NULL, 1),
             (2, 'Coach', NULL, NULL, 2),
             (3, 'Player', NULL, NULL, 3);"
+    );
+
+    $createTableQuery = mysqli_query(
+        $_database,
+        "CREATE TABLE `" . PREFIX . "user_log` (
+            `userID` int(11) NOT NULL,
+            `username` varchar(100) COLLATE latin1_german1_ci NOT NULL,
+            `date` int(11) NOT NULL,
+            `parent_id` int(11) NOT NULL,
+            `action` varchar(255) COLLATE latin1_german1_ci NOT NULL
+        ) ENGINE=MyISAM;"
     );
 
     echo "Delete this file!";
