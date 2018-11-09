@@ -1,14 +1,21 @@
-<div class="panel panel-default">
-	<div class="panel-heading">%ticket_add_answer%</div>
-    <div class="panel-body">
-        <form method="post">
-            <textarea name="text" id="ticketAnswer" class="form-control$textfromClass">$text</textarea>
-            <br />
+<form method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            %ticket_add_answer%
+        </div>
+        <div class="panel-body">
+            <textarea name="text" id="ticketAnswer"
+                      class="form-control$textfromClass">$text</textarea>
+        </div>
+        <div class="panel-footer">
             <input type="hidden" name="ticket_id" value="$ticketID" />
-            <input type="submit" name="submitTicketAnswer" class="btn btn-info btn-sm white darkshadow" value="%save%" />
-        </form>
+            <button type="submit" name="submitTicketAnswer"
+                    class="btn btn-info btn-sm white darkshadow">
+                %save%
+            </button>
+        </div>
     </div>
-</div>
+</form>
 <script type="text/javascript">
     CKEDITOR.replace( 'ticketAnswer', {
         stylesSet: []

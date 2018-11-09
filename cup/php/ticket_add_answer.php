@@ -23,11 +23,11 @@ try {
         throw new \Exception($_language->module['login']);
     }
 
-    $varPage = (mb_substr(basename($_SERVER[ 'REQUEST_URI' ]), 0, 15) != "admincenter.php") ?
+    $varPage = ($getSite == 'cup') ?
         'admin' : 'cup';
 
-    $temp_status 	= 1;
-    $temp_status2 	= 1;
+    $temp_status = 1;
+    $temp_status2 = 1;
 
     if (validate_array($_POST, true)) {
 
@@ -476,7 +476,6 @@ try {
             $data_array['$textfromClass'] = $textfromClass;
             $data_array['$ticketID'] = $ticket_id;
             $data_array['$text'] = $text;
-            $data_array['$static_url'] = $static_url;
             $ticket_add_answer = $GLOBALS["_template_cup"]->replaceTemplate("ticket_add_answer", $data_array);
 
         }
@@ -516,7 +515,7 @@ try {
 
                 $admin_info .= '<a href="'.$userLogLink.$db['ticket_userID'].'" target="_blank" class="list-group-item">&raquo; Gameaccounts</a>';
 
-                $admin_info .= '<div class="list-group-item alert-danger">Teams</div>';
+                $admin_info .= '</div><div class="panel-heading">Teams</div><div class="list-group">';
 
                 $query = mysqli_query(
                     $_database,

@@ -2987,24 +2987,31 @@ function getTicketAccess($ticket_id) {
 
     $teamArray = getteam($userID, 'teamID');
 
-    $whereClause = '`userID` = '.$userID;
+    $whereClauseArray = array();
+    $whereClauseArray[] = '`userID` = '.$userID;
 
     if (validate_array($teamArray, true)) {
 
         $teamString = implode(', ', $teamArray);
 
-        $whereClause .= ' OR `teamID` IN ('.$teamString.')';
-        $whereClause .= ' OR `opponentID` IN ('.$teamString.')';
+        $whereClauseArray[] = '`teamID` IN ('.$teamString.')';
+        $whereClauseArray[] = '`opponentID` IN ('.$teamString.')';
 
     }
 
+    $whereClause = implode(' OR ', $whereClauseArray);
+
     $query = mysqli_query(
         $_database,
-        "SELECT 
-            COUNT(*) AS `access` 
+        "SELECT
+            COUNT(*) AS `access`
         FROM `ws_j12_cups_supporttickets`
-        WHERE ticketID = ".$ticket_id." AND (".$whereClause.")"
+        WHERE ticketID = " . $ticket_id . " AND (" . $whereClause . ")"
     );
+
+    if (!$query) {
+        return FALSE;
+    }
 
     $get = mysqli_fetch_array($query);
     $returnValue = $get['access'];
