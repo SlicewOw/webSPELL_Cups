@@ -332,11 +332,11 @@ try {
                     $active .= '</form>';
 
                     $data_array = array();
-                    $data_array['$n'] 			= $n;
-                    $data_array['$game'] 		= $game;
-                    $data_array['$value'] 		= $ds['value'];
-                    $data_array['$active'] 		= $active;
-                    $data_array['$validate'] 	= $validate;
+                    $data_array['$n'] = $n;
+                    $data_array['$game'] = $game;
+                    $data_array['$value'] = $ds['value'];
+                    $data_array['$active'] = $active;
+                    $data_array['$validate'] = $validate;
                     $gameaccounts .= $GLOBALS["_template_cup"]->replaceTemplate("gameaccount_container", $data_array);
 
                     $n++;
@@ -359,10 +359,10 @@ try {
             //
             // Gameaccount Home
             $data_array = array();
-            $data_array['$info_gameacc'] 	= $info_gameacc;
-            $data_array['$gameaccounts'] 	= $gameaccounts;
-            $data_array['$games'] 			= $games;
-            $data_array['$id'] 				= $id;
+            $data_array['$info_gameacc'] = $info_gameacc;
+            $data_array['$gameaccounts'] = $gameaccounts;
+            $data_array['$games'] = $games;
+            $data_array['$id'] = $id;
             $gameacc_home = $GLOBALS["_template_cup"]->replaceTemplate("gameaccount_home", $data_array);
             echo $gameacc_home;
 
