@@ -245,11 +245,6 @@ try {
             // Update Hits
             setHits('liveshow', 'livID', $stream_id, false);
 
-            if ($userID > 0) {
-                $text = getnickname($userID).' schaut sich "' . $title . '" an';
-                setactivity($userID, $catID, $stream_id, 'active', $text, 'admin');
-            }
-
             $liveshow_content = '';
 
             $data_array = array();

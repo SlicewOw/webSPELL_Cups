@@ -40,8 +40,6 @@ class cup_team {
 
         global $_language, $dir_global;
 
-        $this->cat_id = getActivityCat('cup_teams');
-
         $this->lang = $_language;
 
         $this->lang->readModule('teams');

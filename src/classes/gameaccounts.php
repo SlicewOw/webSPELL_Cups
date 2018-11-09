@@ -5,10 +5,6 @@ namespace myrisk;
 class gameaccount {
 
     //
-    // Activity Feed Kategorie
-    var $cat_id = null;
-
-    //
     // Unique ID
     var $gameaccount_id = null;
 
@@ -44,8 +40,6 @@ class gameaccount {
     var $lang = null;
 
     public function __construct() {
-
-        $this->cat_id = getActivityCat('gameaccounts');
 
         global $_language;
 

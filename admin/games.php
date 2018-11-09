@@ -192,7 +192,6 @@ try {
             }
 
             if (!$saveQuery) {
-                setLog('Games: games_query_delete_failed', __FILE__, 0, false);
                 throw new \Exception($_language->module['query_delete_failed']);
             }
 
