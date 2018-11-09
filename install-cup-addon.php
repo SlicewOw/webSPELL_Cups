@@ -883,6 +883,16 @@ try {
             MODIFY `positionID` int(11) NOT NULL AUTO_INCREMENT;"
     );
 
+    $insertDataQuery = mysqli_query(
+        $_database,
+        "INSERT INTO `" . PREFIX . "cups_teams_position`
+            (`positionID`, `name`, `counter`, `level_id`, `sort`)
+            VALUES
+            (1, 'Admin', NULL, NULL, 1),
+            (2, 'Coach', NULL, NULL, 2),
+            (3, 'Player', NULL, NULL, 3);"
+    );
+
     echo "Delete this file!";
 
 } catch (Exception $e) {

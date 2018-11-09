@@ -2,92 +2,92 @@
 
 try {
 
-	if(!$loggedin) {
-		throw new \Exception($_language->module['not_loggedin']);
-	}
+    if(!$loggedin) {
+        throw new \Exception($_language->module['not_loggedin']);
+    }
 
-	if (validate_array($_POST, true)) {
+    if (validate_array($_POST, true)) {
 
-		$parent_url = 'index.php?site=teams';
+        $parent_url = 'index.php?site=teams';
 
-		if(isset($_POST['submit_team_add'])) {
+        if(isset($_POST['submit_team_add'])) {
 
-			systeminc('classes/cup_teams');
+            systeminc('classes/cup_teams');
 
-			$team = new \myrisk\cup_team();
+            $team = new \myrisk\cup_team();
 
-			try {
+            try {
 
-				if(isset($_POST['teamname'])) {
+                if (isset($_POST['teamname'])) {
 
-					$teamname = getinput($_POST['teamname']);
+                    $teamname = getinput($_POST['teamname']);
 
-					$team->setName($teamname);
+                    $team->setName($teamname);
 
-					$_SESSION['cup']['team']['name'] = $teamname;
+                    $_SESSION['cup']['team']['name'] = $teamname;
 
-				}
+                }
 
-				if(isset($_POST['teamtag'])) {
+                if (isset($_POST['teamtag'])) {
 
-					$teamtag = getinput($_POST['teamtag']);
+                    $teamtag = getinput($_POST['teamtag']);
 
-					$team->setTag($teamtag);
+                    $team->setTag($teamtag);
 
-					$_SESSION['cup']['team']['tag'] = $teamtag;
+                    $_SESSION['cup']['team']['tag'] = $teamtag;
 
-				}
+                }
 
-				if(isset($_POST['homepage'])) {
+                if (isset($_POST['homepage'])) {
 
-					$homepage = $_POST['homepage'];
+                    $homepage = $_POST['homepage'];
 
-					$team->setHomepage($homepage);
+                    $team->setHomepage($homepage);
 
-					$_SESSION['cup']['team']['hp'] = $homepage;
+                    $_SESSION['cup']['team']['hp'] = $homepage;
 
-				}
+                }
 
-				if(isset($_POST['country'])) {
+                if (isset($_POST['country'])) {
 
-					$country = $_POST['country'];
+                    $country = $_POST['country'];
 
-					$_SESSION['cup']['team']['country'] = $country;
+                    $_SESSION['cup']['team']['country'] = $country;
 
-				} else {
-					$country = 'de';
-				}
-				$team->setCountry($country);
+                } else {
+                    $country = 'de';
+                }
+                $team->setCountry($country);
 
-				//
-				// Team Image
-				if(isset($_FILES['logotype'])) {
-					$team->uploadLogotype($_FILES['logotype']);
-				}
+                //
+                // Team Image
+                if (isset($_FILES['logotype'])) {
+                    $team->uploadLogotype($_FILES['logotype']);
+                }
 
-				//
-				// Team speichern in DB
-				$team->saveTeam();
+                //
+                // Team speichern in DB
+                $team->saveTeam();
 
-				unset($_SESSION['cup']);
+                unset($_SESSION['cup']);
 
-				$parent_url .= '&action=admin&id=' . $team->getTeamId();
+                $parent_url .= '&action=admin&id=' . $team->getTeamId();
 
-			} catch(Exception $e) {
+            } catch(Exception $e) {
 
-				$_SESSION['cup']['team']['error'] = showError($e->getMessage());
+                $_SESSION['cup']['team']['error'] = showError($e->getMessage());
 
-				if (!is_null($team->getLogotype()) && !empty($team->getLogotype())) {
-					@unlink(__DIR__ . '/../../images/cup/teams/' . $team->getLogotype());
-				}
+                if (!is_null($team->getLogotype()) && !empty($team->getLogotype())) {
+                    @unlink(__DIR__ . '/../../images/cup/teams/' . $team->getLogotype());
+                }
 
-				$parent_url .= '&action=add';
+                $parent_url .= '&action=add';
 
-			}
+            }
 
-		}
+        }
 
-		header('Location: ' . $parent_url);
+        header('Location: ' . $parent_url);
 
     } else {
 

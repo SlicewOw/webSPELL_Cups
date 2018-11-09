@@ -309,6 +309,7 @@ systeminc('func/captcha');
 // -- Cup -- //
 
 systeminc('func/cup');
+systeminc('func/convert');
 systeminc('func/validation');
 systeminc('func/images');
 

@@ -145,17 +145,17 @@ try {
         $memberQuery = mysqli_query(
             $_database,
             "SELECT
-                    a.userID AS `user_id`,
-                    a.join_date AS `date_join`,
-                    b.name AS `position`,
-                    c.nickname AS `nickname`,
-                    c.firstname AS `firstname`,
-                    c.lastname AS `lastname`
+                    a.`userID` AS `user_id`,
+                    a.`join_date` AS `date_join`,
+                    b.`name` AS `position`,
+                    c.`nickname` AS `nickname`,
+                    c.`firstname` AS `firstname`,
+                    c.`lastname` AS `lastname`
                 FROM `" . PREFIX . "cups_teams_member` a
-                JOIN `" . PREFIX . "cups_teams_position` b ON a.position = b.positionID
-                JOIN `" . PREFIX . "user` c ON a.userID = c.userID
-                WHERE teamID = " . $team_id . " AND active = 1 
-                ORDER BY b.sort ASC, a.join_date ASC"
+                LEFT JOIN `" . PREFIX . "cups_teams_position` b ON a.`position` = b.`positionID`
+                JOIN `" . PREFIX . "user` c ON a.`userID` = c.`userID`
+                WHERE `teamID` = " . $team_id . " AND `active` = 1
+                ORDER BY b.`sort` ASC, a.`join_date` ASC"
         );
 
         if (!$memberQuery) {
@@ -163,7 +163,7 @@ try {
         }
 
         if (mysqli_num_rows($memberQuery) < 1) {
-            $members = '<tr><td>' . showInfo($_language->module['query_select_failed']) . '</td></tr>';
+            $members = '<tr><td>' . showInfo($_language->module['no_member']) . '</td></tr>';
         } else {
 
             $members = '';
@@ -217,7 +217,7 @@ try {
         $time_now = time();
         $get_pp = mysqli_query(
             $_database,
-            "SELECT 
+            "SELECT
                     a.duration_time AS date_duration,
                     b.name_de AS penalty_name,
                     b.points AS penalty_points,
@@ -290,7 +290,7 @@ try {
         }
 
         $penalty = '';
-        if(is_array($penaltyArray) && count($penaltyArray) > 0) {
+        if (validate_array($penaltyArray, true)) {
 
             $penalty .= '<div class="alert alert-info center">';
             $penalty .= implode('<br />', $penaltyArray);
@@ -336,10 +336,13 @@ try {
 
         $team_cup = mysqli_query(
             $_database,
-            "SELECT a.cupID, b.name FROM `" . PREFIX . "cups_teilnehmer` a
-                LEFT JOIN `".PREFIX."cups` b ON a.cupID = b.cupID
-                WHERE teamID = " . $team_id . " AND checked_in = 1
-                ORDER BY b.start_date DESC
+            "SELECT
+                    a.`cupID`,
+                    b.`name`
+                FROM `" . PREFIX . "cups_teilnehmer` a
+                LEFT JOIN `" . PREFIX . "cups` b ON a.cupID = b.cupID
+                WHERE `teamID` = " . $team_id . " AND `checked_in` = 1
+                ORDER BY b.`start_date` DESC
                 LIMIT 0, 10"
         );
         if (mysqli_num_rows($team_cup) > 0) {
@@ -353,7 +356,7 @@ try {
                         "SELECT
                                 `platzierung`
                             FROM `" . PREFIX . "cups_platzierungen`
-                            WHERE teamID = " . $team_id . " AND cupID = " . $dx['cupID']
+                            WHERE `teamID` = " . $team_id . " AND `cupID` = " . $dx['cupID']
                     )
                 );
 
@@ -364,7 +367,7 @@ try {
                 $played_cups .= '<a href="' . $url . '" class="list-group-item">';
                 $played_cups .= $dx['name'];
 
-                if(!empty($platz)) {
+                if (!empty($platz)) {
                     $played_cups .= '<span class="pull-right">' . $platz . '</span>';
                 }
 

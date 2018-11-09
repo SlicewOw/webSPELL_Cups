@@ -50,7 +50,7 @@ class cup_team {
 
         //
         // Team-Logotype Bildpfad
-        $this->logotype_path = '../../images/cup/teams/';
+        $this->logotype_path = __DIR__ . '/../../images/cup/teams/';
 
         //
         // Max. Größe
@@ -182,7 +182,7 @@ class cup_team {
 
     public function saveTeam($team_id = null) {
 
-        if(!is_null($team_id)) {
+        if (!is_null($team_id)) {
 
             $this->is_new_team = FALSE;
 
@@ -306,20 +306,20 @@ class cup_team {
 
     public function insertTeam() {
 
-        if(is_null($this->team_name)) {
+        if (is_null($this->team_name)) {
             throw new \Exception($this->lang->module['wrong_parameter_name']);
         }
 
-        if(is_null($this->team_tag)) {
+        if (is_null($this->team_tag)) {
             throw new \Exception($this->lang->module['wrong_parameter_tag']);
         }
 
-        if(is_null($this->team_logotype)) {
-            throw new \Exception($this->lang->module['wrong_parameter_icon'] . ' (insertTeam, null)');
+        if (is_null($this->team_logotype)) {
+            throw new \Exception($this->lang->module['wrong_parameter_icon'] . ' (1)');
         }
 
-        if(empty($this->team_logotype)) {
-            throw new \Exception($this->lang->module['wrong_parameter_icon'] . ' (insertTeam, empty)');
+        if (empty($this->team_logotype)) {
+            throw new \Exception($this->lang->module['wrong_parameter_icon'] . ' (2)');
         }
 
         //
@@ -330,31 +330,31 @@ class cup_team {
 
         $saveQuery = mysqli_query(
             $_database,
-            "INSERT INTO ".PREFIX."cups_teams 
+            "INSERT INTO `" . PREFIX . "cups_teams`
                 (
-                    `date`, 
-                    `name`, 
-                    `tag`, 
-                    `userID`, 
-                    `hp`, 
+                    `date`,
+                    `name`,
+                    `tag`,
+                    `userID`,
+                    `hp`,
                     `logotype`,
-                    `password`, 
+                    `password`,
                     `country`
-                ) 
-                VALUES 
-                ( 
-                    ".time().", 
-                    '".$this->team_name."', 
-                    '".$this->team_tag."', 
-                    ".$userID.", 
-                    '".$this->team_hp."', 
-                    '".$this->team_logotype."', 
-                    '".RandPass(20)."', 
-                    '".$this->team_country."'
+                )
+                VALUES
+                (
+                    " . time() . ",
+                    '" . $this->team_name . "',
+                    '" . $this->team_tag . "',
+                    " . $userID . ",
+                    '" . $this->team_hp . "',
+                    '" . $this->team_logotype . "',
+                    '" . RandPass(20) . "',
+                    '" . $this->team_country . "'
                 )"
         );
 
-        if(!$saveQuery) {
+        if (!$saveQuery) {
             throw new \Exception($this->lang->module['wrong_query_insert']);
         }
 
@@ -364,19 +364,19 @@ class cup_team {
 
         $query = mysqli_query(
             $_database,
-            "INSERT INTO ".PREFIX."cups_teams_member 
+            "INSERT INTO `" . PREFIX . "cups_teams_member`
                 (
-                    `userID`, 
-                    `teamID`, 
-                    `position`, 
+                    `userID`,
+                    `teamID`,
+                    `position`,
                     `join_date`
-                ) 
-                VALUES 
+                )
+                VALUES
                 (
-                    ".$userID.", 
-                    ".$this->team_id.", 
-                    1, 
-                    ".time()."
+                    " . $userID . ",
+                    " . $this->team_id . ",
+                    1,
+                    " . time() . "
                 )"
         );
 

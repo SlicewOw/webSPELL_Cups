@@ -3045,7 +3045,7 @@ function getTicketSeenDate($ticket_id, $primary_id, $admin = 0) {
     }
 
 }
-function insertTicketStatus($ticket_id, $primary_id, $admin, $date = 1) {
+function insertTicketStatus($ticket_id, $primary_id, $admin = 0, $date = 1) {
 
     global $_database, $_language;
 
