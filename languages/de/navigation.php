@@ -27,7 +27,7 @@
 
 $language_array = array(
 
-    'copyright'=>'Copyright %year_now% by ??? - alle Rechte vorbehalten.',
+    'copyright'=>'Copyright %year_now% by %clanname% - alle Rechte vorbehalten.',
     'data_protection'=>'Datenschutz',
     'hall_of_fame'=>'Hall of Fame',
     'home'=>'Home',

@@ -6,8 +6,8 @@ $_language->readModule('navigation', true, false);
 $copyright = $_language->module['copyright'];
 
 $copyright = str_replace(
-    '%year_now%',
-    date('Y'),
+    array('%year_now%', '%clanname%'),
+    array(date('Y'), $myclanname),
     $copyright
 );
 
