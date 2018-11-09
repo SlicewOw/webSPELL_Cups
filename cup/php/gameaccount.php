@@ -267,19 +267,19 @@ try {
                 $n = 1;
 
                 $gameaccounts = '';
-                while($ds = mysqli_fetch_array($info)) {
+                while ($ds = mysqli_fetch_array($info)) {
 
                     $gameacc_id = $ds['gameaccID'];
 
                     $category = $ds['category'];
-                    $game 	= getgamename($category);
+                    $game = getgamename($category);
 
                     $active = '';
                     $validate = '';
 
                     $active .= '<form method="post">';
 
-                    if($category == 'mc') {
+                    if ($category == 'mc') {
 
                         //
                         // Minecraft Account Aktivierung
@@ -287,27 +287,27 @@ try {
                         $subget = mysqli_fetch_array(
                             mysqli_query(
                                 $_database,
-                                "SELECT * FROM `".PREFIX."cups_gameaccounts_mc`
+                                "SELECT * FROM `" . PREFIX . "cups_gameaccounts_mc`
                                     WHERE gameaccID = " . $gameacc_id
                             )
                         );
 
-                        if(empty($subget['active']) || ($subget['active'] != 1)) {
-                            $active .= ' <button class="btn btn-info btn-xs white darkshadow" type="submit" name="activateMCAccount">'.$_language->module['gameacc_activate_mc'].'</button>';
+                        if (empty($subget['active']) || ($subget['active'] != 1)) {
+                            $active .= ' <button class="btn btn-info btn-xs white darkshadow" type="submit" name="activateMCAccount">' . $_language->module['gameacc_activate_mc'] . '</button>';
                         }
 
-                    } elseif(($category == 'csg') && (gameaccount($userID, 'validated', 'csg') == 0)) {
+                    } else if (($category == 'csg') && (gameaccount($userID, 'validated', 'csg') == 0)) {
 
                         //
                         // CS:GO Account Validierung
-                        $active .= ' <button type="button" class="btn btn-danger btn-xs" onclick="validateCSGOAccount('.$n.');" id="validateCSGOAccountButton">Validate Account</button>';
+                        $active .= ' <button type="button" class="btn btn-danger btn-xs" onclick="validateCSGOAccount('.$n.');" id="validateCSGOAccountButton">' . $_language->module['validate_account'] . '</button>';
 
                         $data_array = array();
-                        $data_array['$image_url']   = $image_url;
-                        $data_array['$n'] 			= $n;
+                        $data_array['$image_url'] = $image_url;
+                        $data_array['$n'] = $n;
                         $data_array['$gameaccount'] = '';
-                        $data_array['$gameacc_id'] 	= 0;
-                        $data_array['$unique_id'] 	= '';
+                        $data_array['$gameacc_id'] = 0;
+                        $data_array['$unique_id'] = '';
                         $gameaccount_validation_csgo = $GLOBALS["_template_cup"]->replaceTemplate("gameaccount_validation_csgo", $data_array);
                         $validate = $gameaccount_validation_csgo;
 
@@ -315,19 +315,19 @@ try {
 
                     //
                     // status
-                    if($ds['active'] == 1) {
-                        $active .= ' <span class="btn btn-success btn-xs">'.$_language->module['gameacc_active'].'</span>';
+                    if ($ds['active'] == 1) {
+                        $active .= ' <span class="btn btn-success btn-xs">' . $_language->module['gameacc_active'] . '</span>';
                     } else {
-                        $active .= ' <span class="btn btn-danger btn-xs">'.$_language->module['gameacc_active_no'].'</span>';
+                        $active .= ' <span class="btn btn-danger btn-xs">' . $_language->module['gameacc_active_no'] . '</span>';
                     }
 
                     //
                     // edit
-                    $active .= ' <a class="btn btn-default btn-xs" href="index.php?site=gameaccount&amp;action=edit&amp;id='.$gameacc_id.'#content">'.$_language->module['edit'].'</a>';
+                    $active .= ' <a class="btn btn-default btn-xs" href="index.php?site=gameaccount&amp;action=edit&amp;id=' . $gameacc_id . '#content">' . $_language->module['edit'] . '</a>';
 
                     //
                     // delete
-                    $active .= ' <button class="btn btn-default btn-xs" type="submit" name="deleteGameacc_'.$gameacc_id.'">'.$_language->module['delete'].'</button>';
+                    $active .= ' <button class="btn btn-default btn-xs" type="submit" name="deleteGameacc_' . $gameacc_id . '">' . $_language->module['delete'] . '</button>';
 
                     $active .= '</form>';
 

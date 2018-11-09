@@ -5,6 +5,11 @@ $info_gameacc
     </div>
     <div class="table-responsive">
         <table class="table table-striped">
+            <thead>
+                <th>%game%</th>
+                <th>%value%</th>
+                <th>%action%</th>
+            </thead>
             <tbody>
                 $gameaccounts
             </tbody>
@@ -86,7 +91,7 @@ function validateCSGOAccount(index) {
     var container = $("#gameaccountContainer" + index),
         varData;
 
-    container.css('display', 'block');
+    container.css('display', '');
     $("#validationText").css('display', 'none');
     $("#validationPending").css('display', 'block');
 

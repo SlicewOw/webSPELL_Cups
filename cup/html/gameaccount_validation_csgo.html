@@ -1,4 +1,3 @@
-<br /><br />
 <form method="post" id="formValidationCSGO">
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -7,21 +6,30 @@
         <div class="panel-body" id="validationPending">
             <img src="$image_url/loader.gif" alt="" />
         </div>
-        <div class="panel-body" id="validationText" style="display: none;">
+        <div class="panel-body" id="validationText"
+             style="display: none;">
             %gameaccount_validation_text%
             %gameaccount_validation_csgo%
         </div>
         <div class="panel-footer">
-        	<input type="hidden" name="index" value="$n" />
-        	<input type="hidden" name="gameacc_id" id="gameacc_id" value="$gameacc_id" />
-        	<input type="hidden" name="unique_id" id="unique_id" value="$unique_id" />
-            <button type="submit" class="btn btn-info btn-sm white darkshadow" 
-					disabled="disabled" 
-					name="submitValidationCSGO" 
-					id="submitValidationCSGO">
+            <input type="hidden" name="index"
+                   value="$n" />
+            <input type="hidden" name="gameacc_id"
+                   id="gameacc_id"
+                   value="$gameacc_id" />
+            <input type="hidden" name="unique_id"
+                   id="unique_id"
+                   value="$unique_id" />
+            <button type="submit"
+                    class="btn btn-info btn-sm white darkshadow"
+                    disabled="disabled"
+                    name="submitValidationCSGO"
+                    id="submitValidationCSGO">
                 %save%
             </button>
-            <button type="submit" class="btn btn-default btn-sm" disabled="disabled" name="cancelValidationCSGO">
+            <button type="submit" class="btn btn-default btn-sm"
+                    disabled="disabled"
+                    name="cancelValidationCSGO">
                 %cancel%
             </button>
         </div>
