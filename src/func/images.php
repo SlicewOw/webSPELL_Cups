@@ -254,7 +254,7 @@ function getCupTeamImage($team_id, $returnAsFullImageLink = TRUE) {
 
     global $_database, $image_url;
 
-    $default_image = $image_url . '/cup/teams/team_nologotype.jpg';
+    $default_image = $image_url . '/cup/teams/team_nologotype.png';
 
     if (!validate_int($team_id, true)) {
         return $default_image;
