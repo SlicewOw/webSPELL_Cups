@@ -10,13 +10,6 @@ if(isset($_GET['id']) && isset($_GET['mID']) && getmatch((int)$_GET['mID'], 'act
 	$mapArray = unserialize($matchArray['maps']);
 	$anzMapsOpen = count($mapArray['open']);
 	
-	$debug = FALSE;
-	if($debug && isdevadmin($userID)) {
-		echo '<pre>';
-		print_r($mapArray);
-		echo '</pre>';
-	}
-	
 	$cupFormat = $matchArray['format'];
 	if(substr($cupFormat, 0, 2) == 'bo') {
 		$finalMapsLeft = substr($cupFormat, 2, strlen($cupFormat));	

@@ -19,10 +19,6 @@ try {
 		throw new \Exception($_language->module['access_denied']);
 	}
 
-	if(isdevadmin($userID)) {
-		$returnArray['data']['admin'] = array();
-	}
-
 	$getGame = (isset($_GET['game']) && (strlen($_GET['game']) == 3)) ?
 		getinput($_GET['game']) : '';
 
@@ -54,20 +50,12 @@ try {
 
 	$steam64_id = $get['value'];
 
-	if(isdevadmin($userID)) {
-		$returnArray['data']['admin'][] = 'UserID: ' . $userID;
-	}
-
 	//
 	// Get Steam API Data
 	$SteamDataArray = getCSGOAccountInfo($steam64_id);
 	
 	if(!validate_array($SteamDataArray)) {
 		throw new \Exception($_language->module['error_failed_steamrequest']);
-	}
-
-	if(isdevadmin($userID)) {
-		$returnArray['data']['admin'][] = $SteamDataArray;
 	}
 
 	if(!isset($SteamDataArray['status']) || ($SteamDataArray['status'] != 1)) {
