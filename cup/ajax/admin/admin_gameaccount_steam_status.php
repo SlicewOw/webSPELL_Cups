@@ -9,7 +9,7 @@ try {
 
     $_language->readModule('gameaccounts', false, true);
 
-    if(!$loggedin || !iscupadmin($userID)) {
+    if (!$loggedin || !iscupadmin($userID)) {
         throw new \Exception('access_denied');
     }
 
@@ -17,11 +17,11 @@ try {
         explode(',', $_GET['user_id']) : array();
 
     $anzUser = count($userArray);
-    if($anzUser < 1) {
+    if ($anzUser < 1) {
         throw new \Exception('unknwon_user_array');
     }
 
-    $steamImagePath = __DIR__ . '/../../images/cup/steam/';
+    $steamImagePath = __DIR__ . '/../../../images/cup/steam/';
 
     for ($n = 0; $n < $anzUser; $n++) {
 
