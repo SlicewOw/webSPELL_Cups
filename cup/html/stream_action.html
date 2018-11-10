@@ -1,75 +1,57 @@
 <form method="post">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h1 class="panel-title">Streams</h1>
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label>Stream URL *</label>
-						<input name="twitch_url" type="url" 
-							   class="form-control" 
-							   placeholder="https://twitch.tv/maxmustertv" 
-							   value="$twitch_id" 
-							   required="required" />
-					</div>
-				</div>
-				<div class="col-sm-3">
-					<div class="form-group">
-						<label>%member%?</label>
-						<select name="member" class="form-control">
-							<option value="0">%no%</option>
-							<option value="1"$selectedMember>%yes%</option>
-						</select>
-					</div>
-				</div>
-				<div class="col-sm-3">
-					<div class="form-group">
-						<label>myRiskTV?</label>
-						<select name="tv" class="form-control">
-							<option value="0">%no%</option>
-							<option value="1"$selectedTV>%yes%</option>
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label>Facebook</label>
-						<input name="socials[]" type="url" 
-							   class="form-control" 
-							   placeholder="https://facebook.com/" 
-							   value="$facebook" />
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label>Twitter</label>
-						<input name="socials[]" type="url" 
-							   class="form-control" 
-							   placeholder="https://twitter.com/" 
-							   value="$twitter" />
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label>YouTube</label>
-						<input name="socials[]" type="url" 
-							   class="form-control" 
-							   placeholder="https://youtube.com/" 
-							   value="$youtube" />
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="panel-footer">
-			<input type="hidden" name="stream_id" value="$stream_id" />
-			<button type="submit" name="$postName" 
-					class="btn btn-info btn-sm white darkshadow">
-				%save%
-			</button>
-		</div>
-	</div>	
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">Streams</h1>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Stream URL *</label>
+                        <input name="twitch_url" type="url"
+                               class="form-control"
+                               placeholder="https://twitch.tv/maxmustertv"
+                               value="$twitch_id"
+                               required="required" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>Facebook</label>
+                        <input name="socials[]" type="url"
+                               class="form-control"
+                               placeholder="https://facebook.com/"
+                               value="$facebook" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>Twitter</label>
+                        <input name="socials[]" type="url"
+                               class="form-control"
+                               placeholder="https://twitter.com/"
+                               value="$twitter" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>YouTube</label>
+                        <input name="socials[]" type="url"
+                               class="form-control"
+                               placeholder="https://youtube.com/"
+                               value="$youtube" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <input type="hidden" name="stream_id" value="$stream_id" />
+            <button type="submit" name="$postName"
+                    class="btn btn-info btn-sm white darkshadow">
+                %save%
+            </button>
+        </div>
+    </div>
 </form>

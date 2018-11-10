@@ -1,3 +1,4 @@
 <?php
 
 $steam_api_key = '';
+$twitch_client_id = '';

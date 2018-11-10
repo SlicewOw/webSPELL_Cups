@@ -1,16 +1,15 @@
 <div class="pull-left">
-    <a href="index.php?site=streams" 
+    <div class="btn-group" role="group">
+        $buttons
+    </div>
+</div>
+<div class="pull-right">
+    <a href="admincenter.php?site=streams"
        class="btn btn-info btn-sm white darkshadow">
         %overview%
     </a>
-</div>
-<div class="pull-right">
-    <a href="index.php?site=streams&amp;action=settings" 
-       class="btn btn-info btn-sm white darkshadow">
-        %settings%
-    </a>
-    <a href="index.php?site=streams&amp;action=add" 
-       class="btn btn-info btn-sm white darkshadow">
+    <a href="admincenter.php?site=streams&amp;action=add"
+       class="btn btn-success btn-sm white darkshadow">
         %add_stream%
     </a>
 </div>
@@ -29,10 +28,10 @@
             <th>%date%</th>
             <th>%socials%</th>
             <th>
-                %prio% 
-                <span class="glyphicon glyphicon-question-sign" 
-                      data-toggle="tooltip" 
-                      data-placement="bottom" 
+                %prio%
+                <span class="fa fa-question-circle"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
                       title="%prio_info%">
                 </span>
             </th>

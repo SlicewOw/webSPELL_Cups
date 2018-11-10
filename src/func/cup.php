@@ -4,6 +4,54 @@
  * General
  **/
 
+function getAPIData($json_url, $cat = '') {
+
+    //
+    // Open Data URL
+    $ch = curl_init();
+
+    if (empty($cat)) {
+        return array();
+    }
+
+    $allowedCategories = array(
+        'twitch'
+    );
+
+    if (!in_array($cat, $allowedCategories)) {
+        return array();
+    }
+
+    //
+    // API Keys
+    include(__DIR__ . '/../../cup/settings.php');
+
+    if ($cat == 'twitch') {
+
+        if (empty($twitch_client_id)) {
+            return array();
+        }
+
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
+                'Client-ID: ' . $twitch_client_id
+            )
+        );
+
+    }
+
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $json_url);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    return $result;
+
+}
+
 function setPlayerLog($user_id, $parent_id, $text) {
 
     if (!validate_int($user_id)) {
