@@ -40,7 +40,7 @@ try {
 
             while ($ds = mysqli_fetch_array($info)) {
 
-                $filePath = $dir_global . 'images/cup/ticket_screenshots/'.$ds['screenshot'];
+                $filePath = __DIR__ . '/../../images/cup/ticket_screenshots/'.$ds['screenshot'];
                 if (file_exists($filePath)) {
                     unlink($filePath);
                     $ticketImagesDeleted++;
@@ -77,7 +77,7 @@ try {
 
             while ($ds = mysqli_fetch_array($info)) {
 
-                $filePath = $dir_global . 'images/cup/match_screenshots/' . $ds['file'];
+                $filePath = __DIR__ . '/../../images/cup/match_screenshots/' . $ds['file'];
                 if (file_exists($filePath)) {
                     unlink($filePath);
                     $anzFiles++;

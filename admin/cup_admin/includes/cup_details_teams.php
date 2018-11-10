@@ -19,7 +19,7 @@ $teamQuery = mysqli_query(
 );
 if(mysqli_num_rows($teamQuery)) {
 
-    $profile_url = $cup_url . '/index.php?site=profile&id=';
+    $profile_url = $hp_url . '/index.php?site=profile&id=';
 
     $n = 1;
     while( $db = mysqli_fetch_array($teamQuery) ) {

@@ -178,10 +178,7 @@ try {
                 )
             );
 
-            $pic = '';
-            if (file_exists($dir_global.'images/games/' . $ds[ 'tag' ] . '.gif')) {
-                $pic = '<img src="' . $image_url . '/games/' . $ds[ 'tag' ] . '.gif" alt="">';
-            }
+            $pic = '<img src="' . getGameIcon($ds[ 'tag' ], true) . '.gif" alt="" />';
 
             $data_array = array();
             $data_array['$name'] = getinput($ds['name']);

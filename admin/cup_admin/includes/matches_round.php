@@ -36,7 +36,7 @@ try {
 
         $matchID = $ds['matchID'];
 
-        $match_url = $cup_url . '/index.php?site=cup&amp;action=match&amp;id=' . $cup_id . '&amp;mID=' . $matchID;
+        $match_url = $hp_url . '/index.php?site=cup&amp;action=match&amp;id=' . $cup_id . '&amp;mID=' . $matchID;
 
         if ($ds['active'] == 0) {
             $border_class = 'class="list-group-item"';	

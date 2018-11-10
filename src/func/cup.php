@@ -339,7 +339,7 @@ function getAge($user_id) {
 
 function getGame($game_id, $cat = '') {
 
-    global $_database, $image_url, $dir_global;
+    global $_database, $image_url;
 
     if (validate_int($game_id)) {
         $whereClause = '`gameID` = ' . $game_id;
@@ -1315,7 +1315,7 @@ function cup($cupID, $teamID, $cat) {
 /* Team Informationen */
 function getteam($id, $cat = '') {
 	
-    global $_database, $userID, $dir_global;
+    global $_database, $userID;
 	
     if($cat == 'admin') {
 		$info = mysqli_query(

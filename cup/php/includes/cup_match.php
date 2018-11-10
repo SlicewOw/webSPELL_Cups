@@ -195,7 +195,7 @@ try {
         //
         //  Screenshots
         $screenshot_url = $image_url . '/cup/match_screenshots/';
-        $screenshot_local_url = $dir_global . 'images/cup/match_screenshots/';
+        $screenshot_local_url = __DIR__ . '/../../../images/cup/match_screenshots/';
 
         $screenshotArray = getScreenshots($match_id);
 
@@ -406,11 +406,6 @@ try {
 
         }
 
-        //
-        // Socials
-        $parent_id = $match_id;
-        include($dir_main . 'socials.php');
-
         $data_array = array();
         $data_array['$match_title'] = $teamArray[1]['name_url'].' vs. '.$teamArray[2]['name_url'];
         $data_array['$match_info'] 	= $match_info;
@@ -436,7 +431,7 @@ try {
         $parentID = $match_id;
         $type = "cm";
         $referer = 'index.php?site=cup&action=match&amp;id=' . $cup_id . '&amp;mID=' . $match_id;
-        include($dir_main . 'comments.php');
+        include(__DIR__ . '/../../../comments.php');
 
     }
 

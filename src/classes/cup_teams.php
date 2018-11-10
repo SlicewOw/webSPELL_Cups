@@ -38,7 +38,7 @@ class cup_team {
 
     public function __construct() {
 
-        global $_language, $dir_global;
+        global $_language;
 
         $this->lang = $_language;
 

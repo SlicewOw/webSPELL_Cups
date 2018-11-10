@@ -213,7 +213,7 @@ try {
 
                 if($_FILES['screenshot']['error'] == 0) {
                     if(isimage($_FILES['screenshot']['type'])) {
-                        $path = $dir_global.'images/cup/ticket_screenshots/';
+                        $path = __DIR__ . '/../../images/cup/ticket_screenshots/';
                         if($_FILES['screenshot']['type'] === 'image/jpeg') 		{ $file_type = '.jpg'; }
                         elseif($_FILES['screenshot']['type'] === 'image/gif') 	{ $file_type = '.gif'; }
                         else 													{ $file_type = '.png'; }

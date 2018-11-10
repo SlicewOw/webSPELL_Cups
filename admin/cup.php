@@ -27,7 +27,7 @@ try {
                 include(__DIR__ . '/cup_admin/cup_add.php');
             } else {
                 // Fehler
-                include($dir_global . '/php/error.php');
+                include(__DIR__ . '/../error.php');
             }
 
         } else if ( $getAction == "edit" && isset($_GET['id']) ) {
@@ -55,7 +55,7 @@ try {
                 include(__DIR__ . '/cup_admin/includes/cup_start_groupstage.php');
             } else {
                 // Fehler
-                include($dir_global . '/php/error.php');
+                include(__DIR__ . '/../error.php');
             }
 
         } else if ( $getAction == "finish" && !empty($getStatus) && isset($_GET['id']) ) {
@@ -65,7 +65,7 @@ try {
                 include(__DIR__ . '/cup_admin/cup_finish_playoffs.php');
             } else {
                 // Fehler
-                include($dir_global . '/php/error.php');
+                include(__DIR__ . '/../error.php');
             }
 
         } else {

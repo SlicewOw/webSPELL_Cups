@@ -100,7 +100,7 @@ try {
         $pic = isset($json_array['streams'][$x]['preview']['medium']) ?
             $json_array['streams'][$x]['preview']['medium'] : '';
 
-        if (!empty($pic) && @copy($pic, $dir_global . '/images/media/streams/' . $twitch_id . '.jpg')) {
+        if (!empty($pic) && @copy($pic, __DIR__ . '/../../images/media/streams/' . $twitch_id . '.jpg')) {
             $setValueArray[] = 'preview = \'' . addslashes($twitch_id) . '.jpg\'';
         }
 

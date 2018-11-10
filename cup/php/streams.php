@@ -4,12 +4,7 @@ try {
 
     $_language->readModule('liveshow');
 
-    if ($loggedin) {
-        $new = '<button class="btn btn-info btn-sm darkshadow pull-right" data-toggle="modal" data-target="#add-stream">'.$_language->module['new'].'</button>';
-        include($dir_global . 'php/main/modals/add_stream.php');
-    } else {
-        $new = '';
-    }
+    $new = '';
 
     if (validate_array($_POST, true)) {
 
@@ -406,7 +401,7 @@ try {
             $type = "st";
             $referer = 'index.php?site=streams&amp;id=' . $stream_id;
             $comments_allowed = 1;
-            include($dir_main.'comments.php');
+            include(__DIR__ . '/../../comments.php');
 
             echo $liveshow_footer;
 

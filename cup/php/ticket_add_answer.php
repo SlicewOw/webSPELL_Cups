@@ -305,7 +305,7 @@ try {
         $ticket_name .= $db['ticket_name'];
 
         $imageLink = $image_url . '/cup/ticket_screenshots/';
-        $userLink = $cup_url . '/index.php?site=profile&amp;id=';
+        $userLink = $hp_url . '/index.php?site=profile&amp;id=';
 
         $teamLink = ($cupAdminAcess && ($varPage == 'admin')) ?
             'admincenter.php?site=cup&amp;mod=teams&amp;action=active&amp;teamID=' :
@@ -353,7 +353,7 @@ try {
 
         if ($db['ticket_matchID'] > 0) {
             $matchArray = getmatch($db['ticket_matchID']);
-            $match_url = $cup_url . '/index.php?site=cup&amp;action=match&amp;id=' . $matchArray['cup_id'] . '&amp;mID=' . $db['ticket_matchID'];
+            $match_url = $hp_url . '/index.php?site=cup&amp;action=match&amp;id=' . $matchArray['cup_id'] . '&amp;mID=' . $db['ticket_matchID'];
             $ticketInfoArray[] = 'Match: <a href="' . $match_url . '" target="_blank" class="blue">#' . $db['ticket_matchID'] . '</a>';
         }
 

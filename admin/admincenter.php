@@ -129,8 +129,6 @@ $getAction = (isset($_GET['action'])) ?
 $getShow = (isset($_GET['show'])) ?
     getinput($_GET['show']) : '';
 
-$cup_url = $hp_url;
-
 global $dir_cup;
 $dir_cup = __DIR__ . '/../cup/php/';
 
