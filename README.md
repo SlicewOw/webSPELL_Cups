@@ -14,7 +14,9 @@ Feel free to use this add-on for webSPELL NOR, but be aware that we (myRisk e.V)
 # Installation
 * {WiP}
 * File settings
-    * Steam API Key: copy /cup/settings.php.sample and remove .sample, fill in Steam API Key
+    * copy /cup/settings.php.sample and remove .sample
+    * Steam API Key: fill in Steam API Key
+    * Twitch API Key
 * webSPELL settings
     * make sure, the homepage url is with http/-s as prefix - otherwise you may notice broken images
 
@@ -23,5 +25,5 @@ Feel free to use this add-on for webSPELL NOR, but be aware that we (myRisk e.V)
 * Cronjobs: 
     * /cup/cj/cup_cj.php (once a day is enough)
     * /cup/cj/gameaccount_cj.php (should be every hour once)
-    * /cup/cj/twitch_cj.php (every 5 minutes)
+    * /cup/cj/twitch_cj.php?cj_id={1-5} (every 5 minutes, use 5 cronjobs from 1 up to 5)
 
