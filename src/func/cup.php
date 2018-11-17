@@ -1224,6 +1224,24 @@ function getcup($id, $cat = '') {
                 'format' => array()
             );
 
+            $selectQuery = mysqli_query(
+                $_database,
+                "SELECT
+                        `round`,
+                        `format`
+                    FROM `" . PREFIX . "cups_settings`
+                    WHERE `cup_id` = " . $cup_id . "
+                    ORDER BY `round` ASC"
+            );
+
+            if ($selectQuery && (mysqli_num_rows($selectQuery) > 0)) {
+
+                while ($getFormat = mysqli_fetch_array($selectQuery)) {
+                    $settingsArray['format'][$getFormat['round']] = $getFormat['format'];
+                }
+
+            }
+
             $returnValue = array(
                 "id"			=> $cup_id,
                 "name"			=> $get['name'],

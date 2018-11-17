@@ -13,18 +13,23 @@ $info .= '<span class="list-group-item">'.getgamename($cupArray['game']).'</span
 $info .= '<span class="list-group-item">'.$_language->module['mode'].': '.$cupArray['mode'].'</span>';
 $info .= '<span class="list-group-item">Check-In: '.getformatdatetime($cupArray['checkin']).'</span>';
 $info .= '<span class="list-group-item">Start: '.getformatdatetime($cupArray['start']).'</span>';
-if($cupArray['phase'] == 'register' || $cupArray['phase'] == 'admin_register') {
+if ($cupArray['phase'] == 'register' || $cupArray['phase'] == 'admin_register') {
     $info .= '<span class="list-group-item">'.$_language->module['teams_registered'].': '.getcup($cup_id, 'anz_teams').' / '.$cupArray['size'].'</span>';
-} elseif($cupArray['phase'] == 'checkin' || $cupArray['phase'] == 'admin_checkin' || $cupArray['phase'] == 'finished') {
+} else if ($cupArray['phase'] == 'checkin' || $cupArray['phase'] == 'admin_checkin' || $cupArray['phase'] == 'finished') {
     $info .= '<span class="list-group-item">'.$_language->module['teams_checked_in'].': '.getcup($cup_id, 'anz_teams_checkedin').' / '.$cupArray['size'].'</span>';
 }
 $info .= '<span class="list-group-item">'.$_language->module['max_penalty'].': '.$cupArray['max_pps'].'</span>';
 
-if($cupArray['mappool'] > 0) {
+if ($cupArray['mappool'] > 0) {
 
     $get_maps = mysqli_fetch_array(
-        mysqli_query($_database, "SELECT maps FROM ".PREFIX."cups_mappool 
-                                    WHERE mappoolID = '".$cupArray['mappool']."'")
+        mysqli_query(
+            $_database,
+            "SELECT
+                    `maps`
+                FROM `" . PREFIX . "cups_mappool`
+                WHERE `mappoolID` = " . $cupArray['mappool']
+        )
     );
 
     if(!empty($get_maps['maps'])) {
@@ -61,7 +66,7 @@ if($anz_admins2) {
             $content_admin_add .= ', ';
         }
         $i++;
-    }				
+    }
 }
 
 if(!empty($content_admin_add)) {
@@ -84,18 +89,23 @@ if(!empty($cupArray['description'])) {
 $content .= '</div>';
 
 //
-// Cup Format			
+// Cup Format
 $content .= '<div class="panel panel-default">';
 $content .= '<div class="panel-heading">Cup Format</div>';
 $content .= '<div class="list-group">';
+    echo '<pre>';
+    print_r($cupArray['settings']);
+    echo '</pre>';
 for($x=1;$x<($cupArray['anz_runden'] + 1);$x++) {
 
-    if(isset($cupArray['settings']['format'][$x])) {
+    if (isset($cupArray['settings']['format'][$x])) {
 
-        if($cupArray['settings']['format'][$x] == 'bo3') {
+        if ($cupArray['settings']['format'][$x] == 'bo3') {
             $formatName = 'Best of 3';
-        } elseif($cupArray['settings']['format'][$x] == 'bo5') {
+        } else if ($cupArray['settings']['format'][$x] == 'bo5') {
             $formatName = 'Best of 5';
+        } else if ($cupArray['settings']['format'][$x] == 'bo7') {
+            $formatName = 'Best of 7';
         } else {
             $formatName = 'Best of 1';
         }
