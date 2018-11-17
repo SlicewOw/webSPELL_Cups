@@ -904,6 +904,21 @@ try {
         ) ENGINE=MyISAM;"
     );
 
+    $createTableQuery = mysqli_query(
+        $_database,
+        "CREATE TABLE `" . PREFIX . "cups_settings` (
+            `cup_id` int(11) NOT NULL,
+            `round` int(2) NOT NULL,
+            `format` varchar(5) COLLATE utf8_bin NOT NULL
+        ) ENGINE=MyISAM;"
+    );
+
+    $alterTabelQuery = mysqli_query(
+        $_database,
+        "ALTER TABLE `" . PREFIX . "cups_settings`
+            ADD UNIQUE KEY `cup_id` (`cup_id`,`round`);"
+    );
+
     echo "Delete this file!";
 
 } catch (Exception $e) {

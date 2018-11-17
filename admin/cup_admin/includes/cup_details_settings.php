@@ -64,16 +64,32 @@ try {
 
     for ($x = 0; $x < $cupArray['anz_runden']; $x++) {
 
+        $round = ($x + 1);
+
         $matchRoundFormat .= '<div class="col-sm-3">';
         $matchRoundFormat .= '<div class="form-group">';
-        $matchRoundFormat .= '<label>Runde '.($x + 1).'</label>';
+        $matchRoundFormat .= '<label>Runde ' . $round . '</label>';
         $matchRoundFormat .= '<select name="round[]" class="form-control">';
 
-        $matchRoundFormat .= str_replace(
-            'value="bo1"',
-            'value="bo1" selected="selected"',
-            $cupOptions['rounds']
+        $selectQuery = mysqli_query(
+            $_database,
+            "SELECT
+                    `format`
+                FROM `" . PREFIX . "cups_settings`
+                WHERE `cup_id` = " . $cup_id . " AND `round` = " . $round
         );
+
+        if ($selectQuery && mysqli_num_rows($selectQuery) == 1) {
+
+            $getFormat = mysqli_fetch_array($selectQuery);
+
+            $matchRoundFormat .= str_replace(
+                'value="' . $getFormat['format'] . '"',
+                'value="' . $getFormat['format'] . '" selected="selected"',
+                $cupOptions['rounds']
+            );
+
+        }
 
         $matchRoundFormat .= '</select>';
         $matchRoundFormat .= '</div>';

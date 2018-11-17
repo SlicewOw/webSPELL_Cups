@@ -86,6 +86,11 @@ function updateMapVote() {
 
 function saveCupSettings() {
 
+    var roundArray = new Array();
+    $('select[name^="round"]').each(function() {
+        roundArray.push($(this).val());
+    });
+
     $.post(
         "ajax.php?site=admin_cup_settings",
         {
@@ -95,7 +100,8 @@ function saveCupSettings() {
             cupSaved : $("select[name=cup_saved]").val(),
             adminVisible : $("select[name=admin_visible]").val(),
             mapVoteEnable : $("select[name=map_vote_enable]").val(),
-            mapPool_id : $("select[name=map_pool]").val()
+            mapPool_id : $("select[name=map_pool]").val(),
+            round : roundArray
         },
         function (data, status) {
 

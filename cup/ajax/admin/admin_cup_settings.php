@@ -50,17 +50,59 @@ try {
 
         $updateQuery = mysqli_query(
             $_database,
-            "UPDATE `".PREFIX."cups`
-                SET	registration = '".$registration."',
-                    mapvote_enable = ".$mapVoteEnable.",
-                    mappool = ".$mapPool_id.",
-                    saved = ".$saved.",
-                    admin_visible = ".$admin."
-                WHERE cupID = ".$cup_id
+            "UPDATE `" . PREFIX . "cups`
+                SET `registration` = '" . $registration . "',
+                    `mapvote_enable` = " . $mapVoteEnable . ",
+                    `mappool` = " . $mapPool_id . ",
+                    `saved` = " . $saved . ",
+                    `admin_visible` = " . $admin . "
+                WHERE `cupID` = " . $cup_id
         );
 
-        if(!$updateQuery) {
+        if (!$updateQuery) {
             throw new \Exception('cannot_save_cup_settings');
+        }
+
+        $deleteQuery = mysqli_query(
+            $_database,
+            "DELETE FROM `". PREFIX . "cups_settings`
+                WHERE `cup_id` = " . $cup_id
+        );
+
+        if (!$deleteQuery) {
+            throw new \Exception('cannot_delete_old_cup_serttings');
+        }
+
+        $roundArray = (isset($_POST['round']) && validate_array($_POST['round'], true)) ?
+            $_POST['round'] : array();
+
+        $roundCounter = count($roundArray);
+        if ($roundCounter > 0) {
+
+            for ($x = 1; $x < ($roundCounter + 1); $x++) {
+
+                $insertQuery = mysqli_query(
+                    $_database,
+                    "INSERT INTO `" . PREFIX . "cups_settings`
+                        (
+                            `cup_id`,
+                            `round`,
+                            `format`
+                        )
+                        VALUES
+                        (
+                            " . $cup_id . ",
+                            " . $x . ",
+                            '" . $roundArray[$x - 1] . "'
+                        )"
+                );
+
+                if (!$insertQuery) {
+                    throw new \Exception('cannot_save_match_rounds');
+                }
+
+            }
+
         }
 
         $returnArray['message'][] = $_language->module['cup_settings_saved'];
