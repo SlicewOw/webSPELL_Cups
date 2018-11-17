@@ -20,7 +20,6 @@ function getsponsor($sponsor_id, $cat = '') {
     );
 
     if (!$info) {
-        setLog('getsponsor: sponsors_query_select_failed', __FILE__, 0, false);
         return false;
     }
 

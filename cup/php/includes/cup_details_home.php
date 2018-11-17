@@ -93,9 +93,7 @@ $content .= '</div>';
 $content .= '<div class="panel panel-default">';
 $content .= '<div class="panel-heading">Cup Format</div>';
 $content .= '<div class="list-group">';
-    echo '<pre>';
-    print_r($cupArray['settings']);
-    echo '</pre>';
+
 for($x=1;$x<($cupArray['anz_runden'] + 1);$x++) {
 
     if (isset($cupArray['settings']['format'][$x])) {
@@ -117,6 +115,7 @@ for($x=1;$x<($cupArray['anz_runden'] + 1);$x++) {
     $content .= '<div class="list-group-item">'.$_language->module['cup_1_round_'.$cupArray['size'].'_'.$x].': '.$formatName.'</div>';
 
 }
+
 $content .= '</div>';
 $content .= '</div>';
 
