@@ -70,6 +70,7 @@ try {
         $matchRoundFormat .= '<div class="form-group">';
         $matchRoundFormat .= '<label>Runde ' . $round . '</label>';
         $matchRoundFormat .= '<select name="round[]" class="form-control">';
+        $matchRoundFormat .= $cupOptions['rounds'];
 
         $selectQuery = mysqli_query(
             $_database,
@@ -86,7 +87,7 @@ try {
             $matchRoundFormat .= str_replace(
                 'value="' . $getFormat['format'] . '"',
                 'value="' . $getFormat['format'] . '" selected="selected"',
-                $cupOptions['rounds']
+                $matchRoundFormat
             );
 
         }
