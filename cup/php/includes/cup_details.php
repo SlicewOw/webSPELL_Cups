@@ -84,7 +84,7 @@ try {
                 s.`banner_small`
             FROM `" . PREFIX . "cups_sponsors` cs
             JOIN `" . PREFIX . "sponsors` s ON cs.`sponsorID` = s.`sponsorID`
-            WHERE cs.`cupID` = " . $cup_id
+            WHERE cs.`cupID` = " . $cup_id . " and s.`displayed` = 1"
     );
 
     if ($sponsors) {
@@ -98,10 +98,9 @@ try {
                 $linkAttributeArray[] = 'href="' . $db['url'] . '"';
                 $linkAttributeArray[] = 'target="_blank"';
                 $linkAttributeArray[] = 'title="' . $db['name'] . '"';
-                $linkAttributeArray[] = 'onclick="setHitsJS(\'sponsors\', ' . $db['sponsorID'] . ');"';
                 $linkAttributeArray[] = 'class="pull-left"';
 
-                $banner_url = getSponsorImage($db['sponsorID'], true, 'white');
+                $banner_url = getSponsorImage($db['sponsorID'], true, 'small');
 
                 $content_sponsors .= '<a ' . implode(' ', $linkAttributeArray) . '><img src="' . $banner_url . '" alt="' . $db['name'] . '" /></a>';
 

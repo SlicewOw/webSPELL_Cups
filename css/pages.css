@@ -271,3 +271,19 @@ li.cup_admin_menu_list span a		{ background: #265da5; width: 100%; height: 30px;
 ul.cup_admin_submenu				{ width: 100%; height: auto; margin: 0; padding: 0; }
 li.cup_admin_submenu_list			{ background: #eeeeee; width: 100%; height: 30px; margin: 0 0 5px 0; padding: 0; border-radius: 4px; list-style: none; }
 li.cup_admin_submenu_list a			{ width: 95%; height: 30px; padding: 0 0 0 5%; display: block; }
+
+/**
+ * Footer
+ */
+#footer_navigation > .list-group {
+    margin: 0;
+}
+#footer_navigation > .list-group > .list-group-item {
+    float: left;
+    background: none;
+    padding: 0;
+    border: none;
+}
+#footer_navigation > .list-group > .list-group-item > a > img {
+    max-height: 106px;
+}

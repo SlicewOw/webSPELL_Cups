@@ -4,6 +4,124 @@
  * General
  **/
 
+/* SPONSORS */
+function getsponsor($sponsor_id, $cat = '') {
+
+    if (!validate_int($sponsor_id, true)) {
+        return false;
+    }
+
+    global $_database;
+
+    $info = mysqli_query(
+        $_database,
+        "SELECT * FROM `" . PREFIX . "sponsors` 
+            WHERE `sponsorID` = " . $sponsor_id
+    );
+
+    if (!$info) {
+        setLog('getsponsor: sponsors_query_select_failed', __FILE__, 0, false);
+        return false;
+    }
+
+    if (mysqli_num_rows($info) != 1) {
+        return false;
+    }
+
+    $db = mysqli_fetch_array($info);
+
+    $returnArray = array(
+        'name' => $db['name'],
+        'url' => $db['url'],
+        'banner' => $db['banner'],
+        'banner_small' => $db['banner_small']
+    );
+
+    if (empty($cat)) {
+        return $returnArray;
+    } else {
+        return $returnArray[$cat];
+    }
+
+}
+
+function getSponsorsAsOptions($selected_id = 0, $addEmptySponsorOption = TRUE, $squadIdToSkipSponsors = 0) {
+
+    global $_database, $_language;
+
+    $_language->readModule('squads', false, true);
+
+    $whereClauseArray = array();
+
+    if (validate_int($squadIdToSkipSponsors, true)) {
+
+        $sponsorQuery = mysqli_query(
+            $_database,
+            "SELECT 
+                    sq.`sponsor_id` AS `sponsor_id`
+                FROM `" . PREFIX . "squads_sponsor` sq
+                WHERE sq.`squad_id` = " . $squadIdToSkipSponsors
+        );
+
+        if (!$sponsorQuery) {
+            setLog('getSponsorsAsOptions: squads_sponsor_query_select_failed', __FILE__, 1, false);
+            return '<option value="0">Query failed.</option>';
+        }
+
+        $skipSponsorsArray = array();
+        while ($get = mysqli_fetch_array($sponsorQuery)) {
+            $skipSponsorsArray[] = $get['sponsor_id'];
+        }
+
+        if (validate_array($skipSponsorsArray, true)) {
+            $whereClauseArray[] = 'sponsorID NOT IN (' . implode(', ', $skipSponsorsArray) . ')';
+        }
+
+    }
+
+    $whereClause = (validate_array($whereClauseArray, true)) ?
+        'WHERE ' . implode(' AND ', $whereClauseArray) : '';
+
+    $selectQuery = mysqli_query(
+        $_database,
+        "SELECT * FROM `" . PREFIX . "sponsors` 
+            " . $whereClause . "
+            ORDER BY `displayed` DESC, `name` ASC"
+    );
+
+    if (!$selectQuery) {
+        setLog('getSponsorsAsOptions: sponsors_query_select_failed (' . $whereClause . ')', __FILE__, 0, false);
+        return '<option value="0">Query failed.</option>';
+    }
+
+    $sponsorOptions = '';
+
+    if ($addEmptySponsorOption) {
+        $sponsorOptions .= '<option value="0">-- / --</option>';
+    }
+
+    if (mysqli_num_rows($selectQuery) < 1) {
+        return '<option value="0">' . $_language->module['no_sponsor'] . '</option>';
+    }
+
+    while ($get = mysqli_fetch_array($selectQuery)) {
+        $sponsorOptions .= '<option value="' . $get['sponsorID'] . '">' . $get['name'] . '</option>';
+    }
+
+    if (validate_int($selected_id, true)) {
+
+        $sponsorOptions = str_replace(
+            'value="' . $selected_id . '"',
+            'value="' . $selected_id . '" selected="selected"',
+            $sponsorOptions
+        );
+
+    }
+
+    return $sponsorOptions;
+
+}
+
 function getAPIData($json_url, $cat = '') {
 
     //

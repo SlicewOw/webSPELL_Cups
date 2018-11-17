@@ -87,7 +87,7 @@ function deleteImageFromDatabase($table_name, $column_banner_name, $column_activ
 /**
  * Sponsor
  */
-function getSponsorImage($sponsor_id, $returnAsFullImageLink = TRUE, $backgroundColor = 'black') {
+function getSponsorImage($sponsor_id, $returnAsFullImageLink = TRUE, $imageSize = 'tall') {
 
     $default_image = '';
 
@@ -103,7 +103,7 @@ function getSponsorImage($sponsor_id, $returnAsFullImageLink = TRUE, $background
                 `banner`,
                 `banner_small`
             FROM `" . PREFIX . "sponsors`
-            WHERE sponsorID = " . $sponsor_id
+            WHERE `sponsorID` = " . $sponsor_id
     );
 
     if (!$query) {
@@ -112,15 +112,15 @@ function getSponsorImage($sponsor_id, $returnAsFullImageLink = TRUE, $background
 
     $get = mysqli_fetch_array($query);
 
-    $selectBanner = ($backgroundColor == 'black') ?
-        'banner_small' : 'banner';
+    $selectBanner = ($imageSize == 'tall') ?
+        'banner' : 'banner_small';
 
     if (empty($get[ $selectBanner ])) {
         return $default_image;
     }
 
-    $imagePath = '/media/sponsors/' . $get[ $selectBanner ];
-    $filePath = __DIR__ . '/../../../images' . $imagePath;
+    $imagePath = '/sponsors/' . $get[ $selectBanner ];
+    $filePath = __DIR__ . '/../../images' . $imagePath;
 
     if (!file_exists($filePath)) {
         deleteImageFromDatabase('sponsors', $selectBanner, 'displayed', 'sponsorID', $sponsor_id);
