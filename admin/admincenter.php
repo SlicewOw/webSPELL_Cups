@@ -174,19 +174,14 @@ $admin_url = 'admin/admincenter.php';
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link href="../css/flipclock.css" rel="stylesheet">
-    <link href="../css/pnotify.custom.min.css" rel="stylesheet">
-    <link href="../css/cup.css" rel="stylesheet">
-    <link href="../css/font.css" rel="stylesheet">
-    <link href="../css/layout.css" rel="stylesheet">
-    <link href="../css/pages.css" rel="stylesheet">
+    <link href="../cup/dist/css/styles.min.css" rel="stylesheet">
 
     <?php
     foreach ($components['js'] as $component) {
         echo '<script src="../' . $component . '"></script>';
     }
     ?>
-    <script src="../js/ckeditor.js"></script>
+    <script src="../cup/dist/js/scripts.min.js"></script>
 
   </head>
 
@@ -545,10 +540,6 @@ if (isset($site) && $site!="news") {
 
     <script src="../js/bbcode.js"></script>
     <script src="../components/admin/js/bootstrap-switch.js"></script>
-
-    <script src="../js/pnotify.custom.min.js"></script>
-    <script src="../js/cup_functions.js"></script>
-    <script src="../js/google_graphs.js"></script>
 
 </body>
 </html>

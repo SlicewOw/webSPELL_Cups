@@ -45,21 +45,15 @@ if (!$userID) {
     <link href="./css/styles.css.php" rel="styleSheet" type="text/css">
     <link href="./css/button.css.php" rel="styleSheet" type="text/css">
     <link href="./_stylesheet.css" rel="stylesheet">
+    <link href="./cup/dist/css/styles.min.css" rel="stylesheet">
 
-    <link href="./css/flipclock.css" rel="stylesheet">
-    <link href="./css/font.css" rel="stylesheet">
-    <link href="./css/layout.css" rel="stylesheet">
-    <link href="./css/pages.css" rel="stylesheet">
     <?php
     foreach ($components['js'] as $component) {
         echo '<script src="./' . $component . '"></script>';
     }
     ?>
     <script src="./js/bbcode.js"></script>
-    <script src="./js/pnotify.custom.min.js"></script>
-    <script src="./js/jquery.countdown.js"></script>
-    <script src="./js/flipclock.min.js"></script>
-    <script src="./js/cup_functions.js"></script>
+    <script src="./cup/dist/js/scripts.min.js"></script>
 
     <title><?php echo PAGETITLE; ?></title>
 
