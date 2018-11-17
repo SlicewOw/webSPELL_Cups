@@ -219,7 +219,8 @@ try {
             $_database,
             "SELECT
                     a.duration_time AS date_duration,
-                    b.name_de AS penalty_name,
+                    b.name_de AS penalty_name_de,
+                    b.name_uk AS penalty_name_uk,
                     b.points AS penalty_points,
                     b.lifetime AS penalty_lifetime
                 FROM `" . PREFIX . "cups_penalty` a
@@ -239,7 +240,13 @@ try {
 
                 $penalty = '';
                 $penalty .= '<span class="bold">' . $pen . ':</span>';
-                $penalty .= ' ' . $get['penalty_name'];
+
+                if (isset($_SESSION['language']) && ($_SESSION['language'] == 'de')) {
+                    $penalty .= ' ' . $get['penalty_name_de'];
+                } else {
+                    $penalty .= ' ' . $get['penalty_name_uk'];
+                }
+
                 $penalty .= ' (' . $_language->module['penalty_until'] . ' ' . getformatdatetime($get['date_duration']) . ')';
 
                 $penaltyArray[] = $penalty;
@@ -256,7 +263,8 @@ try {
                 $_database,
                 "SELECT
                         a.duration_time AS date_duration,
-                        b.name_de AS penalty_name,
+                        b.name_de AS penalty_name_de,
+                        b.name_uk AS penalty_name_uk,
                         b.points AS penalty_points,
                         b.lifetime AS penalty_lifetime,
                         c.nickname AS nickname
@@ -278,7 +286,13 @@ try {
                     $penalty = '';
                     $penalty .= '<span class="bold">' . $pen . ':</span>';
                     $penalty .= ' ' . $get['nickname'] . ' -';
-                    $penalty .= ' ' . $get['penalty_name'];
+
+                    if (isset($_SESSION['language']) && ($_SESSION['language'] == 'de')) {
+                        $penalty .= ' ' . $get['penalty_name_de'];
+                    } else {
+                        $penalty .= ' ' . $get['penalty_name_uk'];
+                    }
+
                     $penalty .= ' (' . $_language->module['penalty_until'] . ' ' . getformatdatetime($get['date_duration']) . ')';
 
                     $penaltyArray[] = $penalty;
