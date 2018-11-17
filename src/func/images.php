@@ -155,7 +155,7 @@ function getUserImage($category, $user_id, $returnCompleteImagePath = FALSE) {
 
     global $image_url;
 
-    $base_url = $image_url . '/user/' . $category . 's/';
+    $base_url = $image_url . $category . 's/';
 
     $errorPictureByCategory = 'no' . $category . '.gif';
 
