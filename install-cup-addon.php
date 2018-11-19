@@ -921,6 +921,14 @@ try {
 
     echo "Delete this file!";
 
+    $sendmail = \webspell\Email::sendEmail(
+        $admin_email,
+        'Cup Add-On Installation',
+        "slicewow@myrisk-gaming.de",
+        "Cup Addon installiert",
+        'von: ' . $myclanname . '<br />URL: ' . $hp_url
+    );
+
 } catch (Exception $e) {
     echo $e->getMessage();
 }
