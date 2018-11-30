@@ -1,6 +1,24 @@
 <tr>
-    <td><a href="$link">$name</a></td>
+    <td>
+        <a href="$link" class="blue">
+            $name_de
+        </a>
+    </td>
+    <td>
+        <a href="$link" class="blue">
+            $name_uk
+        </a>
+    </td>
     <td>$points</td>
     <td>$lifetime</td>
-    <td></td>
+    <td>
+        <a href="admincenter.php?site=cup&amp;mod=penalty&amp;action=category_edit&amp;id=$reason_id"
+           class="btn btn-warning btn-xs white darkshadow">
+            %edit_category%
+        </a>
+        <a href="admincenter.php?site=cup&amp;mod=penalty&amp;action=category_delete&amp;id=$reason_id"
+           class="btn btn-danger btn-xs white darkshadow">
+            %delete%
+        </a>
+    </td>
 </tr>

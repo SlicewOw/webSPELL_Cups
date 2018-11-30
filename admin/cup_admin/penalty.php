@@ -10,18 +10,18 @@ try {
 
     $points = '';
     for ($i = 1; $i < 13; $i++) {
-        $points .= '<option value="'.$i.'">'.$i.'</option>';
+        $points .= '<option value="' . $i . '">' . $i . '</option>';
     }
 
     $admin = isset($_GET['admin']) ?
         getinput($_GET['admin']) : '';
-	
-	if (validate_array($_POST, true)) {
-		
-		$parent_url = 'admincenter.php?site=cup&mod=penalty';
+
+    if (validate_array($_POST, true)) {
+
+        $parent_url = 'admincenter.php?site=cup&mod=penalty';
 
         try {
-         
+
             if (isset($_POST['submitAddPenalty']) || isset($_POST['submitEditPenalty'])) {
 
                 $user_id = (isset($_POST['user_id']) && validate_int($_POST['user_id'], true)) ?
@@ -33,25 +33,25 @@ try {
                 if (($user_id < 1) && ($team_id < 1)) {
                     throw new \Exception($_language->module['error_penalty_no_parent_id']);
                 }
-                
+
                 $reason_id = (isset($_POST['reason_id']) && validate_int($_POST['reason_id'], true)) ?
                     (int)$_POST['reason_id'] : 0;
 
                 if ($reason_id < 1) {
                     throw new \Exception($_language->module['error_penalty_no_reason']);
                 }
-                
+
                 $comment = (isset($_POST['comment'])) ?
                     getinput($_POST['comment']) : '';
 
                 if (isset($_POST['submitAddPenalty'])) {
 
                     $isLifeTimeBann = getPenaltyCategory($reason_id, 'lifetime');
-                    
+
                     if ($isLifeTimeBann) {
-                        
+
                         $duration_time = time() + (3600 * 24 * 7 * 52 * 40);
-                        
+
                     } else {
 
                         $penalty_points = getPenaltyCategory($reason_id, 'points');
@@ -68,22 +68,22 @@ try {
                         $_database,
                         "INSERT INTO `" . PREFIX . "cups_penalty`
                             (
-                                `adminID`, 
-                                `date`, 
+                                `adminID`,
+                                `date`,
                                 `duration_time`,
                                 `teamID`,
-                                `userID`, 
-                                `reasonID`, 
+                                `userID`,
+                                `reasonID`,
                                 `comment`
-                            ) 
-                            VALUES 
+                            )
+                            VALUES
                             (
-                                " . $userID . ", 
-                                " . time() . ", 
-                                " . $duration_time . ", 
-                                " . $team_id . ", 
-                                " . $user_id . ", 
-                                " . $reason_id . ", 
+                                " . $userID . ",
+                                " . time() . ",
+                                " . $duration_time . ",
+                                " . $team_id . ",
+                                " . $user_id . ",
+                                " . $reason_id . ",
                                 '" . $comment . "'
                             )"
                     );
@@ -107,10 +107,10 @@ try {
                         $_database,
                         "UPDATE `" . PREFIX . "cups_penalty`
                             SET `teamID` = " . $team_id . ",
-                                `userID` = " . $user_id . ", 
-                                `reasonID` = " . $reason_id . ", 
+                                `userID` = " . $user_id . ",
+                                `reasonID` = " . $reason_id . ",
                                 `comment` = '" . $comment . "'
-                            WHERE ppID = " . $penalty_id
+                            WHERE `ppID` = " . $penalty_id
                     );
 
                     if (!$query) {
@@ -146,7 +146,7 @@ try {
                                 '" . $name_de . "',
                                 '" . $name_uk . "',
                                 " . $point . ",
-                                " . $lifetime . " 
+                                " . $lifetime . "
                             )"
                     );
 
@@ -165,12 +165,12 @@ try {
 
                     $query = mysqli_query(
                         $_database,
-                        "UPDATE `" . PREFIX . "cups_penalty_category` 
-                            SET	name_de = '".$name_de."', 
-                                name_uk = '".$name_uk."', 
-                                points = " . $point . ", 
-                                lifetime = " . $lifetime . " 
-                            WHERE reasonID = " . $reason_id
+                        "UPDATE `" . PREFIX . "cups_penalty_category`
+                            SET	`name_de` = '" . $name_de . "',
+                                `name_uk` = '" . $name_uk . "',
+                                `points` = " . $point . ",
+                                `lifetime` = " . $lifetime . "
+                            WHERE `reasonID` = " . $reason_id
                     );
 
                     if (!$query) {
@@ -179,30 +179,57 @@ try {
 
                 }
 
+            } else if (isset($_POST['submitDeleteCategory'])) {
+
+                $reason_id = (isset($_POST['reason_id']) && is_numeric($_POST['reason_id'])) ?
+                    (int)$_POST['reason_id'] : 0;
+
+                $deleteQuery = mysqli_query(
+                    $_database,
+                    "DELETE FROM `" . PREFIX . "cups_penalty_category`
+                        WHERE `reasonID` = " . $reason_id
+                );
+
+                if (!$deleteQuery) {
+                    throw new \Exception($_language->module['query_delete_failed']);
+                }
+
+                $deleteQuery = mysqli_query(
+                    $_database,
+                    "DELETE FROM `" . PREFIX . "cups_penalty`
+                        WHERE `reasonID` = " . $reason_id
+                );
+
+                if (!$deleteQuery) {
+                    throw new \Exception($_language->module['query_delete_failed']);
+                }
+
+            } else {
+                throw new \Exception($_language->module['unknown_action']);
             }
 
         } catch (Exception $e) {
             $_SESSION['errorArray'][] = $e->getMessage();
         }
-        
-		header('Location: ' . $parent_url);
-		
-	} else {
+
+        header('Location: ' . $parent_url);
+
+    } else {
 
         if ($admin == 'delete' && !isset($_GET['action'])) {
 
             $ppID = (isset($_GET['id']) && validate_int($_GET['id'])) ?
                 (int)$_GET['id'] : 0;
-            
+
             if ($ppID < 1) {
                 throw new \Exception($_language->module['unknown_penalty_id']);
             }
-            
+
             $updateQuery = mysqli_query(
                 $_database,
-                "UPDATE `" . PREFIX . "cups_penalty` 
-                    SET deleted = 1 
-                    WHERE ppID = " . $ppID
+                "UPDATE `" . PREFIX . "cups_penalty`
+                    SET `deleted` = 1
+                    WHERE `ppID` = " . $ppID
             );
 
             if (!$query) {
@@ -231,6 +258,9 @@ try {
 
             if (!empty($getAction) && !isset($_GET['admin'])) {
 
+                $category_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
+                    (int)$_GET['id'] : 0;
+
                 if ($getAction == 'category') {
 
                     $points = '';
@@ -240,11 +270,12 @@ try {
 
                     $get_pp = mysqli_query(
                         $_database,
-                        "SELECT 
-                              `reasonID`, 
-                              `name_de`, 
-                              `points`, 
-                              `lifetime` 
+                        "SELECT
+                              `reasonID`,
+                              `name_de`,
+                              `name_uk`,
+                              `points`,
+                              `lifetime`
                             FROM `" . PREFIX . "cups_penalty_category`
                             ORDER BY `points` ASC, `name_de` ASC"
                     );
@@ -265,8 +296,9 @@ try {
                             $link = 'admincenter.php?site=cup&amp;mod=penalty&amp;admin=view&amp;id=' . $reason_id;
 
                             $data_array = array();
-                            $data_array['$ppID'] = $reason_id;
-                            $data_array['$name'] = $ds['name_de'];
+                            $data_array['$reason_id'] = $reason_id;
+                            $data_array['$name_de'] = $ds['name_de'];
+                            $data_array['$name_uk'] = $ds['name_uk'];
                             $data_array['$points'] = $ds['points'];
                             $data_array['$lifetime'] = $lifetime;
                             $data_array['$link'] = $link;
@@ -283,22 +315,96 @@ try {
                     $penalty_home = $GLOBALS["_template_cup"]->replaceTemplate("penalty_cat_home", $data_array);
                     echo $penalty_home;
 
+                } else if ($getAction == 'category_edit') {
+
+                    if ($category_id < 1) {
+                        throw new \Exception($_language->module['unknown_id']);
+                    }
+
+                    $selectQuery = mysqli_query(
+                        $_database,
+                        "SELECT
+                                `name_de`,
+                                `name_uk`,
+                                `points`,
+                                `lifetime`
+                            FROM `" . PREFIX . "cups_penalty_category`
+                            WHERE `reasonID` = " . $category_id
+                    );
+
+                    if (!$selectQuery) {
+                        throw new \Exception($_language->module['query_select_failed']);
+                    }
+
+                    $get = mysqli_fetch_array($selectQuery);
+
+                    $points = str_replace(
+                        'value="' . $get['points'] . '"',
+                        'value="' . $get['points'] . '" selected="selected"',
+                        $points
+                    );
+
+                    $data_array = array();
+                    $data_array['$reason_id'] = $category_id;
+                    $data_array['$name_de'] = $get['name_de'];
+                    $data_array['$name_uk'] = $get['name_uk'];
+                    $data_array['$points'] = $points;
+                    $data_array['$checked'] = ($get['lifetime'] == 1) ?
+                        ' checked="checked"' : '';
+                    $category_edit = $GLOBALS["_template_cup"]->replaceTemplate("penalty_category_edit", $data_array);
+                    echo $category_edit;
+
+                } else if ($getAction == 'category_delete') {
+
+                    if ($category_id < 1) {
+                        throw new \Exception($_language->module['unknown_id']);
+                    }
+
+                    $selectQuery = mysqli_query(
+                        $_database,
+                        "SELECT
+                                `name_de`,
+                                `name_uk`,
+                                `points`,
+                                `lifetime`
+                            FROM `" . PREFIX . "cups_penalty_category`
+                            WHERE `reasonID` = " . $category_id
+                    );
+
+                    if (!$selectQuery) {
+                        throw new \Exception($_language->module['query_select_failed']);
+                    }
+
+                    $get = mysqli_fetch_array($selectQuery);
+
+                    $data_array = array();
+                    $data_array['$reason_id'] = $category_id;
+                    $data_array['$name_de'] = $get['name_de'];
+                    $data_array['$name_uk'] = $get['name_uk'];
+                    $data_array['$points'] = $get['points'];
+                    $data_array['$checked'] = ($get['lifetime'] == 1) ?
+                        ' checked="checked"' : '';
+                    $category_delete = $GLOBALS["_template_cup"]->replaceTemplate("penalty_category_delete", $data_array);
+                    echo $category_delete;
+
+                } else {
+                    throw new \Exception($_language->module['unknown_action']);
                 }
 
             } else {
 
                 $time_now = time();
-                
+
                 $get_pp = mysqli_query(
                     $_database,
-                    "SELECT 
-                            a.`ppID`, 
-                            a.`date`, 
-                            a.`userID`, 
-                            a.`teamID`, 
-                            a.`adminID`, 
-                            a.`duration_time`, 
-                            a.`teamID`, 
+                    "SELECT
+                            a.`ppID`,
+                            a.`date`,
+                            a.`userID`,
+                            a.`teamID`,
+                            a.`adminID`,
+                            a.`duration_time`,
+                            a.`teamID`,
                             a.`reasonID`,
                             b.`username` AS username,
                             c.`username` AS adminname,
@@ -321,10 +427,10 @@ try {
 
                     $user_counter = 0;
                     $team_counter = 0;
-                    
+
                     $user_penalty_list = '';
                     $team_penalty_list = '';
-                    
+
                     while ($ds = mysqli_fetch_array($get_pp)) {
 
                         $ppID = $ds['ppID'];
@@ -345,7 +451,7 @@ try {
                         $data_array['$admin_profile'] = $hp_url . '/index.php?site=profile&amp;id=' . $ds['adminID'];
                         $data_array['$admin'] = $ds['adminname'];
                         $data_array['$duration'] = getformatdatetime($ds['duration_time']);
-                        
+
                         if ($ds['teamID'] > 0) {
                             $team_penalty_list .= $GLOBALS["_template_cup"]->replaceTemplate("penalty_list", $data_array);
                             $team_counter++;
@@ -363,7 +469,7 @@ try {
                     $data_array = array();
                     $data_array['$penalty_list'] = $team_penalty_list;
                     $teamPenalties = $GLOBALS["_template_cup"]->replaceTemplate("penalty_panel", $data_array);
-                                        
+
                     $data_array = array();
                     $data_array['$user_counter'] = $user_counter;
                     $data_array['$team_counter'] = $team_counter;
@@ -379,7 +485,7 @@ try {
             }
 
         }
-        
+
     }
 
 } catch (Exception $e) {
