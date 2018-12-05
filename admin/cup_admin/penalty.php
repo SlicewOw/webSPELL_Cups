@@ -60,6 +60,7 @@ try {
                             throw new \Exception($_language->module['error_penalty_no_points']);
                         }
 
+                        // 1 point = 1 week
                         $duration_time = time() + (3600 * 24 * 7 * $penalty_points);
 
                     }
@@ -181,8 +182,12 @@ try {
 
             } else if (isset($_POST['submitDeleteCategory'])) {
 
-                $reason_id = (isset($_POST['reason_id']) && is_numeric($_POST['reason_id'])) ?
+                $reason_id = (isset($_POST['reason_id']) && validate_int($_POST['reason_id'], true)) ?
                     (int)$_POST['reason_id'] : 0;
+
+                if ($reason_id < 1) {
+                    throw new \Exception($_language->module['unknown_reason_id']);
+                }
 
                 $deleteQuery = mysqli_query(
                     $_database,
@@ -203,6 +208,28 @@ try {
                 if (!$deleteQuery) {
                     throw new \Exception($_language->module['query_delete_failed']);
                 }
+
+            } else if (isset($_POST['submitDeletePenalty'])) {
+
+                $penalty_id = (isset($_POST['penalty_details_id']) && validate_int($_POST['penalty_details_id'], true)) ?
+                    (int)$_POST['penalty_details_id'] : 0;
+
+                if ($penalty_id < 1) {
+                    throw new \Exception($_language->module['unknown_penalty_id']);
+                }
+
+                $updateQuery = mysqli_query(
+                    $_database,
+                    "UPDATE `" . PREFIX . "cups_penalty`
+                        SET `deleted` = 1
+                        WHERE `ppID` = " . $penalty_id
+                );
+
+                if (!$updateQuery) {
+                    throw new \Exception($_language->module['query_update_failed']);
+                }
+
+                $_SESSION['errorArray'][] = $_language->module['penalty_deleted'];
 
             } else {
                 throw new \Exception($_language->module['unknown_action']);
@@ -433,7 +460,7 @@ try {
 
                     while ($ds = mysqli_fetch_array($get_pp)) {
 
-                        $ppID = $ds['ppID'];
+                        $penalty_id = $ds['ppID'];
 
                         if ($ds['teamID'] > 0) {
                             $profile = 'admincenter.php?site=cup&amp;mod=teams&amp;action=active&amp;teamID=' . $ds['teamID'];
@@ -444,7 +471,7 @@ try {
                         }
 
                         $data_array = array();
-                        $data_array['$ppID'] = $ppID;
+                        $data_array['$penalty_id'] = $penalty_id;
                         $data_array['$profile'] = $profile;
                         $data_array['$name'] = $name;
                         $data_array['$reason_name'] = $ds['reason_name'];

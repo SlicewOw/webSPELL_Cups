@@ -1,27 +1,38 @@
 <div class="pull-left">
-    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#add-penalty">
+    <button type="button" class="btn btn-success btn-sm white darkshadow"
+            data-toggle="modal"
+            data-target="#add-penalty">
         %add_penalty%
     </button>
-    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#add-category">
+    <button type="button" class="btn btn-success btn-sm white darkshadow"
+            data-toggle="modal"
+            data-target="#add-category">
         %add_category%
     </button>
 </div>
 <div class="pull-right">
-    <a href="admincenter.php?site=cup&amp;mod=penalty" class="btn btn-sm $overviewMenu">
+    <a href="admincenter.php?site=cup&amp;mod=penalty"
+       class="btn btn-sm $overviewMenu">
         %overview%
     </a>
-    <a href="admincenter.php?site=cup&amp;mod=penalty&amp;action=category" class="btn btn-sm $categoryMenu">
+    <a href="admincenter.php?site=cup&amp;mod=penalty&amp;action=category"
+       class="btn btn-sm $categoryMenu">
         %category%
     </a>
 </div>
 <div class="clear"></div>
 <br />
 <form method="post">
-    <div class="modal fade" id="add-penalty" tabindex="-1" role="dialog" aria-labelledby="add-penalty-label">
+    <div class="modal fade" id="add-penalty"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="add-penalty-label">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title" id="add-penalty-label">%add_penalty%</h4>
@@ -58,10 +69,12 @@
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="penalty_id" value="0" />
-                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                    <button type="button" class="btn btn-default btn-sm"
+                            data-dismiss="modal">
                         %close%
                     </button>
-                    <button type="submit" name="submitAddPenalty" class="btn btn-info btn-sm white darkshadow">
+                    <button type="submit" name="submitAddPenalty"
+                            class="btn btn-info btn-sm white darkshadow">
                         %save%
                     </button>
                 </div>
@@ -70,11 +83,11 @@
     </div>
 </form>
 <script type="text/javascript">
-$(".penalty-select").change(function() {
+$(".penalty-select").change(function () {
 
     var select = $(this);
 
-    if(select.val() > 0) {
+    if (select.val() > 0) {
 
         $(".penalty-select").attr('disabled', 'disabled');
         select.removeAttr('disabled');
@@ -86,11 +99,16 @@ $(".penalty-select").change(function() {
 });
 </script>
 <form method="post">
-    <div class="modal fade" id="add-category" tabindex="-1" role="dialog" aria-labelledby="add-category-label">
+    <div class="modal fade" id="add-category"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="add-category-label">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title" id="add-category-label">%add_category%</h4>
@@ -100,13 +118,19 @@ $(".penalty-select").change(function() {
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Name DE *</label>
-                                <input type="text" name="name_de" value="" class="form-control" required />
+                                <input type="text" name="name_de"
+                                       value=""
+                                       class="form-control"
+                                       required />
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Name UK *</label>
-                                <input type="text" name="name_uk" value="" class="form-control" required />
+                                <input type="text" name="name_uk"
+                                       value=""
+                                       class="form-control"
+                                       required />
                             </div>
                         </div>
                     </div>
@@ -116,15 +140,138 @@ $(".penalty-select").change(function() {
                             $points
                         </select>
                     </div>
-                    <span><input type="checkbox" name="lifetime" class="input_checkbox" value="1" /> %penalty_lifetime%</span>
+                    <span>
+                        <input type="checkbox" name="lifetime"
+                               class="input_checkbox"
+                               value="1" /> %penalty_lifetime%
+                    </span>
+                    <br />
+                    <br />
+                    <div class="alert alert-info">%meaning_of_points%</div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="reason_id" value="0" />
-                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                    <button type="button" class="btn btn-default btn-sm"
+                            data-dismiss="modal">
                         %close%
                     </button>
-                    <button type="submit" name="submitAddCategory" class="btn btn-info btn-sm white darkshadow">
+                    <button type="submit" name="submitAddCategory"
+                            class="btn btn-info btn-sm white darkshadow">
                         %save%
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+$(document).ready(function () {
+
+    $("button[name=showPenaltyDetails]").click(function (e) {
+
+        e.preventDefault();
+
+        $(".btn-penalty-details").attr('disabled', 'disabled');
+
+        var penalty_id = convert2id(this.id, 2),
+            varData;
+
+        $.get(
+            "ajax.php?site=admin_penalty",
+            {
+                penalty_id : penalty_id,
+                action : 'getPenaltyDetails'
+            },
+            function (data, status) {
+
+                if (status === "success") {
+
+                    varData = JSON.parse(data);
+                    if (varData.status) {
+
+                        $("#penalty_details_category_de").html(varData.details.category.name_de);
+                        $("#penalty_details_category_uk").html(varData.details.category.name_uk);
+
+                        $("#penalty_details_receiver").html(varData.details.receiver);
+                        $("#penalty_details_duration").html(varData.details.duration);
+                        $("#penalty_details_comment").html(varData.details.comment);
+
+                        $("input[name=penalty_details_id]").val(penalty_id);
+
+                        $("#show-penalty-details").modal('show');
+
+                    } else {
+                        showMultipleNotifies(varData.message, 'error');
+                    }
+
+                    $(".btn-penalty-details").removeAttr('disabled');
+
+                }
+
+            }
+        );
+
+    });
+
+    $('#show-penalty-details').on('hidden.bs.modal', function (e) {
+
+        $("#penalty_details_category_de").html('');
+        $("#penalty_details_category_uk").html('');
+
+        $("#penalty_details_receiver").html('');
+        $("#penalty_details_duration").html('');
+        $("#penalty_details_comment").html('');
+
+        $("input[name=penalty_details_id]").val(0);
+
+    });
+
+});
+</script>
+<form method="post">
+    <div class="modal fade" id="show-penalty-details"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="show-penalty-details-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="show-penalty-details-label">%penalty% Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="bold">%category% DE</label>
+                            <p id="penalty_details_category_de"></p>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="bold">%category% UK</label>
+                            <p id="penalty_details_category_uk"></p>
+                        </div>
+                    </div>
+                    <hr />
+                    <label class="bold">User / Team</label>
+                    <p id="penalty_details_receiver"></p>
+                    <label class="bold">%penalty_duration%</label>
+                    <p id="penalty_details_duration"></p>
+                    <label class="bold">%comment%</label>
+                    <p id="penalty_details_comment"></p>
+                    <hr />
+                    <button type="submit" name="submitDeletePenalty"
+                            class="btn btn-danger btn-sm white darkshadow">
+                        %delete%
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="penalty_details_id" value="0" />
+                    <button type="button" class="btn btn-default btn-sm"
+                            data-dismiss="modal">
+                        %close%
                     </button>
                 </div>
             </div>
