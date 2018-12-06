@@ -45,7 +45,7 @@ try {
                 "SELECT 
                       COUNT(*) AS `exist`, 
                       checked_in AS `checked_in` 
-                    FROM `ws_j12_cups_teilnehmer`
+                    FROM `". PREFIX . "cups_teilnehmer`
                     WHERE `cupID` = " . $cup_id . " AND `teamID` = " . $userID
             )
         );

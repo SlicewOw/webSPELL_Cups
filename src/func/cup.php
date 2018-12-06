@@ -3228,7 +3228,7 @@ function getTicketAccess($ticket_id) {
         $_database,
         "SELECT
             COUNT(*) AS `access`
-        FROM `ws_j12_cups_supporttickets`
+        FROM `" . PREFIX . "cups_supporttickets`
         WHERE ticketID = " . $ticket_id . " AND (" . $whereClause . ")"
     );
 
