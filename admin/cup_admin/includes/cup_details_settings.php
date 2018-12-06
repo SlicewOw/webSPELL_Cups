@@ -66,12 +66,6 @@ try {
 
         $round = ($x + 1);
 
-        $matchRoundFormat .= '<div class="col-sm-3">';
-        $matchRoundFormat .= '<div class="form-group">';
-        $matchRoundFormat .= '<label>Runde ' . $round . '</label>';
-        $matchRoundFormat .= '<select name="round[]" class="form-control">';
-        $matchRoundFormat .= $cupOptions['rounds'];
-
         $selectQuery = mysqli_query(
             $_database,
             "SELECT
@@ -84,17 +78,20 @@ try {
 
             $getFormat = mysqli_fetch_array($selectQuery);
 
-            $matchRoundFormat .= str_replace(
+            $round_options = str_replace(
                 'value="' . $getFormat['format'] . '"',
                 'value="' . $getFormat['format'] . '" selected="selected"',
-                $matchRoundFormat
+                $cupOptions['rounds']
             );
 
+        } else {
+            $round_options = $cupOptions['rounds'];
         }
 
-        $matchRoundFormat .= '</select>';
-        $matchRoundFormat .= '</div>';
-        $matchRoundFormat .= '</div>';
+        $data_array = array();
+        $data_array['$round'] = $round;
+        $data_array['$roundOptions'] = $round_options;
+        $matchRoundFormat .= $GLOBALS["_template_cup"]->replaceTemplate("cup_details_settings_map_round", $data_array);
 
     }
 
