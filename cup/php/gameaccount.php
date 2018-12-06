@@ -344,7 +344,7 @@ try {
                 }
 
             } else {
-                $gameaccounts = '<div class="list-group-item">'.$_language->module['no_gameacc'].'</div>';
+                $gameaccounts = '<tr><td colspan="3">' . $_language->module['no_gameacc'] . '</td></tr>';
             }
 
             $id = '';

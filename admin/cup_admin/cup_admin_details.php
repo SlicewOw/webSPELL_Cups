@@ -19,8 +19,8 @@ try {
 
         $ergebnis = mysqli_query(
             $_database, 
-            "SELECT * FROM `" . PREFIX . "cups` 
-                WHERE `status` = " . $status_id . " 
+            "SELECT * FROM `" . PREFIX . "cups`
+                WHERE `status` = " . $status_id . "
                 ORDER BY `start_date` ASC"
         );
 
@@ -72,7 +72,7 @@ try {
             throw new \Exception($_language->module['unknown_cup']);
         }
 
-        $getPage = (isset($_GET['page'])) ? 
+        $getPage = (isset($_GET['page'])) ?
             getinput($_GET['page']) : 'home';
 
         $pageArray = array(
@@ -101,9 +101,9 @@ try {
 
                     $updateQuery = mysqli_query(
                         $_database,
-                        "UPDATE `" . PREFIX . "cups` 
-                            SET description = '" . $description . "' 
-                            WHERE cupID = " . $cup_id
+                        "UPDATE `" . PREFIX . "cups`
+                            SET `description` = '" . $description . "'
+                            WHERE `cupID` = " . $cup_id
                     );
 
                     if (!$updateQuery) {
@@ -123,14 +123,14 @@ try {
                         $_database,
                         "INSERT INTO `" . PREFIX . "cups_admin`
                             (
-                                userID, 
-                                cupID, 
-                                rights
-                            ) 
-                            VALUES 
+                                `userID`,
+                                `cupID`,
+                                `rights`
+                            )
+                            VALUES
                             (
-                                " . $user_id . ", 
-                                " . $cup_id . ", 
+                                " . $user_id . ",
+                                " . $cup_id . ",
                                 'admin'
                             )"
                     );
@@ -152,12 +152,12 @@ try {
                         $_database,
                         "INSERT INTO `" . PREFIX . "cups_streams`
                             (
-                                cupID, 
-                                livID
-                            ) 
-                            VALUES 
+                                `cupID`,
+                                `livID`
+                            )
+                            VALUES
                             (
-                                " . $cup_id . ", 
+                                " . $cup_id . ",
                                 " . $stream_id . "
                             )"
                     );
@@ -179,12 +179,12 @@ try {
                         $_database,
                         "INSERT INTO `" . PREFIX . "cups_sponsors`
                             (
-                                `cupID`, 
+                                `cupID`,
                                 `sponsorID`
-                            ) 
-                            VALUES 
+                            )
+                            VALUES
                             (
-                                " . $cup_id . ", 
+                                " . $cup_id . ",
                                 " . $sponsor_id . "
                             )"
                     );
@@ -213,9 +213,9 @@ try {
 
                             $postArray = explode('_', $postKeys[$x]);
                             if ($postArray[0] == $searchArray[$n]) {
-                                $deleteAction 	= $postArray[0];
-                                $cup_id 		= $postArray[1];
-                                $value_id 		= $postArray[2];
+                                $deleteAction = $postArray[0];
+                                $cup_id = $postArray[1];
+                                $value_id = $postArray[2];
                                 break;
                             }
 
@@ -234,7 +234,7 @@ try {
 
                         $deleteQuery = mysqli_query(
                             $_database,
-                            "DELETE FROM `" . PREFIX . "cups_streams` 
+                            "DELETE FROM `" . PREFIX . "cups_streams`
                                 WHERE " . $whereClause
                         );
 
@@ -250,7 +250,7 @@ try {
 
                         $deleteQuery = mysqli_query(
                             $_database,
-                            "DELETE FROM `" . PREFIX . "cups_sponsors` 
+                            "DELETE FROM `" . PREFIX . "cups_sponsors`
                                 WHERE " . $whereClause
                         );
 
@@ -266,7 +266,7 @@ try {
 
                         $deleteQuery = mysqli_query(
                             $_database,
-                            "DELETE FROM `" . PREFIX . "cups_admin` 
+                            "DELETE FROM `" . PREFIX . "cups_admin`
                                 WHERE " . $whereClause
                         );
 
@@ -282,7 +282,7 @@ try {
 
                         $deleteQuery = mysqli_query(
                             $_database,
-                            "DELETE FROM `" . PREFIX . "cups_teilnehmer` 
+                            "DELETE FROM `" . PREFIX . "cups_teilnehmer`
                                 WHERE " . $whereClause
                         );
 
@@ -327,7 +327,8 @@ try {
 
             $groupstage_navi = '';
             if($cupArray['groupstage'] == 1) {
-                $groupstage_navi = '<div class="btn-group" role="group"><a href="admincenter.php?site=cup&amp;mod=cup&amp;action=cup&amp;id='.$cup_id.'&amp;page=groups" class="btn '.$navi_groups.'">'.$_language->module['groupstage'].'</a></div>';
+                $groupstage_url = 'admincenter.php?site=cup&amp;mod=cup&amp;action=cup&amp;id=' . $cup_id . '&amp;page=groups';
+                $groupstage_navi = '<div class="btn-group" role="group"><a href="' . $groupstage_url . '" class="btn ' . $navi_groups . '">' . $_language->module['groupstage'] . '</a></div>';
             }
 
             $content = '';
@@ -336,41 +337,45 @@ try {
                 $content .= showInfo($_language->module['cup_not_saved']);
             }
 
-            //
-            // Cup Details Content
-            if (file_exists(__DIR__ . '/includes/cup_details_' . $getPage . '.php')) {
-                include(__DIR__ . '/includes/cup_details_' . $getPage . '.php');
+            /**
+             * Cup Details Content
+             */
+            $contentPath = __DIR__ . '/includes/cup_details_' . $getPage . '.php';
+            if (file_exists($contentPath)) {
+                include($contentPath);
             } else {
                 $content .= showError($_language->module['access_denied']);
             }
 
             $cup_footer = '';
-            if ($cupArray['status'] == 1) { 
+            if ($cupArray['status'] == 1) {
 
                 $start_url = ($cupArray['groupstage'] == 1) ?
                     '&amp;action=start&amp;status=groupstage' : '&amp;action=start&amp;status=playoffs';
 
-                $startURL 	= 'admincenter.php?site=cup&amp;mod=cup'.$start_url.'&amp;id='.$cup_id;
+                $startURL = 'admincenter.php?site=cup&amp;mod=cup'.$start_url.'&amp;id='.$cup_id;
                 $cup_footer .= '<div class="btn-group" role="group">';
                 $cup_footer .= '<a class="btn btn-default btn-sm" href="'.$startURL.'">'.$_language->module['cup_status_' . $cupArray['status']].'</a>';
                 $cup_footer .= '</div>';
 
-                $editURL	= 'admincenter.php?site=cup&amp;mod=cup&amp;action=edit&amp;id='.$cup_id;
+                $editURL = 'admincenter.php?site=cup&amp;mod=cup&amp;action=edit&amp;id='.$cup_id;
                 $cup_footer .= '<div class="btn-group" role="group">';
-                $cup_footer .= '<a class="btn btn-default btn-sm" href="'.$editURL.'">Cup '.$_language->module['edit'].'</a>';  
+                $cup_footer .= '<a class="btn btn-default btn-sm" href="'.$editURL.'">Cup '.$_language->module['edit'].'</a>';
                 $cup_footer .= '</div>';
 
-                $deleteURL	= 'admincenter.php?site=cup&amp;mod=cup&amp;action=delete&amp;id='.$cup_id;
+                $deleteURL = 'admincenter.php?site=cup&amp;mod=cup&amp;action=delete&amp;id='.$cup_id;
                 $cup_footer .= '<div class="btn-group" role="group">';
-                $cup_footer .= '<a class="btn btn-default btn-sm" href="'.$deleteURL.'">Cup '.$_language->module['delete'].'</a>'; 
+                $cup_footer .= '<a class="btn btn-default btn-sm" href="'.$deleteURL.'">Cup '.$_language->module['delete'].'</a>';
                 $cup_footer .= '</div>';
 
             } else if ($cupArray['status'] == 2) {
-                $cup_footer .= '<a class="btn btn-default btn-sm" href="admincenter.php?site=cup&amp;mod=cup&amp;action=status&amp;id='.$cup_id.'">'.$_language->module['cup_status_' . $cupArray['status']].'</a>';
+                $footer_url = 'admincenter.php?site=cup&amp;mod=cup&amp;action=status&amp;id=' . $cup_id;
+                $cup_footer .= '<a class="btn btn-default btn-sm" href="' . $footer_url . '">'.$_language->module['cup_status_' . $cupArray['status']].'</a>';
             } else if ($cupArray['status'] == 3) {
-                $cup_footer .= '<a class="btn btn-default btn-sm" href="admincenter.php?site=cup&amp;mod=cup&amp;action=finish&amp;status=playoffs&amp;id='.$cup_id.'">'.$_language->module['cup_status_' . $cupArray['status']].'</a>';
-            } else { 
-                $cup_footer .= '<span class="btn btn-default btn-sm">'.$_language->module['cup_status_' . $cupArray['status']].'</span>'; 
+                $footer_url = 'admincenter.php?site=cup&amp;mod=cup&amp;action=finish&amp;status=playoffs&amp;id=' . $cup_id;
+                $cup_footer .= '<a class="btn btn-default btn-sm" href="' . $footer_url . '">'.$_language->module['cup_status_' . $cupArray['status']].'</a>';
+            } else {
+                $cup_footer .= '<span class="btn btn-default btn-sm">'.$_language->module['cup_status_' . $cupArray['status']].'</span>';
             }
 
             $data_array = array();
@@ -382,6 +387,8 @@ try {
             $data_array['$navi_home'] = $navi_home;
             $data_array['$navi_settings'] = $navi_settings;
             $data_array['$navi_teams'] = $navi_teams;
+            $data_array['$team_tab_txt'] = ($cupArray['mode'] != '1on1') ?
+                'Teams' : 'Players';
             $data_array['$groupstage_navi'] = $groupstage_navi;
             $data_array['$navi_bracket'] = $navi_bracket;
             $data_array['$navi_rules'] = $navi_rules;

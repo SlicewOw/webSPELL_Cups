@@ -39,12 +39,9 @@ try {
         } else if (($getAction == "cup") || ($getAction == "status")) {
             // Detail Ansicht des Cups
             include(__DIR__ . '/cup_admin/cup_admin_details.php');
-        } else if ($getAction == "teamadd") {
+        } else if ($getAction == "teamadd" || $getAction == "playeradd") {
             // Team zu einem Cup hinzufuegen (durch Admin)
-            include($cup_base_path . '/includes/cup_joincup.php');
-        } else if ( $getAction == "adminadd" && isset($_GET['id']) ) {
-            // Team zu einem Cup hinzufuegen (durch Admin)
-            include(__DIR__ . '/cup_admin/cup_add_admin.php');
+            include(__DIR__ . '/cup_admin/cup_admin_joincup.php');
         } else if ( $getAction == "start" && !empty($getStatus) && isset($_GET['id']) ) {
 
             if ($getStatus == "playoffs") {
