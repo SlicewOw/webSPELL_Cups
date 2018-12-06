@@ -8,12 +8,8 @@ try {
         throw new \Exception($_language->module['login']);
     }
 
-    $varPage = (mb_substr(basename($_SERVER[ 'REQUEST_URI' ]), 0, 15) != "admincenter.php") ?
-        'admin' : 'cup';
-
     $actionArray = array(
-        'joincup',
-        'teamadd'
+        'joincup'
     );
 
     if (!in_array($getAction, $actionArray)) {
@@ -46,11 +42,7 @@ try {
 
     if (validate_array($_POST, true)) {
 
-        if ($varPage == 'admin') {
-            $parent_url = 'admincenter.php?site=cup&mod=cup&action=cup&id=' . $cup_id . '&page=teams';
-        } else {
-            $parent_url = 'index.php?site=cup&action=details&id=' . $cup_id;	
-        }
+        $parent_url = 'index.php?site=cup&action=details&id=' . $cup_id;
 
         try {
 
@@ -171,11 +163,7 @@ try {
 
             $_SESSION['cupErrorArray'][] = $e->getMessage();
 
-            if ($varPage == 'admin') {
-                $parent_url = 'admincenter.php?site=cup&mod=cup&action=teamadd&id=' . $cup_id;
-            } else {
-                $parent_url = 'index.php?site=cup&action=joincup&id=' . $cup_id;
-            }
+            $parent_url = 'index.php?site=cup&action=joincup&id=' . $cup_id;
 
         }
 
@@ -223,80 +211,6 @@ try {
 
             }
 
-        } else if ($getAction == 'teamadd') {
-
-            //
-            // add team
-            // (admin)
-
-            $teams = '';
-
-            if ($maxMode == 1) {
-
-                //
-                // Userlist (1on1)
-
-                $query = mysqli_query(
-                    $_database,
-                    "SELECT 
-                            a.`userID` AS `user_id`,
-                            a.`gameaccID` AS `gameaccount_id`,
-                            a.`value` AS `gameaccount_value`,
-                            b.`nickname` AS `nickname`
-                        FROM `" . PREFIX . "cups_gameaccounts` a
-                        JOIN `" . PREFIX . "user` b ON a.`userID` = b.`userID`
-                        WHERE a.`category` = '" . $cupArray['game'] . "' AND a.`active` = 1 AND a.`deleted` = 0
-                        ORDER BY b.`nickname` ASC"
-                );
-
-                if (!$query) {
-                    throw new \Exception($_language->module['query_select_failed']);
-                }
-
-                while ($db = mysqli_fetch_array($query)) {
-
-                    $accountInfo = '';
-                    $accountInfo .= $db['nickname'];
-                    $accountInfo .= ' (#'.$db['gameaccount_id'].' / '.$db['gameaccount_value'].')';
-
-                    $teams .= '<option value="' . $db['user_id'] . '">' . $accountInfo . '</option>';
-
-                }
-
-            } else {
-
-                //
-                // Team List
-                $info = mysqli_query(
-                    $_database,
-                    "SELECT
-                            `teamID`,
-                            `name`
-                        FROM `" . PREFIX . "cups_teams`
-                        WHERE `deleted` = 0
-                        ORDER BY `name` ASC"
-                );
-
-                if (!$info) {
-                    throw new \Exception($_language->module['query_select_failed']);
-                }
-
-                while ($db = mysqli_fetch_array($info)) {
-
-                    if (($maxMode == 2) && (getteam($db['teamID'], 'anz_member') == $maxMode)) {
-
-                        $teams .= '<option value="'.$db['teamID'].'">'.$db['name'].'</option>';
-
-                    } else if (($maxMode != 2) && getteam($db['teamID'], 'anz_member') >= $maxMode) {
-
-                        $teams .= '<option value="'.$db['teamID'].'">'.$db['name'].'</option>';
-
-                    }
-
-                }
-
-            }
-
         } else {
             $teams = '<option value="0">Error</option>';
         }
@@ -323,6 +237,8 @@ try {
         $data_array['$showTeams'] = ($maxMode == 1) ? ' style="display: none;"' : '';
         $data_array['$teams'] = $teams;
         $data_array['$submitButtonStatus'] = $submitButtonStatus;
+        $data_array['$showAddTeamButton'] = ($maxMode == 1) ?
+            ' style="display: none;"' : '';
         $cups_join = $GLOBALS["_template_cup"]->replaceTemplate("cups_join", $data_array);
         echo $cups_join;
 
