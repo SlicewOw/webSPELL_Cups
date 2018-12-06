@@ -1,10 +1,10 @@
 <?php
 
-if (!isset($content)) { 
-    $content = '';
-}
-
 try {
+
+    if (!isset($content)) {
+        $content = '';
+    }
 
     $cup_maps = '';
     if ($cupArray['mappool'] > 0) {
@@ -36,15 +36,15 @@ try {
     $data_array['$description'] = $cupArray['description'];
     $content .= $GLOBALS["_template_cup"]->replaceTemplate("cup_details_home", $data_array);
 
-    /** 
-     * Admin hinzufuegen	
+    /**
+     * Admin hinzufuegen
      **/
 
     $content_admin_add = '';
 
     $admins = mysqli_query(
         $_database,
-        "SELECT 
+        "SELECT
                 a.`userID` AS `user_id`,
                 b.`nickname` AS `nickname`
             FROM `" . PREFIX . "cups_admin` a
@@ -71,10 +71,10 @@ try {
 
             $nickname = $db['nickname'];
 
-            $info_admin 	= '<a class="btn btn-default btn-xs" href="'.$profile_url.'" target="_blank">'.$_language->module['view'].'</a>';
+            $info_admin = '<a class="btn btn-default btn-xs" href="'.$profile_url.'" target="_blank">'.$_language->module['view'].'</a>';
             $info_admin .= ' <button class="btn btn-default btn-xs" type="submit" name="deleteAdmin_'.$cup_id.'_'.$user_id.'">'.$_language->module['delete'].'</button>';
 
-            $content_admin_add .= '<div  class="list-group-item" target="_blank">'.$nickname.'<span class="pull-right">'.$info_admin.'</span></div>';
+            $content_admin_add .= '<div class="list-group-item" target="_blank">'.$nickname.'<span class="pull-right">'.$info_admin.'</span></div>';
 
             $userIdArray[] = $user_id;
 
@@ -83,7 +83,7 @@ try {
         $userWhereClauseArray[] = 'userID NOT IN (' . implode(', ', $userIdArray) . ')';
 
     } else {
-        $content_admin_add = '<div class="list-group-item">'.$_language->module['no_admin'].'</div>';	
+        $content_admin_add = '<div class="list-group-item">'.$_language->module['no_admin'].'</div>';
         $where_clause = '';
     }
 
@@ -91,7 +91,7 @@ try {
 
     $users = mysqli_query(
         $_database,
-        "SELECT 
+        "SELECT
                 a.`userID` AS `userID`,
                 b.`nickname` AS `nickname`
             FROM `" . PREFIX . "cups_team` a
@@ -121,11 +121,11 @@ try {
 
     $users = mysqli_query(
         $_database,
-        "SELECT 
-                `userID`, 
-                `nickname` 
+        "SELECT
+                `userID`,
+                `nickname`
             FROM `" . PREFIX . "user`
-            WHERE " . $userWhereClause . "  
+            WHERE " . $userWhereClause . "
             ORDER BY `nickname` ASC"
     );
 
@@ -148,14 +148,16 @@ try {
     $data_array['$select_admin_add'] = $select_admin_add;
     $content .= $GLOBALS["_template_cup"]->replaceTemplate("cups_admin_add", $data_array);
 
-    /** 
-     * Streams hinzufuegen	
+    /**
+     * Streams hinzufuegen
      **/
 
     $content_admin_add 	= '';
     $streams = mysqli_query(
-        $_database, 
-        "SELECT livID FROM `" . PREFIX . "cups_streams` 
+        $_database,
+        "SELECT
+                `livID`
+            FROM `" . PREFIX . "cups_streams`
             WHERE `cupID` = " . $cup_id
     );
 
@@ -227,7 +229,7 @@ try {
         "SELECT
                 `sponsorID`
             FROM `" . PREFIX . "cups_sponsors`
-            WHERE cupID = " . $cup_id
+            WHERE `cupID` = " . $cup_id
     );
 
     $sponsorWhereClauseArray = array();

@@ -42,11 +42,9 @@ $("button[name=activeButtonsRound]").click(function (e) {
 
     e.preventDefault();
 
-    var roundString = this.id;
-    var roundArray = roundString.split('_');
-    var round_id = roundArray[1];
+    var round_id = convert2id(this.id, 2),
+        value = $(".resetClass" + round_id).attr('disabled');
 
-    var value = $(".resetClass" + round_id).attr('disabled');
     if (value === "disabled") {
         $(".resetClass" + round_id).removeAttr('disabled');
     } else {
@@ -61,11 +59,9 @@ $("button[name=addMasterComment]").click(function (e) {
 
     e.preventDefault();
 
-    var roundString = this.id;
-    var roundArray = roundString.split('_');
-    var round_id = roundArray[1];
+    var round_id = convert2id(this.id, 2),
+        value = $("#masterComment" + round_id).css('display');
 
-    var value = $("#masterComment" + round_id).css('display');
     if (value === "none") {
         $("#submitMasterComment" + round_id).removeAttr('disabled');
         $("#masterComment" + round_id).css('display', 'block');
@@ -80,11 +76,9 @@ $("button[name=updateRound]").click(function (e) {
 
     e.preventDefault();
 
-    var roundString = this.id;
-    var roundArray = roundString.split('_');
-    var round_id = roundArray[1];
+    var round_id = convert2id(this.id, 2),
+        container = $("#cup_round_" + round_id + "_matches");
 
-    var container = $("#cup_round_" + round_id + "_matches");
     container.html(
         '<div class="list-group-item">' +
         '<img src="$image_url/loader.gif" alt="" />' +

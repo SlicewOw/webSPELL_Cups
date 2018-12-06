@@ -181,7 +181,6 @@ $admin_url = 'admin/admincenter.php';
         echo '<script src="../' . $component . '"></script>';
     }
     ?>
-    <script src="../cup/dist/js/scripts.min.js"></script>
 
   </head>
 
@@ -487,8 +486,7 @@ if (isset($site) && $site!="news") {
     </div>
     <!-- /#wrapper -->
 
- <!-- jQuery -->
-    <script src="../components/jquery/jquery.min.js"></script>
+    <!-- jQuery -->
     <link rel="stylesheet" type="text/css" media="all" href="../components/admin/css/style-nav.css">
     <link href="../components/admin/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     <script src="../components/admin/js/bootstrap-colorpicker.js"></script>
@@ -523,8 +521,6 @@ if (isset($site) && $site!="news") {
             });
         });
     </script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="../components/bootstrap/bootstrap.min.js"></script>
 
     <!-- Menu Plugin JavaScript -->
     <script src="../components/admin/js/menu.min.js"></script>
@@ -540,6 +536,7 @@ if (isset($site) && $site!="news") {
 
     <script src="../js/bbcode.js"></script>
     <script src="../components/admin/js/bootstrap-switch.js"></script>
+    <script src="../cup/dist/js/scripts.min.js"></script>
 
 </body>
 </html>

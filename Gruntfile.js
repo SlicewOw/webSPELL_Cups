@@ -21,6 +21,7 @@ module.exports = function (grunt) {
             },
             css_main: {
                 src: [
+                    'cup/css/bootstrap-select.css',
                     'cup/css/flipclock.css',
                     'cup/css/pnotify.custom.min.css',
                     'cup/css/cup.css',

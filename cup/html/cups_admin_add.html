@@ -1,17 +1,27 @@
 <div class="col-sm-6">
     <form method="post">
         <div class="panel panel-default">
-            <div class="panel-heading">$title_admin_add</div>
-            <div class="list-group">$content_admin_add</div>
+            <div class="panel-heading">
+                $title_admin_add
+            </div>
+            <div class="list-group">
+                $content_admin_add
+            </div>
             <div class="panel-footer">
-                <div class="form_container">
-                    <div class="form-inline">
-                        <select name="$selectName" class="form-control">$select_admin_add</select>
-                        <input type="submit" name="$submit_admin_add" class="btn btn-info btn-sm white darkshadow" value="%save%" />
-                    </div>
-                </div>
+                <select name="$selectName" class="selectpicker"
+                        data-live-search="true">
+                    $select_admin_add
+                </select>
+                <button type="submit" name="$submit_admin_add"
+                        class="btn btn-info btn-sm white darkshadow">
+                    %save%
+                </button>
             </div>
         </div>
-        <div class="clear"></div>
     </form>
 </div>
+<script>
+$(document).ready(function () {
+    $(".selectpicker").selectpicker();
+});
+</script>
