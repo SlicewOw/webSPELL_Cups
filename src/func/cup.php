@@ -1102,7 +1102,7 @@ function getcup($id, $cat = '') {
 
             $getTeamCountCheckedIn = mysqli_num_rows($info);
 
-            if($getTeamCountCheckedIn < 1) {
+            if ($getTeamCountCheckedIn < 1) {
                 return array();
             }
 

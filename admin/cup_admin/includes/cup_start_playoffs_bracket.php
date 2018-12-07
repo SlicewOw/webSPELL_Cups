@@ -1,219 +1,211 @@
 <?php
 
-try {
-	
-	if (!$loggedin || !iscupadmin($userID)) {
-		throw new \Exception($_language->module['access_denied']);
-	}
-	
-    if (!validate_int($cup_id, true)) {
-        throw new \Exception($_language->module['access_denied']);
+if (!$loggedin || !iscupadmin($userID)) {
+    throw new \Exception($_language->module['access_denied']);
+}
+
+if (!validate_int($cup_id, true)) {
+    throw new \Exception($_language->module['access_denied']);
+}
+
+if (!isset($cupArray) || !validate_array($cupArray, true)) {
+    throw new \Exception($_language->module['access_denied']);
+}
+
+if (!isset($cupArray['id']) || ($cup_id != $cupArray['id'])) {
+    throw new \Exception($_language->module['access_denied']);
+}
+
+$cup_teams = getcup($cup_id, 'rand_teams');
+
+$arrlen = count($cup_teams);
+if ($arrlen < 1) {
+    throw new \Exception($_language->module['no_teams']);
+}
+
+$breakTimer = 0;
+$maxBreakTimer = 10;
+
+$break_while = true;
+while ($break_while == true) {
+
+    $shuffle_while = 0;
+    for($x=0;$x<$arrlen;$x+=2) {
+
+        $isTeam1 = (isset($cup_teams[$x]) && ($cup_teams[$x] == 0)) ?
+            TRUE : FALSE;
+
+        $isTeam2 = (isset($cup_teams[$x + 1]) && ($cup_teams[$x + 1] == 0)) ?
+            TRUE : FALSE;
+
+        if($isTeam1 && $isTeam2) {
+            $shuffle_while++;
+        }
+
     }
-    
-    if (!isset($cupArray) || !validate_array($cupArray, true)) {
-        throw new \Exception($_language->module['access_denied']);
+
+    if ($shuffle_while > 0) {
+        $cup_teams = getcup($cup_id, 'rand_teams');
+    } else {
+        break;
     }
-	
-    if (!isset($cupArray['id']) || ($cup_id != $cupArray['id'])) {
-        throw new \Exception($_language->module['access_denied']);
+
+    if ($breakTimer > $maxBreakTimer) {
+        throw new \Exception('rand_teams failed');
     }
-    
-	$cup_teams = getcup($cup_id, 'rand_teams');
-		
-	$arrlen = count($cup_teams);
-	if ($arrlen < 1) {
-		throw new \Exception($_language->module['no_teams']);
-	}
-	
-	$breakTimer = 0;
-	$maxBreakTimer = 10;
-	
-	$break_while = true;
-	while ($break_while == true) {
 
-		$shuffle_while = 0;
-		for($x=0;$x<$arrlen;$x+=2) {
-			
-			$isTeam1 = (isset($cup_teams[$x]) && ($cup_teams[$x] == 0)) ?
-				TRUE : FALSE;
-			
-			$isTeam2 = (isset($cup_teams[$x + 1]) && ($cup_teams[$x + 1] == 0)) ?
-				TRUE : FALSE;
-			
-			if($isTeam1 && $isTeam2) {
-				$shuffle_while++;
-			}
-			
-		}
-		
-		if ($shuffle_while > 0) {
-			$cup_teams = getcup($cup_id, 'rand_teams');
-		} else {
-			break;
-		}
-		
-		if ($breakTimer > $maxBreakTimer) {
-			throw new \Exception('rand_teams failed');
-		}
-		
-		$breakTimer++;
-	}
+    $breakTimer++;
+}
 
-    $cupArray['anz_teams'] = $cupArray['teams']['checked_in'];
-	$anzRunden 	= $cupArray['anz_runden'];
-	$anzMatches = $cupArray['size'] / 2;
+$cupArray['anz_teams'] = $cupArray['teams']['checked_in'];
+$anzRunden 	= $cupArray['anz_runden'];
+$anzMatches = $cupArray['size'] / 2;
 
-	for ($n = 1; $n < ($anzRunden + 1); $n++) {
+for ($n = 1; $n < ($anzRunden + 1); $n++) {
 
-        try {
-            
-            for ($i = 0; $i < $anzMatches; $i++) {
+    try {
 
-                //
-                // 15min nach Cup-Start
-                // start_date + (runde * 1h) + 15min
-                $date = $cupArray['start'] + ((($n - 1) * 3600) + 900);
+        for ($i = 0; $i < $anzMatches; $i++) {
 
-                //
-                // Map Pool
-                $mapList = getMaps($cupArray['mappool']);
+            //
+            // 15min nach Cup-Start
+            // start_date + (runde * 1h) + 15min
+            $date = $cupArray['start'] + ((($n - 1) * 3600) + 900);
 
-                $mapArray = array(
-                    'open' => $mapList,
-                    'banned' => array(
-                        'team1' => array(),
-                        'team2' => array()
-                    ),
-                    'picked' => array(),
-                    'list' => $mapList
-                );
-                
-                $maps = serialize($mapArray);
+            //
+            // Map Pool
+            $mapList = getMaps($cupArray['mappool']);
 
-                //
-                // Match Query
-                $query1 = mysqli_query(
-                    $_database, 
-                    "INSERT INTO `" . PREFIX . "cups_matches_playoff` 
-                        (
-                            `cupID`, 
-                            `wb`, 
-                            `runde`, 
-                            `spiel`, 
-                            `date`, 
-                            `maps`
-                        ) 
-                        VALUES 
-                        ( 
-                            " . $cup_id . ", 
-                            1, 
-                            " . $n . ", 
-                            " . ($i + 1) . ", 
-                            " . $date . ", 
-                            '" . $maps . "'
-                        )"
-                );
+            $mapArray = array(
+                'open' => $mapList,
+                'banned' => array(
+                    'team1' => array(),
+                    'team2' => array()
+                ),
+                'picked' => array(),
+                'list' => $mapList
+            );
 
-                if (!$query1) {
-                    throw new \Exception('cups_matches_playoff_query_insert_failed');
+            $maps = serialize($mapArray);
+
+            //
+            // Match Query
+            $query1 = mysqli_query(
+                $_database,
+                "INSERT INTO `" . PREFIX . "cups_matches_playoff`
+                    (
+                        `cupID`,
+                        `wb`,
+                        `runde`,
+                        `spiel`,
+                        `date`,
+                        `maps`
+                    )
+                    VALUES
+                    (
+                        " . $cup_id . ",
+                        1,
+                        " . $n . ",
+                        " . ($i + 1) . ",
+                        " . $date . ",
+                        '" . $maps . "'
+                    )"
+            );
+
+            if (!$query1) {
+                throw new \Exception('cups_matches_playoff_query_insert_failed');
+            }
+
+            $match_id = mysqli_insert_id($_database);
+
+            //
+            // Update Matches Round 1
+            // Set Teams and Def-Wins
+            if ($n==1) {
+
+                $team1_id = $i * 2;
+                $team2_id = $team1_id + 1;
+
+                if (!$cup_teams[$team1_id]) {
+                    $team1 = 0;
+                } else {
+                    $team1 = $cup_teams[$team1_id];
                 }
 
-                $match_id = mysqli_insert_id($_database);
-
-                //
-                // Update Matches Round 1
-                // Set Teams and Def-Wins
-                if ($n==1) {
-
-                    $team1_id = $i * 2;
-                    $team2_id = $team1_id + 1;
-
-                    if (!$cup_teams[$team1_id]) {
-                        $team1 = 0;
-                    } else {
-                        $team1 = $cup_teams[$team1_id];
-                    }
-                    
-                    if (!$cup_teams[$team2_id]) {
-                        $team2 = 0;
-                    } else {
-                        $team2 = $cup_teams[$team2_id];
-                    }
-                    
-                    $freilos1 = ($team1 == 0) ? 1 : 0;
-                    $freilos2 = ($team2 == 0) ? 1 : 0;
-
-                    $query2 = mysqli_query(
-                        $_database, 
-                        "UPDATE `" . PREFIX . "cups_matches_playoff` 
-                            SET team1 = " . $team1 . ",
-                                team1_freilos = " . $freilos1 . ", 
-                                ergebnis1 = 0, 
-                                team2 = " . $team2 . ", 
-                                team2_freilos = " . $freilos2 . ", 
-                                ergebnis2 = 0, 
-                                active = 1 
-                            WHERE `matchID` = " . $match_id
-                    );
-
-                    if (!$query2) {
-                        throw new \Exception('cups_matches_playoff_query_update_failed');
-                    }
-
+                if (!$cup_teams[$team2_id]) {
+                    $team2 = 0;
+                } else {
+                    $team2 = $cup_teams[$team2_id];
                 }
 
-                if ($cupArray['anz_teams'] > 2) {
+                $freilos1 = ($team1 == 0) ? 1 : 0;
+                $freilos2 = ($team2 == 0) ? 1 : 0;
+
+                $query2 = mysqli_query(
+                    $_database,
+                    "UPDATE `" . PREFIX . "cups_matches_playoff`
+                        SET team1 = " . $team1 . ",
+                            team1_freilos = " . $freilos1 . ",
+                            ergebnis1 = 0,
+                            team2 = " . $team2 . ",
+                            team2_freilos = " . $freilos2 . ",
+                            ergebnis2 = 0,
+                            active = 1
+                        WHERE `matchID` = " . $match_id
+                );
+
+                if (!$query2) {
+                    throw new \Exception('cups_matches_playoff_query_update_failed');
+                }
+
+            }
+
+            if ($cupArray['anz_teams'] > 2) {
+
+                //
+                // Spiel um Platz 3
+                if ($n == $anzRunden) {
 
                     //
-                    // Spiel um Platz 3 
-                    if ($n == $anzRunden) {
+                    // Match Query
+                    $query1 = mysqli_query(
+                        $_database,
+                        "INSERT INTO `" . PREFIX . "cups_matches_playoff` 
+                            (
+                                `cupID`,
+                                `wb`,
+                                `runde`,
+                                `spiel`,
+                                `date`,
+                                `maps`
+                            )
+                            VALUES
+                            (
+                                " . $cup_id . ",
+                                0,
+                                " . $n . ",
+                                " . ($i + 1) . ",
+                                " . $date . ",
+                                '" . $maps . "'
+                            )"
+                    );
 
-                        //
-                        // Match Query
-                        $query1 = mysqli_query(
-                            $_database, 
-                            "INSERT INTO `" . PREFIX . "cups_matches_playoff` 
-                                (
-                                    `cupID`, 
-                                    `wb`, 
-                                    `runde`, 
-                                    `spiel`, 
-                                    `date`, 
-                                    `maps`
-                                ) 
-                                VALUES 
-                                ( 
-                                    " . $cup_id . ", 
-                                    0, 
-                                    " . $n . ", 
-                                    " . ($i + 1) . ", 
-                                    " . $date . ", 
-                                    '" . $maps . "'
-                                )"
-                        );
-
-                        if (!$query1) {
-                            throw new \Exception('cups_matches_playoff_query_insert_failed');
-                        }
-
-                        $match_id = mysqli_insert_id($_database);
-
+                    if (!$query1) {
+                        throw new \Exception('cups_matches_playoff_query_insert_failed');
                     }
+
+                    $match_id = mysqli_insert_id($_database);
 
                 }
 
             }
 
-            $anzMatches = $anzMatches / 2;
-
-        } catch (Exception $e) {
-            echo showError($e->getMessage());
         }
 
-	}
+        $anzMatches = $anzMatches / 2;
 
-    header('Location: admincenter.php?site=cup&mod=cup&action=cup&id=' . $cup_id);
-    
-} catch (Exception $e) {
-	echo showError($e->getMessage());
+    } catch (Exception $e) {
+        echo showError($e->getMessage());
+    }
+
 }

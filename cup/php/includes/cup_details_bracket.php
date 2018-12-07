@@ -10,7 +10,7 @@ if (($cupArray['status'] > 1)) {
 
     $bracket = '';
 
-    $bracketFile = $dir_cup . 'cup_bracket.php';
+    $bracketFile = __DIR__ . '/../cup_bracket.php';
     if (file_exists($bracketFile)) {
         include($bracketFile);
     }
