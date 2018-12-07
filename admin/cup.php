@@ -13,12 +13,15 @@ try {
         throw new \Exception($_language->module['login']);
     }
 
-    $mod = isset($_GET['mod']) ?
+    $mod = (isset($_GET['mod'])) ?
         getinput($_GET['mod']) : 'cup';
 
     $cup_base_path = __DIR__ . '/../cup/php/';
 
     if ($mod == 'cup') {
+
+        $getStatus = (isset($_GET['status'])) ?
+            getinput($_GET['status']) : '';
 
         if ( $getAction == "add" ) {
 
@@ -26,8 +29,7 @@ try {
             if (file_exists(__DIR__ . '/cup_admin/cup_add.php')) {
                 include(__DIR__ . '/cup_admin/cup_add.php');
             } else {
-                // Fehler
-                include(__DIR__ . '/../error.php');
+                throw new \Exception($_language->module['access_denied']);
             }
 
         } else if ( $getAction == "edit" && isset($_GET['id']) ) {
@@ -51,8 +53,7 @@ try {
                 // Cup starten und Gruppen erstellen
                 include(__DIR__ . '/cup_admin/includes/cup_start_groupstage.php');
             } else {
-                // Fehler
-                include(__DIR__ . '/../error.php');
+                throw new \Exception($_language->module['access_denied']);
             }
 
         } else if ( $getAction == "finish" && !empty($getStatus) && isset($_GET['id']) ) {
@@ -77,7 +78,7 @@ try {
     } else if (file_exists(__DIR__ . '/cup_admin/' . $mod . '.php')) {
         include(__DIR__ . '/cup_admin/' . $mod . '.php');
     } else {
-        echo showError($_language->module['access_denied']);
+        throw new \Exception($_language->module['access_denied']);
     }
 
 } catch (Exception $e) {
