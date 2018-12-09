@@ -33,7 +33,7 @@ try {
         throw new \Exception($_language->module['no_cup']);
     }
 
-	if (!isset($cupArray['status']) || ($cupArray['status'] > 1)) {
+    if (!isset($cupArray['status']) || ($cupArray['status'] > 1)) {
         throw new \Exception($_language->module['status_running']);
     }
 
@@ -63,7 +63,7 @@ try {
         }
 
         $team_anz = $cupArray['teams']['checked_in'];
-        if ($team_anz > $cupArray['max_size']) {
+        if ($team_anz > $cupArray['size']) {
             // kein Platz mehr frei
             throw new \Exception($_language->module['error_cup_full']);
         }

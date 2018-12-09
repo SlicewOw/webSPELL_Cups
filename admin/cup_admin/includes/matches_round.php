@@ -107,10 +107,7 @@ try {
         $info = '';
         $info .= '<span class="pull-right">';
 
-        /**
-         * Add missing function getCommentCount($parent_id, $category)
-         */
-        $anzComments = 0;
+        $anzComments = getCommentCount($matchID, 'cm');
         $anzComments = ($anzComments != 1) ?
             $anzComments.' '.$_language->module['comments'] :
             $anzComments.' '.$_language->module['comment'];

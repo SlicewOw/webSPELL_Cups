@@ -4,7 +4,34 @@
  * General
  **/
 
-/* SPONSORS */
+function getCommentCount($comment_id, $type = 'ne') {
+
+    global $_database;
+
+    $returnValue = 0;
+
+    if (!validate_int($comment_id, true)) {
+        return $returnValue;
+    }
+
+    $selectQuery = mysqli_query(
+        $_database,
+        "SELECT
+                COUNT(*) AS `count`
+            FROM `" . PREFIX . "comments`
+            WHERE `type` = '".$type."' AND `parentID` = " . $comment_id
+    );
+
+    if (!$selectQuery) {
+        return $returnValue;
+    }
+
+    $get = mysqli_fetch_array($selectQuery);
+
+    return $get['count'];
+
+}
+
 function getsponsor($sponsor_id, $cat = '') {
 
     if (!validate_int($sponsor_id, true)) {
@@ -1384,52 +1411,101 @@ function getcups($cat = '', $selected = '') {
 
 /* Cup Kontrolle */
 function cup($cupID, $teamID, $cat) {
+
     global $_database;
 
-    if($cat == 'join') {
+    if (!validate_int($cupID, true)) {
+        return FALSE;
+    }
 
-        $get = mysqli_fetch_array(
-            mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teilnehmer` 
-                    WHERE cupID = ".$cupID." AND teamID = ".$teamID
-            )
+    if (!validate_int($teamID, true)) {
+        return FALSE;
+    }
+
+    if (empty($cat)) {
+        return FALSE;
+    }
+
+    $cupMode = getcup($cupID, 'mode');
+
+    if ($cat == 'join') {
+
+        /**
+         * Return value:
+         * true  = user/team can join cup
+         * false = user/team joined cup already
+         */
+
+        $selectQuery = mysqli_query(
+            $_database,
+            "SELECT
+                    COUNT(*) AS `anz`
+                FROM `" . PREFIX . "cups_teilnehmer`
+                WHERE `cupID` = " . $cupID . " AND `teamID` = " . $teamID
         );
 
+        if (!$selectQuery) {
+            return FALSE;
+        }
+
+        $get = mysqli_fetch_array($selectQuery);
+
         $returnValue = TRUE;
-        if ($get['anz'] > 0) {
+        if ($get['anz'] == 1) {
             // Team ist bereits angemeldet
             $returnValue = FALSE;
         } else {
 
-            $ergebnis = mysqli_query(
-                $_database, 
-                "SELECT userID FROM `".PREFIX."cups_teams_member` 
-                    WHERE teamID = ".$teamID." AND active = 1"
-            );
-            while($ds = mysqli_fetch_array($ergebnis)) {
+            if ($cupMode == '1on1') {
+                return TRUE;
+            } else {
 
-                $team = mysqli_query(
-                    $_database, 
-                    "SELECT teamID FROM `".PREFIX."cups_teams_member` 
-                        WHERE userID = ".$ds['userID']." AND active = 1"
+                $ergebnis = mysqli_query(
+                    $_database,
+                    "SELECT
+                            `userID`
+                        FROM `" . PREFIX . "cups_teams_member`
+                        WHERE `teamID` = " . $teamID . " AND `active` = 1"
                 );
-                while($dx = mysqli_fetch_array($team)) {
 
-                    $get = mysqli_fetch_array(
-                        mysqli_query(
-                            $_database, 
-                            "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teilnehmer` 
-                                WHERE cupID = ".$cupID." AND teamID = ".$dx['teamID']
-                        )
+                if (!$ergebnis) {
+                    return FALSE;
+                }
+
+                while ($ds = mysqli_fetch_array($ergebnis)) {
+
+                    $team = mysqli_query(
+                        $_database,
+                        "SELECT
+                                `teamID`
+                            FROM `" . PREFIX . "cups_teams_member`
+                            WHERE userID = ".$ds['userID']." AND active = 1"
                     );
-                    if($get['anz'] > 0) {
-                        // Mitglied des Teams ist bereits beim Cup angemeldet
-                        $returnValue = FALSE;
-                        break;
+
+                    if (!$team) {
+                        return FALSE;
                     }
 
+                    while ($dx = mysqli_fetch_array($team)) {
+
+                        $get = mysqli_fetch_array(
+                            mysqli_query(
+                                $_database,
+                                "SELECT
+                                        COUNT(*) AS `anz`
+                                    FROM `" . PREFIX . "cups_teilnehmer`
+                                    WHERE `cupID` = " . $cupID . " AND `teamID` = " . $dx['teamID']
+                            )
+                        );
+
+                        if ($get['anz'] > 0) {
+                            // Mitglied des Teams ist bereits beim Cup angemeldet
+                            return FALSE;
+                        }
+
+                    }
                 }
+
             }
 
         }
@@ -3027,16 +3103,16 @@ function getticket($ticketID, $cat) {
     return $returnValue;
 }
 function getticket_anz($status, $user_id, $cat) {
-    
-	global $_database;
 
-	$returnValue = 0;
-    
+    global $_database;
+
+    $returnValue = 0;
+
     $whereClauseArray = array();
-    
-	if ($cat == 'anz_new_answer') {
 
-	    $whereClause = '(userID = '.$user_id;
+    if ($cat == 'anz_new_answer') {
+
+        $whereClause = '(userID = '.$user_id;
 
         $teamArray = getteam($user_id, 'teamID');
         if (validate_array($teamArray, true)) {
@@ -3051,17 +3127,17 @@ function getticket_anz($status, $user_id, $cat) {
         $whereClause .= ')';
 
         $whereClauseArray[] = $whereClause;
-        
+
     } else if ($cat == 'anz_new_answer_admin') {
-        
+
         if (validate_int($user_id, true)) {
             $whereClauseArray[] = '`adminID` = ' . $user_id;
         }
-        
+
     } else {
         return -1;
     }
-        
+
     if (validate_int($status, true)) {
         $whereClauseArray[] = '`status` = ' . $status;
     } else {
@@ -3071,9 +3147,9 @@ function getticket_anz($status, $user_id, $cat) {
     if (!validate_array($whereClauseArray, true)) {
         return -1;
     }
-    
+
     $whereClause = implode(' AND ', $whereClauseArray);
-    
+
     $query = mysqli_query(
         $_database,
         "SELECT 
@@ -3083,27 +3159,27 @@ function getticket_anz($status, $user_id, $cat) {
             FROM `" . PREFIX . "cups_supporttickets` 
             WHERE " . $whereClause
     );
-    
+
     if (!$query) {
         return -1;
     }
 
     $baseWhereClauseArray = array();
     $baseWhereClauseArray[] = '(`ticket_seen_date` IS NULL OR `ticket_seen_date` < ' . time() . ')';
-    
+
     while ($ds = mysqli_fetch_array($query)) {
 
         $ticket_id = $ds['ticketID'];
         $admin = ($cat == 'anz_new_answer_admin') ?
             1 : 0;
-        
+
         $whereClauseArray = array();
         $whereClauseArray[] = '`ticket_id` = ' . $ticket_id;
         $whereClauseArray[] = '`primary_id` = ' . $user_id;
         $whereClauseArray[] = '`admin` = ' . $admin;
-        
+
         $whereClause = implode(' AND ', $whereClauseArray);
-        
+
         $selectQuery = mysqli_query(
             $_database,
             "SELECT 
@@ -3111,24 +3187,24 @@ function getticket_anz($status, $user_id, $cat) {
                 FROM `" . PREFIX . "cups_supporttickets_status` 
                 WHERE " . $whereClause
         );
-        
+
         if (!$selectQuery) {
             return -1;
         }
 
         $status_counter = mysqli_num_rows($selectQuery);
-        
+
         $statusGet = mysqli_fetch_array($selectQuery);
 
         /**
          * Es muss noch der letzte Ticket Content geholt werden (Datum) und verglichen werden anstelle des time()
          */
-        
+
         if ($status_counter == 0) {
             insertTicketStatus($ticket_id, $user_id, $admin, -1);
             $returnValue++;
         } else {
-            
+
             $whereClauseArray = array();
             $whereClauseArray[] = '`ticketID` = ' . $ticket_id;
 
@@ -3153,13 +3229,13 @@ function getticket_anz($status, $user_id, $cat) {
             if (is_null($statusGet['ticket_seen_date']) || ($statusGet['ticket_seen_date'] < $contentGet['date'])) {
                 $returnValue++;
             }
-            
+
         }
 
     }
 
-	return $returnValue;
-    
+    return $returnValue;
+
 }
 
 function getticketcategories($selected = '', $addEmptyOption = TRUE) {

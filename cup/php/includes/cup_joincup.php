@@ -33,12 +33,12 @@ try {
         throw new \Exception($_language->module['no_cup']);
     }
 
-    $cupname 	= $cupArray['name'];
-    $checkin 	= getformatdatetime($cupArray['checkin']);
-    $start 		= getformatdatetime($cupArray['start']);
-    $maxSize 	= $cupArray['size'];
-    $maxMode 	= $cupArray['max_mode'];
-    $mode 		= $cupArray['mode'];
+    $cupname = $cupArray['name'];
+    $checkin = getformatdatetime($cupArray['checkin']);
+    $start = getformatdatetime($cupArray['start']);
+    $maxSize = $cupArray['size'];
+    $maxMode = $cupArray['max_mode'];
+    $mode = $cupArray['mode'];
 
     if (validate_array($_POST, true)) {
 
@@ -60,7 +60,7 @@ try {
                 }
 
                 $anzMember = getteam($teamID, 'anz_member');
-                if ($mode == '1on1')	{
+                if ($mode == '1on1') {
                     // Benutzer ist eingeloggt und nimmt an Cup teil
                     $mode_ok = TRUE;
                 } else if (($mode == '2on2') && ($anzMember == '2')) {
