@@ -35,7 +35,7 @@ try {
 
     $bracket = '';
 
-    $adminMatchesRoundInclude = $dir_cup . 'admin/includes/matches_round.php';
+    $adminMatchesRoundInclude = __DIR__ . '/../../../admin/cup_admin/includes/matches_round.php';
     if (!file_exists($adminMatchesRoundInclude)) {
         throw new \Exception($_language->module['unknown_action']);
     }
