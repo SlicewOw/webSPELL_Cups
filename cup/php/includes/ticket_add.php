@@ -97,8 +97,8 @@ try {
 
                 $_language->readModule('formvalidation', true, true);
 
-                $serverPath = '../../images/cup/ticket_screenshots/';
-                $globalPath = __DIR__ . '/' . $serverPath;
+                $serverPath = 'images/cup/ticket_screenshots/';
+                $globalPath = __DIR__ . '/../../' . $serverPath;
 
                 $upload = new \webspell\HttpUpload('screenshot');
                 if ($upload->hasFile() && ($upload->hasError() === false)) {
@@ -134,7 +134,7 @@ try {
                         @chmod($globalPath . $fileName, 0777);
 
                         $query = mysqli_query(
-                            $_database, 
+                            $_database,
                             "UPDATE `" . PREFIX . "cups_supporttickets`
                                 SET `screenshot` = '" . $filename . "'
                                 WHERE `ticketID` = " . $ticket_id
@@ -147,6 +147,8 @@ try {
                     }
 
                 }
+
+                $parent_url .= '&action=details&id=' . $ticket_id;
 
             } else {
                 throw new \Exception($_language->module['unknown_action']);

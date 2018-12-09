@@ -69,7 +69,7 @@ try {
 
         //
         // Bestehendes Ticket
-        include($dir_cup . 'ticket_add_answer.php');
+        include(__DIR__ . '/includes/ticket_add_answer.php');
 
     } else if ($getAction == 'admin_add') {
 

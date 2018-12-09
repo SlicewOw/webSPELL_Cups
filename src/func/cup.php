@@ -3204,32 +3204,38 @@ function getticketcategories($selected = '', $addEmptyOption = TRUE) {
 
 }
 function getTicketAccess($ticket_id) {
+
     global $_database, $userID;
 
     $returnValue = FALSE;
 
     $teamArray = getteam($userID, 'teamID');
 
-    $whereClauseArray = array();
-    $whereClauseArray[] = '`userID` = '.$userID;
+    $andWhereClauseArray = array();
+    $andWhereClauseArray[] = '`ticketID` = '.$ticket_id;
+
+    $orWhereClauseArray = array();
+    $orWhereClauseArray[] = '`userID` = ' . $userID;
 
     if (validate_array($teamArray, true)) {
 
         $teamString = implode(', ', $teamArray);
 
-        $whereClauseArray[] = '`teamID` IN ('.$teamString.')';
-        $whereClauseArray[] = '`opponentID` IN ('.$teamString.')';
+        $orWhereClauseArray[] = '`teamID` IN ('.$teamString.')';
+        $orWhereClauseArray[] = '`opponentID` IN ('.$teamString.')';
 
     }
 
-    $whereClause = implode(' OR ', $whereClauseArray);
+    $andWhereClauseArray[] = '(' . implode(' OR ', $orWhereClauseArray) . ')';
+
+    $whereClause = implode(' AND ', $andWhereClauseArray);
 
     $query = mysqli_query(
         $_database,
         "SELECT
-            COUNT(*) AS `access`
-        FROM `" . PREFIX . "cups_supporttickets`
-        WHERE ticketID = " . $ticket_id . " AND (" . $whereClause . ")"
+                COUNT(*) AS `access`
+            FROM `" . PREFIX . "cups_supporttickets`
+            WHERE " . $whereClause
     );
 
     if (!$query) {
@@ -3254,7 +3260,7 @@ function getTicketSeenDate($ticket_id, $primary_id, $admin = 0) {
     $whereClause = implode(' AND ', $whereClauseArray);
 
     $selectQuery = mysqli_query(
-        $_database, 
+        $_database,
         "SELECT
                 COUNT(*) AS `exists`,
                 `ticket_seen_date`

@@ -1,35 +1,32 @@
 <?php
 
-$_language->readModule('cups');
+try {
 
-if ($loggedin) {
+    $_language->readModule('cups');
+
+    if (!$loggedin) {
+        throw new \Exception($_language->module['login']);
+    }
 
     if ($getAction == 'new_ticket') {
         // Neues Ticket eroeffnen
-        include($dir_cup . 'ticket_add.php');
-    } else if ($getAction == 'details' && isset($_GET['id']) && is_numeric($_GET['id'])) {
+        include(__DIR__ . '/includes/ticket_add.php');
+    } else if ($getAction == 'details' && isset($_GET['id'])) {
 
-        $ticket_id = (int)$_GET['id'];
-        // ticket($userID, $ticket_id, 'user')
-        if (getTicketAccess($ticket_id) || iscupadmin($userID)) {
-            // Neue Antwort auf Ticket schreiben
-            include($dir_cup . 'ticket_add_answer.php');
-        } else {
-            echo showError($_language->module['no_ticket_access']);
+        $ticket_id = (validate_int($_GET['id'], true)) ?
+            (int)$_GET['id'] : 0;
+
+        if ($ticket_id < 1) {
+            throw new \Exception($_language->module['no_ticket_access']);
         }
 
-    } else if ($getAction == 'admin' && iscupadmin($userID)) {
-        // Adminbereich
-        include($dir_cup . 'admin/ticket_admin.php');
-    } else if ($getAction == 'admin_add' && iscupadmin($userID)) {
-        // Adminbereich
-        include($dir_cup . 'ticket_add_admin.php');
+        if (!getTicketAccess($ticket_id)) {
+            throw new \Exception($_language->module['no_ticket_access']);
+        }
+
+        include(__DIR__ . '/includes/ticket_add_answer.php');
+
     } else {
-
-        $admin = '';
-        if(iscupadmin($userID)) {
-            $admin = ' <a class="btn btn-info btn-sm white darkshadow" href="index.php?site=support&amp;action=admin">Admin</a>';
-        }
 
         $teamArray = getteam($userID, 'teamID');
 
@@ -68,9 +65,7 @@ if ($loggedin) {
 
                 $ticketID = $ds['ticketID'];
 
-                if (iscupadmin($userID) && getticket($ticketID, 'new_answer_admin') > 0) {
-                    $panel_class = 'alert-info';
-                } else if (!iscupadmin($userID) && getticket($ticketID, 'new_answer') > 0) {
+                if (getticket($ticketID, 'new_answer') > 0) {
                     $panel_class = 'alert-info';
                 } else {
                     $panel_class = '';
@@ -109,13 +104,12 @@ if ($loggedin) {
         }
 
         $data_array = array();
-        $data_array['$admin'] = $admin;
         $data_array['$ticketList'] = $ticket_list;
         $ticket_home = $GLOBALS["_template_cup"]->replaceTemplate("ticket_home", $data_array);
         echo $ticket_home;
 
     }
 
-} else {
-    echo $_language->module['login'];
+} catch (Exception $e) {
+    echo showError($e->getMessage());
 }
