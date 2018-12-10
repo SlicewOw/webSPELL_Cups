@@ -2,7 +2,7 @@
 
 try {
 
-    $_language->readModule('login');
+    $_language->readModule('login', true);
 
     if ($loggedin) {
 

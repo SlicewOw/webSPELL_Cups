@@ -1,5 +1,7 @@
 <?php
 
+$_language->readModule('navigation');
+
 include($dir_cup . '/sc_activematches.php');
 
 if (!isset($activeMatches)) {
@@ -12,8 +14,6 @@ include(__DIR__ . '/sc_login.php');
 if (!isset($login)) {
     $login = '';
 }
-
-$_language->readModule('navigation', true);
 
 $data_array = array();
 $data_array['$isHome'] = ($getSite == 'home') ?

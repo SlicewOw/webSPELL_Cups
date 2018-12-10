@@ -32,6 +32,8 @@ $language_array = array(
     'hall_of_fame'=>'Hall of Fame',
     'home'=>'Home',
     'member_positions'=>'member positions',
+    'open_match'=>'match open',
+    'open_matches'=>'matches open',
     'policy'=>'Terms of Use',
 
 /* do not edit above this line */

@@ -18,7 +18,7 @@ try {
         throw new \Exception($_language->module['no_match']);
     }
 
-    $cupAdminAccess = (iscupadmin($userID)) ? 
+    $cupAdminAccess = (iscupadmin($userID)) ?
         TRUE : FALSE;
 
     if (!(getmatch($match_id, 'active_playoff') || $cupAdminAccess)) {
@@ -362,14 +362,11 @@ try {
                     $protest_url = 'index.php?site=support&amp;action=new_ticket&amp;matchID=' . $match_id;
 
                     $admin .= '<div class="clear"></div>';
-                    $admin .= '<div class="list-group">';
-                    $admin .= '<a class="list-group-item alert-info center" href="'.$protest_url.'">'.$_language->module['open_protest'].'</a>';
-                    $admin .= '</div>';
+                    $admin .= '<a style="width: 100%;" class="alert alert-danger center" href="'.$protest_url.'">'.$_language->module['open_protest'].'</a>';
 
                 }
 
             }
-
 
         }
 
@@ -409,7 +406,6 @@ try {
         $data_array = array();
         $data_array['$match_title'] = $teamArray[1]['name_url'].' vs. '.$teamArray[2]['name_url'];
         $data_array['$match_info'] 	= $match_info;
-        $data_array['$socials'] = $socials;
         $data_array['$team1_name'] 	= $teamArray[1]['name'];
         $data_array['$team1_url'] = $teamArray[1]['url'];
         $data_array['$match_logo1'] = $teamArray[1]['logotype'];

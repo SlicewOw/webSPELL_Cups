@@ -89,8 +89,8 @@ if ($mod_original === 'lostpassword') {
 
                 $match_id = (int)$_GET['mID'];
 
-                $value .= ' / <a href="' . $base_url . 'details&amp;id=' . $cup_id . '&amp;page=bracket#content">Bracket</a>';
-                $value .= ' / <a href="' . $base_url . 'match&amp;id=' . $cup_id . '&amp;mID=' . $match_id . '#content">Match</a>';
+                $value .= ' / <a href="' . $base_url . 'details&amp;id=' . $unique_id . '&amp;page=bracket#content">Bracket</a>';
+                $value .= ' / <a href="' . $base_url . 'match&amp;id=' . $unique_id . '&amp;mID=' . $match_id . '#content">Match</a>';
 
             }
 
