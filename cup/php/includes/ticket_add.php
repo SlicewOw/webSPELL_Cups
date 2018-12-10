@@ -98,7 +98,7 @@ try {
                 $_language->readModule('formvalidation', true, true);
 
                 $serverPath = 'images/cup/ticket_screenshots/';
-                $globalPath = __DIR__ . '/../../' . $serverPath;
+                $globalPath = __DIR__ . '/../../../' . $serverPath;
 
                 $upload = new \webspell\HttpUpload('screenshot');
                 if ($upload->hasFile() && ($upload->hasError() === false)) {
@@ -129,21 +129,21 @@ try {
 
                     $fileName = convert2filename($ticket_id) . $type;
 
-                    if ($upload->saveAs($serverPath . $fileName, true)) {
+                    if (!$upload->saveAs($serverPath . $fileName, true)) {
+                        throw new \Exception($_language->module['broken_image']);
+                    }
 
-                        @chmod($globalPath . $fileName, 0777);
+                    @chmod($globalPath . $fileName, 0777);
 
-                        $query = mysqli_query(
-                            $_database,
-                            "UPDATE `" . PREFIX . "cups_supporttickets`
-                                SET `screenshot` = '" . $filename . "'
-                                WHERE `ticketID` = " . $ticket_id
-                        );
+                    $query = mysqli_query(
+                        $_database,
+                        "UPDATE `" . PREFIX . "cups_supporttickets`
+                            SET `screenshot` = '" . $fileName . "'
+                            WHERE `ticketID` = " . $ticket_id
+                    );
 
-                        if (!$query) {
-                            throw new \Exception($_language->module['query_update_failed']);
-                        }
-
+                    if (!$query) {
+                        throw new \Exception($_language->module['query_update_failed']);
                     }
 
                 }

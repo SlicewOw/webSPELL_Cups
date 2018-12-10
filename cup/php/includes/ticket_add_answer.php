@@ -211,7 +211,7 @@ try {
         $ticketInfoArray = array();
 
         if (!empty($db['ticket_screenshot'])) {
-            if (file_exists(__DIR__ . '/../../images/cup/ticket_screenshots/' . $db['ticket_screenshot'])) {
+            if (file_exists(__DIR__ . '/../../../images/cup/ticket_screenshots/' . $db['ticket_screenshot'])) {
                 $ticketInfoArray[] = 'Screenshot: <a href="' . $imageLink . $db['ticket_screenshot'] . '" target="_blank" class="blue">' . $db['ticket_screenshot'] . '</a>';
             } else {
                 $ticketInfoArray[] = 'Screenshot: <del>' . $db['ticket_screenshot'] . '</del>';
