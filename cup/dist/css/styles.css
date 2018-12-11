@@ -922,6 +922,44 @@ input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; m
 .cup_bracket_8_match				{ width: 212px; height: 60px; }
 .cup_bracket_8_match a				{ width: 212px; height: 60px; display: block; }
 
+/* BRACKET 4 */
+.cup_bracket_4 {
+    float: left;
+    width: 22%;
+    height: auto;
+}
+.cup_bracket_4_break {
+    float: left;
+    width: 38px;
+    height: 30px;
+}
+#cup_bracket_4_line_2-1 {
+    background: url(https://images.myrisk-ev.de/cup/brackets/break_8_2-1.png) no-repeat;
+    margin: 0;
+    min-height: 240px;
+}
+.cup_bracket_4_break_2 {
+    width: 100%;
+    height: 120px;
+}
+.cup_bracket_4_break_sup3 {
+    width: 100%;
+    height: 30px;
+}
+.cup_bracket_4_break_1_start {
+    width: 100%;
+    height: 90px;
+}
+.cup_bracket_4_match {
+    width: 212px;
+    height: 60px;
+}
+.cup_bracket_4_match a {
+    width: 212px;
+    height: 60px;
+    display: block;
+}
+
 /* BRACKET MATCH */
 .cup_bracket_match:hover			{ background: rgba(38,93,165,0.1); }
 span.cup_bracket_match_team_home	{ position: absolute; width: 100px; height: 20px; margin: 0 0 0 10px; overflow: hidden; display: block; }
