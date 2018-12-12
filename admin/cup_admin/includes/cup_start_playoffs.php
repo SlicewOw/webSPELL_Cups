@@ -28,6 +28,10 @@ try {
     //
     // Bracket zu gross?
     $anzTeams = $cupArray['teams']['checked_in'];
+    if ($anzTeams < 1) {
+        throw new \Exception($_language->module['no_teams']);
+    }
+
     if ($anzTeams < 3) {
         $setValueArray[] = '`max_size` = 2';
     } else if ($anzTeams < 5) {
@@ -58,10 +62,6 @@ try {
             WHERE `cupID` = " . $cup_id
     );
 
-    if (!$query) {
-        throw new \Exception($_language->module['error_update_query_failed']);
-    }
-
     //
     // Bracket erstellen
     $createBracket = __DIR__ . '/cup_start_playoffs_bracket.php';
@@ -71,6 +71,9 @@ try {
 
     include($createBracket);
 
+    if (!$query) {
+        throw new \Exception($_language->module['error_update_query_failed']);
+    }
     $_SESSION['successArray'][] = $_language->module['bracket_created'];
 
     $parent_url .= '&page=bracket';
