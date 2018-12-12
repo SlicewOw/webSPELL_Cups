@@ -24,9 +24,9 @@
 $(document).ready(function() {
 
     setDefaultMessage();
-    
+
     $("select[name=categoryID]").change(function () {
-        
+
         if ($("select[name=categoryID]").val() === "0") {
             setDefaultMessage();
             $("button[name=submitAddAdminTicket]").attr('disabled', 'disabled');
@@ -34,7 +34,7 @@ $(document).ready(function() {
             ticketUpdate('category', '', '');
             $("button[name=submitAddAdminTicket]").removeAttr('disabled');
         }
-        
+
     });
 
 });
@@ -42,7 +42,7 @@ $(document).ready(function() {
 function setDefaultMessage() {
     $("#ticketDetailsContainer").html('<span class="italic grey">%select_ticket_category%</span>');
 }
-    
+
 function getMatchOptions(cup_id) {
 
     if (cup_id > 0) {
@@ -85,14 +85,18 @@ function ticketUpdate(category, value, insertDivID) {
             value : value
         },
         function (data, status) {
-            
-            var dataArray = JSON.parse(data),
+
+            if (status !== "success") {
+                return;
+            }
+
+            var varData = JSON.parse(data),
                 content,
                 i;
-            
-            if (dataArray.status) {
-                
-                content = dataArray.html;
+
+            if (varData.status) {
+
+                content = varData.html;
 
                 if (category === 'category') {
 
@@ -105,22 +109,22 @@ function ticketUpdate(category, value, insertDivID) {
 
                     for (i = 1; i < 3; i++) {
 
-                        $("#team" + i + "_name").html(dataArray.data.team[i].name);
-                        $("input[name=team" + i + "_id]").val(dataArray.data.team[i].team_id);
-                        $("#team" + i + "_player").html(dataArray.data.player[i]);
+                        $("#team" + i + "_name").html(varData.data.team[i].name);
+                        $("input[name=team" + i + "_id]").val(varData.data.team[i].team_id);
+                        $("#team" + i + "_player").html(varData.data.player[i]);
 
                     }
 
                 } else if (insertDivID !== '') {
                     $(insertDivID).html(content);
                 }
-                
+
             } else {
                 showMultipleNotifies(varData.message, 'error');
             }
-            
+
         }
-    );	
-	
+    );
+
 }
 </script>

@@ -1,7 +1,7 @@
 <?php
 
 try {
-    
+
     $_language->readModule('support', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
@@ -9,11 +9,11 @@ try {
     }
 
     if (validate_array($_POST, true)) {
-     
+
         $parent_url = 'admincenter.php?site=cup&mod=support';
-        
+
         try {
-            
+
             if(isset($_POST['submitAddAdminTicket'])) {
 
                 $text = (isset($_POST['text'])) ? 
@@ -236,11 +236,11 @@ try {
         } catch (Exception $e) {
             $_SESSION['errorArray'][] = $e->getMessage();
         }
-        
+
         header('Location: ' . $parent_url);
-        
+
     } else {
-        
+
         $name = '';
 
         $catID = isset($_GET['catID']) ? (int)$_GET['catID'] : '0';
@@ -304,11 +304,11 @@ try {
                 if ($dx['team2'] > 0) { 
                     $team2 = getteam($dx['team2'], 'name'); 
                 }
-                
+
                 if (!empty($team1) && !empty($team2)) {
                     $matches .= '<option value="'.$dx['matchID'].'">Match #'.$dx['matchID'].' - '.$team1.' vs. '.$team2.'</option>';
                 }
-                
+
             }
 
             if (!empty($matchID)) {
@@ -366,7 +366,7 @@ try {
         $text = '';
 
         if(isset($_SESSION['support']) && validate_array($_SESSION['support'])) {
-            
+
             if(isset($_SESSION['support']['category_id'])) {
 
                 $categories = str_replace(
@@ -378,7 +378,7 @@ try {
             }
 
             if(isset($_SESSION['support']['cup_id'])) {
-                
+
                 $cups = str_replace(
                     'value="'.$_SESSION['support']['cup_id'].'"',
                     'value="'.$_SESSION['support']['cup_id'].'" selected="selected"',
@@ -388,7 +388,7 @@ try {
             }
 
             if(isset($_SESSION['support']['match_id'])) {
-                
+
                 $matches = str_replace(
                     'value="'.$_SESSION['support']['match_id'].'"',
                     'value="'.$_SESSION['support']['match_id'].'" selected="selected"',
@@ -398,7 +398,7 @@ try {
             }
 
             if(isset($_SESSION['support']['team_id'])) {
-                
+
                 $teams = str_replace(
                     'value="'.$_SESSION['support']['team_id'].'"',
                     'value="'.$_SESSION['support']['team_id'].'" selected="selected"',
@@ -408,7 +408,7 @@ try {
             }
 
             if(isset($_SESSION['support']['player_id'])) {
-                
+
                 $users = str_replace(
                     'value="'.$_SESSION['support']['player_id'].'"',
                     'value="'.$_SESSION['support']['player_id'].'" selected="selected"',
@@ -416,9 +416,9 @@ try {
                 );
 
             }
-            
+
             unset($_SESSION['support']);
-            
+
         }
 
         $urlArray = array();
@@ -447,9 +447,9 @@ try {
         $data_array['$text'] = $text;
         $ticket_add_admin = $GLOBALS["_template_cup"]->replaceTemplate("ticket_add_admin", $data_array);
         echo $ticket_add_admin;
-        
+
     }
-    
-} catch(Exception $e) {
+
+} catch (Exception $e) {
     echo showError($e->getMessage());
 }

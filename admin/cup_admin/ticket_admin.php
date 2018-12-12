@@ -75,7 +75,7 @@ try {
 
         //
         // Admin Ticket erstellen
-        include($dir_cup . 'ticket_add_admin.php');
+        include(__DIR__ . '/includes/ticket_add_admin.php');
 
     } else if ($getAction == 'archive') {
 
