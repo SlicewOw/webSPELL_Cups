@@ -960,6 +960,33 @@ input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; m
     display: block;
 }
 
+/* BRACKET 4 */
+.cup_bracket_2 {
+    float: left;
+    width: 22%;
+    height: auto;
+    margin: 20px 0 20px 20px;
+}
+.cup_bracket_2_match {
+    width: 212px;
+    height: 60px;
+}
+.cup_bracket_2_match > a {
+    width: 212px;
+    height: 60px;
+    display: block;
+}
+.cup_bracket_4_match > a > .cup_bracket_match_team_id,
+.cup_bracket_2_match > a > .cup_bracket_match_team_id {
+    margin-left: 158px;
+}
+.cup_bracket_4_match > a > .cup_bracket_match_score_home,
+.cup_bracket_4_match > a > .cup_bracket_match_score_oppo,
+.cup_bracket_2_match > a > .cup_bracket_match_score_home,
+.cup_bracket_2_match > a > .cup_bracket_match_score_oppo {
+    margin-left: 178px;
+}
+
 /* BRACKET MATCH */
 .cup_bracket_match:hover			{ background: rgba(38,93,165,0.1); }
 span.cup_bracket_match_team_home	{ position: absolute; width: 100px; height: 20px; margin: 0 0 0 10px; overflow: hidden; display: block; }

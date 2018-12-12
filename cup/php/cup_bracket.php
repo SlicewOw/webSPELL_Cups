@@ -296,8 +296,8 @@ if (($cup_id > 0) && !empty($cupArray)) {
             $score2_class = ' lose darkshadow';
         }
 
-        $score1 = '<span class="cup_bracket_match_score_home lh_twenty right ' . $score1_class . '">' . $matchArray['ergebnis1'] . '</span>';
-        $score2 = '<span class="cup_bracket_match_score_oppo lh_twenty right ' . $score2_class . '">' . $matchArray['ergebnis2'] . '</span>';
+        $score1 = '<span class="cup_bracket_match_score_home lh_twenty center ' . $score1_class . '">' . $matchArray['ergebnis1'] . '</span>';
+        $score2 = '<span class="cup_bracket_match_score_oppo lh_twenty center ' . $score2_class . '">' . $matchArray['ergebnis2'] . '</span>';
 
         $data_array = array();
         $data_array['$match_class'] = $match_class;
