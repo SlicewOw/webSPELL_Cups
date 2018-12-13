@@ -1,25 +1,36 @@
 <div class="form-group">
     <label>%player%</label>
-    <select name="player" id="player" 
+    <select name="player" id="player"
             class="form-control">
         $users
     </select>
 </div>
 <div class="form-group">
     <label>Screenshot</label>
-    <input type="file" name="screenshot" 
-           class="form-control" 
+    <input type="file" name="screenshot"
+           class="form-control"
            readonly="readonly"
            accept="image/*" />
 </div>
 <div class="form-group">
     <label>%subject%</label>
-    <input name="name" type="text" value="$name" 
-           class="form-control" 
-           placeholder="%subject%" 
+    <input name="name" type="text" value="$name"
+           class="form-control"
+           placeholder="%subject%"
            required="required" />
 </div>
 <div class="form-group">
     <label>Text</label>
-    <textarea name="text" class="form-control">$text</textarea>
+    <textarea name="text" id="text"
+              class="form-control">$text</textarea>
 </div>
+<script type="text/javascript">
+$(document).ready(function () {
+    CKEDITOR.replace(
+        'text',
+        {
+            stylesSet: []
+        }
+    );
+});
+</script>

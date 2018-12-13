@@ -1,47 +1,57 @@
 <div class="form-group">
     <label>Cup</label>
-    <select name="cupID" class="form-control" 
+    <select name="cupID" class="form-control"
             onchange="ticketUpdate(this.value, 'cup', 'matchID', '');">
         $cups
     </select>
 </div>
 <div class="form-group">
     <label>Match</label>
-    <select name="matchID" id="matchID" 
-            class="form-control" 
+    <select name="matchID" id="matchID"
+            class="form-control"
             onchange="ticketUpdate(this.value, 'match', 'teams', '');">
         $matches
     </select>
 </div>
 <div class="form-group">
     <label>Team</label>
-    <select name="teams" id="teams" 
-            class="form-control" 
+    <select name="teams" id="teams"
+            class="form-control"
             onchange="ticketUpdate(this.value, 'team', 'player', '');">
         $teams
     </select>
 </div>
 <div class="form-group">
     <label>%player%</label>
-    <select name="player" id="player" 
+    <select name="player" id="player"
             class="form-control">
         $users
     </select>
 </div>
 <div class="form-group">
     <label>Screenshot</label>
-    <input type="file" name="screenshot" 
+    <input type="file" name="screenshot"
            class="form-control" />
 </div>
 <div class="form-group">
     <label>%subject%</label>
-    <input name="name" type="text" 
-           value="$name" 
-           class="form-control" 
+    <input name="name" type="text"
+           value="$name"
+           class="form-control"
            placeholder="%subject%" required="required" />
 </div>
 <div class="form-group">
     <label>Text</label>
-    <textarea name="text" 
+    <textarea name="text" id="text"
               class="form-control">$text</textarea>
 </div>
+<script type="text/javascript">
+$(document).ready(function () {
+    CKEDITOR.replace(
+        'text',
+        {
+            stylesSet: []
+        }
+    );
+});
+</script>

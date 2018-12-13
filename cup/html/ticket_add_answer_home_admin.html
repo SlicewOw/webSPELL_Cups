@@ -3,7 +3,9 @@ $admin
     <div class="col-sm-9">
         <div class="panel panel-default">
             <div class="list-group">
-                <div class="list-group-item active">$ticket_name<span class="pull-right">$ticket_status</span></div>
+                <div class="list-group-item active">
+                    $ticket_name <span class="pull-right">$ticket_status</span>
+                </div>
                 <div class="list-group-item">$ticket_details</div>
                 $ticket_info
             </div>
@@ -27,3 +29,13 @@ $admin
         </div>
     </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function () {
+    CKEDITOR.replace(
+        'ticketAnswer',
+        {
+            stylesSet: []
+        }
+    );
+});
+</script>
