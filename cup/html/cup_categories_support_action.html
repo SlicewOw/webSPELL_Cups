@@ -5,29 +5,38 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                     <div class="form-group">
                         <label>Name DE *</label>
-                        <input type="text" class="form-control" 
-                               name="name_de" 
+                        <input type="text" class="form-control"
+                               name="name_de"
                                value="$name_de"
                                required="required" />
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                     <div class="form-group">
                         <label>Name UK *</label>
-                        <input type="text" class="form-control" 
-                               name="name_uk" 
+                        <input type="text" class="form-control"
+                               name="name_uk"
                                value="$name_uk"
                                required="required" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Template *</label>
+                        <select class="form-control"
+                               name="template">
+                            $support_templates
+                        </select>
                     </div>
                 </div>
             </div>
         </div>
         <div class="panel-footer">
             <input type="hidden" name="cat_id" value="$category_id" />
-            <button type="submit" name="submit_support" 
+            <button type="submit" name="submit_support"
                     class="btn btn-info btn-sm white darkshadow">
                 %save%
             </button>

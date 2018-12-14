@@ -3437,6 +3437,33 @@ function setTicketSeenDate($ticket_id, $primary_id, $admin = 0) {
 
 }
 
+function getSupportTemplatesAsOptions($select_template = '') {
+
+    $supportTemplateArray = array(
+        'default',
+        'bug_report',
+        'gameaccount',
+        'match_protest',
+        'support'
+    );
+
+    $options = '';
+    foreach ($supportTemplateArray as $template) {
+        $options .= '<option value="' . $template . '">' . $template . '</option>';
+    }
+
+    if (!empty($select_template)) {
+        $options = str_replace(
+            'value="' . $select_template . '"',
+            'value="' . $select_template . '" selected="selected"',
+            $options
+        );
+    }
+
+    return $options;
+
+}
+
 /* Awards */
 function getawardcat($award_id, $cat = '') {
     global $_database;
