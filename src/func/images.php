@@ -293,3 +293,32 @@ function getCupTeamImage($team_id, $returnAsFullImageLink = TRUE) {
     }
 
 }
+
+/**
+ * Country
+ */
+function getCountryImage($country_short_name, $returnAsFullImageLink = TRUE) {
+
+    $default_image = 'eu';
+
+    if (empty($country_short_name) || (strlen($country_short_name) > 3)) {
+        $country_short_name = $default_image;
+    }
+
+    $imagePath = '/flags/' . $country_short_name . '.gif';
+    $filePath = __DIR__ . '/../../images' . $imagePath;
+
+    if (!file_exists($filePath)) {
+        $imagePath = '/flags/' . $default_image . '.gif';
+        $filePath = __DIR__ . '/../../images' . $imagePath;
+    }
+
+    global $image_url;
+
+    if ($returnAsFullImageLink) {
+        return $image_url . $imagePath;
+    } else {
+        return $country_short_name . '.gif';
+    }
+
+}
