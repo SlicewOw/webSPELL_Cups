@@ -317,3 +317,11 @@ body {
     background: rgba(19, 19, 19, 0.2);
     border: 1px rgba(19, 19, 19, 0.5) solid;
 }
+
+/**
+ * Custom Bootstrap
+ */
+.input-group > span.form-control {
+    height: 39px;
+    line-height: 25px;
+}

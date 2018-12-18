@@ -484,7 +484,7 @@ class gameaccount {
 
         global $_database, $userID;
 
-        if(is_null($this->game_tag)) {
+        if (is_null($this->game_tag)) {
             throw new \Exception($this->lang->module['error_gameaccount_game_tag']);
         }
 
@@ -628,6 +628,47 @@ class gameaccount {
 
     }
 
+    private function getActivateStateByGame() {
+
+        global $userID;
+
+        if (isanyadmin($userID)) {
+            $this->isActive = 1;
+            return;
+        }
+
+        if (is_null($this->game_tag)) {
+            return;
+        }
+
+        global $_database;
+
+        $getGame = mysqli_query(
+            $_database,
+            "SELECT
+                    `cup_auto_active`
+                FROM `" . PREFIX . "games`
+                WHERE `tag` = '" . $this->game_tag . "'"
+        );
+
+        if (!$getGame) {
+            return;
+        }
+
+        $get = mysqli_fetch_array($getGame);
+
+        if (empty($get['cup_auto_active'])) {
+            return;
+        }
+
+        if ($get['cup_auto_active'] != 1) {
+            return;
+        }
+
+        $this->isActive = 1;
+
+    }
+
     public function saveGameaccount($gameaccount_id = null, $redirect = TRUE) {
 
         if (is_null($this->game_id) || !validate_int($this->game_id)) {
@@ -663,10 +704,8 @@ class gameaccount {
             global $_database, $userID;
 
             //
-            // Gameaccount aktiv?
-            if(isanyadmin($userID)) {
-                $this->isActive = 1;
-            }
+            // Gameaccount automatisch aktiv?
+            $this->getActivateStateByGame();
 
             //
             // Neuer Gameaccount
@@ -682,11 +721,11 @@ class gameaccount {
                     )
                     VALUES
                     (
-                        ".$userID.",
-                        ".time().",
-                        '".$this->game_tag."',
-                        '".$this->value."',
-                        ".$this->isActive."
+                        " . $userID . ",
+                        " . time() . ",
+                        '" . $this->game_tag . "',
+                        '" . $this->value . "',
+                        " . $this->isActive . "
                     )"
             );
 

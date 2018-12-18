@@ -913,10 +913,16 @@ try {
         ) ENGINE=MyISAM;"
     );
 
-    $alterTabelQuery = mysqli_query(
+    $alterTableQuery = mysqli_query(
         $_database,
         "ALTER TABLE `" . PREFIX . "cups_settings`
             ADD UNIQUE KEY `cup_id` (`cup_id`,`round`);"
+    );
+
+    $alterTableQuery = mysqli_query(
+        $_database,
+        "ALTER TABLE `" . PREFIX . "games`
+            ADD `cup_auto_active` INT(1) NOT NULL DEFAULT '0' AFTER `short`;"
     );
 
     echo "Delete this file!";

@@ -17,32 +17,35 @@ try {
         throw new \Exception($_language->module['unknown_action']);
     }
 
-    $game_id = (isset($_GET['game_id']) && validate_int($_GET['game_id'])) ? 
+    $game_id = (isset($_GET['game_id']) && validate_int($_GET['game_id'], true)) ?
         (int)$_GET['game_id'] : 0;
 
     if ($game_id < 1) {
         throw new \Exception($_language->module['unknown_game']);
     }
 
-    if ($getAction == 'setActiveMode') {
+    if ($getAction == 'setActiveMode' || $getAction == 'setAutoActiveMode') {
+
+        $activeColumn = ($getAction == 'setActiveMode') ?
+            'active' : 'cup_auto_active';
 
         $get = mysqli_fetch_array(
             mysqli_query(
                 $_database,
                 "SELECT
-                        `active`
+                        `" . $activeColumn . "`
                     FROM `" . PREFIX . "games`
                     WHERE `gameID` = " . $game_id
             )
         );
 
-        $new_value = (!empty($get['active']) && ($get['active'] == 1)) ?
+        $new_value = (!empty($get[$activeColumn]) && ($get[$activeColumn] == 1)) ?
             0 : 1;
 
         $query = mysqli_query(
             $_database,
-            "UPDATE `".PREFIX."games`
-                SET active = " . $new_value . "
+            "UPDATE `" . PREFIX . "games`
+                SET " . $activeColumn . " = " . $new_value . "
                 WHERE gameID = " . $game_id
         );
 

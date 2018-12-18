@@ -7,11 +7,20 @@
     <td>$short</td>
     <td>$tag</td>
     <td>
+        <button type="button" id="autoActiveMode_$gameID"
+                class="$auto_active_class"
+                onclick="setAutoActiveMode($gameID);">
+            $auto_active_txt
+        </button>
+    </td>
+    <td>
         <button type="button" id="activeMode_$gameID"
                 class="$active_class"
                 onclick="setActiveMode($gameID);">
             $active_txt
         </button>
+    </td>
+    <td>
         <button type="button"
                 class="btn btn-default btn-xs"
                 onclick="editGame($gameID);">

@@ -20,27 +20,32 @@ try {
 
                 $status = FALSE;
 
-                $name 	= getinput($_POST[ "name" ]);
-                $short 	= getinput($_POST[ "short" ]);
-                $tag 	= getinput($_POST[ "tag" ]);
+                $name = getinput($_POST[ "name" ]);
+                $short = getinput($_POST[ "short" ]);
+                $tag = getinput($_POST[ "tag" ]);
+
+                $cup_auto_active = (isset($_POST[ "cup_auto_active" ]) && ($_POST[ "cup_auto_active" ] == '1')) ?
+                    1 : 0;
 
                 if (!checkforempty(array('name', 'short', 'tag'))) {
                     throw new \Exception($_language->module['fill_correctly']);
                 }
 
-                if(isset($_POST[ 'save' ])) {
+                if (isset($_POST[ 'save' ])) {
 
                     $saveQuery = mysqli_query(
                         $_database,
                         "INSERT INTO `" . PREFIX . "games`
                             (
-                                name,
-                                short,
-                                tag
+                                `name`,
+                                `short`,
+                                `tag`,
+                                `cup_auto_active`
                             ) VALUES (
                                 '" . $name . "',
                                 '" . $short . "',
-                                '" . $tag ."'
+                                '" . $tag ."',
+                                " . $cup_auto_active . "
                             )"
                     );
 
@@ -61,9 +66,10 @@ try {
                     $saveQuery = mysqli_query(
                         $_database,
                         "UPDATE `" . PREFIX . "games`
-                            SET	`name` = '" . $name . "',
+                            SET `name` = '" . $name . "',
                                 `tag` = '" . $tag ."',
-                                `short` = '" . $short . "'
+                                `short` = '" . $short . "',
+                                `cup_auto_active` = " . $cup_auto_active . "
                             WHERE `gameID` = " . $game_id
                     );
 
@@ -140,26 +146,38 @@ try {
             $ds = mysqli_fetch_array(
                 mysqli_query(
                     $_database,
-                    "SELECT 
-                            `name`, 
-                            `tag` 
-                        FROM `" . PREFIX . "games` 
+                    "SELECT
+                            `name`,
+                            `tag`
+                        FROM `" . PREFIX . "games`
                         WHERE `gameID` = " . $game_id
                 )
             );
 
-            $saveQuery = mysqli_query(
+            $game_tag = $ds['tag'];
+
+            $deleteQuery = mysqli_query(
                 $_database,
-                "DELETE FROM " . PREFIX . "games 
+                "DELETE FROM `" . PREFIX . "games`
                     WHERE `gameID` = " . $game_id
             );
 
-            if (file_exists($filepath.$ds['tag'].".gif")) {
-                unlink($filepath.$ds['tag'].".gif");
+            if (file_exists($filepath . $game_tag . ".gif")) {
+                unlink($filepath . $game_tag . ".gif");
             }
 
-            if (!$saveQuery) {
-                throw new \Exception($_language->module['query_delete_failed']);
+            if (!$deleteQuery) {
+                throw new \Exception($_language->module['query_delete_failed'] . ' (`games`)');
+            }
+
+            $deleteQuery = mysqli_query(
+                $_database,
+                "DELETE FROM `" . PREFIX . "cups_gameaccounts`
+                    WHERE `category` = '" . $game_tag . "'"
+            );
+
+            if (!$deleteQuery) {
+                throw new \Exception($_language->module['query_delete_failed'] . ' (`cups_gameaccounts`)');
             }
 
             header("Location: admincenter.php?site=games");
@@ -173,8 +191,8 @@ try {
             $ds = mysqli_fetch_array(
                 mysqli_query(
                     $_database,
-                    "SELECT * FROM " . PREFIX . "games
-                        WHERE gameID='" . $game_id . "'"
+                    "SELECT * FROM `" . PREFIX . "games`
+                        WHERE gameID = " . $game_id
                 )
             );
 
@@ -184,17 +202,18 @@ try {
             $data_array['$name'] = getinput($ds['name']);
             $data_array['$short'] = getinput($ds['short']);
             $data_array['$tag'] = getinput($ds['tag']);
+            $data_array['$cup_auto_active'] = $ds['cup_auto_active'];
             $data_array['$icon'] = $pic;
             $data_array['$game_id'] = $game_id;
             $data_array['$postName'] = 'saveedit';
-            $game_edit = $GLOBALS["_template"]->replaceTemplate("game_add", $data_array);
+            $game_edit = $GLOBALS["_template"]->replaceTemplate("game_action", $data_array);
             echo $game_edit;
 
         } else {
 
             $ergebnis = mysqli_query(
                 $_database,
-                "SELECT * FROM `" . PREFIX . "games` 
+                "SELECT * FROM `" . PREFIX . "games`
                     ORDER BY `active` DESC, `name` ASC"
             );
 
@@ -216,6 +235,12 @@ try {
                     $active_txt = ($ds['active']) ?
                         $_language->module[ 'active' ] : $_language->module[ 'inactive' ];
 
+                    $auto_active_class = ($ds['cup_auto_active']) ?
+                        'btn btn-success btn-xs' : 'btn btn-danger btn-xs';
+
+                    $auto_active_txt = ($ds['cup_auto_active']) ?
+                        $_language->module[ 'yes' ] : $_language->module[ 'no' ];
+
                     $edit_url = 'admincenter.php?site=games&amp;action=edit&amp;id=' . $game_id;
                     $delete_url	= 'admincenter.php?site=games&amp;delete=true&amp;id=' . $game_id;
 
@@ -227,6 +252,8 @@ try {
                     $data_array['$tag'] = $game_tag;
                     $data_array['$active_class'] = $active_class;
                     $data_array['$active_txt'] = $active_txt;
+                    $data_array['$auto_active_class'] = $auto_active_class;
+                    $data_array['$auto_active_txt'] = $auto_active_txt;
                     $data_array['$edit_url'] = $edit_url;
                     $data_array['$delete_url'] = $delete_url;
 
@@ -240,7 +267,7 @@ try {
 
             }
 
-            $no_entries = '<tr><td colspan="5">' . $_language->module[ 'no_entries' ] . '</td></tr>';
+            $no_entries = '<tr><td colspan="8">' . $_language->module[ 'no_entries' ] . '</td></tr>';
 
             if (empty($active_games)) {
                 $active_games = $no_entries;
@@ -254,13 +281,11 @@ try {
             $data_array['$name'] = '';
             $data_array['$short'] = '';
             $data_array['$tag'] = '';
+            $data_array['$cup_auto_active'] = '';
             $data_array['$game_id'] = 0;
             $data_array['$icon'] = '';
-            $data_array['$image'] = '';
-            $data_array['$ts_tab'] = '';
-            $data_array['$ts_bg'] = '';
             $data_array['$postName'] = 'save';
-            $add_game = $GLOBALS["_template"]->replaceTemplate("game_add", $data_array);
+            $add_game = $GLOBALS["_template"]->replaceTemplate("game_action", $data_array);
 
             $data_array = array();
             $data_array['$active_games'] = $active_games;

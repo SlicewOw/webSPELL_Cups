@@ -28,6 +28,7 @@
 $language_array = Array(
 
     'active_games'=>'active games',
+    'cup_auto_active'=>'Cup gameaccounts are active automatically?',
     'game_short'=>'Shortcut',
     'inactive_games'=>'inactive games',
     'unknown_game'=>'unknown games',
