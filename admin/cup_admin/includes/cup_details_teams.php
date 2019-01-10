@@ -71,10 +71,6 @@ try {
 
             }
 
-            $team_info = '';
-            $team_info .= ' ';
-            $team_info .= '';
-
             $data_array = array();
             $data_array['$n'] = $n++;
             $data_array['$team_name'] = $team_name;
