@@ -1,11 +1,24 @@
-<tr>
-	<td>$n</td>
-	<td>$team_name</td>
-	<td>$admin_info</td>
-	<td>$status</td>
-	<td>$date_register</td>
-	<td>$date_checkin</td>
-	<td>$cup_counter</td>
-	<td>$match_counter</td>
-	<td>$team_info</td>
+<tr id="$delete_team_from_cup">
+    <td>$n</td>
+    <td>
+        <a class="blue"
+           href="$detail_url"
+           target="_blank">
+            $team_name
+        </a>
+    </td>
+    <td>$admin_info</td>
+    <td>$status</td>
+    <td>$date_register</td>
+    <td>$date_checkin</td>
+    <td>$cup_counter</td>
+    <td>$match_counter</td>
+    <td>
+        <button type="submit"
+                class="btn btn-default btn-xs"
+                name="btnDeleteTeamFromCup"
+                id="$delete_team_from_cup">
+            %delete%
+        </button>
+    </td>
 </tr>

@@ -23,7 +23,12 @@ try {
             WHERE `cupID` = " . $cup_id . "
             ORDER BY `checked_in` DESC, `date_checkin` ASC, `date_register` ASC"
     );
-    if (mysqli_num_rows($teamQuery)) {
+
+    if (!$teamQuery) {
+        throw new \Exception($_language->module['query_select_failed']);
+    }
+
+    if (mysqli_num_rows($teamQuery) > 0) {
 
         $profile_url = $hp_url . '/index.php?site=profile&id=';
 
@@ -48,6 +53,7 @@ try {
                 $match_counter = '';
 
                 $detail_url = $profile_url . $db['teamID'];
+                $delete_team_from_cup = 'deleteTeam_' . $cup_id . '_' . $user_id;
 
             } else {
 
@@ -61,12 +67,13 @@ try {
                 $match_counter = getteam($team_id, 'anz_matches');
 
                 $detail_url = 'admincenter.php?site=cup&amp;mod=teams&amp;action=active&amp;teamID=' . $team_id;
+                $delete_team_from_cup = 'deleteTeam_' . $cup_id . '_' . $team_id;
 
             }
 
             $team_info = '';
-            $team_info .= '<a class="btn btn-info btn-xs white darkshadow" href="' . $detail_url . '#content" target="_blank">' . $_language->module['view'] . '</a> ';
-            $team_info .= '<button class="btn btn-default btn-xs" type="submit" name="deleteTeam_' . $cup_id . '_' . $db['teamID'] . '">' . $_language->module['delete'] . '</button>';
+            $team_info .= ' ';
+            $team_info .= '';
 
             $data_array = array();
             $data_array['$n'] = $n++;
@@ -79,7 +86,8 @@ try {
                 getformatdatetime($db['date_checkin']) : '';
             $data_array['$cup_counter'] = $cup_counter;
             $data_array['$match_counter'] = $match_counter;
-            $data_array['$team_info'] = $team_info;
+            $data_array['$detail_url'] = $detail_url;
+            $data_array['$delete_team_from_cup'] = $delete_team_from_cup;
             $teams .= $GLOBALS["_template_cup"]->replaceTemplate("cup_details_team_list", $data_array);
 
         }

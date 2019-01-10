@@ -1788,32 +1788,33 @@ function getcupteams($user_id = '', $default = '') {
 	return $teams;
 }
 function setCupTeamLog($team_id, $team_name, $text, $kicked_id = 0, $parent_id = 0) {
-	global $_database, $userID;
-	
-	$saveQuery = mysqli_query(
-		$_database,
-		"INSERT INTO `".PREFIX."cups_teams_log`
-			(
-				`teamID`,
-				`teamName`,
-				`date`,
-				`user_id`,
-				`parent_id`,
-				`kicked_id`,
-				`action`
-			)
-			VALUES
-			(
-				".$team_id.",
-				'".$team_name."',
-				".time().",
-				".$userID.",
-				".$parent_id.",
-				".$kicked_id.",
-				'".$text."'
-			)"
-	);
-	
+
+    global $_database, $userID;
+
+    $saveQuery = mysqli_query(
+        $_database,
+        "INSERT INTO `" . PREFIX . "cups_teams_log`
+            (
+                `teamID`,
+                `teamName`,
+                `date`,
+                `user_id`,
+                `parent_id`,
+                `kicked_id`,
+                `action`
+            )
+            VALUES
+            (
+                " . $team_id . ",
+                '" . $team_name . "',
+                " . time() . ",
+                " . $userID . ",
+                " . $parent_id . ",
+                " . $kicked_id . ",
+                '" . $text . "'
+            )"
+    );
+
 }
 
 /* Matches */

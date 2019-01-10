@@ -28,3 +28,55 @@
     </div>
     <div class="clear"></div>
 </div>
+<script>
+$(document).ready(function () {
+
+    $("button[name=btnDeleteTeamFromCup]").click(function (e) {
+
+        e.preventDefault();
+
+        var idStr,
+            idArray,
+            cup_id,
+            team_id;
+
+        idStr = this.id;
+        idArray = idStr.split('_');
+        if (idArray.length !== 3) {
+            alert('unknown_parameter_length: ' + idStr);
+            return
+        }
+
+        cup_id = idArray[1];
+        team_id = idArray[2];
+
+        $.post(
+            "ajax.php?site=admin_cup_details_teams",
+            {
+                action : 'deleteTeamFromCup',
+                cup_id : cup_id,
+                team_id : team_id
+            },
+            function (data, status) {
+
+                if (status === "success") {
+
+                    var varData = JSON.parse(data),
+                        alert_type = 'error';
+
+                    if (varData.status) {
+                        $("#" + idStr).css('display', 'none');
+                        alert_type = 'success';
+                    }
+
+                    showMultipleNotifies(varData.message, alert_type);
+
+                }
+
+            }
+        );
+
+    });
+
+});
+</script>
