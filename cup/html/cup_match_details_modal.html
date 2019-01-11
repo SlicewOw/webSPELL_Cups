@@ -1,53 +1,57 @@
-<div class="modal fade" id="cup-match-details-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title">Match Details</h4>
-			</div>
-			<div class="modal-body">
-				<ul class="nav nav-tabs" role="tablist">
+<div class="modal fade" id="cup-match-details-modal"
+     tabindex="-1"
+     role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Match Details</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
-						<a href="#home" aria-controls="home" 
-                           role="tab" 
+                        <a href="#home" aria-controls="home"
+                           role="tab"
                            data-toggle="tab">
                             Server
                         </a>
-					</li>
+                    </li>
                     <li role="presentation">
-                        <a href="#player" aria-controls="player" 
-                           role="tab" 
+                        <a href="#player" aria-controls="player"
+                           role="tab"
                            data-toggle="tab">
                             Player
                         </a>
                     </li>
                     <li role="presentation">
-                        <a href="#team1_details" aria-controls="team1_details" 
-                           role="tab" 
-                           data-toggle="tab" 
+                        <a href="#team1_details" aria-controls="team1_details"
+                           role="tab"
+                           data-toggle="tab"
                            class="team1_name"></a>
                     </li>
                     <li role="presentation">
-                        <a href="#team2_details" aria-controls="team2_details" 
-                           role="tab" 
-                           data-toggle="tab" 
+                        <a href="#team2_details" aria-controls="team2_details"
+                           role="tab"
+                           data-toggle="tab"
                            class="team2_name"></a>
                     </li>
                     <li role="presentation">
-                        <a href="#match_settings" aria-controls="match_settings" 
-                           role="tab" 
-                           data-toggle="tab" 
+                        <a href="#match_settings" aria-controls="match_settings"
+                           role="tab"
+                           data-toggle="tab"
                            class="match_settings">
                             Settings
                         </a>
                     </li>
                     <li role="presentation">
-                        <a href="#mapvote_status" onclick="updateMapVote();" 
-                           aria-controls="mapvote_status" 
-                           role="tab" 
-                           data-toggle="tab" 
+                        <a href="#mapvote_status" onclick="updateMapVote();"
+                           aria-controls="mapvote_status"
+                           role="tab"
+                           data-toggle="tab"
                            class="mapvote_status">
                             Map-Vote
                         </a>
@@ -59,7 +63,7 @@
                 </div>
                 <div id="tabContentContainer" class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active" id="home">
-        				$serverSettings
+                        $serverSettings
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="player">
                         <div class="row">
@@ -79,50 +83,50 @@
                                     <div class="list-group" id="team2_ListContainer"></div>
                                 </div>
                             </div>
-                        </div>		
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="team1_details">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h1 class="panel-title team1_name"></h1>
-							</div>
-							<table class="table table-striped" id="team1_DetailsContainer"></table>
-						</div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h1 class="panel-title team1_name"></h1>
+                            </div>
+                            <table class="table table-striped" id="team1_DetailsContainer"></table>
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="team2_details">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h1 class="panel-title team2_name"></h1>
-							</div>
-							<table class="table table-striped" id="team2_DetailsContainer"></table>
-						</div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h1 class="panel-title team2_name"></h1>
+                            </div>
+                            <table class="table table-striped" id="team2_DetailsContainer"></table>
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="match_settings">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h1 class="panel-title">Match Settings</h1>
-							</div>
-							<div class="panel-body" id="matchSettings_container"></div>
-						</div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h1 class="panel-title">Match Settings</h1>
+                            </div>
+                            <div class="panel-body" id="matchSettings_container"></div>
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="mapvote_status">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h1 class="panel-title">Map-Vote</h1>
-							</div>
-							<div class="panel-body" id="mapvote_container"></div>
-						</div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h1 class="panel-title">Map-Vote</h1>
+                            </div>
+                            <div class="panel-body" id="mapvote_container"></div>
+                        </div>
                     </div>
                 </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default btn-sm" 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" 
                         data-dismiss="modal">
-					%close%
-				</button>
-			</div>
-		</div>
-	</div>
+                    %close%
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
 
@@ -142,24 +146,23 @@ function updateMapVote() {
             match_id : match_id
         },
         function (data, status) {
-			
-            if (status === "success") {
-                
-                var varData = JSON.parse(data);
 
+            if (status === "success") {
+
+                var varData = JSON.parse(data);
                 if (varData.status) {
-                
+
                     $("#mapvote_container").fadeOut('slow', function() {
                         $("#mapvote_container").html(varData.text);
                         $("#mapvote_container").fadeIn('slow');
                     });
-                    
+
                 } else {
                     showMultipleNotifies(varData.message, 'error');
                 }
 
             }
-            
+
         }
     );
 
@@ -176,18 +179,18 @@ function openAdminDetails(match_id) {
             match_id : match_id
         },
         function (data, status) {
-			
+
             if (status === "success") {
-                
+
                 $("#matchDetailsLoader").css('display', 'none');
                 $("#tabContentContainer").css('display', 'block');
 
                 $('#cup-match-details-modal').modal('show');
-                
-                var varData = JSON.parse(data);
 
+                alert(data);
+                var varData = JSON.parse(data);
                 if (varData.status) {
-                    
+
                     $("#cup_admin_details_match").css('visibility', 'visible');
                     cup_url = "admincenter.php?site=cup&mod=cup&action=cup&id=" + varData.cup_id + "&page=bracket#cup_round_" + varData.cup_round;
                     $("#matchDetailsForm").attr("action", cup_url);
@@ -198,11 +201,11 @@ function openAdminDetails(match_id) {
                     $("#match_gotv_pw").attr("value", varData.server.gotv.pw);
                     $("#match_id").attr("value", match_id);
 
-                    var listGroupItem, 
-                        playerName, 
+                    var listGroupItem,
+                        playerName,
                         playerSteamID,
-                        x, 
-                        n, 
+                        x,
+                        n,
                         anzPlayer;
 
                     for (x = 1; x < 3; x++) {
@@ -228,21 +231,21 @@ function openAdminDetails(match_id) {
                             listGroupItem += "</div>";
 
                         }
-                        
+
                         $("#team" + x + "_ListContainer").html(listGroupItem);
                         $("#team" + x + "_DetailsContainer").html(varData.details["team" + x]);
-                        
+
                         $("#matchSettings_container").html(varData.settings.html);
 
                     }
-                    
+
                 } else {
                     $("#matchDetailsLoader").css('display', 'block');
                     $("#tabContentContainer").css('display', 'none');
                 }
 
             }
-            
+
         }
     );
 
@@ -250,7 +253,7 @@ function openAdminDetails(match_id) {
 
 function closeAdminDetails() {
     "use strict";
-	$('#cup-match-details-modal').modal('hide');
+    $('#cup-match-details-modal').modal('hide');
     return true;
 }
 

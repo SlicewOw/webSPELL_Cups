@@ -4,6 +4,127 @@
  * General
  **/
 
+function getSelectDateTime($type, $selected = '') {
+
+    $returnArray = array(
+        'days' => '',
+        'months' => '',
+        'years' => '',
+        'hours' => '',
+        'minutes' => ''
+    );
+
+    for ($x = 1; $x < 32; $x++) {
+        $value = ($x<10) ?
+            '0' . $x : $x;
+        $returnArray['days'] .= '<option value="' . $x . '">' . $value . '</option>';
+        if ($x<13) {
+            $returnArray['months'] .= '<option value="' . $x . '">' . $value . '</option>';
+        }
+        if ($x<25) {
+            $value = (($x - 1)<10) ?
+                '0' . ($x - 1) : ($x - 1);
+            $returnArray['hours'] .= '<option value="' . ($x - 1) . '">' . $value . '</option>';
+        }
+    }
+
+    $activeYear = date('Y') + 1;
+    for ($x=1960; $x <= $activeYear; $x++) {
+        $returnArray['years'] .= '<option value="' . $x . '">' . $x . '</option>';
+    }
+
+    $returnArray['minutes'] .= '<option value="00">00</option>';
+    $returnArray['minutes'] .= '<option value="15">15</option>';
+    $returnArray['minutes'] .= '<option value="30">30</option>';
+    $returnArray['minutes'] .= '<option value="45">45</option>';
+
+    if (!empty($selected)) {
+
+        if ($type == 'all') {
+
+            $selectedDate = $selected;
+            $actual_minutes = date('i', $selectedDate);
+
+        } else {
+
+            if (isset($returnArray[$type])) {
+
+                $returnArray[$type] = str_replace(
+                    'value=""',
+                    'value=""',
+                    $returnArray[$type]
+                );
+
+            }
+
+        }
+
+    } else {
+
+        if (empty($selectedDate) || (validate_int($selectedDate, true))) {
+            $selectedDate = time();
+        }
+
+        $actual_minutes = date('i');
+
+    }
+
+    $returnArray['days'] = str_replace(
+        'value="'.date('j', $selectedDate).'"',
+        'value="'.date('j', $selectedDate).'" selected="selected"',
+        $returnArray['days']
+    );
+
+    $returnArray['months'] = str_replace(
+        'value="'.date('n', $selectedDate).'"',
+        'value="'.date('n', $selectedDate).'" selected="selected"',
+        $returnArray['months']
+    );
+
+    $returnArray['years'] = str_replace(
+        'value="'.date('Y', $selectedDate).'"',
+        'value="'.date('Y', $selectedDate).'" selected="selected"',
+        $returnArray['years']
+    );
+
+    $returnArray['hours'] = str_replace(
+        'value="'.date('G', $selectedDate).'"',
+        'value="'.date('G', $selectedDate).'" selected="selected"',
+        $returnArray['hours']
+    );
+
+    if ($actual_minutes < 15) {
+        $minute = '00';
+    } else if ($actual_minutes < 30) {
+        $minute = '15';
+    } else if ($actual_minutes < 45) {
+        $minute = '30';
+    } else if ($actual_minutes < 59) {
+        $minute = '45';
+    } else {
+        $minute = '00';
+    }
+
+    $returnArray['minutes'] = str_replace(
+        'value="'.$minute.'"',
+        'value="'.$minute.'" selected="selected"',
+        $returnArray['minutes']
+    );
+
+    if ($type == 'all') {
+        return $returnArray;
+    } else {
+
+        if (isset($returnArray[$type])) {
+            return $returnArray[$type];
+        } else {
+            return NULL;
+        }
+
+    }
+
+}
+
 function getCommentCount($comment_id, $type = 'ne') {
 
     global $_database;

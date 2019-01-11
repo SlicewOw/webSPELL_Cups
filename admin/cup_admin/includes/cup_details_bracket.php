@@ -3,13 +3,13 @@
 $bracket = '';
 
 try {
-    
+
     if (!isset($content)) {
         $content = '';
     }
 
     if (($cupArray['status'] < 2)) {
-        throw new \Exception($_language->module['cup_not_started']);    
+        throw new \Exception($_language->module['cup_not_started']);
     }
 
     if (!$loggedin || !iscupadmin($userID)) {
@@ -36,7 +36,7 @@ try {
             if ($cupRunde < 1) {
                 throw new \Exception($_language->module['unknown_round']);
             }
-                
+
             $whereClauseArray = array();
             $whereClauseArray[] = '`cupID` = ' . $cup_id;
             $whereClauseArray[] = '`runde` = ' . $cupRunde;
@@ -63,8 +63,8 @@ try {
                 $saveQuery = mysqli_query(
                     $_database,
                     "UPDATE `" . PREFIX . "cups_matches_playoff`
-                        SET mapvote = 0,
-                            maps = '" . $maps . "'
+                        SET `mapvote` = 0,
+                            `maps` = '" . $maps . "'
                         WHERE " . $whereClause
                 );
 
@@ -83,37 +83,37 @@ try {
 
                 $query = mysqli_query(
                     $_database,
-                    "SELECT 
-                            `matchID` 
+                    "SELECT
+                            `matchID`
                         FROM `" . PREFIX . "cups_matches_playoff`
                         WHERE " . $whereClause
                 );
-                
+
                 if (!$query) {
                     throw new \Exception($_language->module['query_select_failed']);
                 }
-                
+
                 while ($get = mysqli_fetch_array($query)) {
 
                     $match_id = $get['matchID'];
 
                     $saveQuery = mysqli_query(
-                        $_database, 
-                        "INSERT INTO `" . PREFIX . "comments` 
+                        $_database,
+                        "INSERT INTO `" . PREFIX . "comments`
                             (
-                                `parentID`, 
-                                `type`, 
-                                `userID`, 
-                                `date`, 
+                                `parentID`,
+                                `type`,
+                                `userID`,
+                                `date`,
                                 `comment`,
                                 `announcement`
                             )
-                            VALUES 
+                            VALUES
                             (
-                                " . $match_id . ", 
-                                'cm', 
-                                " . $userID . ", 
-                                " . time() . ", 
+                                " . $match_id . ",
+                                'cm',
+                                " . $userID . ",
+                                " . time() . ",
                                 '" . $message . "',
                                 1
                             )"
@@ -131,47 +131,47 @@ try {
                 }
 
             } else if (isset($_POST['submitMapsByAdmin'])) {
-                
+
                 $match_id = (isset($_POST['match_id']) && validate_int($_POST['match_id'], true)) ?
                     (int)$_POST['match_id'] : 0;
 
                 if ($match_id < 1) {
                     throw new \Exception($_language->module['unknown_match']);
                 }
-                
+
                 $mapArray = (isset($_POST['map']) && validate_array($_POST['map'], true)) ?
                     $_POST['map'] : array();
-                
+
                 $mapCount = count($mapArray);
                 if ($mapCount < 1) {
                     throw new \Exception($_language->module['unknown_match']);
                 }
-                
+
                 $setMapsArray = array(
                     'open' => array(),
                     'banned' => $mapArray,
                     'picked' => array()
                 );
-                
+
                 for ($x = 0; $x < $mapCount; $x++) {
-                
+
                     $map = $mapArray[$x];
-                    
+
                     if (($x + 1) == $mapCount) {
                         $setMapsArray['picked'][] = $map;
                     } else {
-                        
+
                         $team_id = ($x%2) ?
                             'team2' : 'team1';
-                        
+
                         $setMapsArray['picked'][$team_id][] = $map;
-                        
+
                     }
-                    
+
                 }
-                
+
                 $setMaps = serialize($setMapsArray);
-                
+
                 $updateQuery = mysqli_query(
                     $_database,
                     "UPDATE `" . PREFIX . "cups_matches_playoff`
@@ -179,7 +179,7 @@ try {
                             `mapvote` = 1
                         WHERE `matchID` = " . $match_id
                 );
-                
+
                 if (!$updateQuery) {
                     throw new \Exception($_language->module['query_update_failed']);
                 }
@@ -218,8 +218,8 @@ try {
             $bracket .= '</div>';
 
             $data_array = array();
-            $data_array['$cup_id'] 	= $cup_id;
-            $data_array['$i'] 		= $round_id;
+            $data_array['$cup_id'] = $cup_id;
+            $data_array['$i'] = $round_id;
             $bracket .= $GLOBALS["_template_cup"]->replaceTemplate("cup_admin_match_round_footer", $data_array);
 
             $bracket .= '</div>';
@@ -228,8 +228,7 @@ try {
 
     }
 
-    
-    
+
 } catch (Exception $e) {
     $bracket = showError($e->getMessage());
 }
