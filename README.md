@@ -13,12 +13,15 @@ Feel free to use this add-on for webSPELL NOR, but be aware that we (myRisk e.V)
 
 # Installation
 * {WiP}
+* Install cup add-on
+    * https://[YOUR_URL]/install-cup-addon.php
+    * https://[YOUR_URL]/install-streams-addon.php
 * File settings
     * copy /cup/settings.php.sample and remove .sample
     * Steam API Key: fill in Steam API Key
     * Twitch API Key
-* webSPELL settings
-    * make sure, the homepage url is with http/-s as prefix - otherwise you may notice broken images
+* webSPELL settings (as logged in user in admincenter)
+    * make sure, the homepage url contains http/-s as prefix - otherwise you may notice broken images
 
 # Optional stuff
 
