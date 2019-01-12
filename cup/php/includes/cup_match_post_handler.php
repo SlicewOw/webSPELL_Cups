@@ -29,27 +29,26 @@ if (validate_array($_POST, true)) {
             $mapsArray['banned']['team2'] = array();
             $mapsArray['picked'] = array();
 
+            $insertValueArray = array();
+            $insertValueArray[] = '`mapvote` = 0';
+            $insertValueArray[] = '`maps` = \'' . serialize($mapsArray) . '\'';
+            $insertValueArray[] = '`ergebnis1` = 0';
+            $insertValueArray[] = '`team1_confirmed` = 0';
+            $insertValueArray[] = '`ergebnis2` = 0';
+            $insertValueArray[] = '`team2_confirmed` = 0';
+            $insertValueArray[] = '`admin_confirmed` = 0';
+
             if ($cupArray['bot']) {
-                $serverReset = ', server = \'\'';
-            } else {
-                $serverReset = '';
+                $insertValueArray[] = '`server` = \'\'';
             }
 
-            //
-            // Map Array speichern
-            $maps = serialize($mapsArray);
+            $insertValue = implode(', ', $insertValueArray);
+
             $query = mysqli_query(
-                $_database, 
-                "UPDATE `".PREFIX."cups_matches_playoff` 
-                    SET mapvote = '0', 
-                        maps = '".$maps."',
-                        ergebnis1 = '0',
-                        team1_confirmed = '0',
-                        ergebnis2 = '0',
-                        screenshots = '',
-                        team2_confirmed = '0',
-                        admin_confirmed = '0'".$serverReset." 
-                    WHERE matchID = " . $match_id
+                $_database,
+                "UPDATE `" . PREFIX . "cups_matches_playoff`
+                    SET " . $insertValue . "
+                    WHERE `matchID` = " . $match_id
             );
 
             if (!$query) {
@@ -73,9 +72,9 @@ if (validate_array($_POST, true)) {
             $query = mysqli_query(
                 $_database,
                 "UPDATE `" . PREFIX . "cups_matches_playoff`
-                    SET mapvote = 0,
-                        maps = '" . $maps . "'
-                    WHERE matchID = " . $match_id
+                    SET `mapvote` = 0,
+                        `maps` = '" . $maps . "'
+                    WHERE `matchID` = " . $match_id
             );
 
             if (!$query) {
@@ -346,7 +345,7 @@ if (validate_array($_POST, true)) {
                 (int)$_POST['screenshot_category'] : 0;
 
             if ($category_id < 1) {
-                throw new \Exception($_language->module['no_match']);
+                throw new \Exception($_language->module['no_category']);
             }
 
             $_language->readModule('formvalidation', true);
@@ -360,7 +359,11 @@ if (validate_array($_POST, true)) {
                 throw new \Exception($_language->module['broken_image']);
             }
 
-            $mime_types = array('image/jpeg', 'image/png', 'image/gif');
+            $mime_types = array(
+                'image/jpeg',
+                'image/png',
+                'image/gif'
+            );
 
             if (!$upload->supportedMimeType($mime_types)) {
                 throw new \Exception($_language->module['unsupported_image_type']);
@@ -384,7 +387,7 @@ if (validate_array($_POST, true)) {
                     break;
             }
 
-            $filepath = '../../images/cup/match_screenshots/';
+            $filepath = './images/cup/match_screenshots/';
             $file = convert2filename($match_id . '_' . $category_id, true, true) . $endung;
 
             if (!$upload->saveAs($filepath . $file, true)) {
