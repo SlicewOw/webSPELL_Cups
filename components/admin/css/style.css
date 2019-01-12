@@ -164,16 +164,20 @@ fieldset[disabled] .btn-primary:hover {
 .list-group > .alert-info {
     background-color: #d9edf7;
     border-color: #d9edf7;
+    border: 1px #31708f solid;
 }
 .list-group > .alert-success {
     background-color: #dff0d8;
     border-color: #dff0d8;
+    border: 1px #3c763d solid;
 }
 .list-group > .alert-warning {
     background-color: #fcf8e3;
     border-color: #fcf8e3;
+    border: 1px #8a6d3b solid;
 }
 .list-group > .alert-danger {
     background-color: #f2dede;
     border-color: #f2dede;
+    border: 1px #a94442 solid;
 }

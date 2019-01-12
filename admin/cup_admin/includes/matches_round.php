@@ -59,18 +59,18 @@ try {
 
         for ($teamIndex = 1; $teamIndex < 3; $teamIndex++) {
 
-            if ($ds['team'.$teamIndex] != 0) { 
+            if ($ds['team'.$teamIndex] != 0) {
 
                 if($cupArray['mode'] == '1on1') {
-                    $teamArray[$teamIndex] = getnickname($ds['team'.$teamIndex]); 
+                    $teamArray[$teamIndex] = getnickname($ds['team'.$teamIndex]);
                 } else {
-                    $teamArray[$teamIndex] = getteam($ds['team'.$teamIndex], 'name'); 
+                    $teamArray[$teamIndex] = getteam($ds['team'.$teamIndex], 'name');
                 }
 
-            } else if ($ds['team'.$teamIndex.'_freilos'] == 1) { 
-                $teamArray[$teamIndex] = $_language->module['cup_freilos']; 
-            } else { 
-                $teamArray[$teamIndex] = '<span class="italic">unknown</span>'; 
+            } else if ($ds['team'.$teamIndex.'_freilos'] == 1) {
+                $teamArray[$teamIndex] = $_language->module['cup_freilos'];
+            } else {
+                $teamArray[$teamIndex] = '<span class="italic">unknown</span>';
             }
 
         }
@@ -109,18 +109,18 @@ try {
 
         $anzComments = getCommentCount($matchID, 'cm');
         $anzComments = ($anzComments != 1) ?
-            $anzComments.' '.$_language->module['comments'] :
-            $anzComments.' '.$_language->module['comment'];
-        $info .= '<a target="_blank" href="'.$match_url.'#comments" class="btn btn-default btn-sm">'.$anzComments.'</a> ';
+            $anzComments . ' ' . $_language->module['comments'] :
+            $anzComments . ' ' . $_language->module['comment'];
+        $info .= '<a target="_blank" href="' . $match_url. '#comments" class="btn btn-default btn-sm">' . $anzComments. '</a> ';
 
         if ($ds['team1_freilos'] || $ds['team2_freilos']) {
             $info .= '<span class="btn btn-default btn-sm">Def-Win</span> ';
         }
-        $info .= '<span class="btn '.$bracket_color.' btn-sm white darkshadow uppercase">'.$bracket_text.'</span> ';
-        $info .= ' <input type="button" class="btn btn-info btn-sm white darkshadow" value="Admin Details" onclick="openAdminDetails('.$matchID.');" /> ';
-        $info .= ' <a target="_blank" class="btn btn-info btn-sm white darkshadow" href="'.$match_url.'">Match ansehen</a>';
+        $info .= '<span class="btn ' . $bracket_color . ' btn-sm white darkshadow uppercase">' . $bracket_text . '</span> ';
+        $info .= ' <input type="button" class="btn btn-info btn-sm white darkshadow" value="Admin Details" onclick="openAdminDetails(' . $matchID . ');" /> ';
+        $info .= ' <a target="_blank" class="btn btn-info btn-sm white darkshadow" href="' . $match_url . '">Match ansehen</a>';
         $info .= '</span>';
-        $info .= '<span class="pull-left black">'.$teamArray[1].' : '.$teamArray[2].'</span><br /><span class="pull-left fontsmall">'.$server_info.'</span>';
+        $info .= '<span class="pull-left black">' . $teamArray[1] . ' : ' . $teamArray[2] . '</span><br /><span class="pull-left fontsmall">' . $server_info . '</span>';
 
         $data_array = array();
         $data_array['$border_class'] = $border_class;

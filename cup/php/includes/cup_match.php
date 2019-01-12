@@ -111,10 +111,10 @@ try {
 
                 } else if ($matchArray['team'.$x.'_freilos'] == 1) {
                     $teamName = $_language->module['cup_freilos'];
-                    $matchLogo = $logotypeBase . 'team_nologotype.jpg';
+                    $matchLogo = $logotypeBase . 'team_nologotype.png';
                 } else {
                     $teamName = '';
-                    $matchLogo = $logotypeBase . 'team_nologotype.jpg';
+                    $matchLogo = $logotypeBase . 'team_nologotype.png';
                 }
 
             } else {

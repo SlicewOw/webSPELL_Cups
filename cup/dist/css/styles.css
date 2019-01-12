@@ -1430,6 +1430,9 @@ body {
     height: 39px;
     line-height: 25px;
 }
+.panel-danger > .panel-footer {
+    background: rgba(169, 68, 66, 0.4);
+}
 /* MAIN */
 body,
 html,

@@ -925,6 +925,12 @@ try {
             ADD `cup_auto_active` INT(1) NOT NULL DEFAULT '0' AFTER `short`;"
     );
 
+    $alterTableQuery = mysqli_query(
+        $_database,
+        "ALTER TABLE `" . PREFIX . "comments`
+            ADD `announcement` INT(1) NOT NULL DEFAULT '0' AFTER `date`;"
+    );
+
     echo "Delete this file!";
 
     $sendmail = \webspell\Email::sendEmail(
