@@ -463,3 +463,124 @@ function isinusergrp($usergrp, $userID)
 
     return isforumadmin($userID);
 }
+
+/**
+ * Cup functions
+ */
+
+function iscupadmin($user_id) {
+
+    if (!validate_int($user_id, true)) {
+        return FALSE;
+    }
+
+    global $_database;
+
+    $selectQuery = mysqli_query(
+        $_database,
+        "SELECT
+                `userID`
+            FROM `" . PREFIX . "user_groups`
+            WHERE (`cup` = 1 OR `super` = 1) AND `userID` = " . $user_id
+    );
+
+    if (!$selectQuery) {
+        return FALSE;
+    }
+
+    $ergebnis = mysqli_num_rows($selectQuery);
+
+    return ($ergebnis == 1) ? TRUE : FALSE;
+
+}
+
+function isinteam($userID, $teamID, $admin) {
+
+    global $_database;
+
+    if (!validate_int($userID, true)) {
+        return FALSE;
+    }
+
+    if ($admin == 'admin') {
+
+        //
+        // return : Anzahl Teams als Admin
+
+        $whereClauseArray = array();
+
+        $whereClauseArray[] = 'userID = ' . $userID;
+        $whereClauseArray[] = 'deleted = 0';
+
+        if(validate_int($teamID)) {
+            $whereClauseArray[] = 'teamID = ' . $teamID;
+        }
+
+        $get = mysqli_fetch_array(
+            mysqli_query(
+                $_database,
+                "SELECT
+                        COUNT(*) AS `anz`
+                    FROM `" . PREFIX . "cups_teams`
+                    WHERE " . implode(' AND ' , $whereClauseArray)
+            )
+        );
+
+        $returnValue = $get['anz'];
+
+    } else if ($admin == 'player') {
+
+        //
+        // return : 0 / 1
+        // 0 : Spieler ist in keinem Team
+        // 1 : Spieler ist in mindestens einem Team
+
+        $whereClauseArray = array();
+
+        $whereClauseArray[] = 'userID = ' . $userID;
+        $whereClauseArray[] = 'active = 1';
+
+        if(validate_int($teamID)) {
+            $whereClauseArray[] = 'teamID = ' . $teamID;
+        }
+
+        $get = mysqli_fetch_array(
+            mysqli_query(
+                $_database,
+                "SELECT
+                        COUNT(*) AS `anz`
+                    FROM `" . PREFIX . "cups_teams_member`
+                    WHERE " . implode(' AND ' , $whereClauseArray)
+            )
+        );
+
+        $returnValue = ($get['anz'] > 0) ?
+            TRUE : FALSE;
+
+    } else {
+
+        //
+        // return : Anzahl Teams des Benutzers
+
+        $whereClauseArray = array();
+
+        $whereClauseArray[] = 'userID = ' . $userID;
+        $whereClauseArray[] = 'active = 1';
+
+        $get = mysqli_fetch_array(
+            mysqli_query(
+                $_database,
+                "SELECT
+                        COUNT(*) AS `anz`
+                    FROM `" . PREFIX . "cups_teams_member`
+                    WHERE " . implode(' AND ', $whereClauseArray)
+            )
+        );
+
+        $returnValue = $get['anz'];
+
+    }
+
+    return $returnValue;
+
+}
