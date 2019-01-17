@@ -39,16 +39,20 @@ try {
 
     if ($cupArray['mode'] == '1on1') {
 
-        $checkIf = mysqli_fetch_array(
-            mysqli_query(
-            $_database, 
-                "SELECT 
-                      COUNT(*) AS `exist`, 
-                      checked_in AS `checked_in` 
-                    FROM `". PREFIX . "cups_teilnehmer`
-                    WHERE `cupID` = " . $cup_id . " AND `teamID` = " . $userID
-            )
+        $selectQuery = mysqli_query(
+            $_database,
+            "SELECT
+                  COUNT(*) AS `exist`,
+                  checked_in AS `checked_in`
+                FROM `". PREFIX . "cups_teilnehmer`
+                WHERE `cupID` = " . $cup_id . " AND `teamID` = " . $userID
         );
+
+        if (!$selectQuery) {
+            throw new \Exception($_language->module['query_select_failed']);
+        }
+
+        $checkIf = mysqli_fetch_array($selectQuery);
 
         if ($checkIf['exist'] && $checkIf['checked_in']) {
             throw new \Exception($_language->module['player_already_checked_in']);
@@ -63,14 +67,14 @@ try {
         }
 
         $team_anz = $cupArray['teams']['checked_in'];
-        if ($team_anz > $cupArray['size']) {
+        if ($team_anz >= $cupArray['size']) {
             // kein Platz mehr frei
             throw new \Exception($_language->module['error_cup_full']);
         }
 
         $updateQuery = mysqli_query(
-            $_database, 
-            "UPDATE `" . PREFIX . "cups_teilnehmer` 
+            $_database,
+            "UPDATE `" . PREFIX . "cups_teilnehmer`
                 SET `checked_in` = 1,
                     `date_checkin` = " . time() . "
                 WHERE `cupID` = " . $cup_id . " AND `teamID` = " . $userID
@@ -113,15 +117,15 @@ try {
         }
 
         $get_id = mysqli_query(
-            $_database, 
-            "SELECT teamID FROM `" . PREFIX . "cups_teilnehmer` 
+            $_database,
+            "SELECT teamID FROM `" . PREFIX . "cups_teilnehmer`
                 WHERE cupID = " . $cup_id . " AND checked_in = 0"
         );
         while ($te = mysqli_fetch_array($get_id)) {
 
             $query = mysqli_query(
-                $_database, 
-                "SELECT teamID FROM ".PREFIX."cups_teams_member 
+                $_database,
+                "SELECT teamID FROM `" . PREFIX . "cups_teams_member`
                     WHERE userID = " . $userID . " AND teamID = " . $te['teamID'] . " AND active = 1"
             );
             $anz = mysqli_num_rows($query);
@@ -150,14 +154,14 @@ try {
                 }
 
                 $team_anz = $cupArray['teams']['checked_in'];
-                if ($team_anz > $cupArray['size']) {
+                if ($team_anz >= $cupArray['size']) {
                     // kein Platz mehr frei
                     throw new \Exception($_language->module['error_cup_full']);
                 }
 
                 $saveQuery = mysqli_query(
-                    $_database, 
-                    "UPDATE `" . PREFIX . "cups_teilnehmer` 
+                    $_database,
+                    "UPDATE `" . PREFIX . "cups_teilnehmer`
                         SET `checked_in` = 1,
                             `date_checkin` = " . time() . "
                         WHERE `cupID` = " . $cup_id . " AND `teamID` = " . $teamID
