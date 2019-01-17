@@ -931,6 +931,14 @@ try {
             ADD `announcement` INT(1) NOT NULL DEFAULT '0' AFTER `date`;"
     );
 
+    $insertQuery = mysqli_query(
+        $_database,
+        "INSERT INTO `" . PREFIX . "comments_settings`
+            (`ident`, `modul`, `id`, `parent`)
+            VALUES
+            ('cm', 'cups_matches_playoff', 'matchID', 'comments');"
+    );
+
     echo "Delete this file!";
 
     $sendmail = \webspell\Email::sendEmail(

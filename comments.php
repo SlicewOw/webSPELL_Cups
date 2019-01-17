@@ -157,64 +157,86 @@ if (isset($_POST[ 'savevisitorcomment' ])) {
         header("Location: " . $_POST[ 'referer' ]);
     }
 } else if (isset($_POST[ 'saveusercomment' ])) {
-    include("_mysql.php");
-    include("_settings.php");
-    include("_functions.php");
-    $_language->readModule('comments');
-    if (!$userID) {
-        die($_language->module[ 'access_denied' ]);
-    }
- 
-    $parentID = $_POST[ 'parentID' ];
-    $type = $_POST[ 'type' ];
-    $message = $_POST[ 'message' ];
- 
-    $spamApi = webspell\SpamApi::getInstance();
-    $validation = $spamApi->validate($message);
- 
-    if (checkCommentsAllow($type, $parentID)) {
-        $date = time();
-        if ($validation == webspell\SpamApi::SPAM) {
-            safe_query(
-                "INSERT INTO
-                    `" . PREFIX . "comments_spam` (
-                        `parentID`,
-                        `type`,
-                        `userID`,
-                        `date`,
-                        `comment`,
-                        `rating`
-                    )
-                    VALUES (
-                        '" . $parentID . "',
-                        '" . $type . "',
-                        '" . $userID . "',
-                        '" . $date . "',
-                        '" . $message . "',
-                        '" . $rating . "'
-                    )"
-            );
-        } else {
-            safe_query(
-                "INSERT INTO
-                    `" . PREFIX . "comments` (
-                        `parentID`,
-                        `type`,
-                        `userID`,
-                        `date`,
-                        `comment`
-                    )
-                    VALUES (
-                        '" . $parentID . "',
-                        '" . $type . "',
-                        '" . $userID . "',
-                        '" . $date . "',
-                        '" . $message . "'
-                    )"
-            );
+
+    try {
+
+        include("_mysql.php");
+        include("_settings.php");
+        include("_functions.php");
+
+        $_language->readModule('comments');
+        if (!$userID) {
+            die($_language->module[ 'access_denied' ]);
         }
+
+        $parentID = (isset($_POST[ 'parentID' ]) && validate_int($_POST[ 'parentID' ], true)) ?
+            $_POST[ 'parentID' ] : 0;
+
+        if ($parentID < 1) {
+            throw new \Exception('value_of_attribute_parentID_is_incorrect');
+        }
+
+        $type = $_POST[ 'type' ];
+        $message = $_POST[ 'message' ];
+
+        $spamApi = webspell\SpamApi::getInstance();
+        $validation = $spamApi->validate($message);
+
+        if (!checkCommentsAllow($type, $parentID)) {
+            throw new \Exception('comments_not_allowed');
+        }
+
+        $insertAttributeArray = array();
+        $insertValueArray = array();
+
+        $insertAttributeArray[] = '`parentID`';
+        $insertValueArray[] = $parentID;
+
+        $insertAttributeArray[] = '`type`';
+        $insertValueArray[] = '\'' . $type . '\'';
+
+        $insertAttributeArray[] = '`userID`';
+        $insertValueArray[] = $userID;
+
+        $insertAttributeArray[] = '`date`';
+        $insertValueArray[] = time();
+
+        $insertAttributeArray[] = '`comment`';
+        $insertValueArray[] = '\'' . $message . '\'';
+
+        if ($validation == webspell\SpamApi::SPAM) {
+
+            $insert_in_table = 'comments_spam';
+
+            $insertAttributeArray[] = '`rating`';
+            $insertValueArray[] = '\'' . $rating . '\'';
+
+        } else {
+            $insert_in_table = 'comments';
+        }
+
+        $insertQuery = mysqli_query(
+            $_database,
+            "INSERT INTO `" . PREFIX . $insert_in_table . "`
+                (
+                    " . implode(', ', $insertAttributeArray) . "
+                )
+                VALUES
+                (
+                    " . implode(', ', $insertValueArray) . "
+                )"
+        );
+
+        if (isset($insertQuery) && !$insertQuery) {
+            throw new \Exception('query_insert_failed');
+        }
+
+    } catch (Exception $e) {
+        $_SESSION['errorArray'][] = $e->getMessage();
     }
+
     header("Location: " . $_POST[ 'referer' ]);
+
 } else if (isset($_GET[ 'delete' ])) {
     include("_mysql.php");
     include("_settings.php");
@@ -541,7 +563,7 @@ if (isset($_POST[ 'savevisitorcomment' ])) {
             }
  
             $data_array = array();
-            $data_array['$is_announcement'] = ($ds[ 'announcement' ] == 1) ?
+            $data_array['$is_announcement'] = (isset($ds[ 'announcement' ]) && ($ds[ 'announcement' ] == 1)) ?
                 'panel-danger' : 'panel-default';
             $data_array['$avatar'] = $avatar;
             $data_array['$content'] = $content;

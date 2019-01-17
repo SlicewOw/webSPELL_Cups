@@ -419,7 +419,7 @@ if (validate_array($_POST, true)) {
             }
 
         } else {
-            throw new \Exception($_language->module['unknown_action']  . ' 1111');
+            throw new \Exception($_language->module['unknown_action']);
         }
 
     } catch (Exception $e) {
