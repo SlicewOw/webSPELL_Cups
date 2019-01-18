@@ -30,7 +30,7 @@ $break_while = true;
 while ($break_while == true) {
 
     $shuffle_while = 0;
-    for($x=0;$x<$arrlen;$x+=2) {
+    for ($x = 0; $x < $arrlen; $x += 2) {
 
         $isTeam1 = (isset($cup_teams[$x]) && ($cup_teams[$x] == 0)) ?
             TRUE : FALSE;
@@ -38,7 +38,7 @@ while ($break_while == true) {
         $isTeam2 = (isset($cup_teams[$x + 1]) && ($cup_teams[$x + 1] == 0)) ?
             TRUE : FALSE;
 
-        if($isTeam1 && $isTeam2) {
+        if ($isTeam1 && $isTeam2) {
             $shuffle_while++;
         }
 
@@ -55,15 +55,22 @@ while ($break_while == true) {
     }
 
     $breakTimer++;
+
 }
 
 $cupArray['anz_teams'] = $cupArray['teams']['checked_in'];
-$anzRunden 	= $cupArray['anz_runden'];
+$anzRunden = $cupArray['anz_runden'];
 $anzMatches = $cupArray['size'] / 2;
+
+$matchFormatPerRoundArray = (isset($cupArray['settings']['format']) && validate_array($cupArray['settings']['format'], true)) ?
+    $cupArray['settings']['format'] : array();
 
 for ($n = 1; $n < ($anzRunden + 1); $n++) {
 
     try {
+
+        $format = (isset($matchFormatPerRoundArray[$n])) ?
+            $matchFormatPerRoundArray[$n] : 'bo1';
 
         for ($i = 0; $i < $anzMatches; $i++) {
 
@@ -98,6 +105,7 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                         `wb`,
                         `runde`,
                         `spiel`,
+                        `format`,
                         `date`,
                         `maps`
                     )
@@ -107,6 +115,7 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                         1,
                         " . $n . ",
                         " . ($i + 1) . ",
+                        '" . $format . "',
                         " . $date . ",
                         '" . $maps . "'
                     )"
@@ -121,7 +130,7 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
             //
             // Update Matches Round 1
             // Set Teams and Def-Wins
-            if ($n==1) {
+            if ($n == 1) {
 
                 $team1_id = $i * 2;
                 $team2_id = $team1_id + 1;
@@ -144,13 +153,13 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                 $query2 = mysqli_query(
                     $_database,
                     "UPDATE `" . PREFIX . "cups_matches_playoff`
-                        SET team1 = " . $team1 . ",
-                            team1_freilos = " . $freilos1 . ",
-                            ergebnis1 = 0,
-                            team2 = " . $team2 . ",
-                            team2_freilos = " . $freilos2 . ",
-                            ergebnis2 = 0,
-                            active = 1
+                        SET `team1` = " . $team1 . ",
+                            `team1_freilos` = " . $freilos1 . ",
+                            `ergebnis1` = 0,
+                            `team2` = " . $team2 . ",
+                            `team2_freilos` = " . $freilos2 . ",
+                            `ergebnis2` = 0,
+                            `active` = 1
                         WHERE `matchID` = " . $match_id
                 );
 
@@ -170,12 +179,13 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                     // Match Query
                     $query1 = mysqli_query(
                         $_database,
-                        "INSERT INTO `" . PREFIX . "cups_matches_playoff` 
+                        "INSERT INTO `" . PREFIX . "cups_matches_playoff`
                             (
                                 `cupID`,
                                 `wb`,
                                 `runde`,
                                 `spiel`,
+                                `format`,
                                 `date`,
                                 `maps`
                             )
@@ -185,6 +195,7 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                                 0,
                                 " . $n . ",
                                 " . ($i + 1) . ",
+                                '" . $format . "',
                                 " . $date . ",
                                 '" . $maps . "'
                             )"

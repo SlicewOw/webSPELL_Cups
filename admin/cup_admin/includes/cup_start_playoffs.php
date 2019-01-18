@@ -55,12 +55,16 @@ try {
     // 2: Gruppenphase
     // 3: Playoffs
     // 4: beendet
-    $query = mysqli_query(
+    $updateQuery = mysqli_query(
         $_database,
         "UPDATE `" . PREFIX . "cups`
             SET " . $setValues . "
             WHERE `cupID` = " . $cup_id
     );
+
+    if (!$updateQuery) {
+        throw new \Exception($_language->module['error_update_query_failed']);
+    }
 
     //
     // Bracket erstellen
@@ -71,9 +75,6 @@ try {
 
     include($createBracket);
 
-    if (!$query) {
-        throw new \Exception($_language->module['error_update_query_failed']);
-    }
     $_SESSION['successArray'][] = $_language->module['bracket_created'];
 
     $parent_url .= '&page=bracket';
