@@ -1,120 +1,131 @@
 <?php
 
 $returnArray = array(
-	'status'	=> FALSE,
-	'message'	=> array(),
-	'html'		=> ''
+    'status' => FALSE,
+    'message' => array(),
+    'html' => ''
 );
 
 try {
-	
-	$_language->readModule('cups');
 
-	if($getAction == 'table') {
+    $_language->readModule('cups', false, true);
 
-		include($dir_cup . '/admin/includes/admin_team.php');
+    if ($getAction == 'table') {
 
-		if(isset($adminList) && !empty($adminList)) {
+        $includePath = __DIR__ . '/../../../admin/cup_admin/includes/admin_team.php';
 
-			$returnArray['status'] = TRUE;
-			$returnArray['html'] = $adminList;
+        if (!file_exists($includePath)) {
+            throw new \Exception($_language->module['unknown_file']);
+        }
 
-		}
+        include($includePath);
 
-	} else {
+        if (!isset($adminList) || empty($adminList)) {
+            throw new \Exception($_language->module['unknown_action']);
+        }
 
-		$admin_id = (isset($_POST['admin_id']) && validate_int($_POST['admin_id'])) ? 
-			(int)$_POST['admin_id'] : 0;
-		
-		if($admin_id < 1) {
-			throw new \Exception('admin not found');
-		}
-		
-		$user_id = (isset($_POST['user_id']) && validate_int($_POST['user_id'])) ? 
-			(int)$_POST['user_id'] : 0;
+        $returnArray['html'] = $adminList;
 
-		if($user_id < 1) {
-			throw new \Exception('user not found');
-		}
+    } else {
 
-		if($getAction == 'addAdmin' || $getAction == 'editAdmin') {
+        $postAction = (isset($_POST['action'])) ?
+            getinput($_POST['action']) : '';
 
-			$position = (isset($_POST['position'])) ? $_POST['position'] : '';
-			if(empty($position)) {
-				throw new \Exception('no position selected');
-			}
+        if (empty($postAction)) {
+            throw new \Exception($_language->module['unknown_action']);
+        }
 
-			$description = (isset($_POST['description'])) ? 
-				getinput($_POST['description']) : '';
+        $admin_id = (isset($_POST['admin_id']) && validate_int($_POST['admin_id'])) ?
+            (int)$_POST['admin_id'] : 0;
 
-			if($getAction == 'addAdmin') {
+        if ($admin_id < 1) {
+            throw new \Exception($_language->module['unknown_admin']);
+        }
 
-				$query = mysqli_query(
-					$_database,
-					"INSERT INTO `".PREFIX."cups_team`
-						(
-							userID,
-							date,
-							position,
-							description
-						)
-						VALUES
-						(
-							" . $user_id . ",
-							" . time() . ",
-							'" . $position . "',
-							'".$description."'
-						)"
-				);
+        $user_id = (isset($_POST['user_id']) && validate_int($_POST['user_id'])) ?
+            (int)$_POST['user_id'] : 0;
 
-				if(!$query) {
-					throw new \Exception('insert query failed');
-				}
+        if ($user_id < 1) {
+            throw new \Exception($_language->module['unknown_user']);
+        }
 
-			} else {
+        if ($postAction == 'addAdmin' || $postAction == 'editAdmin') {
 
-				$query = mysqli_query(
-					$_database,
-					"UPDATE `".PREFIX."cups_team`
-						SET	date = " . time() . ",
-							position = '" . $position . "',
-							description = '" . $description . "'
-						WHERE userID = " . $user_id
-				);
+            $position = (isset($_POST['position'])) ?
+                getinput($_POST['position']) : '';
 
-				if(!$query) {
-					throw new \Exception('update query failed');
-				}
+            if (empty($position)) {
+                throw new \Exception($_language->module['unknown_position']);
+            }
 
-				$returnArray['message'][] = $description;
+            $description = (isset($_POST['description'])) ?
+                getinput($_POST['description']) : '';
 
-			}
+            if ($postAction == 'addAdmin') {
 
-			$returnArray['status'] = TRUE;
+                $query = mysqli_query(
+                    $_database,
+                    "INSERT INTO `" . PREFIX . "cups_team`
+                        (
+                            `userID`,
+                            `date`,
+                            `position`,
+                            `description`
+                        )
+                        VALUES
+                        (
+                            " . $user_id . ",
+                            " . time() . ",
+                            '" . $position . "',
+                            '" . $description . "'
+                        )"
+                );
 
-		} else if($getAction == 'deleteAdmin') {
+                if (!$query) {
+                    throw new \Exception($_language->module['query_insert_failed']);
+                }
 
-			$query = mysqli_query(
-				$_database,
-				"DELETE FROM `" . PREFIX . "cups_team`
-					WHERE userID = " . $user_id
-			); 
+            } else {
 
-			if(!$query) {
-				throw new \Exception('error while deleting');
-			}
+                $query = mysqli_query(
+                    $_database,
+                    "UPDATE `" . PREFIX . "cups_team`
+                        SET `date` = " . time() . ",
+                            `position` = '" . $position . "',
+                            `description` = '" . $description . "'
+                        WHERE `userID` = " . $user_id
+                );
 
-			$returnArray['status'] = TRUE;
+                if (!$query) {
+                    throw new \Exception($_language->module['query_update_failed']);
+                }
 
-		} else {
-			throw new \Exception('unknown_action');
-		}
+            }
 
-	}
+            $returnArray['message'][] = $_language->module['cup_admin_saved'];
 
-} catch(Exception $e) {
-	$returnArray['message'][] = $e->getMessage();
+        } else if ($postAction == 'deleteAdmin') {
+
+            $query = mysqli_query(
+                $_database,
+                "DELETE FROM `" . PREFIX . "cups_team`
+                    WHERE `userID` = " . $user_id
+            );
+
+            if (!$query) {
+                throw new \Exception($_language->module['query_delete_failed']);
+            }
+
+        } else {
+            throw new \Exception($_language->module['unknown_action']);
+        }
+
+    }
+
+    $returnArray['status'] = TRUE;
+
+} catch (Exception $e) {
+    $returnArray['message'][] = $e->getMessage();
 }
-
 
 echo json_encode($returnArray);

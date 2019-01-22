@@ -1,194 +1,192 @@
-<button type="button" data-toggle="collapse" 
-		aria-expanded="false" 
-		data-target="#addAdminContainer" 
-		aria-controls="addAdminContainer" 
-		class="btn btn-info btn-sm white darkshadow">
-	%add_admin%
+<button type="button" data-toggle="collapse"
+        aria-expanded="false"
+        data-target="#addAdminContainer"
+        aria-controls="addAdminContainer"
+        class="btn btn-info btn-sm white darkshadow">
+    %add_admin%
 </button>
 <br /><br />
 <div id="addAdminContainer" class="collapse">
-	<form method="post">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h1 class="panel-title">%add_admin%</h1>
-			</div>
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label>User</label>
-							<select name="user_id" 
-									class="form-control selectpicker" 
-									data-live-search="true">
-								$userList
-							</select>
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label>Position</label>
-							<select name="position"
-									class="form-control selectpicker" 
-									data-live-search="true" 
-									id="position">
-								$positions
-							</select>
-						</div>
-					</div>
-				</div>
+    <form method="post">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">%add_admin%</h1>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>User</label>
+                            <select name="user_id"
+                                    class="form-control selectpicker"
+                                    data-live-search="true">
+                                $userList
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Position</label>
+                            <select name="position"
+                                    class="form-control selectpicker"
+                                    data-live-search="true"
+                                    id="position">
+                                $positions
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label>%description%</label>
                     <textarea class="form-control" name="description"></textarea>
                 </div>
-			</div>
-			<div class="panel-footer">
-				<button type="button" id="saveAddAdmin" 
-						name="saveAddAdmin" 
-						class="btn btn-info btn-sm white darkshadow">
-					%save%
-				</button>
-			</div>
-		</div>
-	</form>
+            </div>
+            <div class="panel-footer">
+                <button type="button" id="saveAddAdmin" 
+                        name="saveAddAdmin" 
+                        class="btn btn-info btn-sm white darkshadow">
+                    %save%
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
 <div class="panel panel-default">
-	<div class="panel-heading">
-		<h1 class="panel-title">Admins</h1>
-	</div>
-	<div class="table-responsive">
-		<table class="table table-striped">
-			<thead>
-				<th style="width: 15%;">Admin</th>
-				<th style="width: 40%;">Position</th>
-				<th style="width: 15%;">%date%</th>
-				<th style="width: 30%;">%actions%</th>
-			</thead>
-			<tbody id="adminListContainer">
-				$adminList
-			</tbody>
-		</table>
-	</div>
+    <div class="panel-heading">
+        <h1 class="panel-title">Admins</h1>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <th style="width: 15%;">Admin</th>
+                <th style="width: 40%;">Position</th>
+                <th style="width: 15%;">%date%</th>
+                <th style="width: 30%;">%actions%</th>
+            </thead>
+            <tbody id="adminListContainer">
+                $adminList
+            </tbody>
+        </table>
+    </div>
 </div>
 <script type="text/javascript">
-	
+
 function updateAdminList() {
-	
-	$("#adminListContainer").html(
-		'<tr><td colspan="4"><img src="$image_url/loader.gif" alt="" /></td></tr>'
-	);
-	
-	$.get(
-		"ajax.php?site=admin_cup_admins",
-		{
-			action : 'table'
-		},
-		function(data, status){
-			
-			if (status === "success") {
-			   
-				var varData = JSON.parse(data);
-				if(varData.status) {
-					$("#adminListContainer").html(varData.html);
-				} else {
-					$("#adminListContainer").html(
-						'<tr><td colspan="4">%error_getting_data%</td></tr>'
-					);
-				}
-				
-		   	}
-			
-		}
-	);
-	
-}	
-	
-$("#saveAddAdmin").click(function(e) {
-	
-	e.preventDefault();
-	
-	$.post(
-		"ajax.php?site=admin_cup_admins&action=addAdmin",
-		{
-			admin_id	: $user_id,
-			user_id		: $('select[name="user_id"]').val(),
-			position	: $('select[name="position"]').val(),
-			description	: $('textarea[name="description"]').val()
-		},
-		function(data, status){
 
-			if(status === 'success') {
+    $("#adminListContainer").html(
+        '<tr><td colspan="4"><img src="$image_url/loader.gif" alt="" /></td></tr>'
+    );
 
-				var text = "";
+    $.get(
+        "ajax.php?site=admin_cup_admins",
+        {
+            action : 'table'
+        },
+        function (data, status) {
 
-				var varData = JSON.parse(data);
-				if(varData.status === true) {
+            if (status === "success") {
 
-					showNotify('Admin gespeichert', text, 'success');
+                var varData = JSON.parse(data);
+                if (varData.status) {
+                    $("#adminListContainer").html(varData.html);
+                } else {
+                    $("#adminListContainer").html(
+                        '<tr><td colspan="4">%error_getting_data%</td></tr>'
+                    );
+                }
 
-					$('textarea[name="description"]').val('');
+            }
 
-					updateAdminList();
+        }
+    );
 
-				} else {
+}
 
-					$.each(varData.message, function(index, value) {
-						text += value + "\n";
-					});
+$(document).ready(function () {
 
-					showNotify('Admin nicht gespeichert', text, 'danger');
+    $("#saveAddAdmin").click(function (e) {
 
-				}
+        e.preventDefault();
 
-			}
+        $.post(
+            "ajax.php?site=admin_cup_admins",
+            {
+                action : 'addAdmin',
+                admin_id : $user_id,
+                user_id : $('select[name="user_id"]').val(),
+                position : $('select[name="position"]').val(),
+                description : $('textarea[name="description"]').val()
+            },
+            function (data, status) {
 
-		}
-	);
-	
+                if (status === 'success') {
+
+                    var varData = JSON.parse(data),
+                        alert_type = 'error';
+
+                    if (varData.status === true) {
+
+                        alert_type = 'success';
+                        $('textarea[name="description"]').val('');
+
+                        updateAdminList();
+
+                    }
+
+                    showMultipleNotifies(varData.message, alert_type);
+
+                }
+
+            }
+        );
+
+    });
+
 });
 
-var selectedPosition;
-var plainText;
+var selectedPosition,
+    plainText;
 
 function editAdmin(user_id) {
 
     $("button[name=editAdmin" + user_id).attr('disabled', 'disabled');
 
     selectedPosition = $("#userPosition" + user_id).html();
-	var positionOptions = $("#position").html();
-	
-	positionOptions = positionOptions.replace(
-		'">' + selectedPosition + '</option>', 
-		'" selected="selected">' + selectedPosition + '</option>'
-	);
-	
-	$("#userPosition" + user_id).html(
-		"<select class=\"form-control\" name=\"userPosition" + user_id + "\">" + 
-		"<option value=\"0\">-- / --</option>" +
-		positionOptions
-		+ "</select>"
-	);
+    var positionOptions = $("#position").html();
+
+    positionOptions = positionOptions.replace(
+        '">' + selectedPosition + '</option>',
+        '" selected="selected">' + selectedPosition + '</option>'
+    );
+
+    $("#userPosition" + user_id).html(
+        "<select class=\"form-control\" name=\"userPosition" + user_id + "\">" +
+        "<option value=\"0\">-- / --</option>" +
+        positionOptions
+        + "</select>"
+    );
 
     plainText = $("#userDescription" + user_id).html();
-	$("#userDescription" + user_id).html(
-		"<textarea name=\"userDescription" + user_id + "\" class=\"form-control\">" +
-		plainText
-		+ "</textarea>"
-		+ "<button type=\"button\" class=\"btn btn-info btn-sm white darkshadow\" onclick=\"changeUserPosition(" + user_id + ");\">%save%</button>"
+    $("#userDescription" + user_id).html(
+        "<textarea name=\"userDescription" + user_id + "\" class=\"form-control\">" +
+        plainText
+        + "</textarea>"
+        + "<button type=\"button\" class=\"btn btn-info btn-sm white darkshadow\" onclick=\"changeUserPosition(" + user_id + ");\">%save%</button>"
         + " <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"revertAdminChange(" + user_id + ");\">%cancel%</button>"
-	);
-	
-	$("textarea[name=userDescription" + user_id + "]").summernote({
-		height: 100,
-		toolbar: [
-			['style', ['bold', 'italic', 'underline', 'clear']],
-			['font', ['strikethrough', 'superscript', 'subscript']],
-			['fontsize', ['fontsize']],
-			['color', ['color']],
-			['para', ['ul', 'ol', 'paragraph']],
-			['height', ['height']],
-		  ]
-	});
-	
+    );
+
+    $("textarea[name=userDescription" + user_id + "]").summernote({
+        height: 100,
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+          ]
+    });
+
 }
 
 function revertAdminChange(user_id) {
@@ -201,53 +199,51 @@ function revertAdminChange(user_id) {
 }
 
 function changeUserPosition(user_id) {
-	
-	$.post(
-		"ajax.php?site=admin_cup_admins&action=editAdmin",
-		{
-			admin_id	: $user_id,
-			user_id		: user_id,
-			position	: $("select[name=userPosition" + user_id + "]").val(),
-			description	: $("textarea[name=userDescription" + user_id + "]").val()
-		},
-		function(data, status){
 
-			if(status === 'success') {
+    $.post(
+        "ajax.php?site=admin_cup_admins",
+        {
+            action : 'editAdmin',
+            admin_id : $user_id,
+            user_id : user_id,
+            position : $("select[name=userPosition" + user_id + "]").val(),
+            description : $("textarea[name=userDescription" + user_id + "]").val()
+        },
+        function (data, status) {
 
-				updateAdminList();		
+            if (status === 'success') {
+                updateAdminList();
+            }
 
-			}
+        }
+    );
 
-		}
-	);
-	
 }
-	
+
 function deleteAdmin(user_id, username) {
-	
-	var confirmText = '$confirmText';
-	var confirmResult = confirm(confirmText + "\n\nUser: " + username);
-	if(confirmResult) {
-		
-		$.post(
-			"ajax.php?site=admin_cup_admins&action=deleteAdmin",
-			{
-				admin_id	: $user_id,
-				user_id		: user_id
-			},
-			function(data, status){
 
-				if(status === 'success') {
+    var confirmText = '$confirmText';
+    var confirmResult = confirm(confirmText + "\n\nUser: " + username);
+    if (!confirmResult) {
+        return;
+    }
 
-					updateAdminList();		
+    $.post(
+        "ajax.php?site=admin_cup_admins",
+        {
+            action : 'deleteAdmin',
+            admin_id : $user_id,
+            user_id : user_id
+        },
+        function (data, status) {
 
-				}
+            if (status === 'success') {
+                updateAdminList();
+            }
 
-			}
-		);
-		
-	}
-	
+        }
+    );
+
 }
-	
+
 </script>
