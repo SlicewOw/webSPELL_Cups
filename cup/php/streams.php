@@ -51,7 +51,7 @@ try {
                 );
 
                 if (!$ergebnis) {
-                    throw new \Exception($_language->module['query_failed_update']);
+                    throw new \Exception($_language->module['query_update_failed']);
                 }
 
                 $parent_url .= '&id=' . $stream_id;
@@ -71,7 +71,7 @@ try {
 
         if ($getAction == 'edit') {
 
-            if (!istvadmin($userID)) {
+            if (!iscupadmin($userID)) {
                 throw new \Exception($_language->module['access_denied']);
             }
 
@@ -105,7 +105,7 @@ try {
 
         } else if ($getAction == 'delete') {
 
-            if (!istvadmin($userID)) {
+            if (!iscupadmin($userID)) {
                 throw new \Exception($_language->module['access_denied']);
             }
 
@@ -136,7 +136,7 @@ try {
             );
 
             if (!$deleteQuery) {
-                throw new \Exception($_language->module['error_query_delete']);
+                throw new \Exception($_language->module['query_delete_failed']);
             }
 
             $text = 'Stream #'.$stream_id.' gel&ouml;scht';
@@ -286,7 +286,6 @@ try {
             $baseWhereClauseArray[] = '`online` = 1';
 
             $orderArray = array();
-            $orderArray[] = '`tv` DESC';
             $orderArray[] = '`prioritization` DESC';
             $orderArray[] = '`viewer` DESC';
 
@@ -411,7 +410,6 @@ try {
 
             $orderArray = array();
             $orderArray[] = '`online` DESC';
-            $orderArray[] = '`tv` DESC';
             $orderArray[] = '`prioritization` DESC';
             $orderArray[] = '`viewer` DESC';
             $orderArray[] = '`title` DESC';
@@ -476,7 +474,7 @@ try {
                         FROM `".PREFIX."liveshow` a
                         JOIN `".PREFIX."liveshow_type` b ON a.type = b.typeID
                         WHERE active = '1' AND online = '1' AND game = '".$game."' 
-                        ORDER BY `tv` DESC, `prioritization` DESC, `viewer` DESC"
+                        ORDER BY `prioritization` DESC, `viewer` DESC"
                 );
                 if(mysqli_num_rows($ergebnis)) {
 
@@ -612,7 +610,7 @@ try {
                                 $_database,
                                 "SELECT * FROM `" . PREFIX . "liveshow`
                                     WHERE " . $whereClause . "
-                                    ORDER BY `tv` DESC, `prioritization` DESC, `viewer` DESC
+                                    ORDER BY `prioritization` DESC, `viewer` DESC
                                     LIMIT 0, 5"
                             );
 
@@ -664,7 +662,7 @@ try {
                         $_database,
                         "SELECT * FROM `".PREFIX."liveshow`
                             WHERE " . $whereClause . "
-                            ORDER BY `tv` DESC, `prioritization` DESC, `viewer` DESC"
+                            ORDER BY `prioritization` DESC, `viewer` DESC"
                     );
 
                     if ($ergebnis) {
