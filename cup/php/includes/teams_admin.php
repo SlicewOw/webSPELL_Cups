@@ -107,6 +107,7 @@ try {
                 }
 
                 $data_array = array();
+                $data_array['$user_id'] = $user_id;
                 $data_array['$name'] = $name;
                 $data_array['$position'] = $dc['position'];
                 $data_array['$date'] = getformatdatetime($dc['date_join']);
