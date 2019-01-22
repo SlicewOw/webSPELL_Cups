@@ -313,6 +313,10 @@ systeminc('func/convert');
 systeminc('func/validation');
 systeminc('func/images');
 
+// -- Streams -- //
+
+systeminc('func/streams');
+
 // -- LANGUAGE SYSTEM -- //
 
 systeminc('func/language');
