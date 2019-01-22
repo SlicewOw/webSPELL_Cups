@@ -138,12 +138,12 @@ try {
 
                 $stream_info = $db['stream_title'];
 
-                if($db['stream_status']) {
+                if ($db['stream_status']) {
 
                     $stream_info .= '<span class="pull-right">';
 
-                    if(!empty($db['stream_game'])) {
-                        $stream_info .= $streamArray['game'].' / ';
+                    if (!empty($db['stream_game'])) {
+                        $stream_info .= $db['stream_game'] . ' / ';
                     }
 
                     $stream_info .= $db['stream_viewer'].' '.$_language->module['stream_viewer'];
