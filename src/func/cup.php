@@ -1580,145 +1580,194 @@ function cup($cupID, $teamID, $cat) {
 
 /* Team Informationen */
 function getteam($id, $cat = '') {
-	
+
     global $_database, $userID;
-	
-    if($cat == 'admin') {
-		$info = mysqli_query(
-		    $_database,
+
+    if ($cat == 'admin') {
+        $info = mysqli_query(
+            $_database,
             "SELECT userID FROM `".PREFIX."cups_teams` 
-				WHERE teamID = " . $id . " AND deleted = 0"
+                WHERE teamID = " . $id . " AND deleted = 0"
         );
-		if(mysqli_num_rows($info)) {
-			$ds = mysqli_fetch_array($info);
-			$returnValue = $ds['userID'];
-		} else {
-			$returnValue = FALSE;
-		}
-	} else if ($cat == 'teamID') {
-        
-		$info = mysqli_query(
-            $_database, 
-            "SELECT 
-                    `teamID` 
-                FROM `" . PREFIX . "cups_teams` 
+        if (mysqli_num_rows($info)) {
+            $ds = mysqli_fetch_array($info);
+            $returnValue = $ds['userID'];
+        } else {
+            $returnValue = FALSE;
+        }
+    } else if ($cat == 'teamID') {
+
+        $info = mysqli_query(
+            $_database,
+            "SELECT
+                    `teamID`
+                FROM `" . PREFIX . "cups_teams`
                 WHERE userID = " . $id . " AND deleted = '0'"
         );
-        
-		if(mysqli_num_rows($info)) {
-			$IDs = array();
-			while($ds = mysqli_fetch_array($info)) {
-				$IDs[] = $ds['teamID'];
-			}
-			$returnValue = $IDs;
-		} else {
-			$returnValue = FALSE;
-		}
-        
-	} else if ($cat == 'anz_matches') {
-		$anz1 = mysqli_num_rows(
-			mysqli_query($_database, "SELECT * FROM `".PREFIX."cups_gruppen` 
-										WHERE (team1 = '".$id."' OR team2 = '".$id."')")
-		);
-		$anz2 = mysqli_num_rows(
-			mysqli_query($_database, "SELECT * FROM `".PREFIX."cups_matches_playoff` 
-										WHERE (team1 = '".$id."' OR team2 = '".$id."')")
-		);
-		$returnValue = ($anz1 + $anz2);
-	} else if ($cat == 'anz_cups') {
-		$anz = mysqli_num_rows(
-			mysqli_query($_database, "SELECT ID FROM `".PREFIX."cups_teilnehmer` 
-										WHERE teamID = '".$id."' AND checked_in = '1'")
-		);
-		$returnValue = $anz;
-	} else if ($cat == 'anz_member') {
-		$anz = mysqli_num_rows(
-			mysqli_query($_database, "SELECT userID FROM `".PREFIX."cups_teams_member` 
-										WHERE teamID = '".$id."' AND active = '1'")
-		);
-		$returnValue = $anz;
-	} else if ($cat == 'anz_pps') {
-		$anz = mysqli_num_rows(
-			mysqli_query($_database, "SELECT ppID FROM `".PREFIX."cups_penalty` 
-										WHERE teamID = '".$id."'"));
-		$returnValue = $anz;
-	} else if ($cat == 'name_exist' || $cat == 'tag_exist') {
-        
+
+        if (mysqli_num_rows($info)) {
+            $IDs = array();
+            while ($ds = mysqli_fetch_array($info)) {
+                $IDs[] = $ds['teamID'];
+            }
+            $returnValue = $IDs;
+        } else {
+            $returnValue = FALSE;
+        }
+
+    } else if ($cat == 'anz_matches') {
+
+        $whereClauseArray = array();
+        $whereClauseArray[] = '`team1` = ' . $id;
+        $whereClauseArray[] = '`team2` = ' . $id;
+
+        $whereClause = implode(' OR ', $whereClauseArray);
+
+        $anz1 = mysqli_num_rows(
+            mysqli_query(
+                $_database,
+                "SELECT * FROM `" . PREFIX . "cups_gruppen`
+                    WHERE " . $whereClause
+            )
+        );
+
+        $anz2 = mysqli_num_rows(
+            mysqli_query(
+                $_database,
+                "SELECT * FROM `" . PREFIX . "cups_matches_playoff`
+                    WHERE " . $whereClause
+            )
+        );
+
+        $returnValue = ($anz1 + $anz2);
+
+    } else if ($cat == 'anz_cups') {
+
+        $whereClauseArray = array();
+        $whereClauseArray[] = 'ct.`teamID` = ' . $id;
+        $whereClauseArray[] = 'ct.`checked_in` = 1';
+        $whereClauseArray[] = 'c.`mode` != \'1on1\'';
+
+        $whereClause = implode(' AND ', $whereClauseArray);
+
+        $anz = mysqli_num_rows(
+            mysqli_query(
+                $_database,
+                "SELECT
+                        ct.`ID`
+                    FROM `" . PREFIX . "cups_teilnehmer` ct
+                    LEFT JOIN `" . PREFIX . "cups` c ON ct.`cupID` = c.`cupID`
+                    WHERE " . $whereClause
+            )
+        );
+
+        $returnValue = $anz;
+
+    } else if ($cat == 'anz_member') {
+        $anz = mysqli_num_rows(
+            mysqli_query(
+                $_database,
+                "SELECT
+                        `userID`
+                    FROM `" . PREFIX . "cups_teams_member`
+                    WHERE `teamID` = " . $id . " AND active = 1"
+            )
+        );
+        $returnValue = $anz;
+    } else if ($cat == 'anz_pps') {
+        $anz = mysqli_num_rows(
+            mysqli_query(
+                $_database,
+                "SELECT
+                        `ppID`
+                    FROM `" . PREFIX . "cups_penalty`
+                    WHERE `teamID` = " . $id
+            )
+        );
+        $returnValue = $anz;
+    } else if ($cat == 'name_exist' || $cat == 'tag_exist') {
+
         $whereClauseArray = array();
         $whereClauseArray[] = '`deleted` = 0';
-        
+
         if ($cat == 'name_exist') {
             $whereClauseArray[] = '`name` = \'' . $id . '\'';
         } else {
             $whereClauseArray[] = '`tag` = \'' . $id . '\'';
         }
-        
+
         $whereClause = implode(' AND ', $whereClauseArray);
-        
+
         $selectQuery = mysqli_query(
-            $_database, 
-            "SELECT 
-                    `teamID` 
-                FROM `" . PREFIX . "cups_teams` 
+            $_database,
+            "SELECT
+                    `teamID`
+                FROM `" . PREFIX . "cups_teams`
                 WHERE " . $whereClause
         );
-        
+
         if (!$selectQuery) {
             return FALSE;
         }
-        
-		$anz = mysqli_num_rows($selectQuery);
-        
-		$returnValue = ($anz > 0) ? FALSE : TRUE;
-        
-	} else if ($cat == 'team_ids') {
-		$anz = mysqli_fetch_array(
-			mysqli_query($_database, "SELECT team1, team2 FROM `".PREFIX."cups_matches_playoff` 
-										WHERE matchID = '".$id."'")
-		);
-		$returnValue = array($anz['team1'], $anz['team2']);
-	} else {
-		
-		$team_id	= 0;
-		$date		= '';
-		$name		= '';
-		$tag		= '';
-		$admin_id	= '';
-		$anzMember	= 0;
-		$hp			= '';
-		$logotype	= '';
-		$hits		= '';
-		$deleted	= '';
-		$isVisible 	= 0;
+
+        $anz = mysqli_num_rows($selectQuery);
+
+        $returnValue = ($anz > 0) ? FALSE : TRUE;
+
+    } else if ($cat == 'team_ids') {
+        $anz = mysqli_fetch_array(
+            mysqli_query(
+                $_database,
+                "SELECT
+                        `team1`,
+                        `team2`
+                    FROM `" . PREFIX . "cups_matches_playoff`
+                    WHERE `matchID` = " . $id
+            )
+        );
+        $returnValue = array($anz['team1'], $anz['team2']);
+    } else {
+
+        $team_id	= 0;
+        $date		= '';
+        $name		= '';
+        $tag		= '';
+        $admin_id	= '';
+        $anzMember	= 0;
+        $hp			= '';
+        $logotype	= '';
+        $hits		= '';
+        $deleted	= '';
+        $isVisible 	= 0;
         $userArray  = array();
         $anzMatches = 0;
 
-		if ($id > 0) {
+        if ($id > 0) {
 
-			$info = mysqli_query(
-			    $_database,
+            $info = mysqli_query(
+                $_database,
                 "SELECT * FROM `".PREFIX."cups_teams` 
-					WHERE teamID = " . $id
+                    WHERE teamID = " . $id
             );
-			if (mysqli_num_rows($info) == 1) {
+            if (mysqli_num_rows($info) == 1) {
 
-				$ds = mysqli_fetch_array($info);
-				if (($ds['deleted'] == 0) || (iscupadmin($userID))) {
-					$isVisible = 1;
-				}
+                $ds = mysqli_fetch_array($info);
+                if (($ds['deleted'] == 0) || (iscupadmin($userID))) {
+                    $isVisible = 1;
+                }
 
-				$team_id	= $ds['teamID'];
-				$date		= $ds['date'];
-				$name		= $ds['name'];
-				$tag		= $ds['tag'];
-				$admin_id	= $ds['userID'];
-				$anzMember	= getteam($team_id, 'anz_member');
-				$hp			= $ds['hp'];
-				$logotype	= getCupTeamImage($team_id, true);
-				$hits		= $ds['hits'];
-				$deleted	= $ds['deleted'];
+                $team_id	= $ds['teamID'];
+                $date		= $ds['date'];
+                $name		= $ds['name'];
+                $tag		= $ds['tag'];
+                $admin_id	= $ds['userID'];
+                $anzMember	= getteam($team_id, 'anz_member');
+                $hp			= $ds['hp'];
+                $logotype	= getCupTeamImage($team_id, true);
+                $hits		= $ds['hits'];
+                $deleted	= $ds['deleted'];
 
-		        $anzMatches = getteam($team_id, 'anz_matches');
+                $anzMatches = getteam($team_id, 'anz_matches');
 
                 $query = mysqli_query(
                     $_database,
@@ -1728,41 +1777,41 @@ function getteam($id, $cat = '') {
                         WHERE `teamID` = " . $team_id . " AND `active` = 1
                         ORDER BY `position` DESC"
                 );
-                
+
                 while ($get = mysqli_fetch_array($query)) {
                     $userArray[] = $get['userID'];
                 }
 
-			}
+            }
 
-		}
-		
-		$returnValue = array(
-			"team_id" => $team_id,
-			"date" => $date,
-			"name" => $name,
-			"tag" => $tag,
-			"admin_id" => $admin_id,
-			"anz_member" => $anzMember,
-			"hp" => $hp,
-			"logotype" => $logotype,
-			"hits" => $hits,
-			"deleted" => $deleted,
-			"visible" => $isVisible,
+        }
+
+        $returnValue = array(
+            "team_id" => $team_id,
+            "date" => $date,
+            "name" => $name,
+            "tag" => $tag,
+            "admin_id" => $admin_id,
+            "anz_member" => $anzMember,
+            "hp" => $hp,
+            "logotype" => $logotype,
+            "hits" => $hits,
+            "deleted" => $deleted,
+            "visible" => $isVisible,
             "member" => $userArray,
             "statistic" => array(
                 "anz_matches" => $anzMatches
             )
-		);
-		
-		if (!empty($cat) && isset($returnValue[$cat])) {
-			$returnValue = $returnValue[$cat];
-		} 
-		
-	}
-    
-	return $returnValue;
-    
+        );
+
+        if (!empty($cat) && isset($returnValue[$cat])) {
+            $returnValue = $returnValue[$cat];
+        }
+
+    }
+
+    return $returnValue;
+
 }
 function getteams($selected = '') {
     

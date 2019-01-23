@@ -25,7 +25,7 @@ try {
                     )
                 );
 
-                if($get['userID'] == $admin_id) {
+                if ($get['userID'] == $admin_id) {
                     throw new \Exception($_language->module['error_still_admin']);
                 }
 
@@ -96,20 +96,20 @@ try {
             throw new \Exception($_language->module['deleted']);
         }
 
-        //
-        // Team Hits
-        setHits('cups_teams', 'teamID', $team_id, false);
-
         if (($ds['deleted'] == 1) && (iscupadmin($userID))) {
             echo showInfo($_language->module['deleted']);
         }
+
+        //
+        // Team Hits
+        setHits('cups_teams', 'teamID', $team_id, false);
 
         //
         // Team-Admin Rechte
         $teamAdminAccess = ($userID == $ds['userID']) ? TRUE : FALSE;
 
         if ($teamAdminAccess) {
-            echo '<a href="index.php?site=teams&amp;action=admin&amp;id='.$team_id.'" class="btn btn-info btn-sm white darkshadow">Team Admin</a>';
+            echo '<a href="index.php?site=teams&amp;action=admin&amp;id=' . $team_id . '" class="btn btn-info btn-sm white darkshadow">Team Admin</a>';
             echo '<br /><br />';
         }
 
@@ -312,85 +312,16 @@ try {
 
         }
 
-        $team_award = mysqli_query(
-            $_database,
-            "SELECT
-                    a.awardID,
-                    a.award,
-                    a.cupID AS cup_id,
-                    b.name AS cup_name,
-                    c.name AS award_name,
-                    c.icon AS award_icon
-                FROM `" . PREFIX . "cups_awards` a
-                LEFT JOIN `".PREFIX."cups` b ON a.cupID = b.cupID
-                LEFT JOIN `".PREFIX."cups_awards_category` c ON a.award = c.awardID
-                WHERE a.teamID = " . $team_id . "
-                ORDER BY a.date DESC
-                LIMIT 0, 10"
-        );
-        if (mysqli_num_rows($team_award)) {
+        include(__DIR__ . '/teams_details_awards.php');
 
+        if (!isset($team_awards)) {
             $team_awards = '';
-            while ($dx = mysqli_fetch_array($team_award)) {
-
-                if ($dx['cup_id'] > 0) {
-                    $info = $dx['cup_name'];
-                    $info .= '<span class="pull-right">' . $dx['award'] . '</span>';
-                } else {
-                    $info = '<div style="background: url(' . $image_url . '/cup/' . $dx['award_icon'] . '_small.png) no-repeat left; padding: 0 0 0 20px;">' . $dx['award_name'] . '</div>';
-                }
-
-                $team_awards .= '<div class="list-group-item">' . $info . '</div>';
-
-            }
-
-        } else {
-            $team_awards = '<div class="list-group-item">' . $_language->module['no_award'] . '</div>';
         }
 
-        $team_cup = mysqli_query(
-            $_database,
-            "SELECT
-                    a.`cupID`,
-                    b.`name`
-                FROM `" . PREFIX . "cups_teilnehmer` a
-                LEFT JOIN `" . PREFIX . "cups` b ON a.cupID = b.cupID
-                WHERE `teamID` = " . $team_id . " AND `checked_in` = 1
-                ORDER BY b.`start_date` DESC
-                LIMIT 0, 10"
-        );
-        if (mysqli_num_rows($team_cup) > 0) {
+        include(__DIR__ . '/teams_details_participations.php');
 
+        if (!isset($played_cups)) {
             $played_cups = '';
-            while ($dx = mysqli_fetch_array($team_cup)) {
-
-                $subget = mysqli_fetch_array(
-                    mysqli_query(
-                        $_database,
-                        "SELECT
-                                `platzierung`
-                            FROM `" . PREFIX . "cups_platzierungen`
-                            WHERE `teamID` = " . $team_id . " AND `cupID` = " . $dx['cupID']
-                    )
-                );
-
-                $platz = (!empty($subget['platzierung'])) ? $subget['platzierung'] : '';
-
-                $url = 'index.php?site=cup&amp;action=details&amp;id=' . $dx['cupID'];
-
-                $played_cups .= '<a href="' . $url . '" class="list-group-item">';
-                $played_cups .= $dx['name'];
-
-                if (!empty($platz)) {
-                    $played_cups .= '<span class="pull-right">' . $platz . '</span>';
-                }
-
-                $played_cups .= '</a>';
-
-            }
-
-        } else {
-            $played_cups = '<div class="list-group-item">' . $_language->module['no_cup'] . '</div>';
         }
 
         $data_array = array();

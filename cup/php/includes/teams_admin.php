@@ -130,42 +130,16 @@ try {
             $changeAdmin = '';
         }
 
-        $team_award = mysqli_query(
-            $_database,
-            "SELECT a.awardID, a.cupID, a.award, b.name FROM `" . PREFIX . "cups_awards` a
-                LEFT JOIN `".PREFIX."cups` b ON a.cupID = b.cupID
-                WHERE teamID = " . $team_id . "
-                ORDER BY award ASC 
-                LIMIT 0, 10"
-        );
-        if (mysqli_num_rows($team_award)) {
+        include(__DIR__ . '/teams_details_awards.php');
+
+        if (!isset($team_awards)) {
             $team_awards = '';
-            while ($dx = mysqli_fetch_array($team_award)) {
-                $info = '<a href="index.php?site=cup&amp;action=details&amp;id='.$dx['cupID'].'">'.$dx['name'].'</a>';
-                $info .= '<span class="pull-right">' . $dx['award'] . '</span>';
-                $team_awards .= '<div class="list-group-item">' . $info . '</div>';
-            }
-        } else {
-            $team_awards = '<div class="list-group-item">' . $_language->module['no_award'] . '</div>';
         }
 
-        $team_cup = mysqli_query(
-            $_database,
-            "SELECT
-                    `cupID`
-                FROM " . PREFIX . "cups_teilnehmer
-                WHERE teamID = " . $team_id . " AND checked_in = 1
-                ORDER BY cupID DESC
-                LIMIT 0, 10"
-        );
+        include(__DIR__ . '/teams_details_participations.php');
 
-        if (mysqli_num_rows($team_cup)) {
+        if (!isset($played_cups)) {
             $played_cups = '';
-            while ($dx = mysqli_fetch_array($team_cup)) {
-                $played_cups .= '<div class="list-group-item">' . getcup($dx['cupID'], 'name') . '</div>';
-            }
-        } else {
-            $played_cups = '<div class="list-group-item">' . $_language->module['no_cup'] . '</div>';
         }
 
         $log = '';
