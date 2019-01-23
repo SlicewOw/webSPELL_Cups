@@ -92,7 +92,7 @@ try {
         $data_array = array();
         $data_array['$commentList'] = $commentList;
         $data_array['$team_id'] = $teamID;
-        $cup_teams_admin = $GLOBALS["_template_cup"]->replaceTemplate("cup_teams_admin_comment", $data_array);
+        $cup_teams_admin = $GLOBALS["_template_cup"]->replaceTemplate("teams_admin_comment", $data_array);
         echo $cup_teams_admin;
 
     }

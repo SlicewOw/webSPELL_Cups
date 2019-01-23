@@ -1,7 +1,10 @@
 <nav class="navbar navbar-default cup-main-navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse"
+                    data-target=".navbar-collapse"
+                    aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -9,26 +12,27 @@
             </button>
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-left">
-                <li $isHome>
-                    <a href="index.php">%home%</a>
-                </li>
-                <li $isCup>
-                    <a href="index.php?site=cup">Cups</a>
-                </li>
-                <li $isTeams>
-                    <a href="index.php?site=teams">Teams</a>
-                </li>
-                $activeMatches
-                <li $isAdmins>
-                    <a href="index.php?site=admins">Admins</a>
-                </li>
-                <li $isHallOfFame>
-                    <a href="index.php?site=hof">%hall_of_fame%</a>
-                </li>
-            </ul>
-            $login
-            <div class="clear"></div>
+            <div class="clearfix">
+                <ul class="nav navbar-nav navbar-left">
+                    <li $isHome>
+                        <a href="index.php">%home%</a>
+                    </li>
+                    <li $isCup>
+                        <a href="index.php?site=cup">Cups</a>
+                    </li>
+                    <li $isTeams>
+                        <a href="index.php?site=teams">Teams</a>
+                    </li>
+                    $activeMatches
+                    <li $isAdmins>
+                        <a href="index.php?site=admins">Admins</a>
+                    </li>
+                    <li $isHallOfFame>
+                        <a href="index.php?site=hof">%hall_of_fame%</a>
+                    </li>
+                </ul>
+                $login
+            </div>
         </div>
     </div>
 </nav>

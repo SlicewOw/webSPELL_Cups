@@ -830,7 +830,8 @@ input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; m
     padding: 10px 0;
     border-radius: 0px;
 }
-.cup-main-navigation > div > div > ul > li {
+.cup-main-navigation > div > div > div > ul > li,
+.cup-main-navigation > div > div > div > ul > li > a {
     font-size: 12px;
 }
 

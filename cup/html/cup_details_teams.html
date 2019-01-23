@@ -1,32 +1,30 @@
-<div class="full_content">
-    <div class="panel panel-default">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Admin</th>
-                    <th>Status</th>
-                    <th>%date% Anmeldung</th>
-                    <th>%date% Check-In</th>
-                    <th>Cup Counter</th>
-                    <th>Match Counter</th>
-                    <th>%actions%</th>
-                </thead>
-                <tbody>
-                    $teams
-                </tbody>
-            </table>
-        </div>
-        <div class="panel-footer">
-            <input type="hidden" name="cup_id" value="$cupID" />
-            <a href="admincenter.php?site=cup&amp;mod=cup&amp;action=$add_participant_action&amp;id=$cupID"
-               class="btn btn-info btn-sm white darkshadow">
-                $add_participant_text
-            </a>
-        </div>
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <th>#</th>
+                <th>Name</th>
+                <th>Admin</th>
+                <th>Status</th>
+                <th>%date% Anmeldung</th>
+                <th>%date% Check-In</th>
+                <th>Cup Counter</th>
+                <th>Match Counter</th>
+                <th>%actions%</th>
+            </thead>
+            <tbody>
+                $teams
+            </tbody>
+        </table>
     </div>
-    <div class="clear"></div>
+    <div class="panel-footer">
+        <input type="hidden" name="cup_id" value="$cupID" />
+        <a href="admincenter.php?site=cup&amp;mod=cup&amp;action=$add_participant_action&amp;id=$cupID"
+           class="btn btn-info btn-sm white darkshadow">
+            $add_participant_text
+        </a>
+    </div>
 </div>
 <script>
 $(document).ready(function () {

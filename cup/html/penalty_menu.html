@@ -1,26 +1,27 @@
-<div class="pull-left">
-    <button type="button" class="btn btn-success btn-sm white darkshadow"
-            data-toggle="modal"
-            data-target="#add-penalty">
-        %add_penalty%
-    </button>
-    <button type="button" class="btn btn-success btn-sm white darkshadow"
-            data-toggle="modal"
-            data-target="#add-category">
-        %add_category%
-    </button>
+<div class="clearfix">
+    <div class="pull-left">
+        <button type="button" class="btn btn-success btn-sm white darkshadow"
+                data-toggle="modal"
+                data-target="#add-penalty">
+            %add_penalty%
+        </button>
+        <button type="button" class="btn btn-success btn-sm white darkshadow"
+                data-toggle="modal"
+                data-target="#add-category">
+            %add_category%
+        </button>
+    </div>
+    <div class="pull-right">
+        <a href="admincenter.php?site=cup&amp;mod=penalty"
+           class="btn btn-sm $overviewMenu">
+            %overview%
+        </a>
+        <a href="admincenter.php?site=cup&amp;mod=penalty&amp;action=category"
+           class="btn btn-sm $categoryMenu">
+            %category%
+        </a>
+    </div>
 </div>
-<div class="pull-right">
-    <a href="admincenter.php?site=cup&amp;mod=penalty"
-       class="btn btn-sm $overviewMenu">
-        %overview%
-    </a>
-    <a href="admincenter.php?site=cup&amp;mod=penalty&amp;action=category"
-       class="btn btn-sm $categoryMenu">
-        %category%
-    </a>
-</div>
-<div class="clear"></div>
 <br />
 <form method="post">
     <div class="modal fade" id="add-penalty"

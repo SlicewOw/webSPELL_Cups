@@ -1,15 +1,17 @@
-<div class="pull-right">
-    $admin
+<div class="clearfix">
+    <div class="pull-right">
+        $admin
+    </div>
 </div>
-<div class="clear"></div>
 <br />
 <div class="panel panel-default">
     <div class="panel-heading">
-        <div class="pull-left">
-            <h1 class="panel-title">$name</h1>
+        <div class="clearfix">
+            <div class="pull-left">
+                <h1 class="panel-title">$name</h1>
+            </div>
+            <div class="pull-right grey">%created% $date</div>
         </div>
-        <div class="pull-right grey">%created% $date</div>
-        <div class="clear"></div>
     </div>
     <div class="panel-body">
         <form method="post">
@@ -21,19 +23,20 @@
                        class="form-control"
                        readonly="readonly" />
             </div>
-            <div class="pull-left">
-                <button type="button" class="btn btn-default btn-sm"
-                        name="copyToClipboard">
-                    %copy_to_clipboard%
-                </button>
+            <div class="clearfix">
+                <div class="pull-left">
+                    <button type="button" class="btn btn-default btn-sm"
+                            name="copyToClipboard">
+                        %copy_to_clipboard%
+                    </button>
+                </div>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-default btn-sm"
+                            name="changePassword">
+                        %change_password%
+                    </button>
+                </div>
             </div>
-            <div class="pull-right">
-                <button type="button" class="btn btn-default btn-sm"
-                        name="changePassword">
-                    %change_password%
-                </button>
-            </div>
-            <div class="clear"></div>
         </form>
     </div>
 </div>
@@ -60,10 +63,10 @@
 
                     var varData = JSON.parse(data),
                         new_password;
-                    if(varData.password !== "") {
+                    if (varData.password !== "") {
 
                         new_password = varData.password;
-                        
+
                         var quickjoin = $("#quickjoin").val();
                         quickjoin = quickjoin.replace(old_password, new_password);
 

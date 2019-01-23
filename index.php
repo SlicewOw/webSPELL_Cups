@@ -88,19 +88,20 @@ if (($getSite == 'cup') && ($getAction == 'details') && isset($_GET['id'])) {
     <div id="wrapper">
         <div id="content_wrapper">
             <div id="content_top">
-                <div id="content_top_where" class="eleven lh_fourty href_underline">
+                <div class="row">
+                    <div class="col-sm-7 eleven lh_fourty href_underline">
 <?php include($dir_cup . '/where.php'); ?>
-                </div>
-                <div id="content_top_login" class="eleven lh_fourty right href_underline">
+                    </div>
+                    <div class="col-sm-5 eleven lh_fourty right href_underline">
 <?php include($dir_cup . '/content_login.php'); ?>
+                    </div>
                 </div>
-                <div class="clear"></div>
             </div>
-            <div id="content">
+            <div class="clearfix">
+                <div id="content">
 <?php include(__DIR__ . '/content.php'); ?>
-                <div class="clear"></div>
+                </div>
             </div>
-            <div class="clear"></div>
         </div>
     </div>
 </div>

@@ -4,15 +4,15 @@
             <h1 class="panel-title">Test Match</h1>
         </div>
         <div class="panel-body">
-        	$error
-            <div class="full_content">
-                <div class="float_content_50_left">
+            $error
+            <div class="row">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label>%game%</label>
                         <select name="game" class="form-control">$games</select>
                     </div>
                 </div>
-                <div class="float_content_50_right">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label>%mode%</label>
                         <select name="mode" class="form-control">
@@ -22,42 +22,34 @@
                         </select>
                     </div>
                 </div>
-                <div class="float_content_50_left">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label>Map Pool</label>
                         <select name="mappool" class="form-control">$mappool</select>
                     </div>
                 </div>
-                <div class="float_content_50_right">
-                    <div class="form-group">
-                        <label>myRisk Bot?</label>
-                        <select name="bot" class="form-control">
-                            <option value="1">%yes%</option>
-                            <option value="0" selected="selected">%no%</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div>  
+            </div>
             <hr />
-            <div class="full_content">
-                <div class="float_content_50_left">
+            <div class="row">
+                <div class="col-sm-6">
                     <div class="form-group">
                         <label>Team 1</label>
                         <select name="team1" class="form-control">$teams</select>
                     </div>
                 </div>
-                <div class="float_content_50_right">
+                <div class="col-sm-6">
                     <div class="form-group">
                         <label>Team 2</label>
                         <select name="team2" class="form-control">$teams</select>
                     </div>
                 </div>
-                <div class="clear"></div>
-            </div>  
+            </div>
         </div>
         <div class="panel-footer">
-            <input type="submit" name="add" class="btn btn-info btn-sm white darkshadow" value="%save%" />
+            <button type="submit" name="add"
+                    class="btn btn-info btn-sm white darkshadow">
+                %save%
+            </button>
         </div>
     </div>
 </form>

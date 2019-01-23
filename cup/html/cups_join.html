@@ -45,22 +45,23 @@
             </div>
         </div>
         <div class="panel-footer">
-            <div class="pull-left">
-                <input type="hidden" name="cup_id" value="$cupID" />
-                <button type="submit" name="submitCupJoin"
-                        class="btn btn-info btn-sm white darkshadow"
-                        $submitButtonStatus>
-                    %subscribe%
-                </button>
+            <div class="clearfix">
+                <div class="pull-left">
+                    <input type="hidden" name="cup_id" value="$cupID" />
+                    <button type="submit" name="submitCupJoin"
+                            class="btn btn-info btn-sm white darkshadow"
+                            $submitButtonStatus>
+                        %subscribe%
+                    </button>
+                </div>
+                <div class="pull-right">
+                    <a href="index.php?site=teams&amp;action=add"
+                       class="btn btn-success btn-sm white darkshadow"
+                       $showAddTeamButton>
+                        %team_add%
+                    </a>
+                </div>
             </div>
-            <div class="pull-right">
-                <a href="index.php?site=teams&amp;action=add"
-                   class="btn btn-success btn-sm white darkshadow"
-                   $showAddTeamButton>
-                    %team_add%
-                </a>
-            </div>
-            <div class="clear"></div>
         </div>
     </div>
 </form>

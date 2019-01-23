@@ -1,23 +1,24 @@
 <div class="panel panel-default" id="mapvote">
-	<div class="panel-heading">
-    	<h1 class="panel-title">Map-Veto</h1>
+    <div class="panel-heading">
+        <h1 class="panel-title">Map-Veto</h1>
     </div>
-	<div class="panel-body">
+    <div class="panel-body">
         <div class="form-inline" id="map_container">
             $map_veto
         </div>
     </div>
     <div class="panel-footer$footerInfo" id="info_container">
-    	<div class="pull-left" id="status_container">
-        	<span class="glyphicon glyphicon-info-sign"></span> $map_vote_info
+        <div class="clearfix">
+            <div class="pull-left" id="status_container">
+                <span class="glyphicon glyphicon-info-sign"></span> $map_vote_info
+            </div>
+            <div class="pull-right right" id="timer"></div>
         </div>
-    	<div class="pull-right right" id="timer"></div>
-        <div class="clear"></div>
     </div>
 </div>
 <script type="text/javascript">
-    
-var interval, 
+
+var interval,
     dataArray,
     mapvote = $("#mapvote"),
     map_container = $("#map_container"),
@@ -26,14 +27,14 @@ var interval,
     timer = $("#timer"),
     cup_id = $cup_id,
     match_id = $match_id;
-	
+
 function voteMap(map, team_id) {
     'use strict';
-	
-	$(".mapButton").attr('disabled', 'disabled');
-	
-	clearInterval(interval);
-	
+
+    $(".mapButton").attr('disabled', 'disabled');
+
+    clearInterval(interval);
+
     $.post(
         "ajax.php?site=cup_mapvote",
         {
@@ -44,10 +45,10 @@ function voteMap(map, team_id) {
             team_id : team_id
         },
         function (data, status) {
-            
+
             dataArray = JSON.parse(data);
             if (dataArray.status) {
-                
+
                 if (dataArray.veto.status == 'finished') {
 
                     mapvote.css('display', 'none');
@@ -66,21 +67,21 @@ function voteMap(map, team_id) {
             } else {
                 showMultipleNotifies(dataArray.error, 'error');
             }
-            
+
         }
     );
-	
+
 }
 function voteMapUpdate(map, team_id) {
-		
-	var counter = 10;
-	interval = setInterval(function() {
-		
-		counter--;
-		if (counter <= 0) {
-			
-			timer.html("");
-			
+
+    var counter = 10;
+    interval = setInterval(function() {
+
+        counter--;
+        if (counter <= 0) {
+
+            timer.html("");
+
             $.get(
                 "ajax.php?site=cup_mapvote",
                 {
@@ -89,12 +90,12 @@ function voteMapUpdate(map, team_id) {
                     match_id : match_id
                 },
                 function (data, status) {
-                    
+
                     clearInterval(interval);
-                    
-					dataArray = JSON.parse(data);
+
+                    dataArray = JSON.parse(data);
                     if (dataArray.status) {
-                        
+
                         if (dataArray.veto.status === 'finished') {
 
                             mapvote.css('display', 'none');
@@ -110,24 +111,23 @@ function voteMapUpdate(map, team_id) {
                                 voteMapUpdate(map, team_id);
 
                             } else {
-                                info_container.attr('class', 'panel-footer');	
+                                info_container.attr('class', 'panel-footer');
                             }
 
                         }
-                        
+
                     } else {
                         showMultipleNotifies(dataArray.error, 'error');
                     }
-                    
+
                 }
             );
-			
-		} else {
-			timer.html("Refresh in: " + counter + " sec");
-		}
-		
-	}, 1000);
+
+        } else {
+            timer.html("Refresh in: " + counter + " sec");
+        }
+
+    }, 1000);
 
 }
-</script>    
-      
+</script>

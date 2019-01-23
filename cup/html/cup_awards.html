@@ -1,27 +1,30 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <div class="pull-left">
-            <h1 class="panel-title">Cup Awards</h1>
+        <div class="clearfix">
+            <div class="pull-left">
+                <h1 class="panel-title">Cup Awards</h1>
+            </div>
+            <div class="pull-right">
+                <button type="button" name="homeButton"
+                        class="btn btn-default btn-xs">
+                    Home
+                </button>
+            </div>
         </div>
-        <div class="pull-right">
-            <button type="button" name="homeButton" 
-                    class="btn btn-default btn-xs">
-                Home
-            </button>
-        </div>
-        <div class="clear"></div>
     </div>
-    <table class="table table-striped">
-        <thead>
-            <th>#</th>
-            <th>Name</th>
-            <th>Award</th>
-            <th>Value</th>
-            <th>%received_by%</th>
-            <th>Admin</th>
-        </thead>
-        <tbody id="awardContainer"></tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <th>#</th>
+                <th>Name</th>
+                <th>Award</th>
+                <th>Value</th>
+                <th>%received_by%</th>
+                <th>Admin</th>
+            </thead>
+            <tbody id="awardContainer"></tbody>
+        </table>
+    </div>
 </div>
 <script type="text/javascript">
 
