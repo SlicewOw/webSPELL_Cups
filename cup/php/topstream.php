@@ -11,11 +11,11 @@ try {
                 `id`
             FROM `" . PREFIX . "liveshow`
             WHERE `active` = 1 AND `online` = 1
-            ORDER BY `tv` DESC, `member` DESC, `viewer` DESC
+            ORDER BY `prioritization` DESC, `viewer` DESC
             LIMIT 0, 1"
     );
 
-    if (mysqli_num_rows($topstream) < 1) {
+    if (!$topstream) {
         throw new \Exception('liveshow_query_select_failed');
     }
 
