@@ -256,23 +256,27 @@ try {
 
                 if (!empty($serverArray['ip']) && (!empty($serverArray['password']) || ($cupArray['bot'] == 1))) {
 
-                    if($matchAdminAccess_player || $matchAdminAccess_team1 || $matchAdminAccess_team2 || $cupAdminAccess) {
+                    if ($matchAdminAccess_player || $matchAdminAccess_team1 || $matchAdminAccess_team2 || $cupAdminAccess) {
+
                         $server_url = 'steam://connect/'.$serverArray['ip'];
                         if (!empty($serverArray['password'])) {
                             $server_url .= '/'.$serverArray['password'];
                         }
-                        $server_info .= '<div class="list-group-item">';
-                        $server_info .= 'connect '.$serverArray['ip'];
+
+                        $server_info_txt = 'connect '.$serverArray['ip'];
                         if(!empty($serverArray['password'])) {
-                            $server_info .= ';password '.$serverArray['password'];
+                            $server_info_txt = ';password '.$serverArray['password'];
                         }
-                        $server_info .= '<a class="pull-right btn btn-default btn-xs" href="'.$server_url.'">connect</a>';
-                        $server_info .= '<div class="clear"></div>';
-                        $server_info .= '</div>';
+
+                        $data_array = array();
+                        $data_array['$server_url'] = $server_url;
+                        $data_array['$server_info_txt'] = $server_info_txt;
+                        $server_info .= $GLOBALS["_template_cup"]->replaceTemplate("cup_match_server", $data_array);
+
                     }
 
                     if (!empty($serverArray['rcon']) && ($matchAdminAccess_team1 || $cupAdminAccess)) {
-                        $server_info .= '<div class="list-group-item">rcon_password '.$serverArray['rcon'].'</div>';
+                        $server_info .= '<div class="list-group-item">rcon_password ' . $serverArray['rcon'] . '</div>';
                     }
 
                 }
@@ -284,13 +288,13 @@ try {
                         $server_url .= '/'.$serverArray['gotv_pw'];
                         $gotv_connect .= ';password '.$serverArray['gotv_pw'];
                     }
-                    $server_info .= '<a href="'.$server_url.'" class="list-group-item">GOTV: '.$gotv_connect.'</a>';
+                    $server_info .= '<a href="' . $server_url . '" class="list-group-item">GOTV: ' . $gotv_connect . '</a>';
                 }
 
             }
 
-            if(!empty($server_info)) {
-                $admin .= '<div class="panel panel-default"><div class="panel-heading">Server</div><div class="list-group">'.$server_info.'</div></div>';	
+            if (!empty($server_info)) {
+                $admin .= '<div class="panel panel-default"><div class="panel-heading">Server</div><div class="list-group">' . $server_info . '</div></div>';
             }
 
         }
@@ -361,8 +365,7 @@ try {
 
                     $protest_url = 'index.php?site=support&amp;action=new_ticket&amp;matchID=' . $match_id;
 
-                    $admin .= '<div class="clear"></div>';
-                    $admin .= '<a style="width: 100%;" class="alert alert-danger center" href="'.$protest_url.'">'.$_language->module['open_protest'].'</a>';
+                    $admin .= '<a style="width: 100%;" class="alert alert-danger center" href="' . $protest_url . '">' . $_language->module['open_protest'] . '</a>';
 
                 }
 
@@ -399,7 +402,7 @@ try {
 
             }
 
-            $admin .= '<div class="panel panel-default"><div class="panel-heading">Sponsoren</div><div class="panel-body">'.$content_sponsors.'<div class="clear"></div></div></div>';
+            $admin .= '<div class="panel panel-default"><div class="panel-heading">Sponsoren</div><div class="panel-body"><div class="clearfix">' . $content_sponsors . '</div></div></div>';
 
         }
 

@@ -106,7 +106,7 @@ try {
 
             }
 
-            $content .= '<div class="panel panel-default"><div class="panel-heading">Sponsoren</div><div class="panel-body">'.$content_sponsors.'<div class="clear"></div></div></div>';
+            $content .= '<div class="panel panel-default"><div class="panel-heading">Sponsoren</div><div class="panel-body"><div class="clearfix">' . $content_sponsors . '</div></div></div>';
 
         }
 

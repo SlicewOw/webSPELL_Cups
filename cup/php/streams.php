@@ -459,33 +459,34 @@ try {
                 $game = 'League of Legends';
             }
 
-            if(!empty($game)) {
+            if (!empty($game)) {
 
                 $name = '<li class="active">' . $game . '</li>';
 
                 $ergebnis = mysqli_query(
                     $_database,
                     "SELECT
-                            a.livID AS livID,
-                            a.title AS title,
-                            a.type AS type,
-                            a.viewer AS viewer,
-                            b.plattform AS typeName
-                        FROM `".PREFIX."liveshow` a
-                        JOIN `".PREFIX."liveshow_type` b ON a.type = b.typeID
-                        WHERE active = '1' AND online = '1' AND game = '".$game."' 
+                            a.`livID` AS `livID`,
+                            a.`title` AS `title`,
+                            a.`type` AS `type`,
+                            a.`viewer` AS `viewer`,
+                            b.`plattform` AS `typeName`
+                        FROM `" . PREFIX . "liveshow` a
+                        JOIN `" . PREFIX . "liveshow_type` b ON a.type = b.typeID
+                        WHERE `active` = 1 AND `online` = 1 AND `game` = '" . $game . "'
                         ORDER BY `prioritization` DESC, `viewer` DESC"
                 );
-                if(mysqli_num_rows($ergebnis)) {
+                if (mysqli_num_rows($ergebnis)) {
 
                     $streamlist = '';
-                    while($ds = mysqli_fetch_array($ergebnis)) {
+                    while ($ds = mysqli_fetch_array($ergebnis)) {
 
                         $streamlist .= '<a href="index.php?site=streams&amp;id='.$ds['livID'].'" class="list-group-item">';
+                        $streamlist .= '<span class="clearfix">';
                         $streamlist .= '<img src="' . getStreamTypeIcon($ds['type'], true) . '" alt="'.$ds['typeName'].'" title="'.$ds['typeName'].'" />';
                         $streamlist .= '<span class="box-padding-left">' . $ds['title'] . '</span>';
                         $streamlist .= '<span class="pull-right">'.$ds['viewer'].' '.$_language->module['viewers'].'</span>';
-                        $streamlist .= '<span class="clear"></span>';
+                        $streamlist .= '</span>';
                         $streamlist .= '</a>';
 
                     }
