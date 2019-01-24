@@ -47,3 +47,31 @@ function get_streaminfo($stream_id, $cat = '') {
     }
 
 }
+
+function getembed($id, $cat = '') {
+
+    if (empty($cat)) {
+        return '';
+    }
+
+    $allowedCategories = array(
+        'youtube',
+        'twitch_player',
+        'twitch_chat'
+    );
+
+    if (!in_array($cat, $allowedCategories)) {
+        return '';
+    }
+
+    if ($cat == 'youtube') {
+        $returnValue = '<iframe src="https://www.youtube.com/embed/' . $id . '?rel=0" allowfullscreen></iframe>';
+    } else if ($cat == 'twitch_player') {
+        $returnValue = '<iframe src="https://player.twitch.tv/?channel=' . $id . '" class="stream_embed" allowfullscreen scrolling="no"></iframe>';
+    } else if ($cat == 'twitch_chat') {
+        $returnValue = '<iframe frameborder="0" scrolling="no" class="chat_embed" id="chat_embed" src="https://www.twitch.tv/embed/' . $id . '/chat"></iframe>';
+    }
+
+    return $returnValue;
+
+}

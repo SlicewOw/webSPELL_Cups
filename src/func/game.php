@@ -188,3 +188,30 @@ function getGamesAsOptionList($selected = 'csg', $optionValueTag = TRUE, $addDef
 
 }
 
+function getgameshort($name) {
+
+    if (empty($name)) {
+        return '';
+    }
+
+    global $_database;
+
+    $gameName = addslashes($name);
+
+    $selectQuery = mysqli_query(
+        $_database,
+        "SELECT
+                `short`
+            FROM `" . PREFIX . "games`
+            WHERE `name` = '" . $gameName . "'"
+    );
+
+    if (!$selectQuery) {
+        return '';
+    }
+
+    $ds = mysqli_fetch_array($selectQuery);
+
+    return $ds['short'];
+
+}
