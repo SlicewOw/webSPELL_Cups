@@ -156,22 +156,19 @@ try {
                 mysqli_query(
                     $_database,
                     "SELECT
-                        a.userID AS userID,
-                        a.title AS title,
-                        a.id AS id,
-                        a.game AS game,
-                        a.facebook AS facebook,
-                        a.twitter AS twitter,
-                        a.youtube AS youtube,
-                        a.active AS active,
-                        b.video AS video_embed,
-                        b.chat AS chat_embed,
+                        l.`userID` AS `userID`,
+                        l.`title` AS `title`,
+                        l.`id` AS `id`,
+                        l.`game` AS `game`,
+                        l.`facebook` AS `facebook`,
+                        l.`twitter` AS `twitter`,
+                        l.`youtube` AS `youtube`,
+                        l.`active` AS `active`,
                         g.`short`,
                         g.`tag`
-                    FROM `" . PREFIX . "liveshow` a
-                    JOIN `" . PREFIX . "liveshow_type` b ON a.`type` = b.`typeID`
-                    LEFT JOIN `" . PREFIX . "games` g ON a.`game` = g.`name`
-                    WHERE a.livID = " . $stream_id
+                    FROM `" . PREFIX . "liveshow` l
+                    LEFT JOIN `" . PREFIX . "games` g ON l.`game` = g.`name`
+                    WHERE l.`livID` = " . $stream_id
                 )
             );
 
@@ -207,33 +204,15 @@ try {
 
             $title = (!empty($ds['title'])) ? $ds['title'] : $ds['id'];
 
-            $name .= '<li>'.$title.'</li>';
-
-            $code = '';
-            if (!empty($ds['video_embed'])) {
-                $code = str_replace(
-                    '%channel_id%',
-                    $plattform_id,
-                    $ds['video_embed']
-                );
-            }
-
-            $chat = '';
-            if (!empty($ds['chat_embed'])) {
-                $chat = str_replace(
-                    '%channel_id%',
-                    $plattform_id,
-                    $ds['chat_embed']
-                );
-            }
+            $name .= '<li>' . $title . '</li>';
 
             $data_array = array();
             $data_array['$streamID'] = $stream_id;
             $data_array['$adm'] = $adm;
             $data_array['$name'] = $name;
             $data_array['$title'] = $ds['title'];
-            $data_array['$code'] = $code;
-            $data_array['$chat'] = $chat;
+            $data_array['$code'] = getembed($plattform_id, 'twitch_player');
+            $data_array['$chat'] = getembed($plattform_id, 'twitch_chat');
             $liveshow_show = $GLOBALS["_template_cup"]->replaceTemplate("liveshow_show", $data_array);
 
             //
