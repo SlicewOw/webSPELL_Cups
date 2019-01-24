@@ -101,6 +101,14 @@ try {
             MODIFY `typeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;"
     );
 
+    $insertQuery = mysqli_query(
+        $_database,
+        "INSERT INTO `" . PREFIX . "comments_settings`
+            (`ident`, `modul`, `id`, `parent`)
+            VALUES
+            ('st', 'liveshow', 'livID', 'comments');"
+    );
+
     echo "Delete this file!";
 
 } catch (Exception $e) {
