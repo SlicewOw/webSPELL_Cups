@@ -215,3 +215,32 @@ function getgameshort($name) {
     return $ds['short'];
 
 }
+
+function getgametag($name) {
+
+    if (empty($name)) {
+        return '';
+    }
+
+    global $_database;
+
+    $gameName = addslashes($name);
+
+    $selectQuery = mysqli_query(
+        $_database,
+        "SELECT
+                `tag`
+            FROM `" . PREFIX . "games`
+            WHERE `name` = '" . $gameName . "'"
+    );
+
+    if ($selectQuery) {
+        return '';
+    }
+
+    $ds = mysqli_fetch_array($query);
+
+    return (!empty($ds['tag'])) ?
+        $ds['tag'] : '';
+
+}
