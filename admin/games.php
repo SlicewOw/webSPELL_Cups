@@ -111,7 +111,19 @@ try {
                                 throw new \Exception($_language->module['broken_image']);
                             }
 
-                            $file = $tag . ".gif";
+                            $file = $tag . '.' . $upload->getExtension();
+
+                            $deleteExistingIconsIfExisting = array(
+                                'gif',
+                                'png'
+                            );
+
+                            foreach ($deleteExistingIconsIfExisting as $image_extension) {
+                                $file_to_be_deleted = $filepath . $tag . '.' . $image_extension;
+                                if (file_exists($file_to_be_deleted)) {
+                                    unlink($file_to_be_deleted);
+                                }
+                            }
 
                             if (!$upload->saveAs($filepath . $file, true)) {
                                 throw new \Exception($_language->module['broken_image']);

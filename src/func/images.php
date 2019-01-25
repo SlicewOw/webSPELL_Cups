@@ -230,8 +230,21 @@ function getGameIcon($game_tag, $returnAsFullImageLink = TRUE) {
         return $default_image;
     }
 
-    $imagePath = '/games/' . $game_tag . '.gif';
-    $filePath = __DIR__ . '/../../images' . $imagePath;
+    $iconExtensionsAllowed = array(
+        'gif',
+        'png'
+    );
+
+    foreach ($iconExtensionsAllowed as $icon_extension) {
+
+        $imagePath = '/games/' . $game_tag . '.' . $icon_extension;
+        $filePath = __DIR__ . '/../../images' . $imagePath;
+
+        if (file_exists($filePath)) {
+            break;
+        }
+
+    }
 
     if (!file_exists($filePath)) {
         return $default_image;
