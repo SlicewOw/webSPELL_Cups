@@ -96,7 +96,10 @@ try {
                                 throw new \Exception($upload->translateError());
                             }
 
-                            $mime_types = array('image/gif');
+                            $mime_types = array(
+                                'image/gif',
+                                'image/png'
+                            );
 
                             if (!$upload->supportedMimeType($mime_types)) {
                                 throw new \Exception($_language->module['unsupported_image_type']);

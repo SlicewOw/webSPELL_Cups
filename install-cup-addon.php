@@ -76,86 +76,93 @@ try {
     $createTableQuery = mysqli_query(
         $_database,
         "CREATE TABLE `" . PREFIX . "cups_awards_category` (
-      `awardID` int(11) NOT NULL,
-      `name` varchar(255) COLLATE latin1_german1_ci NOT NULL,
-      `icon` varchar(30) COLLATE latin1_german1_ci NOT NULL,
-      `active_column` varchar(50) COLLATE latin1_german1_ci NOT NULL,
-      `platzierung` int(3) DEFAULT NULL,
-      `anz_cups` int(11) DEFAULT NULL,
-      `anz_matches` int(11) DEFAULT NULL,
-      `sort` int(11) NOT NULL DEFAULT '1',
-      `description` text COLLATE latin1_german1_ci NOT NULL
-    ) ENGINE=MyISAM;");
+          `awardID` int(11) NOT NULL,
+          `name` varchar(255) COLLATE latin1_german1_ci NOT NULL,
+          `icon` varchar(30) COLLATE latin1_german1_ci NOT NULL,
+          `active_column` varchar(50) COLLATE latin1_german1_ci NOT NULL,
+          `platzierung` int(3) DEFAULT NULL,
+          `anz_cups` int(11) DEFAULT NULL,
+          `anz_matches` int(11) DEFAULT NULL,
+          `sort` int(11) NOT NULL DEFAULT '1',
+          `description` text COLLATE latin1_german1_ci NOT NULL
+        ) ENGINE=MyISAM;"
+    );
 
     $createTableQuery = mysqli_query(
         $_database,
         "CREATE TABLE `" . PREFIX . "cups_gameaccounts` (
-      `gameaccID` int(11) NOT NULL,
-      `userID` int(11) NOT NULL,
-      `date` int(11) NOT NULL,
-      `category` varchar(3) COLLATE latin1_german1_ci NOT NULL,
-      `value` varchar(255) COLLATE latin1_german1_ci NOT NULL,
-      `smurf` int(1) NOT NULL DEFAULT '0',
-      `active` int(1) NOT NULL DEFAULT '0',
-      `deleted` int(1) NOT NULL DEFAULT '0',
-      `deleted_date` int(11) NOT NULL DEFAULT '0',
-      `deleted_seen` int(1) NOT NULL DEFAULT '1'
-    ) ENGINE=MyISAM;");
+          `gameaccID` int(11) NOT NULL,
+          `userID` int(11) NOT NULL,
+          `date` int(11) NOT NULL,
+          `category` varchar(10) COLLATE latin1_german1_ci NOT NULL,
+          `value` varchar(255) COLLATE latin1_german1_ci NOT NULL,
+          `smurf` int(1) NOT NULL DEFAULT '0',
+          `active` int(1) NOT NULL DEFAULT '0',
+          `deleted` int(1) NOT NULL DEFAULT '0',
+          `deleted_date` int(11) NOT NULL DEFAULT '0',
+          `deleted_seen` int(1) NOT NULL DEFAULT '1'
+        ) ENGINE=MyISAM;"
+    );
 
     $createTableQuery = mysqli_query(
         $_database,
         "CREATE TABLE `" . PREFIX . "cups_gameaccounts_banned` (
-      `id` int(11) NOT NULL,
-      `game` varchar(3) COLLATE latin1_german1_ci NOT NULL,
-      `game_id` int(11) NOT NULL,
-      `value` varchar(50) COLLATE latin1_german1_ci NOT NULL,
-      `description` text COLLATE latin1_german1_ci NOT NULL,
-      `date` int(11) NOT NULL
-    ) ENGINE=MyISAM;");
+          `id` int(11) NOT NULL,
+          `game` varchar(10) COLLATE latin1_german1_ci NOT NULL,
+          `game_id` int(11) NOT NULL,
+          `value` varchar(50) COLLATE latin1_german1_ci NOT NULL,
+          `description` text COLLATE latin1_german1_ci NOT NULL,
+          `date` int(11) NOT NULL
+        ) ENGINE=MyISAM;"
+    );
 
     $createTableQuery = mysqli_query(
         $_database,
         "CREATE TABLE `" . PREFIX . "cups_gameaccounts_csgo` (
-      `gameaccID` int(11) NOT NULL,
-      `validated` int(1) NOT NULL DEFAULT '0',
-      `date` int(11) DEFAULT NULL,
-      `hours` int(11) DEFAULT NULL,
-      `vac_bann` int(1) NOT NULL DEFAULT '0',
-      `bann_date` int(11) NOT NULL DEFAULT '0'
-    ) ENGINE=MyISAM;");
+          `gameaccID` int(11) NOT NULL,
+          `validated` int(1) NOT NULL DEFAULT '0',
+          `date` int(11) DEFAULT NULL,
+          `hours` int(11) DEFAULT NULL,
+          `vac_bann` int(1) NOT NULL DEFAULT '0',
+          `bann_date` int(11) NOT NULL DEFAULT '0'
+        ) ENGINE=MyISAM;"
+    );
 
     $createTableQuery = mysqli_query(
         $_database,
         "CREATE TABLE `" . PREFIX . "cups_gameaccounts_lol` (
-      `gameaccID` int(11) NOT NULL,
-      `unique_id` int(11) NOT NULL,
-      `region` varchar(20) COLLATE latin1_german1_ci NOT NULL DEFAULT 'euw',
-      `name` varchar(255) COLLATE latin1_german1_ci NOT NULL,
-      `date` int(11) NOT NULL,
-      `division` varchar(255) COLLATE latin1_german1_ci NOT NULL,
-      `rank` int(11) NOT NULL DEFAULT '0',
-      `level` int(11) NOT NULL DEFAULT '0'
-    ) ENGINE=MyISAM;");
+          `gameaccID` int(11) NOT NULL,
+          `unique_id` int(11) NOT NULL,
+          `region` varchar(20) COLLATE latin1_german1_ci NOT NULL DEFAULT 'euw',
+          `name` varchar(255) COLLATE latin1_german1_ci NOT NULL,
+          `date` int(11) NOT NULL,
+          `division` varchar(255) COLLATE latin1_german1_ci NOT NULL,
+          `rank` int(11) NOT NULL DEFAULT '0',
+          `level` int(11) NOT NULL DEFAULT '0'
+        ) ENGINE=MyISAM;"
+    );
 
     $createTableQuery = mysqli_query(
         $_database,
         "CREATE TABLE `" . PREFIX . "cups_gameaccounts_mc` (
-      `gameaccID` int(11) NOT NULL,
-      `unique_id` varchar(50) COLLATE latin1_german1_ci NOT NULL,
-      `active` int(1) NOT NULL DEFAULT '0',
-      `date` int(11) NOT NULL
-    ) ENGINE=MyISAM;");
+          `gameaccID` int(11) NOT NULL,
+          `unique_id` varchar(50) COLLATE latin1_german1_ci NOT NULL,
+          `active` int(1) NOT NULL DEFAULT '0',
+          `date` int(11) NOT NULL
+        ) ENGINE=MyISAM;"
+    );
 
     $createTableQuery = mysqli_query(
         $_database,
         "CREATE TABLE `" . PREFIX . "cups_gameaccounts_profiles` (
-      `profileID` int(11) NOT NULL,
-      `user_id` int(11) NOT NULL,
-      `category` varchar(30) NOT NULL,
-      `url` varchar(100) NOT NULL,
-      `date` int(11) NOT NULL,
-      `deleted` int(1) NOT NULL DEFAULT '0'
-    ) ENGINE=MyISAM;");
+          `profileID` int(11) NOT NULL,
+          `user_id` int(11) NOT NULL,
+          `category` varchar(30) NOT NULL,
+          `url` varchar(100) NOT NULL,
+          `date` int(11) NOT NULL,
+          `deleted` int(1) NOT NULL DEFAULT '0'
+        ) ENGINE=MyISAM;"
+    );
 
     $createTableQuery = mysqli_query(
         $_database,
