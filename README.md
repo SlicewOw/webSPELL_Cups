@@ -23,6 +23,12 @@ Feel free to use this add-on for webSPELL NOR, but be aware that we (myRisk e.V)
 * webSPELL settings (as logged in user in admincenter)
     * make sure, the homepage url contains http/-s as prefix - otherwise you may notice broken images
 
+# Communication
+
+To talk about the add-on, I created a Slack channel. Feel free to join us and you may have some question to be answered:
+
+* https://webspellcup-addon.slack.com
+
 # Optional stuff
 
 * Cronjobs: 
