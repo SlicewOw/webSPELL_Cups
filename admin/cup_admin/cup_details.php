@@ -2,14 +2,6 @@
 
 try {
 
-    $data_array = array();
-    $data_array['$overview'] = (empty($getAction)) ?
-        'btn-info white darkshadow' : 'btn-default';
-    $data_array['$add'] = ($getAction == 'add') ?
-        'btn-info white darkshadow' : 'btn-default';
-    $cups_controls = $GLOBALS["_template_cup"]->replaceTemplate("cups_controls_admin", $data_array);
-    echo $cups_controls;
-
     $whereClauseArray = array();
 
     if ($getAction != 'archive') {
@@ -46,10 +38,8 @@ try {
 
             if ($ds['status'] == 1) {
                 $size = $cupArray['teams']['registered'] . ' / ' . $ds['max_size'];
-                $date = getformatdatetime($ds['checkin_date']);
             } else {
                 $size = $cupArray['teams']['checked_in'] . ' / ' . $ds['max_size'];
-                $date = getformatdatetime($ds['start_date']);
             }
 
             $data_array = array();
@@ -58,7 +48,9 @@ try {
             $data_array['$cup_id'] = $cup_id;
             $data_array['$game'] = getGame($ds['game'], 'icon');
             $data_array['$name'] = $ds['name'];
-            $data_array['$date'] = $date;
+            $data_array['$mode'] = $ds['mode'];
+            $data_array['$checkin_start'] = getformatdatetime($ds['checkin_date']);
+            $data_array['$cup_start'] = getformatdatetime($ds['start_date']);
             $data_array['$size'] = $size;
             $data_array['$status'] = $_language->module['cup_status_' . $ds['status']];
             $data_array['$url'] = 'admincenter.php?site=cup&amp;mod=cup&amp;action=cup&amp;id=' . $cup_id;

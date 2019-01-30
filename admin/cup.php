@@ -20,6 +20,14 @@ try {
 
     if ($mod == 'cup') {
 
+        $data_array = array();
+        $data_array['$overview'] = (empty($getAction)) ?
+            'btn-info white darkshadow' : 'btn-default';
+        $data_array['$add'] = ($getAction == 'add') ?
+            'btn-info white darkshadow' : 'btn-default';
+        $cups_controls = $GLOBALS["_template_cup"]->replaceTemplate("cups_controls_admin", $data_array);
+        echo $cups_controls;
+
         $getStatus = (isset($_GET['status'])) ?
             getinput($_GET['status']) : '';
 
