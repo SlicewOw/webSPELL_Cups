@@ -15,9 +15,9 @@ try {
     $info .= '<span class="list-group-item">'.$_language->module['mode'].': '.$cupArray['mode'].'</span>';
     $info .= '<span class="list-group-item">Check-In: '.getformatdatetime($cupArray['checkin']).'</span>';
     $info .= '<span class="list-group-item">Start: '.getformatdatetime($cupArray['start']).'</span>';
-    if ($cupArray['phase'] == 'register' || $cupArray['phase'] == 'admin_register') {
+    if (preg_match('/register/', $cupArray['phase'])) {
         $info .= '<span class="list-group-item">'.$_language->module['teams_registered'].': '.getcup($cup_id, 'anz_teams').' / '.$cupArray['size'].'</span>';
-    } else if ($cupArray['phase'] == 'checkin' || $cupArray['phase'] == 'admin_checkin' || $cupArray['phase'] == 'finished') {
+    } else if (preg_match('/checkin/', $cupArray['phase']) || $cupArray['phase'] == 'finished') {
         $info .= '<span class="list-group-item">'.$_language->module['teams_checked_in'].': '.getcup($cup_id, 'anz_teams_checkedin').' / '.$cupArray['size'].'</span>';
     }
     $info .= '<span class="list-group-item">'.$_language->module['max_penalty'].': '.$cupArray['max_pps'].'</span>';
