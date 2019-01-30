@@ -1,7 +1,6 @@
 <?php
 
 $language_array = Array(
-
     'accept_policy'=>'Confirm that you and your team read the policies and agreed with them.<br />&raquo; <a href="index.php?site=policy" class="blue">Policy</a>',
     'check_in'=>'Wait until check-in begins.',
     'checkliste'=>'Register-checklist',
@@ -18,9 +17,11 @@ $language_array = Array(
     'loggedin_ok'=>'You are logged in.',
     'past_cups'=>'Overview of past cups',
     'status_admin_register'=>'<a href="index.php?site=cup&action=details&id=%cup_id%">register now!</a>',
-    'status_register'=>'Registration allowed for team admins!',
+    'status_register_player'=>'Registration allowed as a player!',
+    'status_register_team'=>'Registration allowed for team admins!',
     'status_admin_checkin'=>'<a href="index.php?site=cup&action=details&id=%cup_id%">check-in now!</a>',
-    'status_checkin'=>'Check-in allowed for team admins!',
+    'status_checkin_player'=>'Check-in allowed for players!',
+    'status_checkin_team'=>'Check-in allowed for team admins!',
     'status_no_team'=>'<a href="index.php?site=teams&action=add">Create a team and register for this cup!</a>',
     'status_running'=>'Cup is started',
     'status_finished'=>'Cup is finished',
@@ -31,5 +32,4 @@ $language_array = Array(
     'update_policyConfirm'=>'Policy got confirmed.<br />&raquo; <a href="index.php?site=policy" class="blue">Policy</a>',
     'update_teamInfo'=>'<br />Team "<span class="bold">%teamName%</span>" has <span class="bold">%anz_player% player</span> with <span class="bold">%anz_gameaccounts% gameaccounts</span>.<br />&raquo; <a href="%teamLink%" class="blue">Team Details</a>',
     'update_teamRegistered'=>'Team "<span class="bold">%teamName%</span>" is registered.<br />&raquo; <a href="%teamLink%" class="blue">Team Details</a><input type="hidden" name="team_id" value="%team_id%" />'
-
 );

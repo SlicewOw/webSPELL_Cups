@@ -7,16 +7,16 @@ $returnArray = array(
 );
 
 try {
-    
+
     $_language->readModule('cups_home');
 
     $upcomingCup = '';
 
-    $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ? 
+    $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ?
         (int)$_GET['cup_id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception('ERROR');    
+        throw new \Exception('ERROR');
     }
 
     $cupArray = getcup($cup_id);
@@ -44,13 +44,13 @@ try {
     $data_array['$date_checkin'] = getformatdatetime($cupArray['checkin']);
     $data_array['$date_start'] = getformatdatetime($cupArray['start']);
     $detailList = $GLOBALS["_template_cup"]->replaceTemplate("home_upcomingcup_details", $data_array);
-    
+
     $data_array = array();
     $data_array['$timeLeft'] = $timeLeft;
     $data_array['$status'] = str_replace(
         '%cup_id%',
         $cup_id,
-        $_language->module['status_'.$cupArray['phase']]
+        $_language->module['status_' . $cupArray['phase']]
     );
     $data_array['$cupName'] = $cupArray['name'];
     $data_array['$detailList'] = $detailList;
@@ -59,7 +59,7 @@ try {
     $returnArray['html'] = $upcomingCup;
 
     $returnArray['status'] = true;
-    
+
 } catch (Exception $e) {
     $returnArray['message'][] = $e->getMessage();
 }

@@ -1197,8 +1197,9 @@ function getcup($id, $cat = '') {
             }
 
             $cup_id = $get['cupID'];
+            $cup_mode = $get['mode'];
 
-            $mode = explode('on', $get['mode']);
+            $mode = explode('on', $cup_mode);
             $maxSize = $mode[0];
 
             $anzRunden = log($get['max_size'], 2);
@@ -1213,20 +1214,24 @@ function getcup($id, $cat = '') {
 
                     //
                     // Phase: Anmeldung
-                    if (isinteam($userID, 0, 'admin')) {
+                    if ($cup_mode == '1on1') {
+                        $cupPhase = 'register_player';
+                    } else if (isinteam($userID, 0, 'admin')) {
                         $cupPhase = 'admin_register';
-                    } else if (($get['mode'] == '1on1') || isinteam($userID, 0, '')) {
-                        $cupPhase = 'register';
+                    } else if (isinteam($userID, 0, '')) {
+                        $cupPhase = 'register_team';
                     }
 
                 } else if ($timeNow <= $get['start_date']) {
 
                     //
                     // Phase: Check-In
-                    if (isinteam($userID, 0, 'admin')) {
+                    if ($cup_mode == '1on1') {
+                        $cupPhase = 'checkin_player';
+                    } else if (isinteam($userID, 0, 'admin')) {
                         $cupPhase = 'admin_checkin';
-                    } else if (($get['mode'] == '1on1') || isinteam($userID, 0, '')) {
-                        $cupPhase = 'checkin';
+                    } else if (isinteam($userID, 0, '')) {
+                        $cupPhase = 'checkin_team';
                     }
 
                 } else {
@@ -1289,7 +1294,7 @@ function getcup($id, $cat = '') {
                 "bot"			=> $get['bot'],             // Bot enabled? 1/0
                 "map_vote"		=> $get['mapvote_enable'],  // Map-Vote? 1/0
                 "mappool"		=> $get['mappool'],         // Map-Pool ID
-                "mode"			=> $get['mode'],            // 1on1, 2on2, 5on5
+                "mode"			=> $cup_mode,               // 1on1, 2on2, 5on5
                 "max_mode"		=> $maxSize,                // 1=1on1, 2=2on2, 5=5on5
                 "rule_id"		=> $get['ruleID'],          // Rule ID
                 "size"			=> $get['max_size'],        // 2, 4, 8, 16, 32, 64

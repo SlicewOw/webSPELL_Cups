@@ -81,14 +81,14 @@ try {
 
                 $_SESSION['successArray'][] = $_language->module['query_saved'];
 
-                $errors = array();
-
                 $_language->readModule('formvalidation', true);
 
                 if (isset($_FILES[ "icon" ])) {
 
                     $upload = new \webspell\HttpUpload('icon');
                     if ($upload->hasFile()) {
+
+                        $errors = array();
 
                         try {
 
@@ -111,7 +111,7 @@ try {
                                 throw new \Exception($_language->module['broken_image']);
                             }
 
-                            $file = $tag . '.' . $upload->getExtension();
+                            $filename = $tag . '.' . $upload->getExtension();
 
                             $deleteExistingIconsIfExisting = array(
                                 'gif',
@@ -125,14 +125,18 @@ try {
                                 }
                             }
 
-                            if (!$upload->saveAs($filepath . $file, true)) {
+                            if (!$upload->saveAs($filepath . $filename, true)) {
                                 throw new \Exception($_language->module['broken_image']);
                             }
 
-                            @chmod($filepath . $file, $new_chmod);
+                            @chmod($filepath . $filename, $new_chmod);
 
                         } catch (Exception $e) {
                             $errors[] = $e->getMessage();
+                        }
+
+                        if (validate_array($errors, true)) {
+                            $_SESSION['errorArray'] = $errors;
                         }
 
                     }
@@ -149,7 +153,7 @@ try {
 
     } else {
 
-        $game_id = (isset($_GET[ 'id' ]) && validate_int($_GET[ 'id' ], true)) ? 
+        $game_id = (isset($_GET[ 'id' ]) && validate_int($_GET[ 'id' ], true)) ?
             (int)$_GET[ 'id' ] : 0;
 
         if (isset($_GET[ "delete" ])) {
