@@ -263,7 +263,7 @@ try {
                     FROM `".PREFIX."cups_gameaccounts`
                     WHERE userID = " . $userID . " AND deleted = 0"
             );
-            if ($info && (mysqli_num_rows($info) > 0) {
+            if ($info && (mysqli_num_rows($info) > 0)) {
 
                 $n = 1;
 
