@@ -31,7 +31,7 @@ try {
 
             if ($get['cup_mode'] == '1on1') {
                 $primary_url = 'index.php?site=profile&amp;id=' . $primary_id;
-                $name = getusername($primary_id);
+                $name = getnickname($primary_id);
                 $logo = getuserpic($primary_id, true);
             } else {
                 $primary_url = 'index.php?site=teams&amp;action=details&amp;id=' . $primary_id;
