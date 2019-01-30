@@ -54,7 +54,7 @@ try {
             $data_array['$size'] = $size;
             $data_array['$status'] = $_language->module['cup_status_' . $ds['status']];
             $data_array['$url'] = 'admincenter.php?site=cup&amp;mod=cup&amp;action=cup&amp;id=' . $cup_id;
-            $cupList .= $GLOBALS["_template_cup"]->replaceTemplate("cups_list", $data_array);
+            $cupList .= $GLOBALS["_template_cup"]->replaceTemplate("cups_admin_list", $data_array);
 
         }
 
@@ -64,7 +64,7 @@ try {
 
     $data_array = array();
     $data_array['$cupList'] = $cupList;
-    $cups_home = $GLOBALS["_template_cup"]->replaceTemplate("cups_home", $data_array);
+    $cups_home = $GLOBALS["_template_cup"]->replaceTemplate("cups_admin_home", $data_array);
     echo $cups_home;
 
 } catch (Exception $e) {

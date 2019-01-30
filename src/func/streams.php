@@ -11,7 +11,7 @@ function get_streaminfo($stream_id, $cat = '') {
 
     $info = mysqli_query(
         $_database,
-        "SELECT * FROM `" . PREFIX . "liveshow` 
+        "SELECT * FROM `" . PREFIX . "liveshow`
             WHERE `livID` = " . $stream_id
     );
 

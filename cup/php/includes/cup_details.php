@@ -51,11 +51,11 @@ try {
     //
     // Countdown
     $anmeldung = '';
-    if (($cupArray['phase'] == 'admin_register') || ($cupArray['phase'] == 'register')) {
+    if (preg_match('/register/', $cupArray['phase'])) {
         // Registration
         $anmeldung = '<div class="panel panel-default"><div class="panel-body center">Anmeldung: <span id="cup_details_countdown"></span></div></div>';
         $date = getformatdatetime($cupArray['checkin']);
-    } else if (($cupArray['phase'] == 'admin_checkin') || ($cupArray['phase'] == 'checkin')) {
+    } else if (preg_match('/checkin/', $cupArray['phase'])) {
         // Check-In
         $anmeldung = '<div class="panel panel-default"><div class="panel-body center">Check-In: <span id="cup_details_countdown"></span></div></div>';
         $date = getformatdatetime($cupArray['start']);
@@ -69,8 +69,9 @@ try {
 
     //
     // Cup Details Content
-    if (file_exists(__DIR__ . '/cup_details_' . $getPage . '.php')) {
-        include(__DIR__ . '/cup_details_' . $getPage . '.php');
+    $cupDetailsContent = __DIR__ . '/cup_details_' . $getPage . '.php';
+    if (file_exists($cupDetailsContent)) {
+        include($cupDetailsContent);
     }
 
     //
@@ -87,28 +88,28 @@ try {
             WHERE cs.`cupID` = " . $cup_id . " and s.`displayed` = 1"
     );
 
-    if ($sponsors) {
+    if ($sponsors && (mysqli_num_rows($sponsors) > 0 )) {
 
-        if (mysqli_num_rows($sponsors)) {
+        $content_sponsors = '';
+        while ($db = mysqli_fetch_array($sponsors)) {
 
-            $content_sponsors = '';
-            while ($db = mysqli_fetch_array($sponsors)) {
+            $linkAttributeArray = array();
+            $linkAttributeArray[] = 'href="' . $db['url'] . '"';
+            $linkAttributeArray[] = 'target="_blank"';
+            $linkAttributeArray[] = 'title="' . $db['name'] . '"';
+            $linkAttributeArray[] = 'class="pull-left"';
 
-                $linkAttributeArray = array();
-                $linkAttributeArray[] = 'href="' . $db['url'] . '"';
-                $linkAttributeArray[] = 'target="_blank"';
-                $linkAttributeArray[] = 'title="' . $db['name'] . '"';
-                $linkAttributeArray[] = 'class="pull-left"';
+            $banner_url = getSponsorImage($db['sponsorID'], true, 'small');
 
-                $banner_url = getSponsorImage($db['sponsorID'], true, 'small');
-
-                $content_sponsors .= '<a ' . implode(' ', $linkAttributeArray) . '><img src="' . $banner_url . '" alt="' . $db['name'] . '" /></a>';
-
-            }
-
-            $content .= '<div class="panel panel-default"><div class="panel-heading">Sponsoren</div><div class="panel-body"><div class="clearfix">' . $content_sponsors . '</div></div></div>';
+            $content_sponsors .= '<a ' . implode(' ', $linkAttributeArray) . '><img src="' . $banner_url . '" alt="' . $db['name'] . '" /></a>';
 
         }
+
+        $data_array = array();
+        $data_array['$panel_type'] = 'panel-default';
+        $data_array['$panel_title'] = 'Sponsoren';
+        $data_array['$panel_content'] = $content_sponsors;
+        $content .= $GLOBALS["_template_cup"]->replaceTemplate("panel_body", $data_array);
 
     }
 
@@ -127,39 +128,39 @@ try {
             WHERE a.`cupID` = " . $cup_id
     );
 
-    if ($streams) {
+    if ($streams && (mysqli_num_rows($streams) > 0 )) {
 
-        if(mysqli_num_rows($streams)) {
+        $content_streams = '';
+        while ($db = mysqli_fetch_array($streams)) {
 
-            $content_streams = '';
-            while ($db = mysqli_fetch_array($streams)) {
+            $stream_url = 'index.php?site=streams&amp;action=show&amp;id=' . $db['stream_id'];
 
-                $stream_url = 'index.php?site=streams&amp;action=show&amp;id=' . $db['stream_id'];
+            $stream_info = $db['stream_title'];
 
-                $stream_info = $db['stream_title'];
+            if ($db['stream_status']) {
 
-                if ($db['stream_status']) {
+                $stream_info .= '<span class="pull-right">';
 
-                    $stream_info .= '<span class="pull-right">';
-
-                    if (!empty($db['stream_game'])) {
-                        $stream_info .= $db['stream_game'] . ' / ';
-                    }
-
-                    $stream_info .= $db['stream_viewer'].' '.$_language->module['stream_viewer'];
-                    $stream_info .= '</span>';
-
-                } else {
-                    $stream_info .= '<span class="pull-right grey italic">offline</span>';
+                if (!empty($db['stream_game'])) {
+                    $stream_info .= $db['stream_game'] . ' / ';
                 }
 
-                $content_streams .= '<a href="'.$stream_url.'" target="_blank" title="'.$db['stream_title'].'" class="list-group-item">'.$stream_info.'</a>';
+                $stream_info .= $db['stream_viewer'].' '.$_language->module['stream_viewer'];
+                $stream_info .= '</span>';
 
+            } else {
+                $stream_info .= '<span class="pull-right grey italic">offline</span>';
             }
 
-            $content .= '<div class="panel panel-default"><div class="panel-heading">Streams</div><div class="list-group">' . $content_streams . '</div></div>';
+            $content_streams .= '<a href="'.$stream_url.'" target="_blank" title="'.$db['stream_title'].'" class="list-group-item">'.$stream_info.'</a>';
 
         }
+
+        $data_array = array();
+        $data_array['$panel_type'] = 'panel-default';
+        $data_array['$panel_title'] = 'Streams';
+        $data_array['$panel_content'] = $content_streams;
+        $content .= $GLOBALS["_template_cup"]->replaceTemplate("panel_list_group", $data_array);
 
     }
 
@@ -167,7 +168,7 @@ try {
     // Cup Anmeldung
     if ($loggedin) {
 
-        if (($cupArray['phase'] == 'admin_register') || ($cupArray['phase'] == 'register')) {
+        if (preg_match('/register/', $cupArray['phase'])) {
 
             //
             // Team Admin: Registrierung
@@ -209,7 +210,7 @@ try {
 
             }
 
-        } else if ($cupArray['phase'] == 'checkin') {
+        } else if (preg_match('/checkin/', $cupArray['phase'])) {
 
             //
             // Team: Check-In
@@ -266,6 +267,6 @@ try {
     $cups_details_home = $GLOBALS["_template_cup"]->replaceTemplate("cups_details_home", $data_array);
     echo $cups_details_home;
 
-} catch(Exception $e) {
+} catch (Exception $e) {
     echo showError($e->getMessage());
 }

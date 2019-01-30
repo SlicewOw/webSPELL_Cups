@@ -63,6 +63,7 @@ try {
                 $data_array['$cup_id'] = $cup_id;
                 $data_array['$game'] = getGame($ds['game'], 'icon');
                 $data_array['$name'] = $ds['name'];
+                $data_array['$mode'] = $ds['mode'];
                 $data_array['$date'] = $date;
                 $data_array['$size'] = $size;
                 $data_array['$status'] = $_language->module['cup_status_' . $ds['status']];
