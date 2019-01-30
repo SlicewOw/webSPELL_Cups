@@ -135,9 +135,9 @@ try {
             $cupstatus = $cupArray['status'];
             $time_now = time();
 
-            if (($cupArray['phase'] == 'admin_register') || ($cupArray['phase'] == 'register')) {
+            if (preg_match('/register/', $cupArray['phase'])) {
                 $date = date('Y/m/d H:i:s', $cupArray['checkin']);
-            } else if (($cupArray['phase'] == 'admin_checkin') || ($cupArray['phase'] == 'checkin')) {
+            } else if (preg_match('/checkin/', $cupArray['phase'])) {
                 $date = date('Y/m/d H:i:s', $cupArray['start']);
             }
 
@@ -191,7 +191,7 @@ try {
 <script src="./cup/js/cup_details_menu.js"></script>
 <script src="./cup/js/support_menu.js"></script>
 <?php
-if (!empty($date)) {
+if (isset($date) && !empty($date)) {
 ?>
 <script type="text/javascript">
 $("#cup_details_countdown").countdown("<?php echo $date; ?>", function (event) {
