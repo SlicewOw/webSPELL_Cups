@@ -180,47 +180,44 @@ try {
 
         $games = getGamesAsOptionList('csg', FALSE);
 
-        //
-        // Ausgabe:
+        $gameaccount_id = (isset($_GET['id']) && validate_int($_GET['id'])) ?
+            (int)$_GET['id'] : 0;
 
-        if($getAction == 'edit') {
+        if ($getAction == 'edit') {
 
-            $gameaccount_id = (isset($_GET['id']) && validate_int($_GET['id'])) ?
-                (int)$_GET['id'] : 0;
-
-            if($gameaccount_id < 1) {
+            if ($gameaccount_id < 1) {
                 throw new \Exception($_language->module['error_gameaccount_id_type']);
             }
-            
+
             $info = mysqli_query(
                 $_database,
-                "SELECT * FROM ".PREFIX."cups_gameaccounts 
+                "SELECT * FROM `" . PREFIX . "cups_gameaccounts`
                     WHERE gameaccID = " . $gameaccount_id . " AND deleted = 0"
             );
-            
-            if(mysqli_num_rows($info) != 1) {
+
+            if (!$info || (mysqli_num_rows($info) != 1)) {
                 throw new \Exception($_language->module['error_gameaccount_id_type']);
             }
 
             $ds = mysqli_fetch_array($info);
 
             $error = (!empty($error)) ?
-                '<div class="alert alert-danger">'.$error.'</div>' : '';
+                showError($error) : '';
 
             $game = getgamename($ds['category']);
             $id = $ds['value'];
 
             $data_array = array();
-            $data_array['$error'] 		= $error;
-            $data_array['$gameaccID'] 	= $gameaccount_id;
-            $data_array['$game'] 		= $game;
-            $data_array['$game_tag'] 	= $ds['category'];
-            $data_array['$id'] 			= $id;
+            $data_array['$error'] = $error;
+            $data_array['$gameaccID'] = $gameaccount_id;
+            $data_array['$game'] = $game;
+            $data_array['$game_tag'] = $ds['category'];
+            $data_array['$id'] = $id;
             $gameacc_edit = $GLOBALS["_template_cup"]->replaceTemplate("gameaccount_edit", $data_array);
             echo $gameacc_edit;
 
         } else {
-            
+
             $info_gameacc = '';
 
             //
@@ -229,11 +226,13 @@ try {
             $get = mysqli_fetch_array(
                 mysqli_query(
                     $_database,
-                    "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts` 
-                        WHERE userID = " . $userID . " AND active = 0 AND deleted = 0"
+                    "SELECT
+                            COUNT(*) AS `anz`
+                        FROM `" . PREFIX . "cups_gameaccounts`
+                        WHERE `userID` = " . $userID . " AND `active` = 0 AND `deleted` = 0"
                 )
             );
-            if($get['anz'] > 0) {
+            if ($get['anz'] > 0) {
                 $info_gameacc .= showInfo($_language->module['gameacc_wait'], true);
             }
 
@@ -243,26 +242,28 @@ try {
             $get = mysqli_fetch_array(
                 mysqli_query(
                     $_database,
-                    "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts` 
-                        WHERE userID = " . $userID . " AND deleted = 1 AND deleted_seen = 0"
+                    "SELECT
+                            COUNT(*) AS `anz`
+                        FROM `" . PREFIX . "cups_gameaccounts`
+                        WHERE `userID` = " . $userID . " AND `deleted` = 1 AND `deleted_seen` = 0"
                 )
             );
-            if($get['anz'] > 0) {
+            if ($get['anz'] > 0) {
                 $info_gameacc .= showError($_language->module['gameacc_wrong_id'], true);
                 gameaccount($userID, 'deleted_seen', '');
             }
 
             $info = mysqli_query(
                 $_database,
-                "SELECT 
+                "SELECT
                         `gameaccID`,
                         `category`,
                         `value`,
                         `active`
-                    FROM `".PREFIX."cups_gameaccounts` 
+                    FROM `".PREFIX."cups_gameaccounts`
                     WHERE userID = " . $userID . " AND deleted = 0"
             );
-            if(mysqli_num_rows($info)) {
+            if ($info && (mysqli_num_rows($info) > 0) {
 
                 $n = 1;
 

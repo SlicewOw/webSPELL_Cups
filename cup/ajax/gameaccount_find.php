@@ -226,6 +226,9 @@ try {
             throw new \Exception('wrong_steam64_id');
         }
 
+        $returnArray['htmlData'] .= '<div class="list-group-item">Steam ID:';
+        $returnArray['htmlData'] .= '<span class="pull-right">' . $steam64_id . '</span></div>';
+
         $accountDetails = getCSGOAccountInfo($steam64_id);
 
         $steamProfileData = $accountDetails['steam_profile'];
@@ -239,27 +242,18 @@ try {
 
         if ($varPage == 'admin') {
 
-            if(isset($steamProfileData['realname'])) {
+            if (isset($steamProfileData['realname'])) {
                 $returnArray['htmlData'] .= '<div class="list-group-item">Name:';
                 $returnArray['htmlData'] .= '<span class="pull-right">'.$steamProfileData['realname'].'</span></div>';
             }
 
-            if(isset($steamProfileData['timecreated'])) {
+            if (isset($steamProfileData['timecreated'])) {
                 $returnArray['htmlData'] .= '<div class="list-group-item">Erstellt am:';
                 $returnArray['htmlData'] .= '<span class="pull-right">'.getformatdatetime($steamProfileData['timecreated']).'</span></div>';
             }
 
             $returnArray['htmlData'] .= '<div class="list-group-item">Steam64 ID:';
             $returnArray['htmlData'] .= '<span class="pull-right">'.$steam64_id.'</span></div>';
-
-        }
-
-        $steam_id = CommunityID2SteamID($steam64_id);
-
-        $returnArray['htmlData'] .= '<div class="list-group-item">CS:GO ID:';
-        $returnArray['htmlData'] .= '<span class="pull-right">' . $steam_id . '</span></div>';
-
-        if ($varPage == 'admin') {
 
             $returnArray['htmlData'] .= '<div class="list-group-item">Community Banned?';
             if(empty($vacStatusData['CommunityBanned'])) {
