@@ -20,6 +20,20 @@ try {
         throw new \Exception($_language->module['no_cup']);
     }
 
+    $getPage = (isset($_GET['page'])) ?
+        getinput($_GET['page']) : 'home';
+
+    $allowedPagesArray = array(
+        'home',
+        'teams',
+        'bracket',
+        'rules'
+    );
+
+    if (!in_array($getPage, $allowedPagesArray)) {
+        header('Location: index.php?site=cup&action=details&id=' . $cup_id);
+    }
+
     $error = '';
     if ($cupArray['admin'] == 1) {
         $error = showInfo($_language->module['admin_only']);
