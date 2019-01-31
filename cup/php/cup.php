@@ -8,24 +8,78 @@ try {
         include($dir_cup . '/includes/cup_' . $getAction . '.php');
     } else {
 
-        $data_array = array();
-        $data_array['$overview'] = (empty($getAction)) ?
-            'btn-info white darkshadow' : 'btn-default';
-        $data_array['$archive'] = ($getAction == 'archive') ?
-            'btn-info white darkshadow' : 'btn-default';
-        $cups_controls = $GLOBALS["_template_cup"]->replaceTemplate("cups_controls", $data_array);
-        echo $cups_controls;
-
-        $whereClauseArray = array();
-
-        $whereClauseArray[] = '`saved` = 1';
+        $baseWhereClauseArray = array();
+        $baseWhereClauseArray[] = '`saved` = 1';
 
         if ($getAction != 'archive') {
-            $whereClauseArray[] = '`status` < 4';
+            $baseWhereClauseArray[] = '`status` < 4';
         }
 
         if (!iscupadmin($userID)) {
-            $whereClauseArray[] = '`admin_visible` = 0';
+            $baseWhereClauseArray[] = '`admin_visible` = 0';
+        }
+
+        $filterByGameTag = (isset($_GET['game'])) ?
+            getinput($_GET['game']) : '';
+
+        if (!empty($filterByGameTag)) {
+            $whereClauseArray[] = '`game` = \'' . $filterByGameTag . '\'';
+        }
+
+        $whereClause = (validate_array($baseWhereClauseArray, true)) ?
+            'WHERE ' . implode(' AND ', $baseWhereClauseArray) : '';
+
+        /**
+         * Quickfilter
+         */
+
+        $selectGamesQuery = mysqli_query(
+            $_database,
+            "SELECT DISTINCT
+                    `game`
+                FROM `" . PREFIX . "cups`
+                " . $whereClause . "
+                ORDER BY `status` ASC, `start_date` ASC"
+        );
+
+        if (!$selectGamesQuery) {
+            throw new \Exception($_language->module['query_select_failed']);
+        }
+
+        $availableGames = array(
+            'list' => array()
+        );
+
+        while ($get = mysqli_fetch_array($selectGamesQuery)) {
+
+            $cup_game_tag = $get['game'];
+            $gameArray = getGame($cup_game_tag);
+
+            if (!in_array($cup_game_tag, $availableGames['list'])) {
+                $availableGames['list'][] = $cup_game_tag;
+                $availableGames[$cup_game_tag] = array(
+                    'icon' => $gameArray['icon'],
+                    'shortcut' => $gameArray['short']
+                );
+            }
+
+        }
+
+        $quickfilter = '<a href="index.php?site=cup"><span class="fa fa-globe sixteen"></span></a>';
+
+        foreach ($availableGames['list'] as $game_tag) {
+            $game_icon = '<img src="' . $availableGames[$game_tag]['icon'] . '" alt="" />';
+            $quickfilter .= '<a href="index.php?site=cup&amp;game=' . $game_tag . '" title="' . $availableGames[$game_tag]['shortcut'] . '">' . $game_icon . '</a>';
+        }
+
+        /**
+         * Cup table content
+         */
+
+        $whereClauseArray = $baseWhereClauseArray;
+
+        if (!empty($filterByGameTag)) {
+            $whereClauseArray[] = '`game` = \'' . $filterByGameTag . '\'';
         }
 
         $whereClause = (validate_array($whereClauseArray, true)) ?
@@ -33,7 +87,9 @@ try {
 
         $ergebnis = mysqli_query(
             $_database,
-            "SELECT * FROM `".PREFIX."cups`
+            "SELECT
+                    `cupID`
+                FROM `" . PREFIX . "cups`
                 " . $whereClause . "
                 ORDER BY `status` ASC, `start_date` ASC"
         );
@@ -51,30 +107,42 @@ try {
 
                 $cupArray = getcup($cup_id);
 
-                if ($ds['status'] == 1) {
-                    $size = $cupArray['teams']['registered'] . ' / ' . $ds['max_size'];
-                    $date = getformatdatetime($ds['checkin_date']);
+                if ($cupArray['status'] == 1) {
+                    $size = $cupArray['teams']['registered'] . ' / ' . $cupArray['size'];
+                    $date = getformatdatetime($cupArray['checkin']);
                 } else {
-                    $size = $cupArray['teams']['checked_in'] . ' / ' . $ds['max_size'];
-                    $date = getformatdatetime($ds['start_date']);
+                    $size = $cupArray['teams']['checked_in'] . ' / ' . $cupArray['size'];
+                    $date = getformatdatetime($cupArray['start']);
                 }
+
+                $cup_game_tag = $cupArray['game'];
+                $cup_game_icon = getGame($cup_game_tag, 'icon');
 
                 $data_array = array();
                 $data_array['$cup_id'] = $cup_id;
-                $data_array['$game'] = getGame($ds['game'], 'icon');
-                $data_array['$name'] = $ds['name'];
-                $data_array['$mode'] = $ds['mode'];
+                $data_array['$game'] = $cup_game_icon;
+                $data_array['$name'] = $cupArray['name'];
+                $data_array['$mode'] = $cupArray['mode'];
                 $data_array['$date'] = $date;
                 $data_array['$size'] = $size;
-                $data_array['$status'] = $_language->module['cup_status_' . $ds['status']];
+                $data_array['$status'] = $_language->module['cup_status_' . $cupArray['status']];
                 $data_array['$url'] = 'index.php?site=cup&amp;action=details&amp;id=' . $cup_id;
                 $cupList .= $GLOBALS["_template_cup"]->replaceTemplate("cups_list", $data_array);
 
             }
 
         } else {
-            $cupList = '<tr><td colspan="7">'.$_language->module['no_cup'].'</td></tr>';
+            $cupList = '<tr><td colspan="7">' . $_language->module['no_cup'] . '</td></tr>';
         }
+
+        $data_array = array();
+        $data_array['$quickfilter'] = $quickfilter;
+        $data_array['$overview'] = (empty($getAction)) ?
+            'btn-info white darkshadow' : 'btn-default';
+        $data_array['$archive'] = ($getAction == 'archive') ?
+            'btn-info white darkshadow' : 'btn-default';
+        $cups_controls = $GLOBALS["_template_cup"]->replaceTemplate("cups_controls", $data_array);
+        echo $cups_controls;
 
         $data_array = array();
         $data_array['$cupList'] = $cupList;

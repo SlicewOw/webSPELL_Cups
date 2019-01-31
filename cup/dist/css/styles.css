@@ -856,6 +856,16 @@ input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; m
 .cup_details_rules h3				{ width: 90%; height: auto; margin: 10px 0 0 10%; }
 .cup_details_rules h4				{ width: 85%; height: auto; margin: 10px 0 0 15%; }
 
+.cup-home-quickfilter > a {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+.cup-home-quickfilter > a > img {
+    width: 16px;
+    height: 16px;
+}
+
 /* BRACKETS */
 .cup_bracket_64						{ float: left; width: 15%; height: auto; }
 .cup_bracket_64_break				{ float: left; width: 2%; height: 100%; }
