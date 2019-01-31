@@ -23,6 +23,11 @@ try {
                 $name = getinput($_POST[ "name" ]);
                 $short = getinput($_POST[ "short" ]);
                 $tag = getinput($_POST[ "tag" ]);
+                $tag_old = getinput($_POST[ "tag_old" ]);
+
+                if (empty($tag) || preg_match('/:/', $tag)) {
+                    throw new \Exception($_language->module['error_game_tag']);
+                }
 
                 $cup_auto_active = (isset($_POST[ "cup_auto_active" ]) && ($_POST[ "cup_auto_active" ] == '1')) ?
                     1 : 0;
@@ -97,6 +102,7 @@ try {
                             }
 
                             $mime_types = array(
+                                'image/jpg',
                                 'image/gif',
                                 'image/png'
                             );
@@ -114,22 +120,30 @@ try {
                             $filename = $tag . '.' . $upload->getExtension();
 
                             $deleteExistingIconsIfExisting = array(
+                                'jpg',
                                 'gif',
                                 'png'
                             );
 
                             foreach ($deleteExistingIconsIfExisting as $image_extension) {
+
+                                $file_to_be_deleted = $filepath . $tag_old . '.' . $image_extension;
+                                if (file_exists($file_to_be_deleted)) {
+                                    unlink($file_to_be_deleted);
+                                }
+
                                 $file_to_be_deleted = $filepath . $tag . '.' . $image_extension;
                                 if (file_exists($file_to_be_deleted)) {
                                     unlink($file_to_be_deleted);
                                 }
+
                             }
 
                             if (!$upload->saveAs($filepath . $filename, true)) {
                                 throw new \Exception($_language->module['broken_image']);
                             }
 
-                            @chmod($filepath . $filename, $new_chmod);
+                            @chmod($filepath . $filename, 644);
 
                         } catch (Exception $e) {
                             $errors[] = $e->getMessage();

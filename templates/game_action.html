@@ -11,7 +11,12 @@
         </div>
         <div class="col-sm-6">
             <div class="form-group">
-                <label>%game_short%</label>
+                <label>
+                    %game_short%
+                    <span class="fa fa-info-circle" data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="%tooltip_game_short%"></span>
+                </label>
                 <input type="text" name="short"
                        value="$short"
                        placeholder="CS:GO"
@@ -20,7 +25,14 @@
         </div>
         <div class="col-sm-6">
             <div class="form-group">
-                <label>%game_tag%</label>
+                <label>
+                    %game_tag%
+                    <span class="fa fa-info-circle" data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="%tooltip_game_tag%"></span>
+                </label>
+                <input type="hidden" name="tag_old"
+                       value="$tag" />
                 <input type="text" name="tag"
                        value="$tag"
                        class="form-control"
@@ -45,7 +57,7 @@
                 <label>%game_icon% (16x16px, gif %or% png)</label>
                 <input name="icon" type="file"
                        class="form-control"
-                       accept="image/gif,image/png" />
+                       accept="image/*" />
             </div>
         </div>
         <div class="col-sm-4" id="game_icon">

@@ -29,8 +29,11 @@ $language_array = Array(
 
     'active_games'=>'active games',
     'cup_auto_active'=>'Cup gameaccounts are active automatically?',
+    'error_game_tag'=>'Fill in game tag correctly (not empty, without colon)',
     'game_short'=>'Shortcut',
     'inactive_games'=>'inactive games',
+    'tooltip_game_short'=>'Visible shortcut of games.',
+    'tooltip_game_tag'=>'Invisible tag which is used internally only.',
     'unknown_game'=>'unknown games',
 
 /* do not edit above this line */

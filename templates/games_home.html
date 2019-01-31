@@ -189,6 +189,7 @@ function editGame(game_id) {
 
                     $("input[name=name]").val(varData.data.name);
                     $("input[name=short]").val(varData.data.short);
+                    $("input[name=tag_old]").val(varData.data.tag);
                     $("input[name=tag]").val(varData.data.tag);
 
                     $("#game_icon").html(varData.data.icon);
@@ -216,6 +217,7 @@ $(document).ready(function() {
 
         $("input[name=name]").val('');
         $("input[name=short]").val('');
+        $("input[name=tag_old]").val('');
         $("input[name=tag]").val('');
 
         $("#game_icon").html('');

@@ -29,8 +29,11 @@ $language_array = Array(
 
     'active_games'=>'aktive Spiele',
     'cup_auto_active'=>'Cup Gameaccounts automatisch aktiviert?',
+    'error_game_tag'=>'F&uuml;lle das Feld \'Tag\' korrekt aus (nicht leer, kein Doppelpunkt).',
     'game_short'=>'Abk&uuml;rzung',
     'inactive_games'=>'inaktive Spiele',
+    'tooltip_game_short'=>'Sichtbare Abk&uuml;rzung auf den Unterseiten.',
+    'tooltip_game_tag'=>'Interne Behandlung der Spiele, keine Sichtbarkeit nach au&szlig;en.',
     'unknown_game'=>'unbekanntes Spiel',
 
 /* do not edit above this line */
