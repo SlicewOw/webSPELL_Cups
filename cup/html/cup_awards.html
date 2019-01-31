@@ -56,6 +56,7 @@ function getCupAwards(action, award_id) {
                     $("#awardContainer").fadeOut('slow', function() {
                         $("#awardContainer").html(varData.html);
                         $("#awardContainer").fadeIn('slow');
+                    });
 
                 } else {
                     showMultipleNotifies(varData.message, 'error');
