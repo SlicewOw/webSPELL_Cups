@@ -82,103 +82,18 @@ try {
 
     //
     // Cup Sponsoren
-    $sponsors = mysqli_query(
-        $_database,
-        "SELECT
-                cs.`sponsorID`,
-                s.`name`,
-                s.`url`,
-                s.`banner_small`
-            FROM `" . PREFIX . "cups_sponsors` cs
-            JOIN `" . PREFIX . "sponsors` s ON cs.`sponsorID` = s.`sponsorID`
-            WHERE cs.`cupID` = " . $cup_id . " and s.`displayed` = 1"
-    );
-
-    if ($sponsors && (mysqli_num_rows($sponsors) > 0 )) {
-
-        $content_sponsors = '';
-        while ($db = mysqli_fetch_array($sponsors)) {
-
-            $linkAttributeArray = array();
-            $linkAttributeArray[] = 'href="' . $db['url'] . '"';
-            $linkAttributeArray[] = 'target="_blank"';
-            $linkAttributeArray[] = 'title="' . $db['name'] . '"';
-            $linkAttributeArray[] = 'class="pull-left"';
-
-            $banner_url = getSponsorImage($db['sponsorID'], true, 'small');
-
-            $content_sponsors .= '<a ' . implode(' ', $linkAttributeArray) . '><img src="' . $banner_url . '" alt="' . $db['name'] . '" /></a>';
-
-        }
-
-        $data_array = array();
-        $data_array['$panel_type'] = 'panel-default';
-        $data_array['$panel_title'] = 'Sponsoren';
-        $data_array['$panel_content'] = $content_sponsors;
-        $content .= $GLOBALS["_template_cup"]->replaceTemplate("panel_body", $data_array);
-
-    }
+    $content .= getSponsorsByCupIdAsPanelBody($cup_id);
 
     //
     // Cup Streams
-    $streams = mysqli_query(
-        $_database,
-        "SELECT
-                a.livID AS stream_id,
-                b.title AS stream_title,
-                b.online AS stream_status,
-                b.viewer AS stream_viewer,
-                b.game AS stream_game
-            FROM `" . PREFIX . "cups_streams` a
-            JOIN `" . PREFIX . "liveshow` b ON a.livID = b.livID
-            WHERE a.`cupID` = " . $cup_id
-    );
-
-    if ($streams && (mysqli_num_rows($streams) > 0 )) {
-
-        $content_streams = '';
-        while ($db = mysqli_fetch_array($streams)) {
-
-            $stream_url = 'index.php?site=streams&amp;action=show&amp;id=' . $db['stream_id'];
-
-            $stream_info = $db['stream_title'];
-
-            if ($db['stream_status']) {
-
-                $stream_info .= '<span class="pull-right">';
-
-                if (!empty($db['stream_game'])) {
-                    $stream_info .= $db['stream_game'] . ' / ';
-                }
-
-                $stream_info .= $db['stream_viewer'].' '.$_language->module['stream_viewer'];
-                $stream_info .= '</span>';
-
-            } else {
-                $stream_info .= '<span class="pull-right grey italic">offline</span>';
-            }
-
-            $content_streams .= '<a href="'.$stream_url.'" target="_blank" title="'.$db['stream_title'].'" class="list-group-item">'.$stream_info.'</a>';
-
-        }
-
-        $data_array = array();
-        $data_array['$panel_type'] = 'panel-default';
-        $data_array['$panel_title'] = 'Streams';
-        $data_array['$panel_content'] = $content_streams;
-        $content .= $GLOBALS["_template_cup"]->replaceTemplate("panel_list_group", $data_array);
-
-    }
+    $content .= getStreamsByCupIdAsListGroup($cup_id);
 
     //
     // Cup Anmeldung
-    $link = getCupStatusContainer($cupArray);
-    $cup_footer = (!empty($link)) ?
-        '<div class="list-group">' . $link . '</div>' : '';
+    $cup_footer = getCupStatusContainer($cupArray);
 
-    //
-    // Update Hits
-    setHits('cups', 'cupID', $cup_id, false);
+    // Cup Hits
+    setCupHitsByPage($cup_id, $getPage);
 
     $data_array = array();
     $data_array['$image_url'] = $image_url;

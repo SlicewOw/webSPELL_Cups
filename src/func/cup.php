@@ -4,6 +4,136 @@
  * General
  **/
 
+function setCupHitsByPage($cup_id, $page) {
+
+    if (!validate_int($cup_id, true)) {
+        return '';
+    }
+
+    $column = (empty($page) || ($page == 'home')) ?
+        'hits' : 'hits_' . $page;
+
+    global $_database;
+
+    $updateQuery = mysqli_query(
+        $_database,
+        "UPDATE `" . PREFIX . "cups`
+            SET `" . $column . "` = `" . $column . "` + 1
+            WHERE `cupID` = " . $cup_id
+    );
+
+}
+
+function getSponsorsByCupIdAsPanelBody($cup_id) {
+
+    if (!validate_int($cup_id, true)) {
+        return '';
+    }
+
+    global $_database;
+
+    $selectSponsorsQuery = mysqli_query(
+        $_database,
+        "SELECT
+                cs.`sponsorID`,
+                s.`name`,
+                s.`url`,
+                s.`banner_small`
+            FROM `" . PREFIX . "cups_sponsors` cs
+            JOIN `" . PREFIX . "sponsors` s ON cs.`sponsorID` = s.`sponsorID`
+            WHERE cs.`cupID` = " . $cup_id . " and s.`displayed` = 1"
+    );
+
+    if (!$selectSponsorsQuery || (mysqli_num_rows($selectSponsorsQuery) < 1)) {
+        return '';
+    }
+
+    $content_sponsors = '';
+    while ($db = mysqli_fetch_array($selectSponsorsQuery)) {
+
+        $linkAttributeArray = array();
+        $linkAttributeArray[] = 'href="' . $db['url'] . '"';
+        $linkAttributeArray[] = 'target="_blank"';
+        $linkAttributeArray[] = 'title="' . $db['name'] . '"';
+        $linkAttributeArray[] = 'class="pull-left"';
+
+        $banner_url = getSponsorImage($db['sponsorID'], true, 'small');
+
+        $content_sponsors .= '<a ' . implode(' ', $linkAttributeArray) . '><img src="' . $banner_url . '" alt="' . $db['name'] . '" /></a>';
+
+    }
+
+    $data_array = array();
+    $data_array['$panel_type'] = 'panel-default';
+    $data_array['$panel_title'] = 'Sponsoren';
+    $data_array['$panel_content'] = $content_sponsors;
+    return $GLOBALS["_template_cup"]->replaceTemplate("panel_body", $data_array);
+
+}
+
+function getStreamsByCupIdAsListGroup($cup_id) {
+
+    if (!validate_int($cup_id, true)) {
+        return '';
+    }
+
+    global $_database;
+
+    $selectSponsorsQuery = mysqli_query(
+        $_database,
+        "SELECT
+                `livID`
+            FROM `" . PREFIX . "cups_streams`
+            WHERE `cupID` = " . $cup_id
+    );
+
+    if (!$selectSponsorsQuery || (mysqli_num_rows($selectSponsorsQuery) < 1)) {
+        return '';
+    }
+
+    global $_language, $hp_url;
+
+    $content_streams = '';
+    while ($db = mysqli_fetch_array($selectSponsorsQuery)) {
+
+        $streamArray = get_streaminfo($db['livID'], '');
+        if (validate_array($streamArray, true)) {
+
+            $stream_info = $streamArray['title'];
+            if (get_streaminfo($db['livID'], 'online')) {
+                $stream_info .= '<span class="pull-right">';
+                if (!empty($streamArray['game'])) {
+                    $stream_info .= $streamArray['game'].' / ';
+                }
+                $stream_info .= $streamArray['viewer'].' '.$_language->module['stream_viewer'].'</span>';
+            } else {
+                $stream_info .= '<span class="pull-right grey italic">offline</span>';
+            }
+
+            $linkAttributeArray = array();
+            $linkAttributeArray[] = 'href="' . $hp_url . '/index.php?site=streams&amp;action=show&amp;livID='.$db['livID'] . '"';
+            $linkAttributeArray[] = 'target="_blank"';
+            $linkAttributeArray[] = 'title="' . $streamArray['title'] . '"';
+            $linkAttributeArray[] = 'class="list-group-item"';
+
+            $content_streams .= '<a ' . implode(' ', $linkAttributeArray) . '>' . $stream_info . '</a>';
+
+        }
+
+    }
+
+    if (empty($content_streams)) {
+        return '';
+    }
+
+    $data_array = array();
+    $data_array['$panel_type'] = 'panel-default';
+    $data_array['$panel_title'] = 'Streams';
+    $data_array['$panel_content'] = $content_streams;
+    return $GLOBALS["_template_cup"]->replaceTemplate("panel_list_group", $data_array);
+
+}
+
 function checkCupDetails($cup_array, $cup_id) {
 
     global $_language;
@@ -36,6 +166,10 @@ function getCupStatusContainer($cup_array) {
 
     if (!$loggedin) {
         return '<div class="list-group-item alert-info bold center">' . $_language->module['login'] . '</div>';
+    }
+
+    if (($cup_array['phase'] == 'running') || ($cup_array['phase'] == 'finished')) {
+        return '';
     }
 
     if (preg_match('/register/', $cup_array['phase'])) {
@@ -104,13 +238,11 @@ function getCupStatusContainer($cup_array) {
             $link = '<div class="list-group-item alert-info center">' . $_language->module['enter_cup'] . '</div>';
         }
 
-    } else if (($cup_array['phase'] == 'running') || ($cup_array['phase'] == 'finished')) {
-        $link = '';
     } else {
         $link = '<a class="list-group-item alert-success bold center" href="index.php?site=teams&action=add">' . $_language->module['add_team'] . '</a>';
     }
 
-    return $link;
+    return '<div class="list-group">' . $link . '</div>';
 
 }
 
