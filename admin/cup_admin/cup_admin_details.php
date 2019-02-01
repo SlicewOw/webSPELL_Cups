@@ -18,7 +18,7 @@ try {
         }
 
         $ergebnis = mysqli_query(
-            $_database, 
+            $_database,
             "SELECT * FROM `" . PREFIX . "cups`
                 WHERE `status` = " . $status_id . "
                 ORDER BY `start_date` ASC"
@@ -337,6 +337,24 @@ try {
                 $content .= showInfo($_language->module['cup_not_saved']);
             }
 
+            if ($cupArray['status'] == 1) {
+
+                $start_url_page = ($cupArray['groupstage'] == 1) ?
+                    '&amp;action=start&amp;status=groupstage' : '&amp;action=start&amp;status=playoffs';
+
+                $start_url = 'admincenter.php?site=cup&amp;mod=cup' . $start_url_page . '&amp;id=' . $cup_id;
+                $cup_footer = '<a class="btn btn-success btn-sm white darkshadow" href="' . $start_url . '">' . $_language->module['cup_admin_status_' . $cupArray['status']].'</a>';
+
+            } else if ($cupArray['status'] == 2) {
+                $footer_url = 'admincenter.php?site=cup&amp;mod=cup&amp;action=status&amp;id=' . $cup_id;
+                $cup_footer = '<a class="btn btn-success btn-sm white darkshadow" href="' . $footer_url . '">'.$_language->module['cup_admin_status_' . $cupArray['status']].'</a>';
+            } else if ($cupArray['status'] == 3) {
+                $footer_url = 'admincenter.php?site=cup&amp;mod=cup&amp;action=finish&amp;status=playoffs&amp;id=' . $cup_id;
+                $cup_footer = '<a class="btn btn-success btn-sm white darkshadow" href="' . $footer_url . '">'.$_language->module['cup_admin_status_' . $cupArray['status']].'</a>';
+            } else {
+                $cup_footer = '<span class="btn btn-default btn-sm">'.$_language->module['cup_admin_status_' . $cupArray['status']].'</span>';
+            }
+
             /**
              * Cup Details Content
              */
@@ -347,42 +365,11 @@ try {
                 $content .= showError($_language->module['access_denied']);
             }
 
-            $cup_footer = '';
-            if ($cupArray['status'] == 1) {
-
-                $start_url = ($cupArray['groupstage'] == 1) ?
-                    '&amp;action=start&amp;status=groupstage' : '&amp;action=start&amp;status=playoffs';
-
-                $startURL = 'admincenter.php?site=cup&amp;mod=cup'.$start_url.'&amp;id='.$cup_id;
-                $cup_footer .= '<div class="btn-group" role="group">';
-                $cup_footer .= '<a class="btn btn-default btn-sm" href="'.$startURL.'">'.$_language->module['cup_status_' . $cupArray['status']].'</a>';
-                $cup_footer .= '</div>';
-
-                $editURL = 'admincenter.php?site=cup&amp;mod=cup&amp;action=edit&amp;id='.$cup_id;
-                $cup_footer .= '<div class="btn-group" role="group">';
-                $cup_footer .= '<a class="btn btn-default btn-sm" href="'.$editURL.'">Cup '.$_language->module['edit'].'</a>';
-                $cup_footer .= '</div>';
-
-                $deleteURL = 'admincenter.php?site=cup&amp;mod=cup&amp;action=delete&amp;id='.$cup_id;
-                $cup_footer .= '<div class="btn-group" role="group">';
-                $cup_footer .= '<a class="btn btn-default btn-sm" href="'.$deleteURL.'">Cup '.$_language->module['delete'].'</a>';
-                $cup_footer .= '</div>';
-
-            } else if ($cupArray['status'] == 2) {
-                $footer_url = 'admincenter.php?site=cup&amp;mod=cup&amp;action=status&amp;id=' . $cup_id;
-                $cup_footer .= '<a class="btn btn-default btn-sm" href="' . $footer_url . '">'.$_language->module['cup_status_' . $cupArray['status']].'</a>';
-            } else if ($cupArray['status'] == 3) {
-                $footer_url = 'admincenter.php?site=cup&amp;mod=cup&amp;action=finish&amp;status=playoffs&amp;id=' . $cup_id;
-                $cup_footer .= '<a class="btn btn-default btn-sm" href="' . $footer_url . '">'.$_language->module['cup_status_' . $cupArray['status']].'</a>';
-            } else {
-                $cup_footer .= '<span class="btn btn-default btn-sm">'.$_language->module['cup_status_' . $cupArray['status']].'</span>';
-            }
-
             $data_array = array();
             $data_array['$image_url'] = $image_url;
             $data_array['$error'] = $error;
             $data_array['$baseURL'] = 'admincenter.php?site=cup&amp;mod=cup&amp;action=cup&amp;id=' . $cup_id;
-            $data_array['$cupID'] = $cup_id;
+            $data_array['$cup_id'] = $cup_id;
             $data_array['$cupname'] = $cupArray['name'];
             $data_array['$navi_home'] = $navi_home;
             $data_array['$navi_settings'] = $navi_settings;

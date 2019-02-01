@@ -3792,7 +3792,7 @@ function getawardcat($award_id, $cat = '') {
 
 /* Cup Options */
 function getCupOption($cat = '') {
-    if($cat == 'size') {
+    if ($cat == 'size') {
         $returnValue = '';
         $returnValue .= '<option value="2">2</option>';
         $returnValue .= '<option value="4">4</option>';
@@ -3802,14 +3802,14 @@ function getCupOption($cat = '') {
         $returnValue .= '<option value="30" disabled="disabled">30</option>';
         $returnValue .= '<option value="32">32</option>';
         $returnValue .= '<option value="64">64</option>	';
-    } elseif($cat == 'penalty') {
+    } else if ($cat == 'penalty') {
         $returnValue = '';
         $returnValue .= '<option value="0">0</option>';
         $returnValue .= '<option value="6">6</option>';
         $returnValue .= '<option value="12">12</option>';
         $returnValue .= '<option value="18">18</option>';
         $returnValue .= '<option value="24">24</option>';
-    } elseif($cat == 'mode') {
+    } else if ($cat == 'mode') {
         $returnValue = '';
         $returnValue .= '<option value="1on1">1on1</option>';
         $returnValue .= '<option value="2on2">2on2</option>';
@@ -3817,31 +3817,31 @@ function getCupOption($cat = '') {
         $returnValue .= '<option value="4on4">4on4</option>';
         $returnValue .= '<option value="5on5">5on5</option>';
         $returnValue .= '<option value="11on11">11on11</option>';
-    } elseif($cat == 'csg_rounds') {
+    } else if ($cat == 'csg_rounds') {
         $returnValue = '';
         $returnValue .= '<option value="18">18 (MR9)</option>';
         $returnValue .= '<option value="30" selected="selected">30 (MR15)</option>';
-    } elseif($cat == 'csg_overtime') {
+    } else if ($cat == 'csg_overtime') {
         $returnValue = '';
         $returnValue .= '<option value="10_16">10 (MR5) - 16.000$</option>';
         $returnValue .= '<option value="6_16">6 (MR3) - 16.000$</option>';
         $returnValue .= '<option value="6_10">6 (MR3) - 10.000$</option>';
-    } else if($cat == 'registration') {
+    } else if ($cat == 'registration') {
         $returnValue = '';
         $returnValue .= '<option value="open">Open</option>';
         $returnValue .= '<option value="invite">Invite</option>';
         $returnValue .= '<option value="closed">Closed</option>';
-    } else if($cat == 'rounds') {
+    } else if ($cat == 'rounds') {
         $returnValue = '';
         $returnValue .= '<option value="bo1">Best-of-One (Bo1)</option>';
         $returnValue .= '<option value="bo3">Best-of-Three (Bo3)</option>';
         $returnValue .= '<option value="bo5">Best-of-Five (Bo5)</option>';
         $returnValue .= '<option value="bo7">Best-of-Seven (Bo7)</option>';
-    } else if($cat == 'priority') {
+    } else if ($cat == 'priority') {
         $returnValue = '';
         $returnValue .= '<option value="normal">normal</option>';
         $returnValue .= '<option value="main">Main</option>';
-    } else if($cat == 'elimination') {
+    } else if ($cat == 'elimination') {
         $returnValue = '';
         $returnValue .= '<option value="single">Single-Elimination</option>';
         $returnValue .= '<option value="double" disabled="disabled">Double-elimination</option>';
@@ -3849,23 +3849,26 @@ function getCupOption($cat = '') {
     } else {
 
         global $_language;
-        $_language->readModule('cups');
+
+        $_language->readModule('cups', true, true);
 
         $returnValue = array(
-            'size' 			=> getCupOption('size'),
-            'penalty' 		=> getCupOption('penalty'),
-            'mode' 			=> getCupOption('mode'),
-            'csg_rounds' 	=> getCupOption('csg_rounds'),
-            'csg_overtime' 	=> getCupOption('csg_overtime'),
-            'registration' 	=> getCupOption('registration'),
-            'priority' 		=> getCupOption('priority'),
-            'elimination' 	=> getCupOption('elimination'),
-            'rounds' 		=> getCupOption('rounds'),
-            'true_false' 	=> '<option value="1">'.$_language->module['yes'].'</option><option value="0">'.$_language->module['no'].'</option>'
+            'size' => getCupOption('size'),
+            'penalty' => getCupOption('penalty'),
+            'mode' => getCupOption('mode'),
+            'csg_rounds' => getCupOption('csg_rounds'),
+            'csg_overtime' => getCupOption('csg_overtime'),
+            'registration' => getCupOption('registration'),
+            'priority' => getCupOption('priority'),
+            'elimination' => getCupOption('elimination'),
+            'rounds' => getCupOption('rounds'),
+            'true_false' => '<option value="1">' . $_language->module['yes'] . '</option><option value="0">' . $_language->module['no'] . '</option>'
         );
 
     }
+
     return $returnValue;
+
 }
 
 /* STATISTICS */

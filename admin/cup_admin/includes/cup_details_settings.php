@@ -32,26 +32,26 @@ try {
     $cupSettingsArray = array();
 
     $registerFormat = str_replace(
-        'value="'.$cupArray['registration'].'"',
-        'value="'.$cupArray['registration'].'" selected="selected"',
+        'value="' . $cupArray['registration'] . '"',
+        'value="' . $cupArray['registration'] . '" selected="selected"',
         $cupOptions['registration']
     );
 
     $cupSaved = str_replace(
-        'value="'.$cupArray['saved'].'"',
-        'value="'.$cupArray['saved'].'" selected="selected"',
+        'value="' . $cupArray['saved'] . '"',
+        'value="' . $cupArray['saved'] . '" selected="selected"',
         $cupOptions['true_false']
     );
 
     $adminOnly = str_replace(
-        'value="'.$cupArray['admin'].'"',
-        'value="'.$cupArray['admin'].'" selected="selected"',
+        'value="' . $cupArray['admin'] . '"',
+        'value="' . $cupArray['admin'] . '" selected="selected"',
         $cupOptions['true_false']
     );
 
     $mapVote = str_replace(
-        'value="'.$cupArray['map_vote'].'"',
-        'value="'.$cupArray['map_vote'].'" selected="selected"',
+        'value="' . $cupArray['map_vote'] . '"',
+        'value="' . $cupArray['map_vote'] . '" selected="selected"',
         $cupOptions['true_false']
     );
 

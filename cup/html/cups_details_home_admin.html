@@ -33,10 +33,25 @@ $error
     </div>
 </div>
 <br />
-$content
-<div class="btn-group btn-group-justified" role="group">
-    $cup_footer
+<div class="clearfix">
+    <div class="pull-left">
+        $cup_footer
+    </div>
+    <div class="pull-right">
+        <a class="btn btn-warning btn-sm white darkshadow"
+           href="admincenter.php?site=cup&amp;mod=cup&amp;action=edit&amp;id=$cup_id">
+            Cup %edit%
+        </a>
+        <a class="btn btn-danger btn-sm white darkshadow"
+           href="admincenter.php?site=cup&amp;mod=cup&amp;action=delete&amp;id=$cup_id">
+            Cup %delete%
+        </a>
+    </div>
 </div>
+<br />
+$content
+<br />
+<br />
 <script type="text/javascript">
 $("button[name=activeButtonsRound]").click(function (e) {
 
@@ -88,7 +103,7 @@ $("button[name=updateRound]").click(function (e) {
     $.get(
         "ajax.php?site=admin_cup_round_details",
         {
-            cup_id : $cupID,
+            cup_id : $cup_id,
             round_id : round_id
         },
         function (data, status) {
