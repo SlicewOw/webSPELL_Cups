@@ -1,37 +1,35 @@
 <div class="panel-footer">
-    <div class="full_content">
-        <form method="post" onsubmit="return confirm('%confirm_mapreset%');">
-            <div class="clearfix">
-                <div class="pull-left">
-                    <button class="btn btn-default btn-sm"
-                            name="activeButtonsRound"
-                            id="round_$i">
-                        %activate_buttons%
-                    </button>
-                    <input type="hidden" name="cup_id" value="$cup_id" />
-                    <input type="hidden" name="runde" value="$i" />
-                    <button type="submit" name="resetMaps"
-                            disabled="disabled"
-                            class="resetClass$i btn btn-info btn-sm white darkshadow">
-                        %reset_maps%
-                    </button>
-                    <button type="submit" name="addMasterComment"
-                            id="mC_$i"
-                            disabled="disabled"
-                            class="resetClass$i btn btn-info btn-sm white darkshadow">
-                        Master %comment%
-                    </button>
-                </div>
-                <div class="pull-right">
-                    <button type="button" id="update_$i"
-                            name="updateRound"
-                            class="btn btn-success btn-sm white darkshadow">
-                        %update_round%
-                    </button>
-                </div>
+    <form method="post" onsubmit="return confirm('%confirm_mapreset%');">
+        <div class="clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm"
+                        name="activeButtonsRound"
+                        id="round_$i">
+                    %activate_buttons%
+                </button>
+                <input type="hidden" name="cup_id" value="$cup_id" />
+                <input type="hidden" name="runde" value="$i" />
+                <button type="submit" name="resetMaps"
+                        disabled="disabled"
+                        class="resetClass$i btn btn-info btn-sm white darkshadow">
+                    %reset_maps%
+                </button>
+                <button type="submit" name="addMasterComment"
+                        id="mC_$i"
+                        disabled="disabled"
+                        class="resetClass$i btn btn-info btn-sm white darkshadow">
+                    Master %comment%
+                </button>
             </div>
-        </form>
-    </div>
+            <div class="pull-right">
+                <button type="button" id="update_$i"
+                        name="updateRound"
+                        class="btn btn-success btn-sm white darkshadow">
+                    %update_round%
+                </button>
+            </div>
+        </div>
+    </form>
     <div id="masterComment$i" style="display: none;">
         <br />
         <form method="post">

@@ -1,114 +1,114 @@
 <div class="collapse" id="addSmurfAccount">
-	<form method="post">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h1 class="panel-title">%add_smurf%</h1>
-			</div>
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label>Value</label>
-							<input type="text" name="smurfValue" 
+    <form method="post">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">%add_smurf%</h1>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Value</label>
+                            <input type="text" name="smurfValue"
                                    class="form-control" />
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<label>%game%</label>
-						<select name="smurfGame" class="form-control">
-							$games
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="panel-footer">
-				<input type="hidden" name="user_id" value="$user_id" />
-				<button type="submit" class="btn btn-info btn-sm white darkshadow" 
-                        name="submitAddSmurf" 
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>%game%</label>
+                        <select name="smurfGame" class="form-control">
+                            $games
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <input type="hidden" name="user_id" value="$user_id" />
+                <button type="submit" class="btn btn-info btn-sm white darkshadow"
+                        name="submitAddSmurf"
                         id="submitAddSmurf">
-					%save%
-				</button>
-			</div>
-		</div>
-	</form>
+                    %save%
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
 <script type="text/javascript">
 $("#submitAddSmurf").click(function(e) {
 
-	e.preventDefault();
+    e.preventDefault();
 
-	var value = $("input[name=smurfValue]").val();
-	if(value === "") {
-		alert('%enter_value%');
-	} else {
+    var value = $("input[name=smurfValue]").val();
+    if (value === "") {
+        alert('%enter_value%');
+        return;
+    }
 
-		$.post(
-			"ajax.php?site=admin_gameaccounts",
-			{
-				action      : 'addSmurf',
-                smurfValue 	: value,
-				smurfGame	: $("select[name=smurfGame]").val(),
-				user_id		: $("input[name=user_id]").val()
-			},
-			function(data, status){
+    $.post(
+        "ajax.php?site=admin_gameaccounts",
+        {
+            action : 'addSmurf',
+            smurfValue : value,
+            smurfGame : $("select[name=smurfGame]").val(),
+            user_id : $("input[name=user_id]").val()
+        },
+        function(data, status){
 
-				if(status === "success") {
-					
-					var varData = JSON.parse(data);
-										
-                    var notifyState;
-					if(varData.status) {
-                        
-                        notifyTitle = '%smurf_saved%';
-                        notifyState = 'success';
-                        
-                        getCSGOContent();
-                        
-					} else {
-                        notifyTitle = '%smurf_failed%';
-                        notifyState = 'error';
-					}
-				
-                    showMultipleNotifies(notifyTitle, notifyState);
-                    
-				
-				} else {
-                    showNotify('%error_getting_data%', '', 'error');
+            if(status === "success") {
+
+                var varData = JSON.parse(data);
+
+                var notifyState;
+                if (varData.status) {
+
+                    notifyTitle = '%smurf_saved%';
+                    notifyState = 'success';
+
+                    getCSGOContent();
+
+                } else {
+                    notifyTitle = '%smurf_failed%';
+                    notifyState = 'error';
                 }
 
-			}
-		);
+                showMultipleNotifies(notifyTitle, notifyState);
 
-		$("input[name=smurfValue]").val('');
+            } else {
+                showNotify('%error_getting_data%', '', 'error');
+            }
 
-	}
+        }
+    );
+
+    $("input[name=smurfValue]").val('');
 
 });
 </script>
 <div class="panel panel-default">
-	<div class="panel-heading">
-		<h1 class="panel-title">$username - Log</h1>
-	</div>
-	<table class="table table-striped">
-		<thead>
-			<th>#</th>
-			<th>ID</th>
-			<th>Value</th>
-			<th>%game%</th>
-			<th>%date%</th>
-			<th>Status</th>
-            <th>%actions%</th>
-		</thead>
-		<tbody>
-			$gameaccount_list
-		</tbody>
-	</table>
-	<div class="full_content" id="csgoDivContainer" style="display: none;">
-		<hr />
-		<div class="panel-body">
-			<label>%check_csgo_accounts%</label>
-		</div>
-		<div class="table-responsive">        
+    <div class="panel-heading">
+        <h1 class="panel-title">$username - Log</h1>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <th>#</th>
+                <th>ID</th>
+                <th>Value</th>
+                <th>%game%</th>
+                <th>%date%</th>
+                <th>Status</th>
+                <th>%actions%</th>
+            </thead>
+            <tbody>
+                $gameaccount_list
+            </tbody>
+        </table>
+    </div>
+    <div id="csgoDivContainer" style="display: none;">
+        <hr />
+        <div class="panel-body">
+            <label>%check_csgo_accounts%</label>
+        </div>
+        <div class="table-responsive">
             <table class="table table-striped" style="margin: 0;">
                 <thead>
                     <th style="width: 5%;">Avatar</th>
@@ -120,91 +120,103 @@ $("#submitAddSmurf").click(function(e) {
                 </thead>
                 <tbody id="csgoTableContainer"></tbody>
             </table>
-		</div>
-	</div>
-	<div class="panel-footer">
-		<input type="hidden" id="csgoGameaccountCheck" name="csgoGameaccountCheck" value="$csgoGameaccountCheck" />
-		<a href="admincenter.php?site=cup&mod=gameaccounts" class="btn btn-info btn-sm white darkshadow">
-			%overview%
-		</a>
-		<button class="btn btn-default btn-sm" type="button" data-toggle="collapse" data-target="#addSmurfAccount" aria-expanded="false" aria-controls="addSmurfAccount">
-			%add_smurf%
-		</button>
-        <button type="button" name="btnUpdateAccounts" class="btn btn-default btn-sm">
+        </div>
+    </div>
+    <div class="panel-footer">
+        <input type="hidden" id="csgoGameaccountCheck"
+               name="csgoGameaccountCheck"
+               value="$csgoGameaccountCheck" />
+        <a href="admincenter.php?site=cup&mod=gameaccounts"
+           class="btn btn-info btn-sm white darkshadow">
+            %overview%
+        </a>
+        <button type="button" class="btn btn-default btn-sm"
+                data-toggle="collapse"
+                data-target="#addSmurfAccount"
+                aria-expanded="false"
+                aria-controls="addSmurfAccount">
+            %add_smurf%
+        </button>
+        <button type="button" name="btnUpdateAccounts"
+                class="btn btn-default btn-sm">
             Update Accounts
         </button>
-	</div>
+    </div>
 </div>
 <ul id="menu-tabs" class="nav nav-tabs" role="tablist">
-	<li role="presentation" class="active">
-		<a href="#user-teams" aria-controls="user-teams" role="tab" data-toggle="tab">
+    <li role="presentation" class="active">
+        <a href="#user-teams" aria-controls="user-teams"
+           role="tab"
+           data-toggle="tab">
             Teams <span class="badge">$anzTeams</span>
-		</a>
-	</li>
-	<li role="presentation">
-		<a href="#user-profiles" aria-controls="user-profiles" role="tab" data-toggle="tab">
+        </a>
+    </li>
+    <li role="presentation">
+        <a href="#user-profiles" aria-controls="user-profiles"
+           role="tab"
+           data-toggle="tab">
             %user_profiles% <span class="badge">$anzProfiles</span>
-		</a>
-	</li>
+        </a>
+    </li>
 </ul>
 <br />
 <div class="tab-content">
-	<div role="tabpanel" class="tab-pane active" id="user-teams">
-		<div class="row">
-			<div class="col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h1 class="panel-title">Teams</h1>
-					</div>
-					<div class="list-group">
-						$teams
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h1 class="panel-title">Team - Log</h1>
-					</div>
-					<div class="list-group">
-						$log
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div role="tabpanel" class="tab-pane" id="user-profiles">
-		$profiles
-	</div>
+    <div role="tabpanel" class="tab-pane active" id="user-teams">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">Teams</h1>
+                    </div>
+                    <div class="list-group">
+                        $teams
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">Team - Log</h1>
+                    </div>
+                    <div class="list-group">
+                        $log
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="user-profiles">
+        $profiles
+    </div>
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
 
-	$('#menu-tabs a[href="#user-$active_tab"]').tab('show');
+    $('#menu-tabs a[href="#user-$active_tab"]').tab('show');
 
-	var checkStatus = $("#csgoGameaccountCheck").val();
-	if(checkStatus === 'true') {
-		getCSGOContent();
-	}
+    var checkStatus = $("#csgoGameaccountCheck").val();
+    if (checkStatus === 'true') {
+        getCSGOContent();
+    }
 
-    $("button[name=btnUpdateAccounts]").click(function() {
+    $("button[name=btnUpdateAccounts]").click(function () {
         getCSGOContent();
     });
-    
+
 });
-	
+
 function updateSteam64ID(gameacc_id, steam_id) {
 
-	$("#csgoTableContainer").html('<tr><td colspan="8"><img src="$image_url/loader.gif" alt="" /></td></tr>');
-	
+    $("#csgoTableContainer").html('<tr><td colspan="8"><img src="$image_url/loader.gif" alt="" /></td></tr>');
+
     $.get(
         "ajax.php?site=admin_gameaccount_steam_update", 
         {
-            gameacc_id  : gameacc_id,
-            steam_id    : steam_id
+            gameacc_id : gameacc_id,
+            steam_id : steam_id
         },
-        function(data, status){
-			getCSGOContent();
+        function (data, status) {
+            getCSGOContent();
         }
     );
 
@@ -213,21 +225,21 @@ function updateSteam64ID(gameacc_id, steam_id) {
 function getCSGOContent() {
 
     $("button[name=btnUpdateAccounts]").attr('disabled', 'disabled');
-    
-	$("#csgoDivContainer").css('display', 'block');
-	$("#csgoTableContainer").html('<tr><td colspan="8"><img src="$image_url/loader.gif" alt="" /></td></tr>');
-	
+
+    $("#csgoDivContainer").css('display', 'block');
+    $("#csgoTableContainer").html('<tr><td colspan="8"><img src="$image_url/loader.gif" alt="" /></td></tr>');
+
     $.get(
         "ajax.php?site=admin_gameaccount_steam_status", 
         {
             user_id  : $user_id
         },
-        function(data, status){
-            
-			$("#csgoTableContainer").html(data);
-            
+        function (data, status){
+
+            $("#csgoTableContainer").html(data);
+
             $("button[name=btnUpdateAccounts]").removeAttr('disabled');
-            
+
         }
     );
 
@@ -236,28 +248,59 @@ function getCSGOContent() {
 function changeSmurfStatus(gameacc_id) {
 
     var confirmResult = confirm('%confirm_change%');
+    if (!confirmResult) {
+        return;
+    }
+
+    $.post(
+        "ajax.php?site=admin_gameaccount_action&action=changeSmurf",
+        {
+            gameacc_id : gameacc_id
+        },
+        function (data, status){
+
+            if (status === "success") {
+
+                var text = "";
+
+                var varData = JSON.parse(data);
+                if (varData.status) {
+                    showNotify('Gameaccount ge&auml;ndert', text, 'success');
+                } else {
+                    showNotify('Gameaccount nicht ge&auml;ndert', text, 'danger');
+                }
+
+            }
+
+        }
+    );
+
+}
+
+function deleteGameacc(gameacc_id) {
+
+    var confirmResult = confirm('%confirm_delete%');
     if(confirmResult) {
 
         $.post(
-            "ajax.php?site=admin_gameaccount_action&action=changeSmurf",
+            "ajax.php?site=admin_gameaccount_action&action=deleteGameaccount", 
             {
                 gameacc_id : gameacc_id
             },
-            function(data, status){
-
-                if(status === "success") {
+            function (data, status){
+                if (status === "success") {
 
                     var text = "";
 
                     var varData = JSON.parse(data);
-                    if(varData.status) {
-                        showNotify('Gameaccount ge&auml;ndert', text, 'success');
+                    if (varData.status) {
+                        showNotify('Gameaccount gel&ouml;scht', text, 'success');
+                        $("#gameaccountList" + gameacc_id).css('display', 'none');
                     } else {
-                        showNotify('Gameaccount nicht ge&auml;ndert', text, 'danger');
+                        showNotify('Gameaccount nicht gel&ouml;scht', text, 'danger');
                     }
 
                 }
-
             }
         );
 
@@ -265,35 +308,4 @@ function changeSmurfStatus(gameacc_id) {
 
 }
 
-function deleteGameacc(gameacc_id) {
-	
-	var confirmResult = confirm('%confirm_delete%');
-	if(confirmResult) {
-	
-		$.post(
-			"ajax.php?site=admin_gameaccount_action&action=deleteGameaccount", 
-			{
-				gameacc_id : gameacc_id
-			}, 
-			function(data, status){
-				if(status === "success") {
-					
-					var text = "";
-					
-					var varData = JSON.parse(data);
-					if(varData.status) {
-						showNotify('Gameaccount gel&ouml;scht', text, 'success');
-						$("#gameaccountList" + gameacc_id).css('display', 'none');
-					} else {
-						showNotify('Gameaccount nicht gel&ouml;scht', text, 'danger');
-					}
-					
-				}
-			}
-		);
-		
-	} 
-	
-}	
-	
 </script>

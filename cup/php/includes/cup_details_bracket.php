@@ -15,7 +15,7 @@ if (($cupArray['status'] > 1)) {
         include($bracketFile);
     }
 
-    $bracket = '<div class="panel panel-default"><div class="full_content">' . $bracket . '</div></div>';
+    $bracket = '<div class="panel panel-default">' . $bracket . '</div>';
 
 } else if ($cupArray['groupstage'] == 1) {
     $bracket = '<div class="panel panel-default"><div class="panel-body italic">'.$_language->module['no_groups'].'</div></div>';

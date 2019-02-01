@@ -207,7 +207,7 @@ try {
 
         }
 
-    }	
+    }
 
     $info = mysqli_num_rows(
         mysqli_query(
@@ -221,30 +221,37 @@ try {
 
     $info = mysqli_query(
         $_database,
-        "SELECT 
-          category, 
-          COUNT(category) AS anz
-        FROM ".PREFIX."cups_gameaccounts 
-        WHERE active = '1' AND deleted = '0' 
-        GROUP BY category 
-        ORDER BY COUNT(category) DESC"
+        "SELECT
+                `category`,
+                COUNT(`category`) AS `anz`
+            FROM `" . PREFIX . "cups_gameaccounts`
+            WHERE `active` = 1 AND `deleted` = 0
+            GROUP BY `category`
+            ORDER BY COUNT(`category`) DESC"
     );
 
-    $gameaccChartRows = '';
+    $gameaccChartRowArray = array();
     while($ds = mysqli_fetch_array($info)) {
 
         $gameArray = getGame($ds['category']);
 
-        $gameaccChartRows .= (!empty($gameaccChartRows)) ? 
-            ', [\''.$gameArray['short'].'\', '.$ds['anz'].']' :
-            '[\''.$gameArray['short'].'\', '.$ds['anz'].']';
+        if (validate_array($gameArray, true)) {
 
-        $gameacc_act_list .= '<a href="admincenter.php?site=cup&amp;mod=gameaccounts&amp;cat='.$ds['category'].'" class="list-group-item">';
-        $gameacc_act_list .= $gameArray['name'];
-        $gameacc_act_list .= '<span class="pull-right grey">'.$ds['anz'].'</span>';
-        $gameacc_act_list .= '</a>';
+            $game_short = (!empty($gameArray['short'])) ?
+                $gameArray['short'] : $gameArray['tag'];
+
+            $gameaccChartRowArray[] = '[\'' . $game_short . '\', ' . $ds['anz'] . ']';
+
+            $gameacc_act_list .= '<a href="admincenter.php?site=cup&amp;mod=gameaccounts&amp;cat='.$ds['category'].'" class="list-group-item">';
+            $gameacc_act_list .= $gameArray['name'];
+            $gameacc_act_list .= '<span class="pull-right grey">'.$ds['anz'].'</span>';
+            $gameacc_act_list .= '</a>';
+
+        }
 
     }
+
+    $gameaccChartRows = implode(', ', $gameaccChartRowArray);
 
     for($x=0;$x<2;$x++) {
 
