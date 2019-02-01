@@ -15,17 +15,7 @@ try {
     // Cup Array
     $cupArray = getcup($cup_id, 'all');
 
-    if (!validate_array($cupArray)) {
-        throw new \Exception($_language->module['no_cup']);
-    }
-
-    if (!isset($cupArray['id']) || ($cupArray['id'] != $cup_id)) {
-        throw new \Exception($_language->module['no_cup']);
-    }
-
-    if (($cupArray['admin'] == 1) && !iscupadmin($userID)) {
-        throw new \Exception($_language->module['no_cup']);
-    }
+    checkCupDetails($cupArray, $cup_id);
 
     $time_now = time();
     $content = '';
@@ -129,53 +119,19 @@ try {
     }
 
     // Admin Anmeldung
-    if ($loggedin) {
-        if ($cupArray['phase'] == 'admin_register') {
-            if (cup_checkin($cup_id, $userID, 'is_registered')) {
-                $link = '<div class="list-group-item alert-success center">'.$_language->module['enter_cup_ok'].'</div>';
-            } else {
-                $link = '<a class="list-group-item alert-info bold center" href="index.php?site=cup&amp;action=joincup&amp;id='.$cup_id.'">'.$_language->module['enter_cup'].'</a>';
-            }
-        } else if (preg_match('/register/', $cupArray['phase'])) {
-            if (cup_checkin($cup_id, $userID, 'is_registered')) {
-                $link = '<div class="list-group-item alert-success center">'.$_language->module['enter_cup_ok'].'</div>';
-            } else {
-                $link = '<div class="list-group-item alert-info center">'.$_language->module['enter_cup'].'</div>';
-            }
-        } else if ($cupArray['phase'] == 'admin_checkin') {
-            if(cup_checkin($cup_id, $userID, 'is_checked_in')) {
-                $link = '<div class="list-group-item alert-success center">'.$_language->module['enter_cup_checkin_ok'];
-            } else {
-                $link = '<div class="list-group-item center"><input type="checkbox" id="checkin_box" name="checkin_box" onclick="checkbox(' . $cup_id . ');" /> Das Team best&auml;tigt die Nutzungsbedingungen gelesen zu haben.</div><div id="enter_cup_container"><span class="list-group-item alert-info center">Team Check-In</span></div>';
-            }
-        } else if (preg_match('/checkin/', $cupArray['phase'])) {
-            if (cup_checkin($cup_id, $userID, 'is_registered')) {
-                $link = '<div class="list-group-item alert-success center">'.$_language->module['enter_cup_checkin_ok'].'</div>';
-            } else {
-                $link = '<div class="list-group-item alert-info center">'.$_language->module['enter_cup'].'</div>';
-            }
-        } else if (($cupArray['phase'] == 'running') || ($cupArray['phase'] == 'finished')) {
-            $link = '';
-        } else {
-            $link = '<a class="list-group-item alert-success bold center" href="index.php?site=teams&action=add">'.$_language->module['add_team'].'</a>';
-        }
-    } else {
-        $link = '<div class="list-group-item alert-info bold center">'.$_language->module['login'].'</div>';
-    }
-
-    $cup_footer = (!empty($link)) ? '<div class="list-group">' . $link . '</div>' : '';
+    $link = getCupStatusContainer($cupArray);
+    $cup_footer = (!empty($link)) ?
+        '<div class="list-group">' . $link . '</div>' : '';
 
     $column = ($getPage == 'home') ?
         'hits' : 'hits_' . $getPage;
 
     $query = mysqli_query(
         $_database,
-        "UPDATE `".PREFIX."cups`
+        "UPDATE `" . PREFIX . "cups`
             SET ".$column." = ".$column." + 1
             WHERE cupID = " . $cup_id
     );
-
-    setHits('cups', 'cupID', $cup_id, true);
 
     echo $content;
 

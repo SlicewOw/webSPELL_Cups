@@ -8,17 +8,7 @@ try {
         $cupArray = getcup($cup_id, 'all');
     }
 
-    if (!validate_array($cupArray)) {
-        throw new \Exception($_language->module['no_cup']);
-    }
-
-    if (!isset($cupArray['id']) || ($cupArray['id'] != $cup_id)) {
-        throw new \Exception($_language->module['no_cup']);
-    }
-
-    if (($cupArray['admin'] == 1) && !iscupadmin($userID)) {
-        throw new \Exception($_language->module['no_cup']);
-    }
+    checkCupDetails($cupArray, $cup_id);
 
     $getPage = (isset($_GET['page'])) ?
         getinput($_GET['page']) : 'home';
@@ -26,6 +16,7 @@ try {
     $allowedPagesArray = array(
         'home',
         'teams',
+        'groups',
         'bracket',
         'rules'
     );
@@ -34,9 +25,9 @@ try {
         header('Location: index.php?site=cup&action=details&id=' . $cup_id);
     }
 
-    $error = '';
+    $cupInfoMessage = '';
     if ($cupArray['admin'] == 1) {
-        $error = showInfo($_language->module['admin_only']);
+        $cupInfoMessage = showInfo($_language->module['admin_only']);
     }
 
     $time_now = time();
@@ -49,7 +40,8 @@ try {
 
     $groupstage_navi = '';
     if ($cupArray['groupstage'] == 1) {
-        if($getPage == 'groups') {
+
+        if ($getPage == 'groups') {
             $navi_groups = 'btn-info';
         }
 
@@ -180,84 +172,7 @@ try {
 
     //
     // Cup Anmeldung
-    if ($loggedin) {
-
-        if (preg_match('/register/', $cupArray['phase'])) {
-
-            //
-            // Team Admin: Registrierung
-            if (cup_checkin($cup_id, $userID, 'is_registered')) {
-
-                $infoText = ($cupArray['mode'] == '1on1') ?
-                    'enter_cup_ok_1on1' : 'enter_cup_ok';
-
-                $link = '<div class="list-group-item alert-success center">' . $_language->module[$infoText] . '</div>';
-
-            } else {
-                $link = '<a class="list-group-item alert-info bold center" href="index.php?site=cup&amp;action=joincup&amp;id=' . $cup_id . '">' . $_language->module['enter_cup'] . '</a>';
-            }
-
-        } else if ($cupArray['phase'] == 'admin_checkin') {
-
-            //
-            // Team Admin: Check-In
-            if (cup_checkin($cup_id, $userID, 'is_checked_in')) {
-
-                $infoText = ($cupArray['mode'] == '1on1') ?
-                    'enter_cup_checkin_ok_1on1' : 'enter_cup_checkin_ok';
-
-                $link = '<div class="list-group-item alert-success center">' . $_language->module[$infoText] . '</div>';
-
-            } else if (!cup_checkin($cup_id, $userID, 'is_registered')) {
-                $link = '<a class="list-group-item alert-info bold center" href="index.php?site=cup&amp;action=joincup&amp;id=' . $cup_id . '">' . $_language->module['enter_cup'] . '</a>';
-            } else {
-
-                $infoText = ($cupArray['mode'] == '1on1') ?
-                    'checkin_confirm_text_1on1' : 'checkin_confirm_text';
-
-                $data_array = array();
-                $data_array['$cup_id'] = $cup_id;
-                $data_array['$confirm_text'] = $_language->module[$infoText];
-                $data_array['$checkin_mode'] = ($cupArray['mode'] == '1on1') ?
-                    'Check-In' : 'Team Check-In';
-                $link = $GLOBALS["_template_cup"]->replaceTemplate("cup_checkin_policy", $data_array);
-
-            }
-
-        } else if (preg_match('/checkin/', $cupArray['phase'])) {
-
-            //
-            // Team: Check-In
-            if (cup_checkin($cup_id, $userID, 'is_checked_in')) {
-                $link = '<div class="list-group-item alert-success center">' . $_language->module['enter_cup_checkin_ok'] . '</div>';
-            } else if (!cup_checkin($cup_id, $userID, 'is_registered')) {
-                $link = '<a class="list-group-item alert-info bold center" href="index.php?site=cup&amp;action=joincup&amp;id=' . $cup_id . '">' . $_language->module['enter_cup'] . '</a>';
-            } else if ($cupArray['mode'] == '1on1') {
-
-                $infoText = ($cupArray['mode'] == '1on1') ?
-                    'checkin_confirm_text_1on1' : 'checkin_confirm_text';
-
-                $data_array = array();
-                $data_array['$cup_id'] = $cup_id;
-                $data_array['$confirm_text'] = $_language->module[$infoText];
-                $data_array['$checkin_mode'] = ($cupArray['mode'] == '1on1') ?
-                    'Check-In' : 'Team Check-In';
-                $link = $GLOBALS["_template_cup"]->replaceTemplate("cup_checkin_policy", $data_array);
-
-            } else {
-                $link = '<div class="list-group-item alert-info center">' . $_language->module['enter_cup'] . '</div>';
-            }
-
-        } else if (($cupArray['phase'] == 'running') || ($cupArray['phase'] == 'finished')) {
-            $link = '';
-        } else {
-            $link = '<a class="list-group-item alert-success bold center" href="index.php?site=teams&action=add">' . $_language->module['add_team'] . '</a>';
-        }
-
-    } else {
-        $link = '<div class="list-group-item alert-info bold center">' . $_language->module['login'] . '</div>';
-    }
-
+    $link = getCupStatusContainer($cupArray);
     $cup_footer = (!empty($link)) ?
         '<div class="list-group">' . $link . '</div>' : '';
 
@@ -267,7 +182,7 @@ try {
 
     $data_array = array();
     $data_array['$image_url'] = $image_url;
-    $data_array['$error'] = $error;
+    $data_array['$error'] = $cupInfoMessage;
     $data_array['$cupID'] = $cup_id;
     $data_array['$navTeams'] = ($cupArray['mode'] == '1on1') ? $_language->module['player'] : 'Teams';
     $data_array['$cupname'] = $cupArray['name'];
