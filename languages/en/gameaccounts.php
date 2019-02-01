@@ -9,6 +9,7 @@ $language_array = Array(
     'delete'=>'delete',
     'edit'=>'edit',
     'edit_gameaccount'=>'edit gameaccount',
+    'error_active_cups'=>'Gameaccount could not be deleted because you participate in at least one cup which is not finished yet.',
     'error_delete_penalty_team'=>'Gameaccount could not be deleted because of one of your teams is blocked.',
     'error_delete_penalty_user'=>'Gameaccount could not be deleted because of you are blocked.',
     'error_failed_steamrequest'=>'Steam Request failed - contact webmaster please!',

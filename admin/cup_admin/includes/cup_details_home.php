@@ -171,13 +171,18 @@ try {
         while($db = mysqli_fetch_array($streams)) {
 
             $streamArray = get_streaminfo($db['livID']);
-            $url_detail	= 'index.php?site=streams&amp;id='.$db['livID'];
-            $info_stream = '<a class="btn btn-default btn-xs" href="'.$url_detail.'" target="_blank">'.$streamArray['title'].'</a>';
-            $info_stream .= ' <button class="btn btn-default btn-xs" type="submit" name="deleteStream_'.$cup_id.'_'.$db['livID'].'">'.$_language->module['delete'].'</button>';
 
-            $content_admin_add .= '<div class="list-group-item">'.$streamArray['title'].'<span class="pull-right">'.$info_stream.'</span></div>';
+            if (validate_array($streamArray, true)) {
 
-            $cupStreamArray[] = $streamArray['stream_id'];
+                $url_detail	= 'index.php?site=streams&amp;id='.$db['livID'];
+                $info_stream = '<a class="btn btn-default btn-xs" href="'.$url_detail.'" target="_blank">'.$streamArray['title'].'</a>';
+                $info_stream .= ' <button class="btn btn-default btn-xs" type="submit" name="deleteStream_'.$cup_id.'_'.$db['livID'].'">'.$_language->module['delete'].'</button>';
+
+                $content_admin_add .= '<div class="list-group-item">'.$streamArray['title'].'<span class="pull-right">'.$info_stream.'</span></div>';
+
+                $cupStreamArray[] = $streamArray['stream_id'];
+
+            }
 
         }
 

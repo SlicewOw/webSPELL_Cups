@@ -139,18 +139,20 @@ try {
                     throw new \Exception($_language->module['error']);
                 }
 
-                if($postArray[0] == 'deleteGameacc') {
+                if ($postArray[0] == 'deleteGameacc') {
 
                     $gameacc_id = $postArray[1];
                     $ds = mysqli_fetch_array(
                         mysqli_query(
-                            $_database, 
-                            "SELECT userID FROM ".PREFIX."cups_gameaccounts 
-                                WHERE gameaccID = " . $gameacc_id
+                            $_database,
+                            "SELECT
+                                    `userID`
+                                FROM `" . PREFIX . "cups_gameaccounts`
+                                WHERE `gameaccID` = " . $gameacc_id
                         )
                     );
 
-                    if($userID != $ds['userID']) {
+                    if ($userID != $ds['userID']) {
                         throw new \Exception($_language->module['error']);
                     }
 
@@ -162,7 +164,7 @@ try {
 
                         $_SESSION['successArray'][] = $_language->module['query_saved_delete'];
 
-                    } catch(Exception $e) {
+                    } catch (Exception $e) {
                         $_SESSION['errorArray'][] = $e->getMessage();
                     }
 

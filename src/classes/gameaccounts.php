@@ -530,15 +530,17 @@ class gameaccount {
 
         global $_database;
 
-        if(is_null($this->gameaccount_id)) {
+        if (is_null($this->gameaccount_id)) {
             throw new \Exception($this->lang->module['unknown_gameaccount']);
         }
 
         $checkIf = mysqli_fetch_array(
             mysqli_query(
                 $_database,
-                "SELECT COUNT(*) AS exist FROM `".PREFIX.$table."`
-                    WHERE gameaccID = ".$this->gameaccount_id
+                "SELECT
+                        COUNT(*) AS `exist`
+                    FROM `" . PREFIX . $table . "`
+                    WHERE `gameaccID` = ".$this->gameaccount_id
             )
         );
 
@@ -548,7 +550,7 @@ class gameaccount {
 
     public function deleteGameaccount() {
 
-        if(!$this->isGameaccount('cups_gameaccounts')) {
+        if (!$this->isGameaccount('cups_gameaccounts')) {
             throw new \Exception($this->lang->module['unknown_gameaccount']);
         }
 
@@ -556,9 +558,11 @@ class gameaccount {
 
         $get = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT userID FROM ".PREFIX."cups_gameaccounts 
-                    WHERE gameaccID = ".$this->gameaccount_id
+                $_database,
+                "SELECT
+                        `userID`
+                    FROM `" . PREFIX . "cups_gameaccounts`
+                    WHERE `gameaccID` = " . $this->gameaccount_id
             )
         );
 
@@ -569,58 +573,114 @@ class gameaccount {
 
         //
         // Spieler: Aktive Strafpunkte?
-        $get = mysqli_fetch_array(
-            mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_penalty`
-                    WHERE userID = ".$userID." AND duration_time > ".time()
-            )
+        $selectUserPenaltiesQuery = mysqli_query(
+            $_database,
+            "SELECT
+                    COUNT(*) AS `user_penalties`
+                FROM `" . PREFIX . "cups_penalty`
+                WHERE `userID` = " . $userID . " AND `duration_time` > " . time()
         );
-        if($get['anz'] > 0) {
+
+        if (!$selectUserPenaltiesQuery) {
+            throw new \Exception($this->lang->module['error_delete_penalty_user']);
+        }
+
+        $get = mysqli_fetch_array($selectUserPenaltiesQuery);
+        if ($get['user_penalties'] > 0) {
+            throw new \Exception($this->lang->module['error_delete_penalty_user']);
+        }
+
+        $selectCupTeamsQuery = mysqli_query(
+            $_database,
+            "SELECT
+                    `teamID`
+                FROM `" . PREFIX . "cups_teams_member`
+                WHERE `userID` = " . $userID . " AND `active` = 1"
+        );
+
+        if (!$selectCupTeamsQuery) {
             throw new \Exception($this->lang->module['error_delete_penalty_user']);
         }
 
         $teamArray = array();
-        $query = mysqli_query(
-            $_database, 
-            "SELECT teamID FROM `".PREFIX."cups_teams_member`
-                WHERE userID = '".$userID."' AND active = '1'"
-        );
-        while($get = mysqli_fetch_array($query)) {
+        while($get = mysqli_fetch_array($selectCupTeamsQuery)) {
             $teamArray[] = $get['teamID'];
         }
 
-        $whereClause = '';
-        if(count($teamArray) > 0) {
-            $whereClause = 'teamID IN ('.implode(', ', $teamArray).') AND ';
-        } else {
-            $whereClause = 'userID = '.$userID.' AND ';
+        $whereClauseArray = array();
+        $whereClauseArray[] = '`duration_time` > ' . time();
+
+        if (count($teamArray) > 0) {
+            $whereClauseArray[] = 'teamID IN (' . implode(', ', $teamArray) . ')';
         }
 
-        $get = mysqli_fetch_array(
-            mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_penalty`
-                    WHERE ".$whereClause."duration_time > ".time()
-            )
+        $whereClause = implode(' AND ', $whereClauseArray);
+
+        $selectTeamPenaltiesQuery = mysqli_query(
+            $_database,
+            "SELECT
+                    COUNT(*) AS `team_penalties`
+                FROM `" . PREFIX . "cups_penalty`
+                WHERE " . $whereClause
         );
-        if($get['anz'] > 0) {
+
+        if (!$selectTeamPenaltiesQuery) {
             throw new \Exception($this->lang->module['error_delete_penalty_team']);
         }
 
-        //
-        // Lösche Gameaccount
-        $query = mysqli_query(
+        $get = mysqli_fetch_array($selectTeamPenaltiesQuery);
+        if ($get['team_penalties'] > 0) {
+            throw new \Exception($this->lang->module['error_delete_penalty_team']);
+        }
+
+        $whereClauseArray = array();
+        $whereClauseArray[] = '(ct.`teamID` = ' . $userID . ' AND c.`mode` = \'1on1\')';
+
+        if (count($teamArray) > 0) {
+            $whereClauseArray[] = '(ct.`teamID` IN (' . implode(', ', $teamArray) . ') AND c.`mode` != \'1on1\')';
+        }
+
+        $whereClause = implode(' OR ', $whereClauseArray);
+        $whereClause .= ' AND c.`status` < 4';
+
+        $selectQuery = mysqli_query(
             $_database,
-            "UPDATE `" . PREFIX . "cups_gameaccounts`
-                SET `active` = 0,
-                    `deleted` = 1,
-                    `deleted_date` = ".time().",
-                    `deleted_seen` = ".$deletedSeen."
-                WHERE gameaccID = " . $this->gameaccount_id
+            "SELECT
+                    COUNT(*) AS `active_cups`
+                FROM `" . PREFIX . "cups_teilnehmer` ct
+                JOIN `" . PREFIX . "cups` c ON ct.`cupID` = c.`cupID`
+                WHERE " . $whereClause
         );
 
-        if (!$query) {
+        if (!$selectQuery) {
+            throw new \Exception($this->lang->module['error_active_cups']);
+        }
+
+        $get = mysqli_fetch_array($selectQuery);
+        if ($get['active_cups'] > 0) {
+            throw new \Exception($this->lang->module['error_active_cups']);
+        }
+
+        /**
+         * Delete gameaccount
+         */
+
+        $updateValueArray = array();
+        $updateValueArray[] = '`active` = 0';
+        $updateValueArray[] = '`deleted` = 1';
+        $updateValueArray[] = '`deleted_date` = ' . time();
+        $updateValueArray[] = '`deleted_seen` = ' . $deletedSeen;
+
+        $updateValues = implode(', ', $updateValueArray);
+
+        $updateQuery = mysqli_query(
+            $_database,
+            "UPDATE `" . PREFIX . "cups_gameaccounts`
+                SET " .$updateValues . "
+                WHERE `gameaccID` = " . $this->gameaccount_id
+        );
+
+        if (!$updateQuery) {
             throw new \Exception($this->lang->module['query_failed_delete']);
         }
 

@@ -73,19 +73,26 @@ if ($mod_original === 'lostpassword') {
     $getAction = isset($getAction) ? $getAction : '';
     if (($getAction == 'joincup' || $getAction == 'details') && ($unique_id > 0)) {
 
-        $getCupPage = (isset($_GET['page'])) ?
-            getinput($_GET['page']) : 'home';
+        if (checkIfContentExists($unique_id, 'cupID', 'cups')) {
 
-        $value .= ' / <a href="' . $base_url . 'details&amp;id=' . $unique_id . '#content">' . getcup($unique_id, 'name') . '</a>';
-        $value .= ' / <a href="' . $base_url . 'details&amp;id=' . $unique_id . '&amp;page=' . $getCupPage . '#content">' . ucfirst($getCupPage) . '</a>';
+            $getCupPage = (isset($_GET['page'])) ?
+                getinput($_GET['page']) : 'home';
+
+            $value .= ' / <a href="' . $base_url . 'details&amp;id=' . $unique_id . '#content">' . getcup($unique_id, 'name') . '</a>';
+            $value .= ' / <a href="' . $base_url . 'details&amp;id=' . $unique_id . '&amp;page=' . $getCupPage . '#content">' . ucfirst($getCupPage) . '</a>';
+
+        }
 
     } else if ($getAction == 'match') {
 
-        if ($unique_id > 0) {
+        if (($unique_id > 0) && checkIfContentExists($unique_id, 'cupID', 'cups')) {
 
             $value .= ' / <a href="' . $base_url . 'details&amp;id=' . $unique_id . '#content">' . getcup($unique_id, 'name') . '</a>';
 
-            if (isset($_GET['mID']) && is_numeric($_GET['mID'])) {
+            $match_id = (isset($_GET['mID']) && validate_int($_GET['mID'], true)) ?
+                (int)$_GET['mID'] : 0;
+
+            if (($match_id > 0) && checkIfContentExists($match_id, 'matchID', 'cups_matches_playoff')) {
 
                 $match_id = (int)$_GET['mID'];
 

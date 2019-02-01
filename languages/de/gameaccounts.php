@@ -9,6 +9,7 @@ $language_array = Array(
     'delete'=>'l&ouml;schen',
     'edit'=>'bearbeiten',
     'edit_gameaccount'=>'Gameaccount bearbeiten',
+    'error_active_cups'=>'Gameaccount kann aufgrund einer aktiven Teilnahme an einem nicht abgeschlossenen Cup nicht ge&ouml;scht werden.',
     'error_delete_penalty_team'=>'Gameaccount kann aufgrund einer aktiven Sperre eines deiner Teams nicht ge&ouml;scht werden.',
     'error_delete_penalty_user'=>'Gameaccount kann aufgrund einer aktiven Sperre nicht ge&ouml;scht werden.',
     'error_failed_steamrequest'=>'Steam Request fehlgeschlagen - bitte Webmaster kontaktieren!',
