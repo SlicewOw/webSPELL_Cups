@@ -89,14 +89,14 @@ try {
         $ds = mysqli_fetch_array(
             mysqli_query(
                 $_database,
-                "SELECT 
-                      `name`, 
-                      `tag`, 
-                      `hp`, 
-                      `logotype`, 
-                      `country` 
-                    FROM `".PREFIX."cups_teams` 
-                    WHERE teamID = " . $team_id
+                "SELECT
+                      `name`,
+                      `tag`,
+                      `hp`,
+                      `logotype`,
+                      `country`
+                    FROM `" . PREFIX . "cups_teams`
+                    WHERE `teamID` = " . $team_id
             )
         );
 
@@ -108,6 +108,7 @@ try {
         $countries = getcountries($country);
 
         $data_array = array();
+        $data_array['$title'] = $_language->module['edit'];
         $data_array['$error_add'] = '';
         $data_array['$teamname'] = (isset($teamname)) ? $teamname : '';
         $data_array['$teamtag'] = (isset($teamtag)) ? $teamtag : '';
@@ -116,7 +117,7 @@ try {
         $data_array['$pic'] = '<img src="' . getCupTeamImage($team_id, true) . '" alt="" />';
         $data_array['$team_id'] = $team_id;
         $data_array['$postName'] = 'submitEditTeam';
-        $teams_add = $GLOBALS["_template_cup"]->replaceTemplate("teams_add", $data_array);
+        $teams_add = $GLOBALS["_template_cup"]->replaceTemplate("teams_action", $data_array);
         echo $teams_add;
 
     }

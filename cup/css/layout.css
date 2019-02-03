@@ -325,3 +325,6 @@ body {
 .panel-danger > .panel-footer {
     background: rgba(169, 68, 66, 0.4);
 }
+.panel > .table-responsive > .table > tbody > .alert-info {
+    background-color: #d9edf7;
+}

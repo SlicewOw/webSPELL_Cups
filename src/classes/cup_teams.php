@@ -23,6 +23,10 @@ class cup_team {
     var $team_logotype = null;
 
     //
+    // Admin team only
+    var $admin_team = 0;
+
+    //
     // Logotype Pfad
     var $logotype_path = null;
     var $logotype_max_size = null;
@@ -104,6 +108,16 @@ class cup_team {
         $country = trim($country);
 
         $this->team_country = $country;
+
+    }
+
+    public function setAdminTeamOnly($is_admin_team_only = TRUE) {
+
+        if (!is_bool($is_admin_team_only)) {
+            return;
+        }
+
+        $this->admin_team = $is_admin_team_only;
 
     }
 
@@ -339,7 +353,8 @@ class cup_team {
                     `hp`,
                     `logotype`,
                     `password`,
-                    `country`
+                    `country`,
+                    `admin`
                 )
                 VALUES
                 (
@@ -350,7 +365,8 @@ class cup_team {
                     '" . $this->team_hp . "',
                     '" . $this->team_logotype . "',
                     '" . RandPass(20) . "',
-                    '" . $this->team_country . "'
+                    '" . $this->team_country . "',
+                    " . $this->admin_team . "
                 )"
         );
 
@@ -443,6 +459,10 @@ class cup_team {
             $updateArray[] = '`logotype` = \'' . $this->team_logotype . '\'';
         }
 
+        if (!is_null($this->admin_team)) {
+            $updateArray[] = '`admin` = ' . $this->admin_team;
+        }
+
         $anzUpdateValues = count($updateArray);
         if($anzUpdateValues > 0) {
 
@@ -452,7 +472,7 @@ class cup_team {
 
             $query = mysqli_query(
                 $_database,
-                "UPDATE `" . PREFIX . "cups_teams` 
+                "UPDATE `" . PREFIX . "cups_teams`
                     SET " . $updateString . "
                     WHERE `teamID` = " . $this->team_id
             );

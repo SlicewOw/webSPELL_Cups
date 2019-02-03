@@ -103,6 +103,7 @@ try {
         }
 
         $data_array = array();
+        $data_array['$title'] = $_language->module['add'];
 
         $data_array['$error_add'] = (isset($_SESSION['cup']['team']['error'])) ?
             $_SESSION['cup']['team']['error'] : '';
@@ -120,7 +121,7 @@ try {
         $data_array['$pic'] = '';
         $data_array['$team_id'] = 0;
         $data_array['$postName'] = 'submit_team_add';
-        $teams_add = $GLOBALS["_template_cup"]->replaceTemplate("teams_add", $data_array);
+        $teams_add = $GLOBALS["_template_cup"]->replaceTemplate("teams_action", $data_array);
         echo $teams_add;
 
         unset($_SESSION['cup']);

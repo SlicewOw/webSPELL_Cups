@@ -1,7 +1,7 @@
 <?php
 
 $language_array = Array(
-    'add'=>'Team hinzufügen',
+    'add_team'=>'Team hinzufügen',
     'country'=>'Herkunft',
     'error_logotype'=>'Fehler beim Hochladen des Logotypes',
     'existing_teams'=>'Bestehende Teams',
