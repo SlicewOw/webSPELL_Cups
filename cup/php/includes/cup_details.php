@@ -60,11 +60,9 @@ try {
     if (preg_match('/register/', $cupArray['phase'])) {
         // Registration
         $anmeldung = '<div class="panel panel-default"><div class="panel-body center">Anmeldung: <span id="cup_details_countdown"></span></div></div>';
-        $date = getformatdatetime($cupArray['checkin']);
     } else if (preg_match('/checkin/', $cupArray['phase'])) {
         // Check-In
         $anmeldung = '<div class="panel panel-default"><div class="panel-body center">Check-In: <span id="cup_details_countdown"></span></div></div>';
-        $date = getformatdatetime($cupArray['start']);
     }
 
     $content = $anmeldung;

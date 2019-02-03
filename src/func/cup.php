@@ -172,6 +172,10 @@ function getCupStatusContainer($cup_array) {
         return '';
     }
 
+    global $userID;
+
+    $cup_id = $cup_array['id'];
+
     if (preg_match('/register/', $cup_array['phase'])) {
 
         //
