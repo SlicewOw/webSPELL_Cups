@@ -3,12 +3,12 @@
 $_language->readModule('index');
 $_language->readModule('navigation', true, false);
 
-$copyright = $_language->module['copyright'];
+$copyright_txt = $_language->module['copyright'];
 
-$copyright = str_replace(
+$copyright_txt = str_replace(
     array('%year_now%', '%clanname%'),
     array(date('Y'), $myclanname),
-    $copyright
+    $copyright_txt
 );
 
 $copyrightLinkArray = array();
@@ -17,6 +17,9 @@ $copyrightLinkArray[] = '<a href="index.php?site=policy">' . $_language->module[
 $copyrightLinkArray[] = '<a href="index.php?site=imprint">' . $_language->module['imprint'] . '</a>';
 $copyrightLinkArray[] = '<a href="index.php?site=datenschutz">' . $_language->module['data_protection'] . '</a>';
 
-$copyright .= ' - ' . implode(' - ', $copyrightLinkArray);
+$copyright_txt .= ' - ' . implode(' - ', $copyrightLinkArray);
 
+$data_array = array();
+$data_array['$copyright_txt'] = $copyright_txt;
+$copyright = $GLOBALS["_template_cup"]->replaceTemplate("copyright", $data_array);
 echo $copyright;
