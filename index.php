@@ -60,26 +60,7 @@ if (!$userID) {
 </head>
 
 <body>
-<?php
-
-if (iscupadmin($userID) && $loggedin && ($getSite == 'cup_admin') && ($getPage == 'bracket')) {
-    include($dir_cup . 'admin/cup_matches_admin.php');
-}
-
-include($dir_cup . '/navigation.php');
-
-if (($getSite == 'cup') && ($getAction == 'details') && isset($_GET['id'])) {
-
-    $cup_id = (validate_int($_GET['id'], true)) ?
-        (int)$_GET['id'] : 0;
-
-    if ($cup_id > 0) {
-        $cupArray = getcup($cup_id);
-    }
-
-}
-
-?>
+<?php include($dir_cup . '/header.php'); ?>
 <div id="page">
     <div id="header">
         <h1>webSPELL Cup Add-On by SlicewOw</h1>
