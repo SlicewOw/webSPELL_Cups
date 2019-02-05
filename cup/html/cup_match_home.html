@@ -7,32 +7,38 @@
     </div>
 </div>
 <br />
-<div class="cup_match_left panel panel-default">
-    <div class="panel-body">
-        <div class="clearfix">
-            <div class="cup_match_container_left" align="center">
-                <a href="$team1_url" title="$team1_name">
-                    $match_logo1
-                </a>
+<div class="clearfix">
+    <div class="cup_match_left panel panel-default">
+        <div class="panel-body">
+            <div class="clearfix">
+                <div class="cup_match_container_left" align="center">
+                    <a href="$team1_url" title="$team1_name">
+                        $match_logo1
+                    </a>
+                </div>
+                <div class="cup_match_container_center fontbig bold lh_fourty center">
+                    $score
+                </div>
+                <div class="cup_match_container_right" align="center">
+                    <a href="$team2_url" title="$team2_name">
+                        $match_logo2
+                    </a>
+                </div>
             </div>
-            <div class="cup_match_container_center fontbig bold lh_fourty center">
-                $score
-            </div>
-            <div class="cup_match_container_right" align="center">
-                <a href="$team2_url" title="$team2_name">
-                    $match_logo2
-                </a>
+        </div>
+    </div>
+    <div class="cup_match_right">
+        <div class="panel panel-primary">
+            <div class="panel-heading white darkshadow">Status</div>
+            <div class="list-group">
+                $status
             </div>
         </div>
     </div>
 </div>
-<div class="cup_match_right">
-    <div class="panel panel-primary">
-        <div class="panel-heading white darkshadow">Status</div>
-        <div class="list-group">
-            $status
-        </div>
-    </div>
-</div>$error
+$error
 $admin
+<div class="clearfix">
+    $content
+</div>
 <div class="content_full_space"></div>

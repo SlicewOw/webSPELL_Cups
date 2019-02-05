@@ -155,6 +155,7 @@ $language_array = Array(
     'match_confirm'=>'Match Result',
     'match_confirmed'=>'Match ist confirmed an closed',
     'match_error_score'=>'Draw is not allowed - the result has not been saved.',
+    'match_inactive'=>'This match is inactive.',
     'match_not_played'=>'Match has not been played yet',
     'match_success_score'=>'Result saved.',
     'match_team1_confirmed'=>'Team 1 confirmed the result',

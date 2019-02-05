@@ -11,6 +11,12 @@ try {
         throw new \Exception($_language->module['no_match']);
     }
 
+    //
+    // Cup Array
+    $cupArray = getcup($cup_id);
+
+    checkCupDetails($cupArray, $cup_id);
+
     $match_id = (isset($_GET['mID']) && validate_int($_GET['mID'], true)) ?
         (int)$_GET['mID'] : 0;
 
@@ -32,9 +38,11 @@ try {
     $time_now = time();
 
     //
-    // Info Arrays
-    $cupArray = getcup($cup_id);
+    // Game Array
     $gameArray = getGame($cupArray['game']);
+
+    //
+    // Match Array
     $matchArray = getmatch($match_id);
 
     if (!isset($matchArray['cup_id']) || ($matchArray['cup_id'] != $cup_id)) {
@@ -84,7 +92,7 @@ try {
         }
 
         if ((!$matchArray['active']) && $cupAdminAccess) {
-            echo showInfo('Dieses Match ist nicht aktiv.', true);
+            echo showInfo($_language->module['match_inactive'], true);
         }
 
         $error_screen = '';
@@ -95,126 +103,18 @@ try {
 
         //
         // Team Details
-        $logotypeBase = $image_url . '/cup/teams/';
-        for ($x = 1; $x < 3; $x++) {
-
-            if ($cupArray['mode'] == '1on1') {
-
-                $user_id = $matchArray['team'.$x.'_id'];
-
-                $teamURL = 'javascript:;';
-                if ($user_id > 0) {
-
-                    $teamName = getnickname($user_id);
-                    $teamURL = 'index.php?site=profile&id='.$user_id.'#content';
-                    $matchLogo = getuserpic($user_id, true);
-
-                } else if ($matchArray['team'.$x.'_freilos'] == 1) {
-                    $teamName = $_language->module['cup_freilos'];
-                    $matchLogo = $logotypeBase . 'team_nologotype.png';
-                } else {
-                    $teamName = '';
-                    $matchLogo = $logotypeBase . 'team_nologotype.png';
-                }
-
-            } else {
-
-                $team_array = getteam($matchArray['team'.$x.'_id']);
-
-                $teamURL = 'javascript:;';
-                if ($matchArray['team'.$x.'_id'] > 0) {
-                    $teamURL = 'index.php?site=teams&amp;action=details&amp;id='.$matchArray['team'.$x.'_id'];
-                    $teamName = $team_array['name'];
-                } else if ($matchArray['team'.$x.'_freilos'] == 1) {
-                    $teamName = $_language->module['cup_freilos'];
-                } else {
-                    $teamName = '';
-                }
-
-                $matchLogo = $team_array['logotype'];
-
-            }
-
-            $teamArray[$x] = array(
-                'name' => $teamName,
-                'name_url' => '<a href="'.$teamURL.'" title="'.$teamName.'">'.$teamName.'</a>',
-                'logotype' => '<img src="'.$matchLogo.'" width="180" height="180" alt="'.$teamName.'" title="'.$teamName.'" />',
-                'url' => $teamURL
-            );
-
-        }
+        $teamArray = getTeamDetailsByMatchId($cupArray, $match_id);
 
         $bracket_ext = ($matchArray['bracket'] == 1) ?
             'Winner Bracket' : 'Loser Bracket';
 
-        $formatArray = array(
-            'bo1',
-            'bo3'
-        );
-
         //
         // Match Detail Info
-        $matchInfoArray = array();
-        $matchInfoArray[] = $cupArray['name'];
-        $matchInfoArray[] = $_language->module['cup_'.$matchArray['bracket'].'_round_'.$cupArray['size'].'_'.$matchArray['runde']];
-        $matchInfoArray[] = $_language->module['cup_match_start'].': '.getformatdatetime($matchArray['date']);
-        $matchInfoArray[] = 'Format: '.strtoupper($matchArray['format']);
-
-        if (in_array($matchArray['format'], $formatArray) && ($matchArray['mapvote'] == 1)) {
-
-            if (($matchArray['team1_freilos'] == 0) && ($matchArray['team2_freilos'] == 0)) {
-                $matchInfoArray[] = getmap($match_id, $matchArray['format']);
-            }
-
-        }
-
-        $match_info = implode(' / ', $matchInfoArray);
+        $match_info = getMatchDetailsByMatchId($cupArray, $match_id);
 
         //
         // Match Status
-        $status = '';
-        if ($matchArray['match_confirm'] == 1) {
-
-            if ($matchArray['admin_confirm'] == 1) {
-                $confirmStatus = $_language->module['match_admin_confirmed'];
-            } else {
-                $confirmStatus = $_language->module['match_confirmed'];
-            }
-
-        } else {
-            $confirmStatus = $_language->module['match_not_played'];
-        }
-        $status .= '<div class="list-group-item">'.$confirmStatus.'</div>';
-
-        if ($cupArray['mappool'] > 0) {
-            $matchVeto = ($matchArray['mapvote'] == 1) ? 
-                $_language->module['match_veto_ok'] : $_language->module['match_veto_ip'];
-            $status .= '<div class="list-group-item">' . $matchVeto . '</div>';
-        }
-
-        //
-        //  Screenshots
-        $screenshot_url = $image_url . '/cup/match_screenshots/';
-        $screenshot_local_url = __DIR__ . '/../../../images/cup/match_screenshots/';
-
-        $screenshotArray = getScreenshots($match_id);
-
-        if (validate_array($screenshotArray, true)) {
-
-            $statusScreenshotArray = array();
-            foreach ($screenshotArray as $screenshot) {
-
-                if (file_exists($screenshot_local_url . $screenshot['file'])) {
-                    $statusScreenshotArray[] = '<a href="' . $screenshot_url . $screenshot['file'] . '" target="_blank">' . $screenshot['category_name'] . '</a>';
-                } else {
-                    $statusScreenshotArray[] = '<del>' . $screenshot['category_name'] . '</del>';
-                }
-
-            }
-
-            $status .= '<div class="list-group-item">Screens: ' . implode(', ', $statusScreenshotArray) . '</div>';
-
-        }
+        $status = getMatchStatusAsListByMatchId($cupArray, $match_id);
 
         $admin = '';
 
@@ -233,13 +133,13 @@ try {
 
                         $data_array = array();
                         $data_array['$image_url'] = $image_url;
-                        $data_array['$cupID'] 	= $cup_id;
+                        $data_array['$cupID'] = $cup_id;
                         $data_array['$matchID'] = $match_id;
                         $server_info = $GLOBALS["_template_cup"]->replaceTemplate("cup_server_request", $data_array);
 
                     } else {
 
-                        $server_info = '<div class="list-group-item lh_twenty">'.$_language->module['server_request_info'].'</div>';
+                        $server_info = '<div class="list-group-item lh_twenty">' . $_language->module['server_request_info'] . '</div>';
                         $server_info = str_replace(
                             '%team1%',
                             '"'.$teamArray[1]['name'].'"',
@@ -258,14 +158,14 @@ try {
 
                     if ($matchAdminAccess_player || $matchAdminAccess_team1 || $matchAdminAccess_team2 || $cupAdminAccess) {
 
-                        $server_url = 'steam://connect/'.$serverArray['ip'];
+                        $server_url = 'steam://connect/' . $serverArray['ip'];
                         if (!empty($serverArray['password'])) {
-                            $server_url .= '/'.$serverArray['password'];
+                            $server_url .= '/' . $serverArray['password'];
                         }
 
                         $server_info_txt = 'connect '.$serverArray['ip'];
-                        if(!empty($serverArray['password'])) {
-                            $server_info_txt = ';password '.$serverArray['password'];
+                        if (!empty($serverArray['password'])) {
+                            $server_info_txt = ';password ' . $serverArray['password'];
                         }
 
                         $data_array = array();
@@ -282,19 +182,21 @@ try {
                 }
 
                 if (!empty($serverArray['gotv'])) {
-                    $server_url = 'steam://connect/'.$serverArray['gotv'];
-                    $gotv_connect = 'connect '.$serverArray['gotv'];
-                    if(!empty($serverArray['gotv_pw'])) {
-                        $server_url .= '/'.$serverArray['gotv_pw'];
-                        $gotv_connect .= ';password '.$serverArray['gotv_pw'];
+                    $server_url = 'steam://connect/' . $serverArray['gotv'];
+                    $gotv_connect = 'connect ' . $serverArray['gotv'];
+                    if (!empty($serverArray['gotv_pw'])) {
+                        $server_url .= '/' . $serverArray['gotv_pw'];
+                        $gotv_connect .= ';password ' . $serverArray['gotv_pw'];
                     }
                     $server_info .= '<a href="' . $server_url . '" class="list-group-item">GOTV: ' . $gotv_connect . '</a>';
                 }
 
-            }
+                $data_array = array();
+                $data_array['$panel_type'] = 'panel-default';
+                $data_array['$panel_title'] = 'Server';
+                $data_array['$panel_content'] = $server_info;
+                $admin .= $GLOBALS["_template_cup"]->replaceTemplate("panel_list_group", $data_array);
 
-            if (!empty($server_info)) {
-                $admin .= '<div class="panel panel-default"><div class="panel-heading">Server</div><div class="list-group">' . $server_info . '</div></div>';
             }
 
         }
@@ -365,7 +267,7 @@ try {
 
                     $protest_url = 'index.php?site=support&amp;action=new_ticket&amp;matchID=' . $match_id;
 
-                    $admin .= '<a style="width: 100%;" class="alert alert-danger center" href="' . $protest_url . '">' . $_language->module['open_protest'] . '</a>';
+                    $admin .= '<a class="btn btn-danger btn-sm white darkshadow" href="' . $protest_url . '">' . $_language->module['open_protest'] . '</a><br /><br />';
 
                 }
 
@@ -375,36 +277,7 @@ try {
 
         //
         // Cup Sponsoren
-        $sponsors = mysqli_query(
-            $_database,
-            "SELECT
-                    `sponsorID`
-                FROM `" . PREFIX . "cups_sponsors`
-                WHERE `cupID` = " . $cup_id
-        );
-        if (mysqli_num_rows($sponsors)) {
-
-            $content_sponsors = '';
-            while ($db = mysqli_fetch_array($sponsors)) {
-
-                $sponsorArray = getsponsor($db['sponsorID']);
-
-                $linkAttributeArray = array();
-                $linkAttributeArray[] = 'href="' . $sponsorArray['url'] . '"';
-                $linkAttributeArray[] = 'target="_blank"';
-                $linkAttributeArray[] = 'title="' . $sponsorArray['name'] . '"';
-                $linkAttributeArray[] = 'onclick="setHitsJS(\'sponsors\', ' . $db['sponsorID'] . ');"';
-                $linkAttributeArray[] = 'class="pull-left"';
-
-                $banner_url = getSponsorImage($db['sponsorID'], true, 'white');
-
-                $content_sponsors .= '<a ' . implode(' ', $linkAttributeArray) . '><img src="' . $banner_url . '" alt="' . $sponsorArray['name'] . '" /></a>';
-
-            }
-
-            $admin .= '<div class="panel panel-default"><div class="panel-heading">Sponsoren</div><div class="panel-body"><div class="clearfix">' . $content_sponsors . '</div></div></div>';
-
-        }
+        $content = getSponsorsByCupIdAsPanelBody($cup_id);
 
         $data_array = array();
         $data_array['$match_title'] = $teamArray[1]['name_url'].' vs. '.$teamArray[2]['name_url'];
@@ -418,6 +291,7 @@ try {
         $data_array['$match_logo2'] = $teamArray[2]['logotype'];
         $data_array['$status'] = $status;
         $data_array['$error'] = $error;
+        $data_array['$content'] = $content;
         $data_array['$admin'] = $admin;
         $cup_match = $GLOBALS["_template_cup"]->replaceTemplate("cup_match_home", $data_array);
         echo $cup_match;

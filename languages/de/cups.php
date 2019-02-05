@@ -155,6 +155,7 @@ $language_array = Array(
     'match_confirm'=>'Match Ergebnis',
     'match_confirmed'=>'Match ist best&auml;tigt und abgeschlossen',
     'match_error_score'=>'Unentschieden sind nicht m&ouml;glich - das Ergebnis wurde nicht gespeichert.',
+    'match_inactive'=>'Dieses Match ist nicht aktiv.',
     'match_not_played'=>'Match wurde noch nicht gespielt',
     'match_success_score'=>'Ergebnis gespeichert.',
     'match_team1_confirmed'=>'Team 1 hat das Ergebnis best&auml;tigt',
