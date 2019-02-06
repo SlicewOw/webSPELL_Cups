@@ -6,41 +6,32 @@ if (validate_array($_POST, true)) {
 
     try {
 
-        //
-        // Submits
+        if (!isset($teamAdminAccess) && !isset($cupAdminAccess)) {
+            throw new \Exception($_language->module['access_denied']);
+        }
+
         if (!($teamAdminAccess || $cupAdminAccess)) {
             throw new \Exception($_language->module['access_denied']);
         }
 
-        //
-        // Map-Veto
-        if ($cupAdminAccess && isset($_POST['submitMatchReset'])) {
+        if (isset($_POST['submitMatchReset'])) {
+
+            if (!$cupAdminAccess) {
+                throw new \Exception($_language->module['access_denied']);
+            }
 
             //
             // Map Array
-            $mapsArray = unserialize($matchArray['maps']);
-
-            if (isset($mapsArray['list'])) {
-                $mapsArray['open'] = $mapsArray['list'];
-            } else {
-                $mapsArray['open'] = array();
-            }
-            $mapsArray['banned']['team1'] = array();
-            $mapsArray['banned']['team2'] = array();
-            $mapsArray['picked'] = array();
+            $mapsArray = resetMatchMapVote(unserialize($matchArray['maps']));
 
             $insertValueArray = array();
             $insertValueArray[] = '`mapvote` = 0';
             $insertValueArray[] = '`maps` = \'' . serialize($mapsArray) . '\'';
             $insertValueArray[] = '`ergebnis1` = 0';
-            $insertValueArray[] = '`team1_confirmed` = 0';
             $insertValueArray[] = '`ergebnis2` = 0';
+            $insertValueArray[] = '`team1_confirmed` = 0';
             $insertValueArray[] = '`team2_confirmed` = 0';
             $insertValueArray[] = '`admin_confirmed` = 0';
-
-            if ($cupArray['bot']) {
-                $insertValueArray[] = '`server` = \'\'';
-            }
 
             $insertValue = implode(', ', $insertValueArray);
 
@@ -55,31 +46,33 @@ if (validate_array($_POST, true)) {
                 throw new \Exception('cups_matches_playoff_query_update_failed');
             }
 
-        } else if ($cupAdminAccess && isset($_POST['submitMapvoteReset'])) {
+            $_SESSION['successArray'][] = $_language->module['admin_match_reset'];
+
+        } else if (isset($_POST['submitMapvoteReset'])) {
+
+            if (!$cupAdminAccess) {
+                throw new \Exception($_language->module['access_denied']);
+            }
 
             //
             // Map Array
-            $mapsArray = unserialize($matchArray['maps']);
-
-            $mapsArray['open'] = $mapsArray['list'];
-            $mapsArray['banned']['team1'] = array();
-            $mapsArray['banned']['team2'] = array();
-            $mapsArray['picked'] = array();
+            $mapsArray = resetMatchMapVote(unserialize($matchArray['maps']));
 
             //
             // Map Array speichern
-            $maps = serialize($mapsArray);
             $query = mysqli_query(
                 $_database,
                 "UPDATE `" . PREFIX . "cups_matches_playoff`
                     SET `mapvote` = 0,
-                        `maps` = '" . $maps . "'
+                        `maps` = '" . serialize($mapsArray) . "'
                     WHERE `matchID` = " . $match_id
             );
 
             if (!$query) {
                 throw new \Exception('cups_matches_playoff_query_update_failed');
             }
+
+            $_SESSION['successArray'][] = $_language->module['admin_map_reset'];
 
         } else if (isset($_POST['submitMatchScore']) || isset($_POST['submitAdminWinner'])) {
 
@@ -88,6 +81,10 @@ if (validate_array($_POST, true)) {
 
             if ($match_id < 1) {
                 throw new \Exception($_language->module['no_match']);
+            }
+
+            if (!isset($_POST['team'])) {
+                $_POST['team'] = '';
             }
 
             $team1_score = (isset($_POST['team1_score']) && validate_int($_POST['team1_score'], true)) ?
@@ -126,77 +123,37 @@ if (validate_array($_POST, true)) {
 
             if ($correctScore) {
 
-                //
-                // Score Check
-                for ($x = 1; $x < 3; $x++) {
-
-                    $teamCheckValue[$x] = FALSE;
-
-                    $teamScore = (int)$_POST['team'.$x.'_score'];
-
-                    //
-                    // Match confirmed by Team $x?
-                    if ($teamScore == $matchArray['ergebnis'.$x]) {
-
-                        //
-                        // Match confirmed by Team $x?
-                        if (isset($matchArray['team'.$x.'_confirm']) && $matchArray['team'.$x.'_confirm']) {
-
-                            $teamCheckValue[$x] = TRUE;
-
-                        }
-
-                    }
-
-                }
-
-                $matchConfirm = (($_POST['team'] === 'admin') || ($teamCheckValue[1] && $teamCheckValue[2])) ?
-                    TRUE : FALSE;
-
-                //
-                // Confirmed by?
-                // 1: team1_confirmed
-                // 2: team2_confirmed
-                // 3: admin_confirmed
-                $ergebnisCheck = $_POST['team'] . '_confirmed';
-
                 $setValueArray = array();
                 $setValueArray[] = '`ergebnis1` = ' . $team1_score;
                 $setValueArray[] = '`ergebnis2` = ' . $team2_score;
-                $setValueArray[] = '`' . $ergebnisCheck . '` = 1';
 
-                $team1_checkValue = ($team1_score == $matchArray['ergebnis1']) ?
-                    TRUE : FALSE;
-
-                $team2_checkValue = ($team2_score == $matchArray['ergebnis2']) ?
-                    TRUE : FALSE;
-
-                if (!$team1_checkValue || !$team2_checkValue) {
-
-                    if ($_POST['team'] == 'team1') {
-                        $setValueArray[] = '`team2_confirmed` = 0';
-                    } else {
-                        $setValueArray[] = '`team1_confirmed` = 0';
-                    }
-
+                if ($_POST['team'] == 'team1') {
+                    $setValueArray[] = '`team1_confirmed` = 1';
+                } else {
+                    $setValueArray[] = '`team2_confirmed` = 1';
                 }
 
-                if ($ergebnisCheck == 'admin_confirmed') {
+                if ($_POST['team'] === 'admin') {
                     $setValueArray[] = '`mapvote` = 1';
                 }
 
                 $setValues = implode(', ', $setValueArray);
 
-                $query = mysqli_query(
+                $updateQuery = mysqli_query(
                     $_database,
                     "UPDATE `" . PREFIX . "cups_matches_playoff`
                         SET " . $setValues . "
                         WHERE `matchID` = " . $match_id
                 );
 
-                if (!$query) {
-                    throw new \Exception('cups_matches_playoff_query_update_failed (' . $setValues . ')');
+                if (!$updateQuery) {
+                    throw new \Exception('cups_matches_playoff_query_update_failed');
                 }
+
+                $matchArray = getmatch($match_id);
+
+                $matchConfirm = (($_POST['team'] === 'admin') || ($matchArray['team1_confirm'] && $matchArray['team2_confirm'])) ?
+                    TRUE : FALSE;
 
                 if ($matchConfirm) {
 
@@ -236,7 +193,7 @@ if (validate_array($_POST, true)) {
                     );
 
                     if (!$query) {
-                        throw new \Exception('cups_matches_playoff_query_update_failed (' . $setValue . ' / ' . $winnerBracketWhereClause . ')');
+                        throw new \Exception('cups_matches_playoff_query_update_failed');
                     }
 
                     //
@@ -266,7 +223,7 @@ if (validate_array($_POST, true)) {
                         );
 
                         if (!$query) {
-                            throw new \Exception('cups_matches_playoff_query_update_failed (' . $setValue . ' / ' . $loserBracketWhereClause . ')');
+                            throw new \Exception('cups_matches_playoff_query_update_failed');
                         }
 
                     }
