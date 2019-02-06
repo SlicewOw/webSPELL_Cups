@@ -26,25 +26,9 @@ try {
         $fileLocation .= 'admin/';
 
         //
-        // Zeige keine Information, sofern kein Admin
+        // no admin = no information
         if (!isanyadmin($userID)) {
-
-            $teamManagementSiteArray = array(
-                'admin_clanwar_details'
-            );
-
-            if (!in_array($getSite, $teamManagementSiteArray)) {
-                $getAccess = FALSE;
-            } else {
-
-                $teamAdminArray = isteamadmin($userID, 0);
-
-                if (!isset($teamAdminArray['checkValue']) || !$teamAdminArray['checkValue']) {
-                    $getAccess = FALSE;
-                }
-
-            }
-
+            $getAccess = FALSE;
         }
 
     }
