@@ -1,7 +1,6 @@
 <?php
 
-$_language->readModule('index');
-$_language->readModule('navigation', true, false);
+$_language->readModule('navigation');
 
 $copyright_txt = $_language->module['copyright'];
 

@@ -116,11 +116,10 @@ try {
                 }
 
                 $cup_game_tag = $cupArray['game'];
-                $cup_game_icon = getGame($cup_game_tag, 'icon');
 
                 $data_array = array();
                 $data_array['$cup_id'] = $cup_id;
-                $data_array['$game'] = $cup_game_icon;
+                $data_array['$game'] = getGame($cup_game_tag, 'icon');;
                 $data_array['$name'] = $cupArray['name'];
                 $data_array['$mode'] = $cupArray['mode'];
                 $data_array['$date'] = $date;
