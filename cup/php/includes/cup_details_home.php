@@ -69,7 +69,6 @@ try {
 
     //
     // Cup Platzierungen
-    $finish_cup_info = '';
     if ($cupArray['status'] == 4) {
         include(__DIR__ . '/cup_details_platzierungen.php');
     }
