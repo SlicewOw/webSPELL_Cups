@@ -209,7 +209,7 @@ try {
 
                 //
                 // Team Admin: Mapvote
-                include($dir_cup . 'cup_match_mapvote.php');
+                include(__DIR__ . '/cup_match_mapvote.php');
 
             } else if ($cupArray['status'] < 4) {
 
