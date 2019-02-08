@@ -1,9 +1,9 @@
 <?php
 
 try {
-    
+
     $_language->readModule('cups', false, true);
-    
+
     if (!$loggedin || !iscupadmin($userID)) {
         throw new \Exception($_language->module['login']);
     }
@@ -14,7 +14,7 @@ try {
     if ($cup_id < 1) {
         throw new \Exception($_language->module['unknown_cup_id']);
     }
-    
+
     $cupArray = getcup($cup_id);
 
     if ($cupArray['status'] > 3) {
@@ -26,7 +26,7 @@ try {
     }
 
     if (!getmatch($cup_id, 'confirmed_final')) {
-        // Finale wurde nicht bestaetigt
+        // Finish cup if final is confirmed only
         throw new \Exception($_language->module['cup_wrong_status']);
     }
 
@@ -35,7 +35,7 @@ try {
     $baseWhereClauseArray[] = '`wb` = 1';
 
     $rankArray = array();
-    
+
     $index = 1;
     if ($cupArray['anz_runden'] == 3) {
         $rankArray[$index++] = '5-8';
@@ -52,9 +52,9 @@ try {
         $rankArray[$index++] = '9-16';
         $rankArray[$index++] = '5-8';
     }
-    
+
     if (count($rankArray) > 0) {
-        
+
         for ($x = 1; $x < $cupArray['anz_runden']; $x++) {
 
             $whereClauseArray = $baseWhereClauseArray;
@@ -63,47 +63,51 @@ try {
             $whereClause = implode(' AND ', $whereClauseArray);
 
             $get_platz = mysqli_query(
-                $_database, 
-                "SELECT 
-                        `team1`, 
-                        `team1_freilos`, 
-                        `ergebnis1`, 
-                        `team2`, 
-                        `team2_freilos`, 
-                        `ergebnis2` 
-                    FROM `" . PREFIX . "cups_matches_playoff` 
+                $_database,
+                "SELECT
+                        `team1`,
+                        `team1_freilos`,
+                        `ergebnis1`,
+                        `team2`,
+                        `team2_freilos`,
+                        `ergebnis2`
+                    FROM `" . PREFIX . "cups_matches_playoff`
                     WHERE " . $whereClause
             );
 
             if (!$get_platz) {
-                throw new \Exception($_language->module['query_select_failed'] . ' (' . $whereClause . ')');
+                throw new \Exception($_language->module['query_select_failed']);
             }
 
             while ($ds = mysqli_fetch_array($get_platz)) {
 
                 if (($ds['team1_freilos'] == 0) && ($ds['team2_freilos'] == 0)) {
 
-                    $loser_id = ($ds['ergebnis1'] < $ds['ergebnis2']) ? 
+                    $loser_id = ($ds['ergebnis1'] < $ds['ergebnis2']) ?
                         $ds['team1'] : $ds['team2'];
 
-                    $insertQuery = mysqli_query(
-                        $_database,
-                        "INSERT INTO `" . PREFIX . "cups_platzierungen` 
-                            (
-                                cupID, 
-                                teamID, 
-                                platzierung
-                            ) 
-                            VALUES 
-                            (
-                                " . $cup_id . ", 
-                                " . $loser_id . ", 
-                                '" . $rankArray[$x] . "'
-                            )"
-                    );
+                    if (isset($rankArray[$x])) {
 
-                    if (!$insertQuery) {
-                        throw new \Exception($_language->module['query_insert_failed']);
+                        $insertQuery = mysqli_query(
+                            $_database,
+                            "INSERT INTO `" . PREFIX . "cups_platzierungen`
+                                (
+                                    `cupID`,
+                                    `teamID`,
+                                    `platzierung`
+                                )
+                                VALUES
+                                (
+                                    " . $cup_id . ",
+                                    " . $loser_id . ",
+                                    '" . $rankArray[$x] . "'
+                                )"
+                        );
+
+                        if (!$insertQuery) {
+                            throw new \Exception($_language->module['query_insert_failed']);
+                        }
+
                     }
 
                 }
@@ -113,7 +117,7 @@ try {
         }
 
     }
-    
+
     $whereClauseArray = $baseWhereClauseArray;
 
     // Platzierungen 1 & 2
@@ -123,48 +127,48 @@ try {
 
     $ds = mysqli_fetch_array(
         mysqli_query(
-            $_database, 
-            "SELECT 
-                    `team1`, 
-                    `team1_freilos`, 
-                    `ergebnis1`, 
-                    `team2`, 
-                    `team2_freilos`, 
+            $_database,
+            "SELECT
+                    `team1`,
+                    `team1_freilos`,
+                    `ergebnis1`,
+                    `team2`,
+                    `team2_freilos`,
                     `ergebnis2`
-                FROM `" . PREFIX . "cups_matches_playoff` 
+                FROM `" . PREFIX . "cups_matches_playoff`
                 WHERE " . $whereClause
         )
     );
 
-    if(($ds['team1_freilos'] == 0) && ($ds['team2_freilos'] == 0)) {
+    if (($ds['team1_freilos'] == 0) && ($ds['team2_freilos'] == 0)) {
 
-        if($ds['ergebnis1'] < $ds['ergebnis2'])	{
-            $winner_id 	= $ds['team2'];
-            $loser_id 	= $ds['team1'];
+        if ($ds['ergebnis1'] < $ds['ergebnis2']) {
+            $winner_id = $ds['team2'];
+            $loser_id = $ds['team1'];
         } else {
-            $winner_id 	= $ds['team1'];
-            $loser_id 	= $ds['team2'];
+            $winner_id = $ds['team1'];
+            $loser_id = $ds['team2'];
         }
 
         if(($winner_id > 0) && ($loser_id > 0)) {
 
             $query = mysqli_query(
-                $_database, 
-                "INSERT INTO `".PREFIX."cups_platzierungen` 
+                $_database,
+                "INSERT INTO `" . PREFIX . "cups_platzierungen`
                     (
-                        `cupID`, 
-                        `teamID`, 
+                        `cupID`,
+                        `teamID`,
                         `platzierung`
-                    ) 
-                    VALUES 
+                    )
+                    VALUES
                     (
-                        " . $cup_id . ", 
-                        " . $winner_id . ", 
+                        " . $cup_id . ",
+                        " . $winner_id . ",
                         '1'
                     ),
                     (
-                        " . $cup_id . ", 
-                        " . $loser_id . ", 
+                        " . $cup_id . ",
+                        " . $loser_id . ",
                         '2'
                     )"
             );
@@ -175,10 +179,10 @@ try {
 
             // Awards
             $query = mysqli_query(
-                $_database, 
-                "INSERT INTO `" . PREFIX . "cups_awards` 
-                    (`teamID`, `cupID`, `award`, `date`) 
-                    VALUES 
+                $_database,
+                "INSERT INTO `" . PREFIX . "cups_awards`
+                    (`teamID`, `cupID`, `award`, `date`)
+                    VALUES
                     (" . $winner_id . ", " . $cup_id . ", 1, " . time() . "),
                     (" . $loser_id  .", " . $cup_id . ", 2, " . time() . ")"
             );
@@ -190,11 +194,11 @@ try {
         }
 
     }
-    
-    /** 
+
+    /**
      * Platzierungen 3 & 4
      */
-    
+
     $whereClauseArray = array();
     $whereClauseArray[] = '`cupID` = ' . $cup_id;
     $whereClauseArray[] = '`wb` = 0';
@@ -204,48 +208,48 @@ try {
 
     $ds = mysqli_fetch_array(
         mysqli_query(
-            $_database, 
-            "SELECT 
-                    `team1`, 
-                    `team1_freilos`, 
-                    `ergebnis1`, 
-                    `team2`, 
-                    `team2_freilos`, 
+            $_database,
+            "SELECT
+                    `team1`,
+                    `team1_freilos`,
+                    `ergebnis1`,
+                    `team2`,
+                    `team2_freilos`,
                     `ergebnis2`
-                FROM `" . PREFIX . "cups_matches_playoff` 
+                FROM `" . PREFIX . "cups_matches_playoff`
                 WHERE " . $whereClause
         )
     );
 
     if (($ds['team1_freilos'] == 0) && ($ds['team2_freilos'] == 0)) {
 
-        if ($ds['ergebnis1'] < $ds['ergebnis2'])	{
-            $winner_id 	= $ds['team2'];
-            $loser_id 	= $ds['team1'];
+        if ($ds['ergebnis1'] < $ds['ergebnis2']) {
+            $winner_id = $ds['team2'];
+            $loser_id = $ds['team1'];
         } else {
-            $winner_id 	= $ds['team1'];
-            $loser_id 	= $ds['team2'];
+            $winner_id = $ds['team1'];
+            $loser_id = $ds['team2'];
         }
 
         if(($winner_id > 0) && ($loser_id > 0)) {
 
             $query = mysqli_query(
-                $_database, 
-                "INSERT INTO `".PREFIX."cups_platzierungen` 
+                $_database,
+                "INSERT INTO `" . PREFIX . "cups_platzierungen`
                     (
-                        `cupID`, 
-                        `teamID`, 
+                        `cupID`,
+                        `teamID`,
                         `platzierung`
-                    ) 
-                    VALUES 
+                    )
+                    VALUES
                     (
-                        " . $cup_id. ", 
-                        " . $winner_id . ", 
+                        " . $cup_id. ",
+                        " . $winner_id . ",
                         '3'
                     ),
                     (
-                        " . $cup_id . ", 
-                        " . $loser_id . ", 
+                        " . $cup_id . ",
+                        " . $loser_id . ",
                         '4'
                     )"
             );
@@ -257,8 +261,8 @@ try {
             // Awards
             $query = mysqli_query(
                 $_database, 
-                "INSERT INTO `" . PREFIX . "cups_awards` 
-                    (`teamID`, `cupID`, `award`, `date`) 
+                "INSERT INTO `" . PREFIX . "cups_awards`
+                    (`teamID`, `cupID`, `award`, `date`)
                     VALUES 
                     (" . $winner_id . ", " . $cup_id . ", 3, " . time() . ")"
             );
@@ -272,9 +276,9 @@ try {
     }
 
     $saveQuery = mysqli_query(
-        $_database, 
-        "UPDATE `" . PREFIX . "cups` 
-            SET `status` = 4 
+        $_database,
+        "UPDATE `" . PREFIX . "cups`
+            SET `status` = 4
             WHERE `cupID` = " . $cup_id
     );
 
