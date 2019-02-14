@@ -1,0 +1,29 @@
+<script type="text/javascript">
+$("#cup_details_countdown").countdown("$date", function (event) {
+
+    var format = '%H:%M:%S',
+        weeks_str = "%weeks%",
+        week_str = "%week%",
+        days_str = "%days%",
+        day_str = "%day%";
+
+    if (event.offset.days > 0) {
+        if (event.offset.days > 1) {
+            format = '%-d ' + days_str + ' ' + format;
+        } else {
+            format = '%-d ' + day_str + ' ' + format;
+        }
+    }
+
+    if (event.offset.weeks > 0) {
+        if (event.offset.weeks > 1) {
+            format = '%-w ' + weeks_str + ' ' + format;
+        } else {
+            format = '%-w ' + week_str + ' ' + format;
+        }
+    }
+
+    $(this).html(event.strftime(format));
+
+});
+</script>

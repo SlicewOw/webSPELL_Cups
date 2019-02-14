@@ -60,41 +60,44 @@ if (!$userID) {
 </head>
 
 <body>
-<?php include($dir_cup . '/header.php'); ?>
-<div id="page">
-    <div id="header">
-        <h1>webSPELL Cup Add-On by SlicewOw</h1>
-    </div>
-    <div class="linie_1"></div>
-    <div id="wrapper">
-        <div id="content_wrapper">
-            <div id="content_top">
-                <div class="row">
-                    <div class="col-sm-7 eleven lh_fourty href_underline">
-<?php include($dir_cup . '/where.php'); ?>
-                    </div>
-                    <div class="col-sm-5 eleven lh_fourty right href_underline">
-<?php include($dir_cup . '/content_login.php'); ?>
+    <?php
+    include($dir_cup . '/header.php');
+    include($dir_cup . '/navigation.php');
+    ?>
+    <div id="page">
+        <div id="header">
+            <h1>webSPELL Cup Add-On by SlicewOw</h1>
+        </div>
+        <div class="linie_1"></div>
+        <div id="wrapper">
+            <div id="content_wrapper">
+                <div id="content_top">
+                    <div class="row">
+                        <div class="col-sm-7 eleven lh_fourty href_underline">
+                            <?php include($dir_cup . '/where.php'); ?>
+                        </div>
+                        <div class="col-sm-5 eleven lh_fourty right href_underline">
+                            <?php include($dir_cup . '/content_login.php'); ?>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="clearfix">
-                <div id="content">
-<?php include(__DIR__ . '/content.php'); ?>
+                <div class="clearfix">
+                    <div id="content">
+                        <?php include(__DIR__ . '/content.php'); ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="linie_2"></div>
-<div id="footer_navigation_body">
-    <div id="footer_navigation">
-        <?php include('./sc_sponsors.php'); ?>
+    <div class="linie_2"></div>
+    <div id="footer_navigation_body">
+        <div id="footer_navigation">
+            <?php include('./sc_sponsors.php'); ?>
+        </div>
     </div>
-</div>
-<?php include($dir_cup . '/copyright.php'); ?>
-<script src="./cup/js/cup_details_menu.js"></script>
-<script src="./cup/js/support_menu.js"></script>
-<?php include($dir_cup . '/footer.php'); ?>
+    <?php include($dir_cup . '/copyright.php'); ?>
+    <script src="./cup/js/cup_details_menu.js"></script>
+    <script src="./cup/js/support_menu.js"></script>
+    <?php include($dir_cup . '/footer.php'); ?>
 </body>
 </html>

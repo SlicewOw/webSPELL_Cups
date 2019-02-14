@@ -711,7 +711,7 @@ function getParentIdByValue($value_name, $isIntegerParentId = TRUE) {
 
     global $_language;
 
-    $_language->readModule('cups', true);
+    $_language->readModule('index', true, false);
 
     if (!isset($_GET[$value_name])) {
         return -1;

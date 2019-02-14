@@ -8,6 +8,8 @@ $language_array = Array(
     'confirm'=>'best&auml;tigen und anmelden',
     'create_team'=>'<a href="index.php?site=teams&amp;action=add" class="blue">Erstelle dein eigenes Team</a> und lade deine Mitspieler ein.',
     'create_team_ok'=>'Du bist Admin von %anzahl_teams% Teams.',
+    'day'=>'Tag',
+    'days'=>'Tage',
     'faq'=>'H6auml;fig gestellte Fragen',
     'gameacccount_validate'=>'Dein CS:GO Gameaccount ist nicht validiert - um Probleme zu Vermeiden empfehlen wir, den Account zu validieren.<br />&raquo; <a href="index.php?site=gameaccount" class="blue">Gameaccounts</a>',
     'goto_cup'=>'zum Cup',
@@ -31,5 +33,7 @@ $language_array = Array(
     'update_cupInfo'=>'<br />Dieser Cup ben&ouml;tigt <span class="bold">%anz_player% Spieler</span> pro Team.',
     'update_policyConfirm'=>'Nutzungsbedingungen wurden akzeptiert.<br />&raquo; <a href="index.php?site=policy" class="blue">Nutzungsbedingung</a>',
     'update_teamInfo'=>'<br />Team "<span class="bold">%teamName%</span>" hat <span class="bold">%anz_player% Spieler</span> mit <span class="bold">%anz_gameaccounts% Gameaccounts</span>.<br />&raquo; <a href="%teamLink%" class="blue">Team Details</a>',
-    'update_teamRegistered'=>'Team "<span class="bold">%teamName%</span>" ist angemeldet.<br />&raquo; <a href="%teamLink%" class="blue">Team Details</a><input type="hidden" name="team_id" value="%team_id%" />'
+    'update_teamRegistered'=>'Team "<span class="bold">%teamName%</span>" ist angemeldet.<br />&raquo; <a href="%teamLink%" class="blue">Team Details</a><input type="hidden" name="team_id" value="%team_id%" />',
+    'week'=>'Woche',
+    'weeks'=>'Wochen'
 );

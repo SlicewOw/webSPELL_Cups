@@ -8,6 +8,8 @@ $language_array = Array(
     'confirm'=>'confirm and register',
     'create_team'=>'<a href="index.php?site=teams&amp;action=add" class="blue">Create a team</a> and invite your friends.',
     'create_team_ok'=>'You are admin of %anzahl_teams% teams.',
+    'day'=>'day',
+    'days'=>'days',
     'faq'=>'FAQ',
     'gameacccount_validate'=>'Your gameaccount is not validated yet - please verify manually that your gameaccount is set correctly.<br />&raquo; <a href="index.php?site=gameaccount" class="blue">Gameaccounts</a>',
     'goto_cup'=>'goto Cup',
@@ -31,5 +33,7 @@ $language_array = Array(
     'update_cupInfo'=>'<br />This cup requires <span class="bold">%anz_player% players</span> per team.',
     'update_policyConfirm'=>'Policy got confirmed.<br />&raquo; <a href="index.php?site=policy" class="blue">Policy</a>',
     'update_teamInfo'=>'<br />Team "<span class="bold">%teamName%</span>" has <span class="bold">%anz_player% player</span> with <span class="bold">%anz_gameaccounts% gameaccounts</span>.<br />&raquo; <a href="%teamLink%" class="blue">Team Details</a>',
-    'update_teamRegistered'=>'Team "<span class="bold">%teamName%</span>" is registered.<br />&raquo; <a href="%teamLink%" class="blue">Team Details</a><input type="hidden" name="team_id" value="%team_id%" />'
+    'update_teamRegistered'=>'Team "<span class="bold">%teamName%</span>" is registered.<br />&raquo; <a href="%teamLink%" class="blue">Team Details</a><input type="hidden" name="team_id" value="%team_id%" />',
+    'week'=>'week',
+    'weeks'=>'weeks'
 );

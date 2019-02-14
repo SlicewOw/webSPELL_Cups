@@ -4,8 +4,6 @@ if (iscupadmin($userID) && $loggedin && ($getSite == 'cup_admin') && ($getPage =
     include($dir_cup . 'admin/cup_matches_admin.php');
 }
 
-include($dir_cup . '/navigation.php');
-
 if (($getSite == 'cup') && ($getAction == 'details') && isset($_GET['id'])) {
 
     $cup_id = (validate_int($_GET['id'], true)) ?

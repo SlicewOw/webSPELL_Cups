@@ -1,30 +1,39 @@
 <?php
 
 $date = '';
+
 try {
+
+    $_language->readModule('cups_home');
 
     if ($getSite == 'cup') {
 
         $cup_id = getParentIdByValue('id', true);
 
-        if ($cup_id > 0) {
+        if ($cup_id < 1) {
+            throw new \Exception('unknown_cup');
+        }
 
-            $where_clause = (iscupadmin($userID)) ?
-                ' AND admin_visible = \'0\'' : '';
+        if (!isset($cupArray) || !validate_array($cupArray, true)) {
+            $cupArray = getcup($cup_id, 'all');
+        }
 
-            if (!isset($cupArray) || !validate_array($cupArray, true)) {
-                $cupArray = getcup($cup_id, 'all');
-            }
+        if (!isset($cupArray['phase'])) {
+            throw new \Exception('unknown_cup_phase');
+        }
 
-            $cupstatus = $cupArray['status'];
-            $time_now = time();
+        if (!isset($cupArray['checkin'])) {
+            throw new \Exception('unknown_cup_date_checkin');
+        }
 
-            if (preg_match('/register/', $cupArray['phase'])) {
-                $date = date('Y/m/d H:i:s', $cupArray['checkin']);
-            } else if (preg_match('/checkin/', $cupArray['phase'])) {
-                $date = date('Y/m/d H:i:s', $cupArray['start']);
-            }
+        if (!isset($cupArray['start'])) {
+            throw new \Exception('unknown_cup_date_start');
+        }
 
+        if (preg_match('/register/', $cupArray['phase'])) {
+            $date = date('Y/m/d H:i:s', $cupArray['checkin']);
+        } else if (preg_match('/checkin/', $cupArray['phase'])) {
+            $date = date('Y/m/d H:i:s', $cupArray['start']);
         }
 
     } else if (empty($getSite) || ($getSite == 'home')) {
@@ -70,34 +79,17 @@ try {
 
     }
 
+    if (!isset($date)) {
+        throw new \Exception('no_date_value');
+    }
+
+    if (empty($date)) {
+        throw new \Exception('invalid_date_value');
+    }
+
+    $data_array = array();
+    $data_array['$date'] = $date;
+    $footer = $GLOBALS["_template_cup"]->replaceTemplate("footer", $data_array);
+    echo $footer;
+
 } catch (Exception $e) {}
-
-if (isset($date) && !empty($date)) {
-?>
-<script type="text/javascript">
-$("#cup_details_countdown").countdown("<?php echo $date; ?>", function (event) {
-
-    var format = '%H:%M:%S';
-
-    if (event.offset.days > 0) {
-        if (event.offset.days > 1) {
-            format = '%-d <?php echo 'Tage'; ?> ' + format;
-        } else {
-            format = '%-d <?php echo 'Tag'; ?> ' + format;
-        }
-    }
-
-    if (event.offset.weeks > 0) {
-        if (event.offset.weeks > 1) {
-            format = '%-w <?php echo 'Wochen'; ?> ' + format;
-        } else {
-            format = '%-w <?php echo 'Woche'; ?> ' + format;
-        }
-    }
-
-    $(this).html(event.strftime(format));
-
-});
-</script>
-<?php
-}
