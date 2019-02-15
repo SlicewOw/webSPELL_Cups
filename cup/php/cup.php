@@ -4,8 +4,9 @@ try {
 
     $_language->readModule('cups');
 
-    if (file_exists($dir_cup . '/includes/cup_' . $getAction . '.php')) {
-        include($dir_cup . '/includes/cup_' . $getAction . '.php');
+    $cupDetailsFile = $dir_cup . '/includes/cup_' . $getAction . '.php';
+    if (file_exists($cupDetailsFile)) {
+        include($cupDetailsFile);
     } else {
 
         $baseWhereClauseArray = array();
@@ -13,6 +14,8 @@ try {
 
         if ($getAction != 'archive') {
             $baseWhereClauseArray[] = '`status` < 4';
+        } else {
+            $baseWhereClauseArray[] = '`status` = 4';
         }
 
         if (!iscupadmin($userID)) {
