@@ -946,6 +946,30 @@ try {
             ('cm', 'cups_matches_playoff', 'matchID', 'comments');"
     );
 
+    $createTableQuery = mysqli_query(
+        $_database,
+        "CREATE TABLE `" . PREFIX . "cups_logs` (
+            `logID` int(11) NOT NULL,
+            `query` text COLLATE utf8_bin NOT NULL,
+            `message` varchar(500) COLLATE utf8_bin NOT NULL,
+            `date` int(11) NOT NULL,
+            `file` varchar(300) COLLATE utf8_bin NOT NULL,
+            `line` int(11) NOT NULL DEFAULT '0'
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;"
+    );
+
+    $alterTableQuery = mysqli_query(
+        $_database,
+        "ALTER TABLE `" . PREFIX . "cups_logs`
+            ADD PRIMARY KEY (`logID`);"
+    );
+
+    $alterTableQuery = mysqli_query(
+        $_database,
+        "ALTER TABLE `" . PREFIX . "cups_logs`
+            MODIFY `logID` int(11) NOT NULL AUTO_INCREMENT;"
+    );
+
     echo "Delete this file!";
 
     $sendmail = \webspell\Email::sendEmail(

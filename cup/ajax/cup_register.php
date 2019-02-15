@@ -6,13 +6,13 @@ $returnArray = array(
     'status' => FALSE,
     'message' => array()
 );
-    
+
 try {
-        
+
     if (empty($getAction)) {
         throw new \Exception('unknown_action');
     }
-    
+
     if ($getAction == 'cup_update') {
 
         $returnArray = array(
@@ -30,7 +30,7 @@ try {
             'html' => ''
         );
 
-        $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ? 
+        $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ?
             (int)$_GET['cup_id'] : 0;
 
         if ($cup_id < 1) {
@@ -39,7 +39,7 @@ try {
 
         //
         // Get Cup Data Array
-        $cupArray = getcup($cup_id);	
+        $cupArray = getcup($cup_id);
 
         //
         // Safe Text of Team with Details
@@ -56,28 +56,24 @@ try {
         //
         // Check if User is registered
         $whereClauseArray = array();
-        $whereClauseArray[] = 'a.`cupID` = ' . $cup_id;
-        $whereClauseArray[] = 'b.`userID` = ' . $userID;
-        $whereClauseArray[] = 'b.`active` = 1';
-        
+        $whereClauseArray[] = 'ct.`cupID` = ' . $cup_id;
+        $whereClauseArray[] = 'ctm.`userID` = ' . $userID;
+        $whereClauseArray[] = 'ctm.`active` = 1';
+
         $whereClause = implode(' AND ', $whereClauseArray);
-        
-        $selectQuery = mysqli_query(
-            $_database, 
-            "SELECT 
+
+        $selectQuery = cup_query(
+            "SELECT
                   COUNT(*) AS `checkValue`,
-                  a.`teamID` AS `team_id`
-                FROM `" . PREFIX . "cups_teilnehmer` a 
-                JOIN `" . PREFIX . "cups_teams_member` b ON a.`teamID` = b.`teamID` 
-                WHERE " . $whereClause
+                  ct.`teamID` AS `team_id`
+                FROM `" . PREFIX . "cups_teilnehmer` ct
+                JOIN `" . PREFIX . "cups_teams_member` ctm ON ct.`teamID` = ctm.`teamID`
+                WHERE " . $whereClause,
+            __FILE__
         );
-        
-        if (!$selectQuery) {
-            throw new \Exception('query_select_failed');
-        }
-        
+
         $isRegistered = mysqli_fetch_array($selectQuery);
-        
+
         if ($isRegistered['checkValue'] < 1) {
             throw new \Exception('error_checkValue');
         }
@@ -127,14 +123,14 @@ try {
 
         $team_id = (isset($_GET['team_id']) && validate_int($_GET['team_id'], true)) ? 
             (int)$_GET['team_id'] : 0;
-        
+
         if ($team_id < 1) {
             throw new \Exception('unknown_team');
         }
-        
+
         $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ? 
             (int)$_GET['cup_id'] : 0;
-        
+
         if ($cup_id < 1) {
             throw new \Exception('unknown_team');
         }
@@ -161,21 +157,17 @@ try {
             $whereClauseArray[] = '`category` = \'' . $cupArray['game'] . '\'';
             $whereClauseArray[] = '`active` = 1';
             $whereClauseArray[] = '`deleted` = 0';
-            
+
             $whereClause = implode(' AND ', $whereClauseArray);
-            
-            $selectQuery = mysqli_query(
-                $_database, 
-                "SELECT 
-                        COUNT(*) AS `anz` 
+
+            $selectQuery = cup_query(
+                "SELECT
+                        COUNT(*) AS `anz`
                     FROM `" . PREFIX . "cups_gameaccounts`
-                    WHERE " . $whereClause
+                    WHERE " . $whereClause,
+                __FILE__
             );
-            
-            if (!$selectQuery) {
-                throw new \Exception('query_select_failed');
-            }
-            
+
             $getGameaccount = mysqli_fetch_array($selectQuery);
 
             $returnArray['data']['anz_gameaccounts'] = $getGameaccount['anz'];
@@ -185,7 +177,7 @@ try {
         //
         // Safe Data in returnArray
         $returnArray['data']['anz_member'] = $teamArray['anz_member'];
-        
+
 
         //
         // Safe Text of Team with Details
@@ -255,8 +247,9 @@ try {
     }
 
     $returnArray['status'] = TRUE;
-    
+
 } catch (Exception $e) {
+    setLog('', $e->getMessage(), __FILE__, $e->getLine());
     $returnArray['message'][] = $e->getMessage();
 }
 

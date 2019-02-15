@@ -1,8 +1,8 @@
 <?php
 
 $returnArray = array(
-	'status' => FALSE,
-	'error' => array(),
+    'status' => FALSE,
+    'error' => array(),
     'veto' => array(
         'status' => 'error',
         'maps' => '',
@@ -11,67 +11,63 @@ $returnArray = array(
 );
 
 try {
-    
+
     $_language->readModule('cups', true, false);
 
     if (!$loggedin) {
         throw new \Exception($_language->module['access_denied']);
     }
-    
+
     if (validate_array($_POST, true)) {
-        
+
         $postAction = (isset($_POST['action'])) ?
             getinput($_POST['action']) : '';
-        
+
         if (empty($postAction)) {
             throw new \Exception($_language->module['unknown_action']);
         }
-        
+
         if ($postAction == 'voteMap') {
-           
-            $banned_map = (isset($_POST['map'])) ? 
+
+            $banned_map = (isset($_POST['map'])) ?
                 getinput($_POST['map']) : '';
 
             if (strlen($banned_map) == 0) {
                 throw new \Exception('error_bann-map');
             }
 
-            $cup_id = (isset($_POST['cup_id']) && validate_int($_POST['cup_id'], true)) ? 
+            $cup_id = (isset($_POST['cup_id']) && validate_int($_POST['cup_id'], true)) ?
                 (int)$_POST['cup_id'] : 0;
 
             if ($cup_id < 1) {
                 throw new \Exception('error_cup-id');
             }
 
-            $match_id = (isset($_POST['match_id']) && validate_int($_POST['match_id'], true)) ? 
+            $match_id = (isset($_POST['match_id']) && validate_int($_POST['match_id'], true)) ?
                 (int)$_POST['match_id'] : 0;
 
             if ($match_id < 1) {
                 throw new \Exception('error_match-id');
             }
 
-            $team_id = (isset($_POST['team_id']) && preg_match('/team/', $_POST['team_id'])) ? 
+            $team_id = (isset($_POST['team_id']) && preg_match('/team/', $_POST['team_id'])) ?
                 getinput($_POST['team_id']) : '';
 
             if (strlen($team_id) == 0) {
                 throw new \Exception('error_team-id');
             }
 
-            $selectQuery = mysqli_query(
-                $_database, 
-                "SELECT 
-                        `format`, 
+            $selectQuery = cup_query(
+                "SELECT
+                        `format`,
                         `mapvote`,
-                        `team1`, 
-                        `team2`, 
-                        `maps` 
-                    FROM `" . PREFIX . "cups_matches_playoff` 
-                    WHERE matchID = " . $match_id . " AND cupID = " . $cup_id
+                        `team1`,
+                        `team2`,
+                        `maps`
+                    FROM `" . PREFIX . "cups_matches_playoff`
+                    WHERE matchID = " . $match_id . " AND cupID = " . $cup_id,
+                __FILE__
             );
-
-            if (!$selectQuery) {
-                throw new \Exception($_language->module['query_select_failed']);
-            }
 
             $get = mysqli_fetch_array($selectQuery);
 
@@ -92,9 +88,9 @@ try {
             // 5 = bo5
             $cupFormat = strtolower($get['format']);
             if (preg_match('/bo/', $cupFormat)) {
-                $finalMapsLeft = substr($cupFormat, 2, 1);	
+                $finalMapsLeft = substr($cupFormat, 2, 1);
             } else {
-                $finalMapsLeft = 1;	
+                $finalMapsLeft = 1;
             }
 
             if ($finalMapsLeft < 1) {
@@ -156,8 +152,8 @@ try {
                     }
 
                     $info = str_replace(
-                        '%team%', 
-                        '<span class="bold">'.$teamname.'</span>', 
+                        '%team%',
+                        '<span class="bold">'.$teamname.'</span>',
                         $info
                     );
 
@@ -209,7 +205,7 @@ try {
 
                         $mapvote_status = 'mapvote = \'1\', ';
 
-                        $returnArray['veto']['status'] = 'finished';	
+                        $returnArray['veto']['status'] = 'finished';
 
                     }
 
@@ -223,7 +219,7 @@ try {
                     }
 
                     $info = str_replace(
-                        '%team%', 
+                        '%team%',
                         '<span class="bold">'.$teamname.'</span>', 
                         $info
                     );
@@ -252,7 +248,7 @@ try {
                     // Liste der offenen Maps
                     $anzMapsOpen = count($mapsArray['open']);
                     for ($x = 0; $x < $anzMapsOpen; $x++) {
-                        $mapList .= ' <span class="btn btn-default btn-sm">' . $mapsArray['open'][$x] . '</span>';	
+                        $mapList .= ' <span class="btn btn-default btn-sm">' . $mapsArray['open'][$x] . '</span>';
                     }
 
                     $returnArray['veto']['status'] = 'running';
@@ -267,8 +263,8 @@ try {
                     }
 
                     $info = str_replace(
-                        '%team%', 
-                        '<span class="bold">'.$teamname.'</span>', 
+                        '%team%',
+                        '<span class="bold">'.$teamname.'</span>',
                         $info
                     );
 
@@ -291,33 +287,29 @@ try {
             // Map Array speichern
             $maps = serialize($mapsArray);
 
-            $query = mysqli_query(
-                $_database, 
-                "UPDATE `" . PREFIX . "cups_matches_playoff` 
-                    SET " . $mapvote_status . "maps = '" . $maps . "' 
-                    WHERE matchID = " . $match_id . " AND cupID = " . $cup_id
+            $query = cup_query(
+                "UPDATE `" . PREFIX . "cups_matches_playoff`
+                    SET " . $mapvote_status . "maps = '" . $maps . "'
+                    WHERE `matchID` = " . $match_id . " AND `cupID` = " . $cup_id,
+                __FILE__
             );
-
-            if (!$query) {
-                throw new \Exception($_language->module['query_update_failed']);
-            }
 
         } else {
             throw new \Exception($_language->module['unknown_action']);
         }
-        
+
     } else {
-        
+
         if ($getAction == 'updateMaps') {
 
-            $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ? 
+            $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ?
                 (int)$_GET['cup_id'] : 0;
 
             if ($cup_id < 1) {
                 throw new \Exception('error_cup-id');
             }
 
-            $match_id = (isset($_GET['match_id']) && validate_int($_GET['match_id'], true)) ? 
+            $match_id = (isset($_GET['match_id']) && validate_int($_GET['match_id'], true)) ?
                 (int)$_GET['match_id'] : 0;
 
             if ($match_id < 1) {
@@ -339,27 +331,27 @@ try {
             // 5 = bo5
             $cupFormat = strtolower($matchArray['format']);
             if (substr($cupFormat, 0, 2) == 'bo') {
-                $finalMapsLeft = substr($cupFormat, 2, strlen($cupFormat));	
+                $finalMapsLeft = substr($cupFormat, 2, strlen($cupFormat));
             } else {
-                $finalMapsLeft = 1;	
+                $finalMapsLeft = 1;
             }
 
             $mapsArray = unserialize($matchArray['maps']);
             $anzMapsOpen = count($mapsArray['open']);
 
-            $team = ($anzMapsOpen % 2) ? 
+            $team = ($anzMapsOpen % 2) ?
                 'team1' : 'team2';
-            
+
             if ($cupArray['mode'] == '1on1') {
-                
+
                 if ($userID == $matchArray[$team . '_id']) {
                     $activeMapVote = TRUE;
                 } else {
                     $activeMapVote = FALSE;
                 }
-                
+
             } else {
-                
+
                 if (($matchArray[$team . '_id'] > 0) && isinteam($userID, $matchArray[$team . '_id'], 'admin')) {
                     $activeMapVote = TRUE;
                 } else {
@@ -389,33 +381,33 @@ try {
             $info = '<span class="glyphicon glyphicon-info-sign"></span> ';
             if ($finalMapsLeft == 1) {
 
-                $info .= (!$activeMapVote) ? 
-                    $_language->module['cup_veto_team'] : 
+                $info .= (!$activeMapVote) ?
+                    $_language->module['cup_veto_team'] :
                     $_language->module['map_vote_info'];
 
             } else if ($finalMapsLeft == 3) {
 
                 if ($anzMapsOpen <= $finalMapsLeft) {
 
-                    $info .= ($activeMapVote) ? 
-                        $_language->module['cup_choose_team1'] : 
+                    $info .= ($activeMapVote) ?
+                        $_language->module['cup_choose_team1'] :
                         $_language->module['cup_choose_team2'];
 
                 } else {
 
-                    $info .= (!$activeMapVote) ? 
-                        $_language->module['cup_veto_team'] : 
+                    $info .= (!$activeMapVote) ?
+                        $_language->module['cup_veto_team'] :
                         $_language->module['map_vote_info'];
 
-                }			
+                }
 
             } else if ($finalMapsLeft == 5) {
-                
+
                 /**
                  * WiP
                  */
                 throw new \Exception($_language->module['unknown_action']);
-                
+
             }
 
             //
@@ -435,15 +427,15 @@ try {
             );
 
             //
-            // Vote-Status	
+            // Vote-Status
             if ($anzMapsOpen == 0) {
-                $status = 'finished';	
+                $status = 'finished';
             } else if (!$activeMapVote) {
-                $status = 'waiting';	
+                $status = 'waiting';
             } else if ($activeMapVote) {
-                $status = 'running';	
+                $status = 'running';
             } else {
-                $status = 'unknown';	
+                $status = 'unknown';
             }
 
             $returnArray['veto']['status'] = $status;
@@ -457,16 +449,16 @@ try {
     if (isset($mapList)) {
         $returnArray['veto']['maps'] = $mapList;
     }
-    
+
     if (isset($info)) {
         $returnArray['veto']['info'] = $info;
     }
 
     $returnArray['status'] = TRUE;
-    
+
 } catch (Exception $e) {
+    setLog('', $e->getMessage(), __FILE__, $e->getLine());
     $returnArray['error'][] = $e->getMessage();
 }
 
 echo json_encode($returnArray);
-    

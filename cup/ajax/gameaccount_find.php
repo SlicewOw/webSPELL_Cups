@@ -55,39 +55,35 @@ try {
 
             $whereClause = implode(' OR ', $whereClauseArray);
 
-            $checkIf = mysqli_fetch_array(
-                mysqli_query(
-                    $_database,
-                    "SELECT
-                            COUNT(userID) AS `exists`
-                        FROM `" . PREFIX . "cups_gameaccounts` cg
-                        WHERE " . $whereClause
-                )
+            $selectQuery = cup_query(
+                "SELECT
+                        COUNT(userID) AS `exists`
+                    FROM `" . PREFIX . "cups_gameaccounts` cg
+                    WHERE " . $whereClause,
+                __FILE__
             );
 
-            if($checkIf['exists'] > 0) {
+            $checkIf = mysqli_fetch_array($selectQuery);
 
-                $query = mysqli_query(
-                    $_database, 
-                    "SELECT 
-                            cg.*, 
+            if ($checkIf['exists'] > 0) {
+
+                $query = cup_query(
+                    "SELECT
+                            cg.*,
                             b.nickname AS `user_nick`,
                             c.name AS `game_name`
                         FROM `".PREFIX."cups_gameaccounts` cg
                         LEFT JOIN `". PREFIX . "user` b ON cg.userID = b.userID
                         LEFT JOIN `" . PREFIX . "games` c ON a.category = c.tag
                         WHERE " . $whereClause . "
-                        ORDER BY cg.`active` DESC"
+                        ORDER BY cg.`active` DESC",
+                    __FILE__
                 );
 
-                if (!$query) {
-                    throw new \Exception('cups_gameaccounts_query_select_failed (' . $whereClause . ')');
-                }
-
-                while($get = mysqli_fetch_array($query)) {
+                while ($get = mysqli_fetch_array($query)) {
 
                     $active = ($get['active']) ?
-                        '<span class="btn btn-success btn-xs">' . $_language->module['yes'] . '</span>' : 
+                        '<span class="btn btn-success btn-xs">' . $_language->module['yes'] . '</span>' :
                         '<span class="btn btn-danger btn-xs">' . $_language->module['no'] . '</span>';
 
                     $data_array = array();
@@ -111,45 +107,41 @@ try {
 
         $whereClauseArray = array();
 
-        $whereClauseArray[] = 'a.`nickname` LIKE \'%' . $value . '%\'';
+        $whereClauseArray[] = 'u.`nickname` LIKE \'%' . $value . '%\'';
 
         $whereClause = implode(' OR ', $whereClauseArray);
 
-        $checkIf = mysqli_fetch_array(
-            mysqli_query(
-                $_database,
-                "SELECT
-                        COUNT(userID) AS `exists`
-                    FROM `" . PREFIX . "user` a
-                    WHERE " . $whereClause
-            )
+        $selectQuery = cup_query(
+            "SELECT
+                    COUNT(userID) AS `exists`
+                FROM `" . PREFIX . "user` u
+                WHERE " . $whereClause,
+            __FILE__
         );
+
+        $checkIf = mysqli_fetch_array($selectQuery);
 
         if ($checkIf['exists']) {
 
             $returnArray['results']++;
 
-            $query = mysqli_query(
-                $_database,
+            $query = cup_query(
                 "SELECT
-                        a.userID AS userID,
-                        a.nickname AS nickname,
-                        b.gameaccID AS gameaccID,
-                        b.category AS category,
-                        b.value AS value,
-                        b.active AS active
-                    FROM `" . PREFIX . "user` a
-                    LEFT JOIN `" . PREFIX . "cups_gameaccounts` b ON a.userID = b.userID
-                    WHERE " . $whereClause
+                        u.userID AS userID,
+                        u.nickname AS nickname,
+                        cg.gameaccID AS gameaccID,
+                        cg.category AS category,
+                        cg.value AS value,
+                        cg.active AS active
+                    FROM `" . PREFIX . "user` u
+                    LEFT JOIN `" . PREFIX . "cups_gameaccounts` cg ON u.`userID` = cg.`userID`
+                    WHERE " . $whereClause,
+                __FILE__
             );
-
-            if (!$query) {
-                throw new \Exception('cups_gameaccounts_query_select_failed (' . $whereClause . ')');
-            }
 
             while ($get = mysqli_fetch_array($query)) {
 
-                if(!is_null($get['value'])) {
+                if (!is_null($get['value'])) {
                     $active = ($get['active']) ?
                         '<span class="btn btn-success btn-xs white darkshadow">' . $_language->module['yes'] . '</span>' : 
                         '<span class="btn btn-danger btn-xs white darkshadow">' . $_language->module['no'] . '</span>';
@@ -279,27 +271,29 @@ try {
         $extern_url = 'https://steamcommunity.com/profiles/' . $steam64_id;
         $returnArray['htmlData'] .= '<a href="' . $extern_url . '" target="_blank" class="list-group-item">&raquo; Steam Community Profile</a>';
 
-        $check = mysqli_fetch_array(
-            mysqli_query(
-                $_database,
-                "SELECT 
-                        COUNT(*) AS `if_exists` 
-                    FROM `" . PREFIX . "cups_gameaccounts`
-                    WHERE `value` = '" . $steam64_id . "'"
-            )
+        $selectQuery = cup_query(
+            "SELECT
+                    COUNT(*) AS `exists`
+                FROM `" . PREFIX . "cups_gameaccounts`
+                WHERE `value` = '" . $steam64_id . "'",
+            __FILE__
         );
+
+        $checkIf = mysqli_fetch_array($selectQuery);
 
         if ($varPage == 'admin') {
 
-            if($check['if_exists']) {
+            if ($checkIf['exists']) {
 
-                $get = mysqli_fetch_array(
-                    mysqli_query(
-                        $_database,
-                        "SELECT `userID` FROM `" . PREFIX . "cups_gameaccounts`
-                            WHERE `value` = '" . $steam64_id. "'"
-                    )
+                $subSelectQuery = cup_query(
+                    "SELECT
+                            `userID`
+                        FROM `" . PREFIX . "cups_gameaccounts`
+                        WHERE `value` = '" . $steam64_id. "'",
+                    __FILE__
                 );
+
+                $get = mysqli_fetch_array($subSelectQuery);
 
                 $intern_url = 'admincenter.php?site=cup&amp;mod=gameaccounts&amp;action=log&amp;user_id=' . $get['userID'];
                 $returnArray['htmlData'] .= '<a href="' . $intern_url . '" class="list-group-item">&raquo; '.getnickname($get['userID']).'</a>';
@@ -317,6 +311,7 @@ try {
     $returnArray['status'] = TRUE;
 
 } catch (Exception $e) {
+    setLog('', $e->getMessage(), __FILE__, $e->getLine());
     $returnArray['message'][] = $e->getMessage();
 }
 

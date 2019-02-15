@@ -61,6 +61,7 @@ try {
     $returnArray['status'] = true;
 
 } catch (Exception $e) {
+    setLog('', $e->getMessage(), __FILE__, $e->getLine());
     $returnArray['message'][] = $e->getMessage();
 }
 

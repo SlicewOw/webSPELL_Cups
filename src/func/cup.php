@@ -4,6 +4,67 @@
  * General
  **/
 
+function cup_query($query, $file, $line = 0) {
+
+    global $_database;
+    global $_mysql_querys;
+    global $_language;
+
+    $_language->readModule('index', true);
+
+    if (stristr(str_replace(' ', '', $query), "unionselect") === false and
+        stristr(str_replace(' ', '', $query), "union(select") === false
+    ) {
+        $_mysql_querys[ ] = $query;
+        if (empty($query)) {
+            return false;
+        }
+
+        $result = $_database->query($query);
+
+        if (!$result) {
+            setLog($query, 'Query failed!', addslashes($file), $line);
+            throw new \Exception($_language->module['query_failed']);
+        }
+
+        return $result;
+
+    } else {
+        die();
+    }
+
+}
+
+function setLog($query, $message, $file, $line) {
+
+    global $_database;
+
+    if (!validate_int($line, true)) {
+        $line = 0;
+    }
+
+    $insertQuery = mysqli_query(
+        $_database,
+        "INSERT INTO `" . PREFIX . "cups_logs`
+            (
+                `query`,
+                `message`,
+                `date`,
+                `file`,
+                `line`
+            )
+            VALUES
+            (
+                '" . $query . "',
+                '" . $message . "',
+                " . time() . ",
+                '" . $file . "',
+                " . $line . "
+            )"
+    );
+
+}
+
 function setCupHitsByPage($cup_id, $page) {
 
     if (!validate_int($cup_id, true)) {

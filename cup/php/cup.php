@@ -15,11 +15,11 @@ try {
         if ($getAction != 'archive') {
             $baseWhereClauseArray[] = '`status` < 4';
         } else {
-            $baseWhereClauseArray[] = '`status` = 4';
+            $baseWhereClauseArray[] = '`status1` = 4';
         }
 
         if (!iscupadmin($userID)) {
-            $baseWhereClauseArray[] = '`admin_visible` = 0';
+            $baseWhereClauseArray[] = '`admin_visible1` = 0';
         }
 
         $filterByGameTag = (isset($_GET['game'])) ?
@@ -36,18 +36,14 @@ try {
          * Quickfilter
          */
 
-        $selectGamesQuery = mysqli_query(
-            $_database,
+        $selectGamesQuery = cup_query(
             "SELECT DISTINCT
                     `game`
                 FROM `" . PREFIX . "cups`
                 " . $whereClause . "
-                ORDER BY `status` ASC, `start_date` ASC"
+                ORDER BY `status` ASC, `start_date` ASC",
+                __FILE__
         );
-
-        if (!$selectGamesQuery) {
-            throw new \Exception($_language->module['query_select_failed']);
-        }
 
         $availableGames = array(
             'list' => array()
@@ -88,18 +84,14 @@ try {
         $whereClause = (validate_array($whereClauseArray, true)) ?
             'WHERE ' . implode(' AND ', $whereClauseArray) : '';
 
-        $ergebnis = mysqli_query(
-            $_database,
+        $ergebnis = cup_query(
             "SELECT
                     `cupID`
                 FROM `" . PREFIX . "cups`
                 " . $whereClause . "
-                ORDER BY `status` ASC, `start_date` ASC"
+                ORDER BY `status` ASC, `start_date` ASC",
+                __FILE__
         );
-
-        if (!$ergebnis) {
-            throw new \Exception($_language->module['query_select_failed']);
-        }
 
         if (mysqli_num_rows($ergebnis) > 0) {
 
