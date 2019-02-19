@@ -19,7 +19,7 @@ try {
         }
 
         if (!iscupadmin($userID)) {
-            $baseWhereClauseArray[] = '`admin_visible1` = 0';
+            $baseWhereClauseArray[] = '`admin_visible` = 0';
         }
 
         $filterByGameTag = (isset($_GET['game'])) ?
