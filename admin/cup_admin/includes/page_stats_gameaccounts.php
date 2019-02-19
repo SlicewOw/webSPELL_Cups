@@ -10,7 +10,7 @@ $selectQuery = cup_query(
 
 $getGameaccountCount = mysqli_num_rows($selectQuery);
 
-$gameacc_act_list = '<div class="list-group-item">Anzahl Gesamt<span class="pull-right grey">' . $getGameaccountCount . '</span></div>';
+$gameacc_act_list = '<div class="list-group-item">' . $_language->module['gameaccounts_total_active'] . '<span class="pull-right grey">' . $getGameaccountCount . '</span></div>';
 
 $info = cup_query(
     "SELECT
@@ -35,7 +35,7 @@ while($ds = mysqli_fetch_array($info)) {
 
         $gameaccChartRowArray[] = '[\'' . $game_short . '\', ' . $ds['anz'] . ']';
 
-        $gameacc_act_list .= '<a href="admincenter.php?site=cup&amp;mod=gameaccounts&amp;cat='.$ds['category'].'" class="list-group-item">';
+        $gameacc_act_list .= '<a href="admincenter.php?site=cup&amp;mod=gameaccounts&amp;cat=' . $ds['category'] . '" class="list-group-item">';
         $gameacc_act_list .= $gameArray['name'];
         $gameacc_act_list .= '<span class="pull-right grey">'.$ds['anz'].'</span>';
         $gameacc_act_list .= '</a>';
@@ -63,8 +63,8 @@ for ($x = 0; $x < 2; $x++) {
 }
 
 $gameaccCSGOValidateRows = '';
-$gameaccCSGOValidateRows .= '[\'nicht validiert\', '.$getCSGOVal[0].']';
-$gameaccCSGOValidateRows .= ', [\'validiert\', '.$getCSGOVal[1].']';
+$gameaccCSGOValidateRows .= '[\'' . $_language->module['not_validated'] . '\', '.$getCSGOVal[0].']';
+$gameaccCSGOValidateRows .= ', [\'' . $_language->module['validated'] . '\', '.$getCSGOVal[1].']';
 
 $selectQuery = cup_query(
     "SELECT
@@ -76,7 +76,7 @@ $selectQuery = cup_query(
 
 $getDeletedGameaccountCount = mysqli_num_rows($selectQuery);
 
-$gameacc_del_list = '<div class="list-group-item">Anzahl Gesamt<span class="pull-right grey">' . $getDeletedGameaccountCount . '</span></div>';
+$gameacc_del_list = '<div class="list-group-item">' . $_language->module['gameaccounts_total_deleted'] . '<span class="pull-right grey">' . $getDeletedGameaccountCount . '</span></div>';
 
 $info = cup_query(
     "SELECT
@@ -86,15 +86,15 @@ $info = cup_query(
         WHERE `active` = 0 AND `deleted` = 1
         GROUP BY `category`
         ORDER BY COUNT(`category`) DESC
-        LIMIT 0, ".($maxEntries - 1),
+        LIMIT 0, " . ($maxEntries - 1),
     __FILE__
 );
 
 while($ds = mysqli_fetch_array($info)) {
 
-    $gameacc_del_list .= '<a href="admincenter.php?site=cup&amp;mod=gameaccounts&amp;cat='.$ds['category'].'" class="list-group-item">';
+    $gameacc_del_list .= '<a href="admincenter.php?site=cup&amp;mod=gameaccounts&amp;cat=' . $ds['category'] . '" class="list-group-item">';
     $gameacc_del_list .= getgamename($ds['category']);
-    $gameacc_del_list .= '<span class="pull-right grey">'.$ds['anz'].'</span>';
+    $gameacc_del_list .= '<span class="pull-right grey">' . $ds['anz'] . '</span>';
     $gameacc_del_list .= '</a>';
 
 }
@@ -113,9 +113,15 @@ $selectQuery = cup_query(
 
 $getExtrema = mysqli_fetch_array($selectQuery);
 
-$gameacc_csgo_list .= '<div class="list-group-item">Mittelwert &Oslash;<span class="pull-right grey">'.(int)$getExtrema['mean'].' h</span></div>';
-$gameacc_csgo_list .= '<div class="list-group-item">Minimum <span class="pull-right grey">'.(int)$getExtrema['minimum'].' h</span></div>';
-$gameacc_csgo_list .= '<div class="list-group-item">Maximum <span class="pull-right grey">'.(int)$getExtrema['maximum'].' h</span></div>';
+$statsArray = array(
+    'mean',
+    'minimum',
+    'maximum'
+);
+
+foreach($statsArray as $stats) {
+    $gameacc_csgo_list .= '<div class="list-group-item">' . $_language->module[$stats] . '<span class="pull-right grey">' . (int)$getExtrema[$stats] . ' h</span></div>';
+}
 
 $selectQuery = cup_query(
     "SELECT
@@ -127,7 +133,7 @@ $selectQuery = cup_query(
 
 $getExtrema = mysqli_fetch_array($selectQuery);
 
-$gameacc_csgo_list .= '<div class="list-group-item">Accounts mit VAC-Bann <span class="pull-right grey">'.$getExtrema['anz'].'</span></div>';
+$gameacc_csgo_list .= '<div class="list-group-item">' . $_language->module['gameaccounts_total_vac'] . '<span class="pull-right grey">' . $getExtrema['anz'] . '</span></div>';
 
 $selectQuery = cup_query(
     "SELECT
@@ -139,7 +145,7 @@ $selectQuery = cup_query(
 
 $getExtrema = mysqli_fetch_array($selectQuery);
 
-$gameacc_csgo_list .= '<div class="list-group-item">0 Stunden <span class="pull-right grey">'.(int)$getExtrema['anz'].'</span></div>';
+$gameacc_csgo_list .= '<div class="list-group-item">0 ' . $_language->module['hours'] . ' <span class="pull-right grey">'.(int)$getExtrema['anz'].'</span></div>';
 
 $selectQuery = cup_query(
     "SELECT
@@ -151,7 +157,7 @@ $selectQuery = cup_query(
 
 $getExtrema = mysqli_fetch_array($selectQuery);
 
-$gameacc_csgo_list .= '<div class="list-group-item">Smurf Accounts <span class="pull-right grey">'.(int)$getExtrema['anz'].'</span></div>';
+$gameacc_csgo_list .= '<div class="list-group-item">' . $_language->module['smurf'] . '<span class="pull-right grey">' . (int)$getExtrema['anz'] . '</span></div>';
 
 /*
 * CSGO ACC LIST
@@ -187,7 +193,7 @@ for ($x = 0; $x < 2; $x++) {
 
         $infoText = $getExtrema['nickname'].' <span class="pull-right grey">'.$getExtrema['hours_played'].'h - '.$getExtrema['value'];
         if (!$getExtrema['isActive']) {
-            $infoText .= ' - gel&ouml;scht';
+            $infoText .= ' - ' . $_language->module['deleted'];
         }
         $infoText .= '</span>';
 

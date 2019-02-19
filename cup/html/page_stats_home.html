@@ -21,6 +21,12 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="panel panel-default">
+                    <div class="panel-heading">Cups</div>
+                    <div class="list-group">
+                        $cups_detailed_stats_list
+                    </div>
+                </div>
+                <div class="panel panel-default">
                     <div class="panel-heading">Cup Hits</div>
                     <div class="list-group">$cuphit_list</div>
                 </div>
@@ -33,7 +39,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Cup Teilnehmer</div>
+                    <div class="panel-heading">Cup %participants%</div>
                     <div class="list-group">$cupteam_list</div>
                 </div>
             </div>
@@ -42,15 +48,23 @@
     </div>
     <div role="tabpanel" class="tab-pane" id="teams">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">Teams</div>
+                    <div class="list-group">
+                        $teams_detailed_stats_list
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Teams (%hits%)</div>
                     <div class="list-group">$teams_list</div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Team Mitglieder</div>
+                    <div class="panel-heading">Team %members%</div>
                     <div class="list-group">$team_member_list</div>
                 </div>
             </div>
@@ -60,19 +74,25 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Match Hits</div>
+                    <div class="panel-heading">Matches</div>
+                    <div class="list-group">
+                        $match_detailed_stats_list
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Match %hits%</div>
                     <div class="list-group">$matchhit_list</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Anzahl Matches (Team)</div>
+                    <div class="panel-heading">%matches_count% (Team)</div>
                     <div class="list-group">$matchanz_list_team</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Anzahl Matches (Player)</div>
+                    <div class="panel-heading">%matches_count% (Player)</div>
                     <div class="list-group">$matchanz_list_player</div>
                 </div>
             </div>
@@ -89,7 +109,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Gameaccounts (gel&ouml;scht)</div>
+                    <div class="panel-heading">Gameaccounts %deleted%</div>
                     <div class="list-group">$gameacc_del_list</div>
                 </div>
             </div>
@@ -114,19 +134,19 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Supportticket (bearbeitet)</div>
+                    <div class="panel-heading">%support% (%in_progress%)</div>
                     <div class="list-group">$ticket_adm_list</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Supportticket (er&ouml;ffnet)</div>
+                    <div class="panel-heading">%support% (%opened%)</div>
                     <div class="list-group">$ticket_usr_list</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Supportticket (Kategorie)</div>
+                    <div class="panel-heading">%support% (%category%)</div>
                     <div class="list-group">$ticket_cat_list</div>
                 </div>
             </div>
@@ -134,13 +154,17 @@
     </div>
 </div>
 <script type="text/javascript">
-google.charts.load(
-    'current',
-    {
-        'packages': ['corechart', 'bar']
-    }
-);
-google.charts.setOnLoadCallback(drawChart);
+$(document).ready(function () {
+
+    google.charts.load(
+        'current',
+        {
+            'packages': ['corechart', 'bar']
+        }
+    );
+    google.charts.setOnLoadCallback(drawChart);
+
+});
 
 function drawChart() {
 

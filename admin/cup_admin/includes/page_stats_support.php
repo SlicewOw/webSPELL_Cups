@@ -9,7 +9,7 @@ $selectQuery = cup_query(
 
 $totalTickets = mysqli_num_rows($selectQuery);
 
-$ticket_adm_list = '<div class="list-group-item">Anzahl Gesamt<span class="pull-right grey">' . $totalTickets . ' Tickets</span></div>';
+$ticket_adm_list = '<div class="list-group-item">' . $_language->module['total_count'] . '<span class="pull-right grey">' . $totalTickets . ' Tickets</span></div>';
 
 $info = cup_query(
     "SELECT
@@ -63,7 +63,7 @@ $info = cup_query(
         FROM `" . PREFIX . "cups_supporttickets`
         GROUP BY `categoryID`
         ORDER BY COUNT(`categoryID`) DESC
-        LIMIT 0, ".$maxEntries,
+        LIMIT 0, " . $maxEntries,
     __FILE__
 );
 
@@ -74,7 +74,7 @@ while ($ds = mysqli_fetch_array($info)) {
 
         $ticket_cat_list .= '<div class="list-group-item">';
         $ticket_cat_list .= $ticketCategory;
-        $ticket_cat_list .= '<span class="pull-right grey">'.$ds['anz'].' ('.(int)(($ds['anz'] / $totalTickets) * 100).'%)</span>';
+        $ticket_cat_list .= '<span class="pull-right grey">' . $ds['anz'] . ' (' . (int)(($ds['anz'] / $totalTickets) * 100) . '%)</span>';
         $ticket_cat_list .= '</div>';
 
     }

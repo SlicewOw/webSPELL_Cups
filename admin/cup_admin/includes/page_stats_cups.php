@@ -1,5 +1,38 @@
 <?php
 
+/**
+ * Cup statistics in general
+ */
+
+$cups_detailed_stats_list = '';
+
+$selectQuery = cup_query(
+    "SELECT
+          COUNT(*) AS `cups`
+        FROM `" . PREFIX . "cups`",
+    __FILE__
+);
+
+$getCountOf = mysqli_fetch_array($selectQuery);
+
+$cups_detailed_stats_list .= '<div class="list-group-item">' . $_language->module['total_count'] . '<span class="pull-right grey">' . $getCountOf['cups'] . '</span></div>';
+
+$selectQuery = cup_query(
+    "SELECT
+          COUNT(*) AS `closed_cups`
+        FROM `" . PREFIX . "cups`
+        WHERE `status` = 4",
+    __FILE__
+);
+
+$getCountOf = mysqli_fetch_array($selectQuery);
+
+$cups_detailed_stats_list .= '<div class="list-group-item">' . $_language->module['closed_cups'] . '<span class="pull-right grey">' . $getCountOf['closed_cups'] . '</span></div>';
+
+/**
+ * Cup match statis in general
+ */
+
 $cupArray = array(
     'list' => array(),
     'details' => array()
@@ -14,17 +47,18 @@ $selectQuery = cup_query(
 
 $checkIf = mysqli_fetch_array($selectQuery);
 
-$cupChartHits = '';
+$cupChartHitsArray = array();
 
 if ($checkIf['exist'] > 0) {
 
-    $info = mysqli_query(
-        $_database,
-        "SELECT * FROM ".PREFIX."cups 
-            ORDER BY cupID ASC"
+    $info = cup_query(
+        "SELECT * FROM `" . PREFIX . "cups`
+            WHERE `admin_visible` = 0
+            ORDER BY `cupID` ASC",
+        __FILE__
     );
 
-    while($ds = mysqli_fetch_array($info)) {
+    while ($ds = mysqli_fetch_array($info)) {
 
         $cup_id = $ds['cupID'];
 
@@ -38,17 +72,24 @@ if ($checkIf['exist'] > 0) {
         $cupArray['list'][$ds['cupID']] =  $hits;
         $cupArray['details'][$ds['cupID']] = $ds['name'];
 
-        if(!$ds['admin_visible']) {
-            $cupChartHits .= (!empty($cupChartHits)) ? 
-                ', [\''.$ds['name'].'\', '.$hits.', '.$ds['hits'].', '.$ds['hits_teams'].', '.$ds['hits_groups'].', '.$ds['hits_bracket'].', '.$ds['hits_rules'].']' :
-                '[\''.$ds['name'].'\', '.$hits.', '.$ds['hits'].', '.$ds['hits_teams'].', '.$ds['hits_groups'].', '.$ds['hits_bracket'].', '.$ds['hits_rules'].']';
-        }
+        $chartValueArray = array();
+        $chartValueArray[] = '\''.$ds['name'].'\'';
+        $chartValueArray[] = $hits;
+        $chartValueArray[] = $ds['hits'];
+        $chartValueArray[] = $ds['hits_teams'];
+        $chartValueArray[] = $ds['hits_groups'];
+        $chartValueArray[] = $ds['hits_bracket'];
+        $chartValueArray[] = $ds['hits_rules'];
+
+        $cupChartHitsArray[] = '[' . implode(', ', $chartValueArray) . ']';
 
     }
 
     arsort($cupArray['list']);
 
 }
+
+$cupChartHits = implode(', ', $cupChartHitsArray);
 
 $cuphit_list = '';
 $arrayKeys = array_keys($cupArray['list']);
