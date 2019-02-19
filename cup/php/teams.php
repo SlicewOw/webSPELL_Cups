@@ -78,5 +78,5 @@ try {
     }
 
 } catch (Exception $e) {
-    echo showError($e->getMessage, true);
+    echo showError($e->getMessage(), true);
 }
