@@ -15,7 +15,7 @@ try {
         if ($getAction != 'archive') {
             $baseWhereClauseArray[] = '`status` < 4';
         } else {
-            $baseWhereClauseArray[] = '`status1` = 4';
+            $baseWhereClauseArray[] = '`status` = 4';
         }
 
         if (!iscupadmin($userID)) {
