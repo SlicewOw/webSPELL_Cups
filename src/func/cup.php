@@ -494,7 +494,8 @@ function getsponsor($sponsor_id, $cat = '') {
     if (empty($cat)) {
         return $returnArray;
     } else {
-        return $returnArray[$cat];
+        return (isset($returnArray[$cat])) ?
+            $returnArray[$cat] : '';
     }
 
 }
@@ -959,24 +960,22 @@ function getAge($user_id) {
 
 function getGame($game_id, $cat = '') {
 
-    global $_database, $image_url;
-
     if (validate_int($game_id)) {
-        $whereClause = '`gameID` = ' . $game_id;
+        $whereClause = 'g.`gameID` = ' . $game_id;
     } else {
-        $whereClause = '`tag` = \'' . getinput($game_id) . '\'';
+        $whereClause = 'g.`tag` = \'' . getinput($game_id) . '\'';
     }
 
-    $get = mysqli_fetch_array(
-        mysqli_query(
-            $_database,
-            "SELECT
-                    COUNT(gameID) AS `exist`,
-                    a.*
-                FROM `" . PREFIX . "games` a
-                WHERE " . $whereClause
-        )
+    $selectQuery = cup_query(
+        "SELECT
+                COUNT(`gameID`) AS `exist`,
+                g.*
+            FROM `" . PREFIX . "games` g
+            WHERE " . $whereClause,
+        __FILE__
     );
+
+    $get = mysqli_fetch_array($selectQuery);
 
     if ($get['exist'] != 1) {
         return (empty($cat)) ? array() : '';
@@ -993,7 +992,8 @@ function getGame($game_id, $cat = '') {
     if (empty($cat) || ($cat == 'all')) {
         return $returnArray;
     } else {
-        return $returnArray[$cat];
+        return (isset($returnArray[$cat])) ?
+            $returnArray[$cat] : '';
     }
 
 }
@@ -3515,24 +3515,33 @@ function getSupportTemplatesAsOptions($select_template = '') {
 
 /* Awards */
 function getawardcat($award_id, $cat = '') {
-    global $_database;
-    $get = mysqli_fetch_array(
-        mysqli_query($_database, "SELECT * FROM `".PREFIX."cups_awards_category` WHERE awardID = '".$award_id."'")
+
+    $selectQuery = cup_query(
+        $_database,
+        "SELECT * FROM `" . PREFIX . "cups_awards_category`
+            WHERE `awardID` = " . $award_id,
+        __FILE__
     );
+
+    $get = mysqli_fetch_array($selectQuery);
+
     $returnArray = array(
-        'id'			=> $get['awardID'],
-        'name'			=> $get['name'],
-        'icon'			=> $get['icon'],
-        'platzierung'	=> $get['platzierung'],
-        'anz_matches'	=> $get['anz_matches'],
-        'anz_cups'		=> $get['anz_cups'],
-        'description'	=> $get['description']
+        'id' => $get['awardID'],
+        'name' => $get['name'],
+        'icon' => $get['icon'],
+        'platzierung' => $get['platzierung'],
+        'anz_matches' => $get['anz_matches'],
+        'anz_cups' => $get['anz_cups'],
+        'description' => $get['description']
     );
-    if(!empty($cat) && isset($returnArray[$cat])) {
-        return $returnArray[$cat];
-    } else {
+
+    if (empty($cat) || ($cat == 'all')) {
         return $returnArray;
+    } else {
+        return (isset($returnArray[$cat])) ?
+            $returnArray[$cat] : '';
     }
+
 }
 
 /* Cup Options */
