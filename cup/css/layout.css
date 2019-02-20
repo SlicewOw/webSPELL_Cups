@@ -72,13 +72,6 @@ body {
     opacity: 1;
 }
 
-/**
- * Cup Matches
- */
-.cup-match-score {
-    max-width: 120px;
-}
-
 /* Normale Ansicht */
 @media (min-device-width: 481px) {
 
@@ -275,18 +268,6 @@ body {
 
 }
 
-.hof_image_container {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    margin: 10px 0;
-}
-
-.hof_image_container > a > img {
-    max-height: 140px;
-    max-width: 140px;
-}
-
 /* Global Socials */
 .globalSocialsContainer {
     background: rgba(255,255,255,0.8);
@@ -316,15 +297,17 @@ body {
 }
 
 /**
- * Custom Bootstrap
+ * Footer
  */
-.input-group > span.form-control {
-    height: 39px;
-    line-height: 25px;
+#footer_navigation > .list-group {
+    margin: 0;
 }
-.panel-danger > .panel-footer {
-    background: rgba(169, 68, 66, 0.4);
+#footer_navigation > .list-group > .list-group-item {
+    float: left;
+    background: none;
+    padding: 0;
+    border: none;
 }
-.panel > .table-responsive > .table > tbody > .alert-info {
-    background-color: #d9edf7;
+#footer_navigation > .list-group > .list-group-item > a > img {
+    max-height: 106px;
 }

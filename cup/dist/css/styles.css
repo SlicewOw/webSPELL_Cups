@@ -835,6 +835,22 @@ input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; m
     font-size: 12px;
 }
 
+/**
+ * Hall of Fame
+ */
+
+.hof_image_container {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.hof_image_container > a > img {
+    max-height: 140px;
+    max-width: 140px;
+}
+
 /* CUP */
 .cup_container						{ background: #f3f3f3; width: 100%; height: auto; margin: 0 0 10px 0; padding: 1%; border-radius: 5px; }
 .cup_container ul					{ width: 95%; height: auto; margin: 0 0 0 5%; padding: 0; }
@@ -864,6 +880,13 @@ input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; m
 .cup-home-quickfilter > a > img {
     width: 16px;
     height: 16px;
+}
+
+/**
+ * Cup Matches
+ */
+.cup-match-score {
+    max-width: 120px;
 }
 
 /* BRACKETS */
@@ -1109,338 +1132,6 @@ li.cup_admin_submenu_list a			{ width: 95%; height: 30px; padding: 0 0 0 5%; dis
     border: none;
 }
 
-/**
- * Footer
- */
-#footer_navigation > .list-group {
-    margin: 0;
-}
-#footer_navigation > .list-group > .list-group-item {
-    float: left;
-    background: none;
-    padding: 0;
-    border: none;
-}
-#footer_navigation > .list-group > .list-group-item > a > img {
-    max-height: 106px;
-}
-
-textarea {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    min-height: 200px;
-}
-
-/* CSS Document written by SlicewOw */
-html,
-body {
-    background: #000000;
-    height: 100%;
-}
-.td1 {
-    background: #FFF;
-}
-.td2 {
-    background: #e9e9e9;
-}
-
-/* BACKGROUND */
-.red_border {
-    border: #FF0000 1px solid;
-}
-.orange_border {
-    border: #FFA500 1px solid;
-}
-.green_border {
-    border: #00FF00 1px solid;
-}
-.black_border {
-    border: #000000 1px solid;
-}
-.grey_border {
-    border: #CCCCCC 1px solid;
-}
-
-/* TRENNLINIEN & STRICHE */
-.linie_1 {
-    background: #2c2e30;
-    width: 100%;
-    height: 3px;
-}
-.linie_2 {
-    background: #556B2F;
-    width: 100%;
-    height: 3px;
-}
-.linie_3 {
-    background: #556B2F;
-    width: 100%;
-    height: 1px;
-}
-
-/* HOME */
-.teamStyle {
-    margin: 20px 0 0 0;
-    padding: 20px 0 0 0;
-    display: block;
-}
-
-#content_top_login > a.flag {
-    margin: 0 5px 0 0;
-}
-#content_top_login > a.flag:last-child {
-    margin: 0;
-}
-#content_top_login > a.flag > img {
-    opacity: 0.3;
-}
-#content_top_login > a.flag.active > img {
-    opacity: 1;
-}
-
-/**
- * Cup Matches
- */
-.cup-match-score {
-    max-width: 120px;
-}
-
-/* Normale Ansicht */
-@media (min-device-width: 481px) {
-
-    /* Global Socials */
-    .globalSocials {
-        position: fixed;
-        left: 0;
-        top: 360px;
-    }
-
-    /* PAGE */
-    #page {
-        width: 100%;
-        height: auto;
-    }
-    #header {
-        width: 1000px;
-        height: 60px;
-        margin: 0 auto;
-    }
-
-    /* CONTENT */
-    #wrapper {
-        background: #969696;
-        width: 100%;
-        height: auto;
-        padding: 0 0 10px 0;
-    }
-    #content_wrapper {
-        width: 1000px;
-        height: auto;
-        min-height: 500px;
-        margin: 0 auto;
-        padding: 0 0 10px 0;
-    }
-    #content_top {
-        width: 1000px;
-        height: 40px;
-    }
-    #content_top_where {
-        float: left;
-        width: 50%;
-        height: 40px;
-        overflow: hidden;
-    }
-    #content_top_login {
-        float: left;
-        width: 50%;
-        height: 40px;
-    }
-    #content {
-        background: #FFFFFF;
-        width: 1000px;
-        height: auto;
-        min-height: 276px;
-        padding: 10px;
-        border-radius: 6px;
-    }
-
-    /* FOOTER */
-    #footer_navigation_body {
-        background: #BCEE68;
-        width: 100%;
-        height: 120px;
-    }
-    #footer_navigation {
-        width: 1000px;
-        height: 100px;
-        margin: 0 auto;
-        padding: 10px 0;
-    }
-    #footer_navigation > a {
-        float: left;
-        width: 200px;
-        height: 100px;
-        margin: 0 25px;
-        padding: 0;
-        list-style: none;
-    }
-    #footer_navigation > a > img {
-        max-width: 200px;
-        max-height: 100px;
-    }
-
-    /* COPYRIGHT */
-    #copyright {
-        background: #2E8B57;
-        width: 100%;
-        height: auto;
-        min-height: 40px;
-        margin: 0 auto;
-    }
-
-}
-
-/* Smartphone */
-@media (max-device-width: 1100px) {
-
-    /* Global Socials */
-    .globalSocials {
-        display: none;
-    }
-
-}
-
-/* Smartphone */
-@media (max-device-width: 480px) {
-
-    /* Global Socials */
-    .globalSocials {
-        display: none;
-    }
-
-    /* PAGE */
-    #page {
-        width: 100%;
-        height: auto;
-    }
-    #header {
-        width: 100%;
-        height: 100px;
-        margin: 0 auto;
-    }
-
-    /* CONTENT */
-    #wrapper {
-        background: #969696;
-        width: 100%;
-        height: auto;
-        padding: 0 0 10px 0;
-    }
-    #content_wrapper {
-        width: 100%;
-        height: auto;
-        min-height: 100px;
-        margin: 0 auto;
-        padding: 0 0 10px 0;
-    }
-    #content_top {
-        width: 100%;
-        height: auto;
-        min-height: 40px;
-    }
-    #content_top_where {
-        width: 80%;
-        height: auto;
-        min-height: 40px;
-        margin: 0 10%;
-    }
-    #content_top_login {
-        width: 80%;
-        height: auto;
-        min-height: 40px;
-        margin: 0 10%;
-    }
-    #content {
-        background: #FFFFFF;
-        width: 100%;
-        height: auto;
-        min-height: 276px;
-        padding: 10px;
-        border-radius: 6px;
-    }
-
-    /* FOOTER */
-    #footer_navigation {
-        background: #1E90FF;
-        width: 100%;
-        height: auto;
-        min-height: 120px;
-    }
-    #footer_navigation ul {
-        width: 100%;
-        height: auto;
-        margin: 0;
-        padding: 10px 0;
-    }
-    #footer_navigation ul li {
-        width: 100%;
-        height: 100px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    /* COPYRIGHT */
-    #copyright {
-        background: #87CEFA;
-        width: 100%;
-        height: auto;
-        min-height: 40px;
-        padding: 0 5%;
-    }
-
-}
-
-.hof_image_container {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    margin: 10px 0;
-}
-
-.hof_image_container > a > img {
-    max-height: 140px;
-    max-width: 140px;
-}
-
-/* Global Socials */
-.globalSocialsContainer {
-    background: rgba(255,255,255,0.8);
-    width: 40px;
-    height: auto;
-    padding: 10px 10px 10px 5px;
-}
-.globalSocialsContainer > a {
-    margin: 0 0 5px 0;
-}
-.globalSocialsContainer > a:last-of-type {
-    margin: 0px;
-}
-
-/* STATUS */
-.status-ok {
-    background: rgba(0, 255, 0, 0.2);
-    border: 1px #00FF00 solid;
-}
-.status-error {
-    background: rgba(255, 0, 0, 0.2);
-    border: 1px #FF0000 solid;
-}
-.status-disable {
-    background: rgba(19, 19, 19, 0.2);
-    border: 1px rgba(19, 19, 19, 0.5) solid;
-}
 
 /**
  * Custom Bootstrap

@@ -26,10 +26,15 @@ module.exports = function (grunt) {
                     'cup/css/pnotify.custom.min.css',
                     'cup/css/cup.css',
                     'cup/css/pages.css',
-                    'cup/css/layout.css',
                     'cup/css/font.css'
                 ],
                 dest: 'cup/dist/css/styles.css'
+            },
+            css_layout: {
+                src: [
+                    'cup/css/layout.css'
+                ],
+                dest: 'cup/dist/css/layout.css'
             }
         },
         uglify: {
@@ -46,6 +51,9 @@ module.exports = function (grunt) {
                 files: {
                     'cup/dist/css/styles.min.css': [
                         'cup/dist/css/styles.css'
+                    ],
+                    'cup/dist/css/layout.min.css': [
+                        'cup/dist/css/layout.css'
                     ]
                 }
             }
@@ -60,10 +68,24 @@ module.exports = function (grunt) {
             },
             css_static: {
                 files: [
-                    'cup/css/**/*.css'
+                    'cup/css/bootstrap-select.css',
+                    'cup/css/flipclock.css',
+                    'cup/css/pnotify.custom.min.css',
+                    'cup/css/cup.css',
+                    'cup/css/pages.css',
+                    'cup/css/font.css'
                 ],
                 tasks: [
                     'concat:css_main',
+                    'cssmin:css'
+                ]
+            },
+            css_layout: {
+                files: [
+                    'cup/css/layout.css'
+                ],
+                tasks: [
+                    'concat:css_layout',
                     'cssmin:css'
                 ]
             }

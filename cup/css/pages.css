@@ -85,6 +85,22 @@ input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; m
     font-size: 12px;
 }
 
+/**
+ * Hall of Fame
+ */
+
+.hof_image_container {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.hof_image_container > a > img {
+    max-height: 140px;
+    max-width: 140px;
+}
+
 /* CUP */
 .cup_container						{ background: #f3f3f3; width: 100%; height: auto; margin: 0 0 10px 0; padding: 1%; border-radius: 5px; }
 .cup_container ul					{ width: 95%; height: auto; margin: 0 0 0 5%; padding: 0; }
@@ -114,6 +130,13 @@ input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; m
 .cup-home-quickfilter > a > img {
     width: 16px;
     height: 16px;
+}
+
+/**
+ * Cup Matches
+ */
+.cup-match-score {
+    max-width: 120px;
 }
 
 /* BRACKETS */
@@ -359,18 +382,17 @@ li.cup_admin_submenu_list a			{ width: 95%; height: 30px; padding: 0 0 0 5%; dis
     border: none;
 }
 
+
 /**
- * Footer
+ * Custom Bootstrap
  */
-#footer_navigation > .list-group {
-    margin: 0;
+.input-group > span.form-control {
+    height: 39px;
+    line-height: 25px;
 }
-#footer_navigation > .list-group > .list-group-item {
-    float: left;
-    background: none;
-    padding: 0;
-    border: none;
+.panel-danger > .panel-footer {
+    background: rgba(169, 68, 66, 0.4);
 }
-#footer_navigation > .list-group > .list-group-item > a > img {
-    max-height: 106px;
+.panel > .table-responsive > .table > tbody > .alert-info {
+    background-color: #d9edf7;
 }

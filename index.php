@@ -45,7 +45,12 @@ if (!$userID) {
     <link href="./css/styles.css.php" rel="styleSheet" type="text/css">
     <link href="./css/button.css.php" rel="styleSheet" type="text/css">
     <link href="./_stylesheet.css" rel="stylesheet">
+
+    <!-- Important CSS file related to Cup-Addon -->
     <link href="./cup/dist/css/styles.min.css" rel="stylesheet">
+
+    <!-- (optional!) Stylesheets related to Cup-Addon -->
+    <link href="./cup/dist/css/layout.min.css" rel="stylesheet">
 
     <?php
     foreach ($components['js'] as $component) {
