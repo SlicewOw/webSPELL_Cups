@@ -19,13 +19,13 @@ try {
         (int)$_GET['id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['wrong_cup_id']);
+        throw new \Exception($_language->module['unknown_cup_id']);
     }
 
     $cupArray = getcup($cup_id);
 
     if (!validate_array($cupArray)) {
-        throw new \Exception($_language->module['no_cup']);
+        throw new \Exception($_language->module['unknown_cup_id']);
     }
 
     if (!isset($cupArray['id']) || ($cupArray['id'] != $cup_id)) {
@@ -90,8 +90,7 @@ try {
                     throw new \Exception($_language->module['cup_join_error3']);
                 }
 
-                $saveQuery = mysqli_query(
-                    $_database,
+                $saveQuery = cup_query(
                     "INSERT INTO `" . PREFIX . "cups_teilnehmer`
                         (
                             `cupID`,
@@ -103,12 +102,9 @@ try {
                             " . $cup_id . ",
                             " . $team_id . ",
                             " . time() . "
-                        )"
+                        )",
+                    __FILE__
                 );
-
-                if (!$saveQuery) {
-                    throw new \Exception($_language->module['query_insert_failed']);
-                }
 
                 $status = 0;
                 if ($mode == '1on1') {
@@ -127,17 +123,13 @@ try {
                     // Team Log
                     setCupTeamLog($team_id, $teamname, 'cup_join_' . $cup_id);
 
-                    $query = mysqli_query(
-                        $_database,
+                    $query = cup_query(
                         "SELECT
                                 `userID`
                             FROM `" . PREFIX . "cups_teams_member`
-                            WHERE `teamID` = " . $team_id . " AND `active` = 1"
+                            WHERE `teamID` = " . $team_id . " AND `active` = 1",
+                        __FILE__
                     );
-
-                    if (!$query) {
-                        throw new \Exception($_language->module['query_select_failed']);
-                    }
 
                     while ($get = mysqli_fetch_array($query)) {
 
@@ -180,9 +172,19 @@ try {
 
         if ($getAction == 'teamadd' || $getAction == 'playeradd') {
 
-            //
-            // add team
-            // (admin)
+            $registeredParticipantArray = array();
+
+            $selectParticipantsQuery = cup_query(
+                "SELECT
+                        `teamID`
+                    FROM `" . PREFIX . "cups_teilnehmer`
+                    WHERE `cupID` = " . $cup_id,
+                __FILE__
+            );
+
+            while ($get = mysqli_fetch_array($selectParticipantsQuery)) {
+                $registeredParticipantArray[] = $get['teamID'];
+            }
 
             $teams = '';
 
@@ -191,8 +193,18 @@ try {
                 //
                 // Userlist (1on1)
 
-                $query = mysqli_query(
-                    $_database,
+                $whereClauseArray = array();
+                $whereClauseArray[] = 'a.`category` = \'' . $cupArray['game'] . '\'';
+                $whereClauseArray[] = 'a.`active` = 1';
+                $whereClauseArray[] = 'a.`deleted` = 0';
+
+                if (validate_array($registeredParticipantArray, true)) {
+                    $whereClauseArray[] = 'b.`userID` NOT IN (' . implode(', ', $registeredParticipantArray) . ')';
+                }
+
+                $whereClause = implode(' AND ', $whereClauseArray);
+
+                $query = cup_query(
                     "SELECT
                             a.`userID` AS `user_id`,
                             a.`gameaccID` AS `gameaccount_id`,
@@ -200,13 +212,10 @@ try {
                             b.`nickname` AS `nickname`
                         FROM `" . PREFIX . "cups_gameaccounts` a
                         JOIN `" . PREFIX . "user` b ON a.`userID` = b.`userID`
-                        WHERE a.`category` = '" . $cupArray['game'] . "' AND a.`active` = 1 AND a.`deleted` = 0
-                        ORDER BY b.`nickname` ASC"
+                        WHERE " .$whereClause . "
+                        ORDER BY b.`nickname` ASC",
+                    __FILE__
                 );
-
-                if (!$query) {
-                    throw new \Exception($_language->module['query_select_failed']);
-                }
 
                 while ($db = mysqli_fetch_array($query)) {
 
@@ -220,21 +229,26 @@ try {
 
             } else {
 
+                $whereClauseArray = array();
+                $whereClauseArray[] = '`deleted` = 0';
+
+                if (validate_array($registeredParticipantArray, true)) {
+                    $whereClauseArray[] = '`teamID` NOT IN (' . implode(', ', $registeredParticipantArray) . ')';
+                }
+
+                $whereClause = implode(' AND ', $whereClauseArray);
+
                 //
                 // Team List
-                $info = mysqli_query(
-                    $_database,
+                $info = cup_query(
                     "SELECT
                             `teamID`,
                             `name`
                         FROM `" . PREFIX . "cups_teams`
-                        WHERE `deleted` = 0
-                        ORDER BY `name` ASC"
+                        WHERE " . $whereClause . "
+                        ORDER BY `name` ASC",
+                    __FILE__
                 );
-
-                if (!$info) {
-                    throw new \Exception($_language->module['query_select_failed']);
-                }
 
                 while ($db = mysqli_fetch_array($info)) {
 
