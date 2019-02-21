@@ -35,16 +35,12 @@ if (validate_array($_POST, true)) {
 
             $insertValue = implode(', ', $insertValueArray);
 
-            $query = mysqli_query(
-                $_database,
+            $query = cup_query(
                 "UPDATE `" . PREFIX . "cups_matches_playoff`
                     SET " . $insertValue . "
-                    WHERE `matchID` = " . $match_id
+                    WHERE `matchID` = " . $match_id,
+                __FILE__
             );
-
-            if (!$query) {
-                throw new \Exception('cups_matches_playoff_query_update_failed');
-            }
 
             $_SESSION['successArray'][] = $_language->module['admin_match_reset'];
 
@@ -60,17 +56,13 @@ if (validate_array($_POST, true)) {
 
             //
             // Map Array speichern
-            $query = mysqli_query(
-                $_database,
+            $query = cup_query(
                 "UPDATE `" . PREFIX . "cups_matches_playoff`
                     SET `mapvote` = 0,
                         `maps` = '" . serialize($mapsArray) . "'
-                    WHERE `matchID` = " . $match_id
+                    WHERE `matchID` = " . $match_id,
+                __FILE__
             );
-
-            if (!$query) {
-                throw new \Exception('cups_matches_playoff_query_update_failed');
-            }
 
             $_SESSION['successArray'][] = $_language->module['admin_map_reset'];
 
@@ -139,11 +131,11 @@ if (validate_array($_POST, true)) {
 
                 $setValues = implode(', ', $setValueArray);
 
-                $updateQuery = mysqli_query(
-                    $_database,
+                $updateQuery = cup_query(
                     "UPDATE `" . PREFIX . "cups_matches_playoff`
                         SET " . $setValues . "
-                        WHERE `matchID` = " . $match_id
+                        WHERE `matchID` = " . $match_id,
+                    __FILE__
                 );
 
                 if (!$updateQuery) {
@@ -185,16 +177,12 @@ if (validate_array($_POST, true)) {
 
                     //
                     // Winner Match
-                    $query = mysqli_query(
-                        $_database,
+                    $query = cup_query(
                         "UPDATE `" . PREFIX . "cups_matches_playoff`
                             SET " . $setValue . "
-                            WHERE " . $winnerBracketWhereClause
+                            WHERE " . $winnerBracketWhereClause,
+                        __FILE__
                     );
-
-                    if (!$query) {
-                        throw new \Exception('cups_matches_playoff_query_update_failed');
-                    }
 
                     //
                     // Spiel um Platz 3
@@ -215,16 +203,12 @@ if (validate_array($_POST, true)) {
 
                         //
                         // Loser Match
-                        $query = mysqli_query(
-                            $_database,
+                        $query = cup_query(
                             "UPDATE `".PREFIX."cups_matches_playoff`
                                 SET " . $setValue . "
-                                WHERE " . $loserBracketWhereClause
+                                WHERE " . $loserBracketWhereClause,
+                            __FILE__
                         );
-
-                        if (!$query) {
-                            throw new \Exception('cups_matches_playoff_query_update_failed');
-                        }
 
                     }
 
@@ -239,21 +223,26 @@ if (validate_array($_POST, true)) {
                 // 3: kein Sieger (freilos)
                 $adminPanel = (int)$_POST['admin_defwin'];
 
+                $match_format = $matchArray['format'];
+                $mapsToBePlayed = substr($match_format, 2, strlen($match_format));
+
+                $freeWinScore = ceil($mapsToBePlayed / 2);
+
                 // Current Game
-                $team1_score = ($adminPanel == 1) ? 16 : 0;
-                $team2_score = ($adminPanel == 2) ? 16 : 0;
-                $query = mysqli_query(
-                    $_database,
+                $team1_score = ($adminPanel == 1) ?
+                    $freeWinScore : 0;
+
+                $team2_score = ($adminPanel == 2) ?
+                    $freeWinScore : 0;
+
+                $query = cup_query(
                     "UPDATE `" . PREFIX."cups_matches_playoff`
                         SET `ergebnis1` = " . $team1_score . ",
                             `ergebnis2` = " . $team2_score . ",
                             `admin_confirmed` = 1
-                        WHERE matchID = " . $match_id
+                        WHERE `matchID` = " . $match_id,
+                    __FILE__
                 );
-
-                if (!$query) {
-                    throw new \Exception('cups_matches_playoff_query_update_failed (#' . $match_id . ', `admin_confirmed` = 1)');
-                }
 
                 //
                 // Next Game
@@ -273,17 +262,13 @@ if (validate_array($_POST, true)) {
 
                 $whereClause = implode(' AND ', $whereClauseArray);
 
-                $query = mysqli_query(
-                    $_database,
+                $query = cup_query(
                     "UPDATE `" . PREFIX . "cups_matches_playoff`
                         SET `" . $nextTeam . "` = " . $winner_id . ",
                             `active` = 1
-                        WHERE " . $whereClause
+                        WHERE " . $whereClause,
+                    __FILE__
                 );
-
-                if (!$query) {
-                    throw new \Exception('cups_matches_playoff_query_update_failed (' . $whereClause . ')');
-                }
 
             } else {
                 throw new \Exception($_language->module['unknown_action']);
@@ -353,8 +338,7 @@ if (validate_array($_POST, true)) {
 
             @chmod($filepath . $file, $new_chmod);
 
-            $insertQuery = mysqli_query(
-                $_database,
+            $insertQuery = cup_query(
                 "INSERT INTO `" . PREFIX . "cups_matches_playoff_screens`
                     (
                         `matchID`,
@@ -368,12 +352,9 @@ if (validate_array($_POST, true)) {
                         '" . $file . "',
                         " . $category_id . ",
                         " . time() . "
-                    )"
+                    )",
+                __FILE__
             );
-
-            if (!$insertQuery) {
-                throw new \Exception('cups_matches_playoff_screens_query_insert_failed (' . $file . ')');
-            }
 
         } else {
             throw new \Exception($_language->module['unknown_action']);

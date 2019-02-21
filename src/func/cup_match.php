@@ -301,7 +301,7 @@ function getmatch($id, $cat = '') {
             "bracket"		=> $get['wb'],
             "runde"			=> $get['runde'],
             "spiel"			=> $get['spiel'],
-            "format"		=> $get['format'],
+            "format"		=> $get['format'],                // bo1, bo3, ...
             "date"			=> $get['date'],
             "mapvote"		=> $get['mapvote'],
             "team1_id"		=> $get['team1'],
@@ -334,34 +334,38 @@ function getmatch($id, $cat = '') {
 }
 function getmatches($cup_id = 0, $selected_id = 0, $allMatches = TRUE) {
 
-    global $_database, $userID;
 
-    $whereClause = ($cup_id > 0) ? 'WHERE cupID = \''.$cup_id.'\'' : '';
+    $whereClauseArray = array();
 
-    if(!$allMatches) {
-        if(empty($whereClause)) {
-            $whereClause = 'WHERE';
-        } else {
-            $whereClause .= ' AND';
-        }
-        $whereClause .= ' team1_freilos = 0 AND team2_freilos = 0';
+    if ($cup_id > 0) {
+        $whereClauseArray[] = '`cupID` = ' . $cup_id;
     }
 
-    $match = mysqli_query(
-        $_database,
-        "SELECT 
-                `matchID`, 
-                `wb`, 
-                `runde`, 
-                `spiel`, 
-                `team1`, 
-                `team1_freilos`, 
-                `team2`, 
-                `team2_freilos` 
-            FROM `" . PREFIX . "cups_matches_playoff` 
-            " . $whereClause . " 
-            ORDER BY wb DESC, runde DESC, spiel ASC"
+    if (!$allMatches) {
+        $whereClauseArray[] = '`team1_freilos` = 0';
+        $whereClauseArray[] = '`team2_freilos` = 0';
+    }
+
+    $whereClause = (validate_array($whereClauseArray, true)) ?
+        'WHERE ' . implode(' AND ', $whereClauseArray) : '';
+
+    $match = cup_query(
+        "SELECT
+                `matchID`,
+                `wb`,
+                `runde`,
+                `spiel`,
+                `team1`,
+                `team1_freilos`,
+                `team2`,
+                `team2_freilos`
+            FROM `" . PREFIX . "cups_matches_playoff`
+            " . $whereClause . "
+            ORDER BY wb DESC, runde DESC, spiel ASC",
+        __FILE__
     );
+
+    global $userID;
 
     $cupAdminAccess = (iscupadmin($userID)) ? TRUE : FALSE;
 
@@ -385,13 +389,13 @@ function getmatches($cup_id = 0, $selected_id = 0, $allMatches = TRUE) {
 
         }
 
-        if($dx['team1'] != 0) {
+        if ($dx['team1'] != 0) {
             $team1 = getteam($dx['team1'], 'name');
         } else {
             $team1 = 'freilos';
         }
 
-        if($dx['team2'] != 0) {
+        if ($dx['team2'] != 0) {
             $team2 = getteam($dx['team2'], 'name');
         } else {
             $team2 = 'freilos';
@@ -400,13 +404,13 @@ function getmatches($cup_id = 0, $selected_id = 0, $allMatches = TRUE) {
         $match_info = '';
         $match_info .= 'Match #'.$dx['matchID'].' - ';
 
-        if($cupAdminAccess) {
+        if ($cupAdminAccess) {
             $match_info .= 'R'.$dx['runde'].' - ';
         }
 
-        $match_info .= $team1.' vs. '.$team2;
+        $match_info .= $team1 . ' vs. ' . $team2;
 
-        $matches .= '<option value="'.$dx['matchID'].'">'.$match_info.'</option>';
+        $matches .= '<option value="' . $dx['matchID'] . '">' . $match_info . '</option>';
 
         $n++;
 
@@ -419,24 +423,32 @@ function getmatches($cup_id = 0, $selected_id = 0, $allMatches = TRUE) {
 }
 
 function getmap($matchID, $format) {
-    global $_database;
-    $get = mysqli_fetch_array(
-        mysqli_query($_database, "SELECT maps FROM `".PREFIX."cups_matches_playoff` WHERE matchID = '".$matchID."'")
+
+    $selectQuery = cup_query(
+        "SELECT
+                `maps`
+            FROM `" . PREFIX . "cups_matches_playoff`
+            WHERE `matchID` = " . $matchID,
+        __FILE__
     );
+
+    $get = mysqli_fetch_array($selectQuery);
+
     $mapsArray = unserialize($get['maps']);
-    if($format == 'bo1') {
-        $returnValue = (isset($mapsArray['picked'][0])) ? 'Map: '.$mapsArray['picked'][0] : '';
-    } elseif($format == 'bo3') {
+    if ($format == 'bo1') {
+        $returnValue = (isset($mapsArray['picked'][0])) ?
+            'Map: '.$mapsArray['picked'][0] : '';
+    } else if ($format == 'bo3') {
         $returnValue = '';
         if(!empty($mapsArray['picked'])) {
             $returnValue .= 'Maps: ';
-            if(isset($mapsArray['picked']['team1'])) {
+            if (isset($mapsArray['picked']['team1'])) {
                 $returnValue .= $mapsArray['picked']['team1'][0];
             }
-            if(isset($mapsArray['picked']['team2'])) {
+            if (isset($mapsArray['picked']['team2'])) {
                 $returnValue .= ', '.$mapsArray['picked']['team2'][0];
             }
-            if(isset($mapsArray['picked'][0])) {
+            if (isset($mapsArray['picked'][0])) {
                 $returnValue .= ', '.$mapsArray['picked'][0];
             }
         }
@@ -453,10 +465,7 @@ function getScreenshots($match_id) {
         return array();
     }
 
-    global $_database;
-
-    $selectQuery = mysqli_query(
-        $_database,
+    $selectQuery = cup_query(
         "SELECT
                 cmps.`category_id`,
                 cmps.`file`,
@@ -465,7 +474,8 @@ function getScreenshots($match_id) {
             FROM `" . PREFIX . "cups_matches_playoff_screens` cmps
             JOIN `" . PREFIX . "cups_matches_playoff_screens_category` cmpsc ON cmpsc.`categoryID` = cmps.`category_id`
             WHERE cmps.`matchID` = " . $match_id . "
-            ORDER BY cmps.`date` ASC"
+            ORDER BY cmps.`date` ASC",
+        __FILE__
     );
 
     if (!$selectQuery) {
