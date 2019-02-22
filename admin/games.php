@@ -239,7 +239,7 @@ try {
             $data_array['$icon'] = $pic;
             $data_array['$game_id'] = $game_id;
             $data_array['$postName'] = 'saveedit';
-            $game_edit = $GLOBALS["_template"]->replaceTemplate("game_action", $data_array);
+            $game_edit = $GLOBALS["_template_cup"]->replaceTemplate("game_action", $data_array);
             echo $game_edit;
 
         } else {
@@ -291,9 +291,9 @@ try {
                     $data_array['$delete_url'] = $delete_url;
 
                     if ($ds['active']) {
-                        $active_games .= $GLOBALS["_template"]->replaceTemplate("games_list", $data_array);
+                        $active_games .= $GLOBALS["_template_cup"]->replaceTemplate("games_list", $data_array);
                     } else {
-                        $inactive_games .= $GLOBALS["_template"]->replaceTemplate("games_list", $data_array);
+                        $inactive_games .= $GLOBALS["_template_cup"]->replaceTemplate("games_list", $data_array);
                     }
 
                 }
@@ -318,13 +318,13 @@ try {
             $data_array['$game_id'] = 0;
             $data_array['$icon'] = '';
             $data_array['$postName'] = 'save';
-            $add_game = $GLOBALS["_template"]->replaceTemplate("game_action", $data_array);
+            $add_game = $GLOBALS["_template_cup"]->replaceTemplate("game_action", $data_array);
 
             $data_array = array();
             $data_array['$active_games'] = $active_games;
             $data_array['$inactive_games'] = $inactive_games;
             $data_array['$add_game'] = $add_game;
-            $games_home = $GLOBALS["_template"]->replaceTemplate("games_home", $data_array);
+            $games_home = $GLOBALS["_template_cup"]->replaceTemplate("games_home", $data_array);
             echo $games_home;
 
         }
