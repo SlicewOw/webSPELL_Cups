@@ -225,7 +225,7 @@ try {
             }
             while ($subget = mysqli_fetch_array($subquery)) {
 
-                if(strlen($subget['team_name']) > 14) {
+                if (strlen($subget['team_name']) > 14) {
                     $name = $subget['team_tag'];
                 } else {
                     $name = $subget['team_name'];
@@ -244,7 +244,14 @@ try {
                     $logotype = getCupTeamImage($subget['team_id'], true);
                 }
 
-                $teamArray[$subget['platzierung'] - 1]['logotype'] = '<img src="' . $logotype . '"' . $description . ' style="width: 50px; height: 50px; margin: 0 auto; display: block; border-radius: 50px;" />';
+                $cssStyleArray = array();
+                $cssStyleArray[] = 'width: 50px;';
+                $cssStyleArray[] = 'height: 50px;';
+                $cssStyleArray[] = 'margin: 10px auto 0 auto;';
+                $cssStyleArray[] = 'display: block;';
+                $cssStyleArray[] = 'border-radius: 50px;';
+
+                $teamArray[$subget['platzierung'] - 1]['logotype'] = '<img src="' . $logotype . '"' . $description . ' style="' . implode(' ', $cssStyleArray) . '" />';
 
             }
 
@@ -253,17 +260,17 @@ try {
             $data_array['$cupLink'] = 'index.php?site=cup&amp;action=details&amp;id='.$cup_id;
             $data_array['$cupName'] = $get['cup_name'];
             $data_array['$isVisible1'] = $teamArray[0]['visible'];
-            $data_array['$teamLink1'] = ($get['mode'] == '1on1') ? 
+            $data_array['$teamLink1'] = ($get['mode'] == '1on1') ?
                 $userLink.$teamArray[0]['id'] : $teamLink.$teamArray[0]['id'];
             $data_array['$teamLogotype1'] = $teamArray[0]['logotype'];
             $data_array['$teamName1'] = $teamArray[0]['name'];
             $data_array['$isVisible2'] = $teamArray[1]['visible'];
-            $data_array['$teamLink2'] = ($get['mode'] == '1on1') ? 
+            $data_array['$teamLink2'] = ($get['mode'] == '1on1') ?
                 $userLink.$teamArray[1]['id'] : $teamLink.$teamArray[1]['id'];
             $data_array['$teamLogotype2'] = $teamArray[1]['logotype'];
             $data_array['$teamName2'] = $teamArray[1]['name'];
             $data_array['$isVisible3'] = $teamArray[2]['visible'];
-            $data_array['$teamLink3'] = ($get['mode'] == '1on1') ? 
+            $data_array['$teamLink3'] = ($get['mode'] == '1on1') ?
                 $userLink.$teamArray[2]['id'] : $teamLink.$teamArray[2]['id'];
             $data_array['$teamLogotype3'] = $teamArray[2]['logotype'];
             $data_array['$teamName3'] = $teamArray[2]['name'];
