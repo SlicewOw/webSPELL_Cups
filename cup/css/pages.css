@@ -310,11 +310,14 @@ span.cup_bracket_match_score_oppo {
     display: block;
 }
 
+.cup_bracket_16_match > a > .cup_bracket_match_team_id,
 .cup_bracket_8_match > a > .cup_bracket_match_team_id,
 .cup_bracket_4_match > a > .cup_bracket_match_team_id,
 .cup_bracket_2_match > a > .cup_bracket_match_team_id {
     margin-left: 158px;
 }
+.cup_bracket_16_match > a > .cup_bracket_match_score_home,
+.cup_bracket_16_match > a > .cup_bracket_match_score_oppo,
 .cup_bracket_8_match > a > .cup_bracket_match_score_home,
 .cup_bracket_8_match > a > .cup_bracket_match_score_oppo,
 .cup_bracket_4_match > a > .cup_bracket_match_score_home,
@@ -323,6 +326,9 @@ span.cup_bracket_match_score_oppo {
 .cup_bracket_2_match > a > .cup_bracket_match_score_oppo {
     margin-left: 178px;
 }
+.cup_bracket_16_match > a > .cup_bracket_match_team_home,
+.cup_bracket_16_match > a > .cup_bracket_match_team_vs,
+.cup_bracket_16_match > a > .cup_bracket_match_team_oppo,
 .cup_bracket_8_match > a > .cup_bracket_match_team_home,
 .cup_bracket_8_match > a > .cup_bracket_match_team_vs,
 .cup_bracket_8_match > a > .cup_bracket_match_team_oppo,
