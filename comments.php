@@ -571,7 +571,7 @@ if (isset($_POST[ 'savevisitorcomment' ])) {
             $data_array['$actions'] = $actions;
             $data_array['$poster'] = $poster;
             $data_array['$date'] = $date;
-            $comments = $GLOBALS["_template"]->replaceTemplate("comments", $data_array);
+            $comments = $GLOBALS["_template_cup"]->replaceTemplate("comments", $data_array);
             echo $comments;
  
             unset(
