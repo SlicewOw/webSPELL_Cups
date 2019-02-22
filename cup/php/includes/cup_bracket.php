@@ -299,18 +299,22 @@ if (($cup_id > 0) && !empty($cupArray)) {
         $score1 = '<span class="cup_bracket_match_score_home lh_twenty center ' . $score1_class . '">' . $matchArray['ergebnis1'] . '</span>';
         $score2 = '<span class="cup_bracket_match_score_oppo lh_twenty center ' . $score2_class . '">' . $matchArray['ergebnis2'] . '</span>';
 
-        $data_array = array();
-        $data_array['$match_class'] = $match_class;
-        $data_array['$url'] = $url;
-        $data_array['$team1'] = $teamInfoArray[1];
-        $data_array['$score1'] = $score1;
-        $data_array['$id'] = $game_id;
-        $data_array['$team2'] = $teamInfoArray[2];
-        $data_array['$score2'] = $score2;
-        $data_array['$break'] = $break;
+        if (isset($matchVars['vars'][$matchArray['runde']])) {
 
-        $matchRow = $matchVars['vars'][$matchArray['runde']];
-        $matchVars[$matchRow] .= $GLOBALS["_template_cup"]->replaceTemplate("cup_bracket_match", $data_array);
+            $matchRow = $matchVars['vars'][$matchArray['runde']];
+
+            $data_array = array();
+            $data_array['$match_class'] = $match_class;
+            $data_array['$url'] = $url;
+            $data_array['$team1'] = $teamInfoArray[1];
+            $data_array['$score1'] = $score1;
+            $data_array['$id'] = $game_id;
+            $data_array['$team2'] = $teamInfoArray[2];
+            $data_array['$score2'] = $score2;
+            $data_array['$break'] = $break;
+            $matchVars[$matchRow] .= $GLOBALS["_template_cup"]->replaceTemplate("cup_bracket_match", $data_array);
+
+        }
 
         unset($teamInfoArray);
         $i++;
