@@ -93,29 +93,98 @@ if (validate_array($_POST, true)) {
                 $team2_score = 1;
             }
 
-            //
-            // correctScore:
-            // 1: kein Unentschieden
-            // 2: kein 0:0
-            if ((($team1_score > 0) || ($team2_score > 0)) && ($team1_score != $team2_score)) {
+            $setValueArray = array();
+
+            if (isset($_POST['submitAdminWinner'])) {
+
+                if (isset($_POST['admin_defwin']) && ($_POST['admin_defwin'] > 0)) {
+
+                    //
+                    // 0: normales Spiel
+                    // 1: Team 1 Def-Win
+                    // 2: Team 2 Def-Win
+                    // 3: kein Sieger (freilos)
+                    $adminPanel = (int)$_POST['admin_defwin'];
+
+                    $match_format = $matchArray['format'];
+                    $mapsToBePlayed = substr($match_format, 2, strlen($match_format));
+
+                    $freeWinScore = ceil($mapsToBePlayed / 2);
+
+                    // Current Game
+                    $team1_score = ($adminPanel == 1) ?
+                        $freeWinScore : 0;
+
+                    $team2_score = ($adminPanel == 2) ?
+                        $freeWinScore : 0;
+
+                    $query = cup_query(
+                        "UPDATE `" . PREFIX."cups_matches_playoff`
+                            SET `ergebnis1` = " . $team1_score . ",
+                                `ergebnis2` = " . $team2_score . ",
+                                `admin_confirmed` = 1
+                            WHERE `matchID` = " . $match_id,
+                        __FILE__
+                    );
+
+                    //
+                    // Next Game
+                    $winner_id = ($adminPanel < 3) ? $matchArray['team'.$adminPanel.'_id'] : 0;
+                    $nextTeam = ($matchArray['spiel']%2) ? 'team1' : 'team2';
+                    $nextGame = floor(($matchArray['spiel'] / 2) + 0.5);
+
+                    $whereClauseArray = array();
+                    $whereClauseArray[] = '`cupID` = ' . $cup_id;
+                    $whereClauseArray[] = '`wb` = 1';
+                    $whereClauseArray[] = '`runde` = ' . ($matchArray['runde'] + 1);
+                    $whereClauseArray[] = '`spiel` = ' . $nextGame;
+
+                    if ($winner_id == 0) {
+                        $whereClauseArray[] = '`' . $nextTeam . '_freilos` = 1';
+                    }
+
+                    $whereClause = implode(' AND ', $whereClauseArray);
+
+                    $query = cup_query(
+                        "UPDATE `" . PREFIX . "cups_matches_playoff`
+                            SET `" . $nextTeam . "` = " . $winner_id . ",
+                                `active` = 1
+                            WHERE " . $whereClause,
+                        __FILE__
+                    );
+
+                }
+
+                $setValueArray[] = '`mapvote` = 1';
 
                 $correctScore = TRUE;
 
-                if ($team1_score > $team2_score) {
-                    $winner_id = $matchArray['team1_id'];
-                    $loser_id = $matchArray['team2_id'];
+            } else {
+
+                //
+                // correctScore:
+                // 1: kein Unentschieden
+                // 2: kein 0:0
+                if ((($team1_score > 0) || ($team2_score > 0)) && ($team1_score != $team2_score)) {
+
+                    $correctScore = TRUE;
+
+                    if ($team1_score > $team2_score) {
+                        $winner_id = $matchArray['team1_id'];
+                        $loser_id = $matchArray['team2_id'];
+                    } else {
+                        $winner_id = $matchArray['team2_id'];
+                        $loser_id = $matchArray['team1_id'];
+                    }
+
                 } else {
-                    $winner_id = $matchArray['team2_id'];
-                    $loser_id = $matchArray['team1_id'];
+                    $correctScore = FALSE;
                 }
 
-            } else {
-                $correctScore = FALSE;
             }
 
             if ($correctScore) {
 
-                $setValueArray = array();
                 $setValueArray[] = '`ergebnis1` = ' . $team1_score;
                 $setValueArray[] = '`ergebnis2` = ' . $team2_score;
 
@@ -123,10 +192,6 @@ if (validate_array($_POST, true)) {
                     $setValueArray[] = '`team1_confirmed` = 1';
                 } else {
                     $setValueArray[] = '`team2_confirmed` = 1';
-                }
-
-                if ($_POST['team'] === 'admin') {
-                    $setValueArray[] = '`mapvote` = 1';
                 }
 
                 $setValues = implode(', ', $setValueArray);
@@ -138,13 +203,9 @@ if (validate_array($_POST, true)) {
                     __FILE__
                 );
 
-                if (!$updateQuery) {
-                    throw new \Exception('cups_matches_playoff_query_update_failed');
-                }
-
                 $matchArray = getmatch($match_id);
 
-                $matchConfirm = (($_POST['team'] === 'admin') || ($matchArray['team1_confirm'] && $matchArray['team2_confirm'])) ?
+                $matchConfirm = ($matchArray['team1_confirm'] && $matchArray['team2_confirm']) ?
                     TRUE : FALSE;
 
                 if ($matchConfirm) {
@@ -213,62 +274,6 @@ if (validate_array($_POST, true)) {
                     }
 
                 }
-
-            } else if (isset($_POST['admin_defwin']) && ($_POST['admin_defwin'] > 0)) {
-
-                //
-                // 0: normales Spiel
-                // 1: Team 1 Def-Win
-                // 2: Team 2 Def-Win
-                // 3: kein Sieger (freilos)
-                $adminPanel = (int)$_POST['admin_defwin'];
-
-                $match_format = $matchArray['format'];
-                $mapsToBePlayed = substr($match_format, 2, strlen($match_format));
-
-                $freeWinScore = ceil($mapsToBePlayed / 2);
-
-                // Current Game
-                $team1_score = ($adminPanel == 1) ?
-                    $freeWinScore : 0;
-
-                $team2_score = ($adminPanel == 2) ?
-                    $freeWinScore : 0;
-
-                $query = cup_query(
-                    "UPDATE `" . PREFIX."cups_matches_playoff`
-                        SET `ergebnis1` = " . $team1_score . ",
-                            `ergebnis2` = " . $team2_score . ",
-                            `admin_confirmed` = 1
-                        WHERE `matchID` = " . $match_id,
-                    __FILE__
-                );
-
-                //
-                // Next Game
-                $winner_id = ($adminPanel < 3) ? $matchArray['team'.$adminPanel.'_id'] : 0;
-                $nextTeam = ($matchArray['spiel']%2) ? 'team1' : 'team2';
-                $nextGame = floor(($matchArray['spiel'] / 2) + 0.5);
-
-                $whereClauseArray = array();
-                $whereClauseArray[] = '`cupID` = ' . $cup_id;
-                $whereClauseArray[] = '`wb` = 1';
-                $whereClauseArray[] = '`runde` = ' . ($matchArray['runde'] + 1);
-                $whereClauseArray[] = '`spiel` = ' . $nextGame;
-
-                if ($winner_id == 0) {
-                    $whereClauseArray[] = '`' . $nextTeam . '_freilos` = 1';
-                }
-
-                $whereClause = implode(' AND ', $whereClauseArray);
-
-                $query = cup_query(
-                    "UPDATE `" . PREFIX . "cups_matches_playoff`
-                        SET `" . $nextTeam . "` = " . $winner_id . ",
-                            `active` = 1
-                        WHERE " . $whereClause,
-                    __FILE__
-                );
 
             } else {
                 throw new \Exception($_language->module['unknown_action']);
@@ -361,23 +366,7 @@ if (validate_array($_POST, true)) {
         }
 
     } catch (Exception $e) {
-
-        if (!preg_match('/_query_/', $e->getMessage())) {
-            $_SESSION['errorArray'][] = $e->getMessage();
-        } else {
-
-            if (preg_match('/_query_update_/', $e->getMessage())) {
-                $_SESSION['errorArray'][] = $_language->module['query_update_failed'];
-            } else if (preg_match('/_query_insert_/', $e->getMessage())) {
-                $_SESSION['errorArray'][] = $_language->module['query_insert_failed'];
-            } else if (preg_match('/_query_delete_/', $e->getMessage())) {
-                $_SESSION['errorArray'][] = $_language->module['query_delete_failed'];
-            } else {
-                $_SESSION['errorArray'][] = $_language->module['query_select_failed'];
-            }
-
-        }
-
+        $_SESSION['errorArray'][] = $e->getMessage();
     }
 
     header('Location: ' . $parent_url);

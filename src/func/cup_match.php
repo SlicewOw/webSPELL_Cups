@@ -103,7 +103,12 @@ function getMatchDetailsByMatchId($cup_array, $match_id) {
     if (in_array($matchArray['format'], $formatArray) && ($matchArray['mapvote'] == 1)) {
 
         if (($matchArray['team1_freilos'] == 0) && ($matchArray['team2_freilos'] == 0)) {
-            $matchInfoArray[] = getmap($match_id, $matchArray['format']);
+
+            $maps = getmap($match_id, $matchArray['format']);
+            if (!empty($maps)) {
+                $matchInfoArray[] = $maps;
+            }
+
         }
 
     }
@@ -435,27 +440,50 @@ function getmap($matchID, $format) {
     $get = mysqli_fetch_array($selectQuery);
 
     $mapsArray = unserialize($get['maps']);
+
+    $returnMapArray = array();
+
     if ($format == 'bo1') {
-        $returnValue = (isset($mapsArray['picked'][0])) ?
-            'Map: '.$mapsArray['picked'][0] : '';
-    } else if ($format == 'bo3') {
-        $returnValue = '';
-        if(!empty($mapsArray['picked'])) {
-            $returnValue .= 'Maps: ';
-            if (isset($mapsArray['picked']['team1'])) {
-                $returnValue .= $mapsArray['picked']['team1'][0];
-            }
-            if (isset($mapsArray['picked']['team2'])) {
-                $returnValue .= ', '.$mapsArray['picked']['team2'][0];
-            }
-            if (isset($mapsArray['picked'][0])) {
-                $returnValue .= ', '.$mapsArray['picked'][0];
-            }
+
+        if (isset($mapsArray['picked'][0])) {
+            $returnMapArray[] = $mapsArray['picked'][0];
         }
-    } else {
-        $returnValue = $mapsArray['picked'];
+
+    } else if ($format == 'bo3' || $format == 'bo5') {
+
+        $returnValue = '';
+
+        if (!empty($mapsArray['picked'])) {
+
+            $returnValue .= 'Maps: ';
+
+            if (isset($mapsArray['picked']['team1'][0])) {
+                $returnMapArray[] = $mapsArray['picked']['team1'][0];
+            }
+
+            if (isset($mapsArray['picked']['team2'][0])) {
+                $returnMapArray[] = $mapsArray['picked']['team2'][0];
+            }
+
+            if (isset($mapsArray['picked']['team1'][1])) {
+                $returnMapArray[] = $mapsArray['picked']['team1'][1];
+            }
+
+            if (isset($mapsArray['picked']['team2'][1])) {
+                $returnMapArray[] = $mapsArray['picked']['team2'][1];
+            }
+
+            if (isset($mapsArray['picked'][0])) {
+                $returnMapArray[] = $mapsArray['picked'][0];
+            }
+
+        }
+
     }
-    return $returnValue;
+
+    return (validate_array($returnMapArray, true)) ?
+            'Maps: ' . implode(', ', $returnMapArray) : '';
+
 }
 
 
