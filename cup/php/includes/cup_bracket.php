@@ -1,20 +1,25 @@
 <?php
 
-if (!isset($cupArray) || !validate_array($cupArray, true)) {
+try {
 
-    $cup_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
-        (int)$_GET['id'] : 0;
+    if (!isset($cupArray) || !validate_array($cupArray, true)) {
 
-    if ($cup_id == 0) {
-        $cup_id = isset($_GET['cup_id']) ? (int)$_GET['cup_id'] : 0;
+        $cup_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
+            (int)$_GET['id'] : 0;
+
+        if ($cup_id == 0) {
+            $cup_id = isset($_GET['cup_id']) ? (int)$_GET['cup_id'] : 0;
+        }
+
+        $cupArray = getcup($cupID, 'all');
+
     }
 
-    $cupArray = getcup($cupID, 'all');
-}
+    if (($cup_id < 1) || !validate_array($cupArray, true)) {
+        throw new \Exception($_language->module['no_cup']);
+    }
 
-if (($cup_id > 0) && !empty($cupArray)) {
-
-    $match_class = 'cup_bracket_'.$cupArray['size'].'_match';
+    $match_class = 'cup_bracket_' . $cupArray['size'] . '_match';
 
     if ($cupArray['size'] == 64) {
         $matchVars = array(
@@ -99,13 +104,13 @@ if (($cup_id > 0) && !empty($cupArray)) {
         5 => 'Finale'
     );
 
-    $matchQuery = mysqli_query(
-        $_database,
+    $matchQuery = cup_query(
         "SELECT
                 `matchID`
             FROM `" . PREFIX . "cups_matches_playoff`
             WHERE `cupID` = " . $cup_id . "
-            ORDER BY `matchID` ASC, `wb` DESC"
+            ORDER BY `matchID` ASC, `wb` DESC",
+        __FILE__
     );
 
     $i=1;
@@ -171,22 +176,23 @@ if (($cup_id > 0) && !empty($cupArray)) {
                     $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_2"></div>';
                 }
                 $prefix_id = 4;
-            } else if ($i == 31) {
-                $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_8"></div>';
             }
         } else if ($cupArray['size'] == 16) {
             if ($i < 9) {
+                // First round, match count: 8
                 if ($i < 8) {
                     $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_8"></div>';
                 }
                 $prefix_id = 2;
             } else if ($i < 13) {
-                if($i < 12) {
+                // Second round, match count: 4
+                if ($i < 12) {
                     $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_4"></div>';
                 }
                 $prefix_id = 3;
             } else if ($i < 15) {
-                if($i < 14) {
+                // Third round, match count: 2
+                if ($i < 14) {
                     $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_2"></div>';
                 }
                 $prefix_id = 4;
@@ -202,16 +208,17 @@ if (($cup_id > 0) && !empty($cupArray)) {
                     $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_2"></div>';
                 }
                 $prefix_id = 4;
-            } else if ($i == 7) {
-                $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_4"></div>';
             }
         } else if ($cupArray['size'] == 4) {
             if ($i < 2) {
                 $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_2"></div>';
                 $prefix_id = 4;
-            } else if ($i == 3) {
-                $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_sup3"></div>';
             }
+        }
+
+        // Third-place-match break
+        if (empty($break) && ($cupArray['size'] > 2) && (($cupArray['size'] - 1) == $i)) {
+            $break = '<div class="cup_bracket_break_sup3"></div>';
         }
 
         //
@@ -285,19 +292,36 @@ if (($cup_id > 0) && !empty($cupArray)) {
 
         }
 
-        $score1_class = '';
-        $score2_class = '';
+        $baseScoreCssClassArray = array();
+        $baseScoreCssClassArray[] = 'lh_twenty';
+        $baseScoreCssClassArray[] = 'center';
+
+        $score1CssClassArray = $baseScoreCssClassArray;
+        $score1CssClassArray[] = 'cup_bracket_match_score_home';
+
+        $score2CssClassArray = $baseScoreCssClassArray;
+        $score2CssClassArray[] = 'cup_bracket_match_score_oppo';
 
         if ($matchArray['ergebnis1'] < $matchArray['ergebnis2']) {
-            $score1_class = ' lose darkshadow';
-            $score2_class = ' win darkshadow';
+
+            $score1CssClassArray[] = 'lose';
+            $score1CssClassArray[] = 'darkshadow';
+
+            $score2CssClassArray[] = 'win';
+            $score2CssClassArray[] = 'darkshadow';
+
         } else if ($matchArray['ergebnis1'] > $matchArray['ergebnis2']) {
-            $score1_class = ' win darkshadow';
-            $score2_class = ' lose darkshadow';
+
+            $score1CssClassArray[] = 'win';
+            $score1CssClassArray[] = 'darkshadow';
+
+            $score2CssClassArray[] = 'lose';
+            $score2CssClassArray[] = 'darkshadow';
+
         }
 
-        $score1 = '<span class="cup_bracket_match_score_home lh_twenty center ' . $score1_class . '">' . $matchArray['ergebnis1'] . '</span>';
-        $score2 = '<span class="cup_bracket_match_score_oppo lh_twenty center ' . $score2_class . '">' . $matchArray['ergebnis2'] . '</span>';
+        $score1 = '<span class="' . implode(' ', $score1CssClassArray) . '">' . $matchArray['ergebnis1'] . '</span>';
+        $score2 = '<span class="' . implode(' ', $score2CssClassArray) . '">' . $matchArray['ergebnis2'] . '</span>';
 
         if (isset($matchVars['vars'][$matchArray['runde']])) {
 
@@ -328,6 +352,6 @@ if (($cup_id > 0) && !empty($cupArray)) {
     }
     $bracket = $GLOBALS["_template_cup"]->replaceTemplate("cup_bracket_" . $cupArray['size'], $data_array);
 
-} else {
-    $bracket = $_language->module['no_cup'];
+} catch (Exception $e) {
+    $bracket = showError($e->getMessage());
 }

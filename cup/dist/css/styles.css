@@ -976,10 +976,6 @@ input.input_submit_button			{ background: #265da5; width: 200px; height: 30px; m
     width: 100%;
     height: 120px;
 }
-.cup_bracket_4_break_sup3 {
-    width: 100%;
-    height: 30px;
-}
 .cup_bracket_4_break_1_start {
     width: 100%;
     height: 90px;
@@ -1089,6 +1085,11 @@ span.cup_bracket_match_score_oppo {
 .cup_bracket_2_match > a > .cup_bracket_match_team_vs,
 .cup_bracket_2_match > a > .cup_bracket_match_team_oppo {
     width: 160px;
+}
+
+.cup_bracket_break_sup3 {
+    width: 100%;
+    height: 30px;
 }
 
 /* MATCHES */
