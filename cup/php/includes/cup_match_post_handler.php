@@ -166,17 +166,7 @@ if (validate_array($_POST, true)) {
                 // 1: kein Unentschieden
                 // 2: kein 0:0
                 if ((($team1_score > 0) || ($team2_score > 0)) && ($team1_score != $team2_score)) {
-
                     $correctScore = TRUE;
-
-                    if ($team1_score > $team2_score) {
-                        $winner_id = $matchArray['team1_id'];
-                        $loser_id = $matchArray['team2_id'];
-                    } else {
-                        $winner_id = $matchArray['team2_id'];
-                        $loser_id = $matchArray['team1_id'];
-                    }
-
                 } else {
                     $correctScore = FALSE;
                 }
@@ -205,10 +195,18 @@ if (validate_array($_POST, true)) {
 
                 $matchArray = getmatch($match_id);
 
-                $matchConfirm = ($matchArray['team1_confirm'] && $matchArray['team2_confirm']) ?
+                $matchConfirm = ($matchArray['admin_confirm'] || ($matchArray['team1_confirm'] && $matchArray['team2_confirm'])) ?
                     TRUE : FALSE;
 
                 if ($matchConfirm) {
+
+                    if ($team1_score > $team2_score) {
+                        $winner_id = $matchArray['team1_id'];
+                        $loser_id = $matchArray['team2_id'];
+                    } else {
+                        $winner_id = $matchArray['team2_id'];
+                        $loser_id = $matchArray['team1_id'];
+                    }
 
                     //
                     // Upper or lower Seeding?

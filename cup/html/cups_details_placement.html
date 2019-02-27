@@ -1,4 +1,50 @@
-<a href="index.php?site=teams&amp;action=details&amp;id=$team_id"
-   class="list-group-item">
-    $placement - $name
-</a>
+<div class="list-group-item">
+    <div class="row" style="margin: 10px 0 20px 0;">
+        <div class="col-sm-4" style="$isVisible1 background: url(./images/cup/placements/gold.png) no-repeat; background-position: center top;">
+            <a href="$teamLink1" class="center" style="display: block;">
+                $teamLogotype1
+                <span class="full_content bold teamStyle">$teamName1</span>
+            </a>
+        </div>
+        <div class="col-sm-4" style="$isVisible2 background: url(./images/cup/placements/silver.png) no-repeat; background-position: center top;">
+            <a href="$teamLink2" class="center" style="display: block;">
+                $teamLogotype2
+                <span class="full_content bold teamStyle">$teamName2</span>
+            </a>
+        </div>
+        <div class="col-sm-4" style="$isVisible3 background: url(./images/cup/placements/bronze.png) no-repeat; background-position: center top;">
+            <a href="$teamLink3" class="center" style="display: block;">
+                $teamLogotype3
+                <span class="full_content bold teamStyle">$teamName3</span>
+            </a>
+        </div>
+    </div>
+    <button type="button" name="showAllPlacements"
+            class="btn btn-default btn-sm">
+        %show_all_placements%
+    </button>
+</div>
+<div id="showAllPlacementsListGroupItem"
+     style="display: none;">
+    $placements
+</div>
+<script>
+$(document).ready(function () {
+
+    var placementContainer = $("#showAllPlacementsListGroupItem");
+
+    $("button[name=showAllPlacements]").click(function (e) {
+
+        e.preventDefault();
+
+        var containerIsDisplayed = placementContainer.css('display');
+        if (containerIsDisplayed === "none") {
+            placementContainer.css('display', 'block');
+        } else {
+            placementContainer.css('display', 'none');
+        }
+
+    });
+
+});
+</script>

@@ -26,20 +26,73 @@ try {
 
         $cupPlacementList = '';
 
+        $firstThreeTeamsArray = array();
+
+        for ($x = 1; $x < 4; $x++) {
+
+            $firstThreeTeamsArray[$x] = array(
+                'url' => '',
+                'name' => '',
+                'logotype' => '',
+                'visible' => 'display: none; '
+            );
+
+        }
+
+        $placement_list = '';
+
         while ($get = mysqli_fetch_array($getCupPlacementsQuery)) {
 
             $team_id = $get['team_id'];
 
-            $name = ($get['cup_mode'] != '1on1') ?
-                getteam($team_id, 'name') : getnickname($team_id);
+            if ($get['cup_mode'] == '1on1') {
+                $url = 'index.php?site=profile&amp;id=' . $team_id;
+                $name = getnickname($team_id);
+                $logotype = getuserpic($team_id, true);
+            } else {
+                $url = 'index.php?site=teams&amp;action=details&amp;id=' . $team_id;
+                $name = getteam($team_id, 'name');
+                $logotype = getCupTeamImage($team_id, true);
+            }
 
-            $data_array = array();
-            $data_array['$team_id'] = $team_id;
-            $data_array['$placement'] = $get['team_placement'] . '.';
-            $data_array['$name'] = $name;
-            $cupPlacementList .= $GLOBALS["_template_cup"]->replaceTemplate("cups_details_placement", $data_array);
+            $placement = $get['team_placement'];
+            if ($placement < 4) {
+
+                $description = ' alt="' . $name . '" title="' . $name . '"';
+
+                $cssStyleArray = array();
+                $cssStyleArray[] = 'width: 50px;';
+                $cssStyleArray[] = 'height: 50px;';
+                $cssStyleArray[] = 'margin: 10px auto 0 auto;';
+                $cssStyleArray[] = 'display: block;';
+                $cssStyleArray[] = 'border-radius: 50px;';
+
+                $firstThreeTeamsArray[$placement] = array(
+                    'url' => $url,
+                    'name' => $name,
+                    'logotpye' => '<img src="' . $logotype . '"' . $description . ' style="' . implode(' ', $cssStyleArray) . '" />',
+                    'visible' => ''
+                );
+
+            } else {
+
+                $placement_text = $placement . '. - ' . $name;
+
+                $placement_list .= '<a href="' . $url . '" class="list-group-item">' . $placement_text . '</a>';
+
+            }
 
         }
+
+        $data_array = array();
+        for ($x = 1; $x < 4; $x++) {
+            $data_array['$isVisible' . $x] = $firstThreeTeamsArray[$x]['visible'];
+            $data_array['$teamLink' . $x] = $firstThreeTeamsArray[$x]['url'];
+            $data_array['$teamName' . $x] = $firstThreeTeamsArray[$x]['name'];
+            $data_array['$teamLogotype' . $x] = $firstThreeTeamsArray[$x]['logotpye'];
+        }
+        $data_array['$placements'] = $placement_list;
+        $cupPlacementList .= $GLOBALS["_template_cup"]->replaceTemplate("cups_details_placement", $data_array);
 
         $data_array = array();
         $data_array['$panel_type'] = 'panel-success';

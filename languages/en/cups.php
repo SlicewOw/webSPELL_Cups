@@ -251,6 +251,7 @@ $language_array = Array(
     'settings_format'=>'match round format',
     'settings_main'=>'main-settings',
     'settings_mapvote'=>'Map-Vote',
+    'show_all_placements'=>'show all placements',
     'size'=>'max. teams',
     'start_date'=>'Start Date',
     'status_admin_register'=>'<a href="index.php?site=cup&action=details&id=%cup_id%">join cup!</a>',

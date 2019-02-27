@@ -252,6 +252,7 @@ $language_array = Array(
     'settings_format'=>'Match Runden Format',
     'settings_main'=>'Haupt-Einstellungen',
     'settings_mapvote'=>'Map-Vote',
+    'show_all_placements'=>'zeige alle Platzierungen',
     'size'=>'max. Teilnehmer',
     'start_date'=>'Start Datum',
     'status_admin_register'=>'<a href="index.php?site=cup&action=details&id=%cup_id%">jetzt anmelden!</a>',
