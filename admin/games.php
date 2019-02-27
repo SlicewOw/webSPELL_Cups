@@ -82,6 +82,20 @@ try {
                         throw new \Exception($_language->module['query_update_failed']);
                     }
 
+                    $updateCupsQuery = cup_query(
+                        "UPDATE `" . PREFIX . "cups`
+                            SET `game` = '" . $tag . "'
+                            WHERE `category` = '" . $tag_old . "'",
+                        __FILE__
+                    );
+
+                    $updateGameaccountsQuery = cup_query(
+                        "UPDATE `" . PREFIX . "cups_gameaccounts`
+                            SET `category` = '" . $tag . "'
+                            WHERE `category` = '" . $tag_old . "'",
+                        __FILE__
+                    );
+
                 }
 
                 $_SESSION['successArray'][] = $_language->module['query_saved'];
