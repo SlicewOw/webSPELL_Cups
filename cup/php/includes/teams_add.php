@@ -102,8 +102,20 @@ try {
 
         }
 
+        $logotype_max_size = (isset($cup_team_logotype_max_size) && $cup_team_logotype_max_size) ?
+            $cup_team_logotype_max_size : 500;
+
+        $image_response = str_replace(
+            '%max_pixels%',
+            $logotype_max_size,
+            $_language->module['image_response']
+        );
+
         $data_array = array();
         $data_array['$title'] = $_language->module['add'];
+        $data_array['$logotype_is_required'] = (isset($cup_team_logotype_is_required) && $cup_team_logotype_is_required) ?
+            ' *' : '';
+        $data_array['$image_response'] = $image_response;
 
         $data_array['$error_add'] = (isset($_SESSION['cup']['team']['error'])) ?
             $_SESSION['cup']['team']['error'] : '';

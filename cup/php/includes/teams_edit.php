@@ -1,18 +1,18 @@
 <?php
 
-if($loggedin) {
+if ($loggedin) {
 
-    if(isset($_POST['submit_team_edit'])) {
-		
-        if(isset($_POST['team_id'])) {
+    if (isset($_POST['submit_team_edit'])) {
+
+        if (isset($_POST['team_id'])) {
             $team_id = $_POST['team_id'];
-        } elseif(isset($_POST['teamID'])) {
+        } else if (isset($_POST['teamID'])) {
             $team_id = $_POST['teamID'];
         } else {
             $team_id = 0;
         }
-		
-    } else if(isset($_GET['id'])) {
+
+    } else if (isset($_GET['id'])) {
         $team_id = (int)$_GET['id'];
     }
 
@@ -32,7 +32,7 @@ try {
         mysqli_query(
             $_database,
             "SELECT COUNT(*) AS exist FROM `".PREFIX."cups_teams` 
-            	WHERE teamID = " . $team_id
+                WHERE teamID = " . $team_id
         )
     );
 
@@ -107,8 +107,20 @@ try {
 
         $countries = getcountries($country);
 
+        $logotype_max_size = (isset($cup_team_logotype_max_size) && $cup_team_logotype_max_size) ?
+            $cup_team_logotype_max_size : 500;
+
+        $image_response = str_replace(
+            '%max_pixels%',
+            $logotype_max_size,
+            $_language->module['image_response']
+        );
+
         $data_array = array();
         $data_array['$title'] = $_language->module['edit'];
+        $data_array['$logotype_is_required'] = (isset($cup_team_logotype_is_required) && $cup_team_logotype_is_required) ?
+            ' *' : '';
+        $data_array['$image_response'] = $image_response;
         $data_array['$error_add'] = '';
         $data_array['$teamname'] = (isset($teamname)) ? $teamname : '';
         $data_array['$teamtag'] = (isset($teamtag)) ? $teamtag : '';

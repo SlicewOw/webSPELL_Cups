@@ -33,8 +33,9 @@ class cup_team {
     var $logotype_type = null;
 
     //
-    // Restrictions
+    // Settings
     var $team_tag_max_length = null;
+    var $cup_team_logotype_is_required = null;
 
     //
     // Status
@@ -57,13 +58,47 @@ class cup_team {
         $this->logotype_path = __DIR__ . '/../../images/cup/teams/';
 
         //
-        // Max. Größe
-        // 500 -> 500x500
-        $this->logotype_max_size = 500;
+        // Set cup team settings
+        $this->loadCupSettings();
 
-        //
-        // Max. Länge des Team Tags
-        $this->team_tag_max_length = 16;
+    }
+
+    private function loadCupSettings() {
+
+        $settingsFile = __DIR__ . '/../../cup/settings.php';
+        if (!file_exists($settingsFile)) {
+
+            //
+            // teams need to upload logotype
+            $this->cup_team_logotype_is_required = TRUE;
+
+            //
+            // Max. site of logotype
+            // 500 -> 500x500 pixel
+            $this->logotype_max_size = 500;
+
+            //
+            // Mmax count of chars of team tag
+            $this->team_tag_max_length = 16;
+
+        } else {
+
+            include($settingsFile);
+
+            //
+            // teams need to upload logotype
+            $this->cup_team_logotype_is_required = $cup_team_logotype_is_required;
+
+            //
+            // Max. site of logotype
+            // 500 -> 500x500 pixel
+            $this->logotype_max_size = $cup_team_logotype_max_size;
+
+            //
+            // Mmax count of chars of team tag
+            $this->team_tag_max_length = $cup_team_tag_max_length;
+
+        }
 
     }
 
@@ -332,8 +367,14 @@ class cup_team {
             throw new \Exception($this->lang->module['wrong_parameter_icon'] . ' (1)');
         }
 
-        if (empty($this->team_logotype)) {
-            throw new \Exception($this->lang->module['wrong_parameter_icon'] . ' (2)');
+        if ($this->cup_team_logotype_is_required) {
+
+            if (empty($this->team_logotype)) {
+                throw new \Exception($this->lang->module['wrong_parameter_icon'] . ' (2)');
+            }
+
+        } else if (is_null($this->team_logotype)) {
+            $this->team_logotype = '';
         }
 
         //
@@ -400,7 +441,7 @@ class cup_team {
             throw new \Exception($this->lang->module['wrong_query_insert']);
         }
 
-        if (!is_null($this->logotype_type)) {
+        if (!is_null($this->logotype_type) && !empty($this->team_logotype)) {
 
             $fileName = convert2filename($this->team_id, true, true) . $this->logotype_type;
 

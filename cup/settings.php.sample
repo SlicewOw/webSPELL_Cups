@@ -1,4 +1,14 @@
 <?php
 
+/**
+ * API Keys
+ */
 $steam_api_key = '';
 $twitch_client_id = '';
+
+/**
+ * Cup Team settings
+ */
+$cup_team_tag_max_length = 16; // max count of chars (default=16)
+$cup_team_logotype_max_size = 500; // value in pixels, 500 -> 500x500px (default=500)
+$cup_team_logotype_is_required = TRUE; // if teams need to add a logotype or not (default=TRUE)

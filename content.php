@@ -5,8 +5,11 @@ if (file_exists($errorNotifyPath)) {
     include($errorNotifyPath);
 }
 
-if (!file_exists(__DIR__ . '/cup/settings.php')) {
+$cupSettingsFile = __DIR__ . '/cup/settings.php';
+if (!file_exists($cupSettingsFile)) {
     echo showError('Please create the settings files within folder "cup/". Just copy the sample file and remove the suffix ".sample".');
+} else {
+    include($cupSettingsFile);
 }
 
 $invalide = array('\\', '/', '/\/', ':', '.');
