@@ -20,17 +20,13 @@ try {
 
     $date = time();
 
-    $ergebnis = mysqli_query(
-        $_database,
+    $selectUserQuery = cup_query(
         "SELECT * FROM `" . PREFIX . "user`
-            WHERE `userID` = " .$user_id
+            WHERE `userID` = " . $user_id,
+        __FILE__
     );
 
-    if (!$ergebnis) {
-        throw new \Exception($_language->module['query_select_failed']);
-    }
-
-    $ds = mysqli_fetch_array($ergebnis);
+    $ds = mysqli_fetch_array($selectUserQuery);
 
     updateUserVisitorStatistic($user_id);
 
@@ -39,15 +35,15 @@ try {
 
     $time_now = time();
 
-    $get_pp = mysqli_query(
-        $_database,
+    $get_pp = cup_query(
         "SELECT
                 `ppID`,
                 `date`,
                 `duration_time`,
                 `reasonID`
             FROM `" . PREFIX . "cups_penalty`
-            WHERE `duration_time` > " . $time_now . " AND `userID` = " . $user_id . " AND `deleted` = 0"
+            WHERE `duration_time` > " . $time_now . " AND `userID` = " . $user_id . " AND `deleted` = 0",
+        __FILE__
     );
 
     if (mysqli_num_rows($get_pp) > 0) {
@@ -88,25 +84,26 @@ try {
         $email = '<a href="mailto:'.mail_protect(cleartext($ds['email'])).'">'.cleartext($ds['email']).'</a>';
     }
 
-    if ($loggedin && $ds['userID'] != $userID) {
+    if ($loggedin && ($user_id != $userID)) {
 
-        $pm = '<a href="index.php?site=messenger&amp;action=touser&amp;touser='.$ds['userID'].'">&raquo; '.$_language->module['write'].'</a>';
+        $pm = '<a href="index.php?site=messenger&amp;action=touser&amp;touser=' . $user_id . '" class="list-group-item">&raquo; '.$_language->module['write'].'</a>';
 
         $icon_url = $image_url . 'icons/';
 
-        if (isignored($userID, $ds['userID'])) {
-            $buddy = '<a href="buddys.php?action=readd&amp;id='.$ds['userID'].'&amp;userID='.$userID.'"><img src="' . $icon_url . 'buddy_readd.gif" border="0" alt="'.$_language->module['back_buddylist'].'" /></a>';
+        if (isignored($userID, $user_id)) {
+            $buddy_url = 'buddys.php?action=readd&amp;id=' . $user_id . '&amp;userID=' . $userID;
+            $buddy = '<a href="' . $buddy_url . '"><img src="' . $icon_url . 'buddy_readd.gif" border="0" alt="'.$_language->module['back_buddylist'].'" /></a>';
         } else if (isbuddy($userID, $ds['userID'])) {
-            $buddy = '<a href="buddys.php?action=ignore&amp;id='.$ds['userID'].'&amp;userID='.$userID.'"><img src="' . $icon_url . 'buddy_ignore.gif" border="0" alt="'.$_language->module['ignore_user'].'" /></a>';
-        } else if ($userID == $ds['userID']) {
-            $buddy = '';
+            $buddy_url = 'buddys.php?action=ignore&amp;id=' . $user_id . '&amp;userID=' . $userID;
+            $buddy = '<a href="' . $buddy_url . '"><img src="' . $icon_url . 'buddy_ignore.gif" border="0" alt="'.$_language->module['ignore_user'].'" /></a>';
         } else {
-            $buddy = '<a href="buddys.php?action=add&amp;id='.$ds['userID'].'&amp;userID='.$userID.'"><img src="' . $icon_url . 'buddy_add.gif" border="0" alt="'.$_language->module['add_buddylist'].'" /></a>';
+            $buddy_url = 'buddys.php?action=add&amp;id=' . $user_id . '&amp;userID=' . $userID;
+            $buddy = '<a href="' . $buddy_url . '"><img src="' . $icon_url . 'buddy_add.gif" border="0" alt="'.$_language->module['add_buddylist'].'" /></a>';
         }
 
     } else {
 
-        $pm = $_language->module['no_write'];
+        $pm = '';
         $buddy = '';
 
     }
@@ -115,17 +112,25 @@ try {
     $lastname = clearfromtags($ds['lastname']);
 
     $birthday = mb_substr($ds['birthday'], 0, 10);
-    $birthday = date("d.m.Y",strtotime($birthday));
+    $birthday = date("d.m.Y", strtotime($birthday));
 
     $birth = getAge($user_id) . ' ' . $_language->module['years'];
 
-    if($ds['sex'] == "f") $sex = $_language->module['female'];
-    elseif($ds['sex'] == "m") $sex = $_language->module['male'];
-    else $sex = $_language->module['unknown'];
-    $flag = '[flag]'.$ds['country'].'[/flag]';
+    if ($ds['sex'] == "f") {
+        $sex = $_language->module['female'];
+    } else if ($ds['sex'] == "m") {
+        $sex = $_language->module['male'];
+    } else {
+        $sex = $_language->module['unknown'];
+    }
+
+    $flag = '[flag]' . $ds['country'] . '[/flag]';
     $profilecountry = flags($flag);
+
     $town = clearfromtags($ds['town']);
-    if($town == '') $town = $_language->module['n_a'];
+    if (!empty($town)) {
+        $town = $_language->module['from'] . ' ' . $town;
+    }
 
     $equipmentArray = array();
 
@@ -204,27 +209,9 @@ try {
         $equipment = '<div class="list-group-item grey italic">' . $_language->module['no_equipment'] . '</div>';
     }
 
-    $anznewsposts = getusernewsposts($ds['userID']);
-    $anzforumtopics = getuserforumtopics($ds['userID']);
-    $anzforumposts = getuserforumposts($ds['userID']);
-
-    $comments = array();
-    $comments[] = getusercomments($ds['userID'], 'ne');
-    $comments[] = getusercomments($ds['userID'], 'cw');
-    $comments[] = getusercomments($ds['userID'], 'ar');
-    $comments[] = getusercomments($ds['userID'], 'de');
-
-    $pmgot = 0;
-    $pmgot = $ds['pmgot'];
-
-    $pmsent = 0;
-    $pmsent = $ds['pmsent'];
-
-    if ($ds['about']) {
-        $about = cleartext($ds['about']);
-    } else {
-        $about = $_language->module['n_a'];
-    }
+    /**
+     * Cup teams
+     */
 
     $teams = '';
 
@@ -234,14 +221,14 @@ try {
 
     $whereClause = implode(' AND ', $whereClauseArray);
 
-    $teamSelectQuery = mysqli_query(
-        $_database,
+    $teamSelectQuery = cup_query(
         "SELECT
                 `teamID`,
                 `join_date`
             FROM `" . PREFIX . "cups_teams_member`
             WHERE " . $whereClause . "
-            ORDER BY teamID ASC"
+            ORDER BY `teamID` ASC",
+        __FILE__
     );
 
     if ($teamSelectQuery) {
@@ -261,10 +248,58 @@ try {
             }
 
         } else {
-            $teams = '<div class="list-group-item grey italic">'.$_language->module['no_team'].'</div>';
+            $teams = '<div class="list-group-item grey italic">' . $_language->module['no_team'] . '</div>';
         }
 
     }
+
+    /**
+     * Cup achievements
+     */
+
+    $achievements = '';
+
+    $whereClauseArray = array();
+    $whereClauseArray[] = 'cp.`teamID` = ' . $user_id;
+    $whereClauseArray[] = 'c.`mode` = \'1on1\'';
+    $whereClauseArray[] = '(cp.`platzierung` = \'1\' OR cp.`platzierung` = \'2\' OR cp.`platzierung` = \'3\' OR cp.`platzierung` = \'4\')';
+
+    $whereClause = implode(' AND ', $whereClauseArray);
+
+    $selectAwardsQuery = cup_query(
+        "SELECT
+                cp.`teamID` AS `user_id`,
+                cp.`platzierung` AS `user_placement`,
+                cp.`cupID` AS `cup_id`,
+                c.`name` AS `cup_name`
+            FROM `" . PREFIX . "cups_platzierungen` cp
+            JOIN `" . PREFIX . "cups` c ON cp.`cupID` = c.`cupID`
+            WHERE " . $whereClause,
+        __FILE__
+    );
+
+    if ($selectAwardsQuery) {
+
+        if (mysqli_num_rows($selectAwardsQuery) > 0) {
+
+            while ($get = mysqli_fetch_array($selectAwardsQuery)) {
+
+                $cup_url = 'index.php?site=cup&amp;action=details&amp;id=' . $get['cup_id'];
+                $achievement_text = $get['user_placement'] . '. - ' . $get['cup_name'];
+
+                $achievements .= '<a href="' . $cup_url . '" class="list-group-item">' . $achievement_text . '</a>';
+
+            }
+
+        } else {
+            $achievements = '<div class="list-group-item grey italic">' . $_language->module['no_achievement'] . '</div>';
+        }
+
+    }
+
+    /**
+     * Cup gameaccounts
+     */
 
     $gameaccounts = '';
 
@@ -275,11 +310,12 @@ try {
 
     $whereClause = implode(' AND ', $whereClauseArray);
 
-    $gameaccountSelectQuery = mysqli_query(
-        $_database,
+    $gameaccountSelectQuery = cup_query(
         "SELECT * FROM `" . PREFIX . "cups_gameaccounts`
-            WHERE " . $whereClause
+            WHERE " . $whereClause,
+        __FILE__
     );
+
     if ($gameaccountSelectQuery) {
 
         if (mysqli_num_rows($gameaccountSelectQuery) > 0) {
@@ -330,6 +366,7 @@ try {
     $data_array['$equipment'] = $equipment;
     $data_array['$connection'] = $connection;
     $data_array['$teams'] = $teams;
+    $data_array['$achievements'] = $achievements;
     $data_array['$gameaccounts'] = $gameaccounts;
     $profile = $GLOBALS["_template_cup"]->replaceTemplate("profile", $data_array);
     echo $profile;

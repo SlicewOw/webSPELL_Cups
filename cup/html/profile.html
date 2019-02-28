@@ -5,48 +5,62 @@
 </div>
 $penalty
 <div class="row">
-    <div class="col-sm-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h1 class="panel-title">%profile%</h1>
+    <div class="col-sm-8">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">%profile%</h1>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item">$birth $town</div>
+                        <div class="list-group-item">%last_login% $lastlogin</div>
+                        <div class="list-group-item">%registered_since% $registered</div>
+                        $pm
+                    </div>
+                </div>
             </div>
-            <div class="list-group">
-                <div class="list-group-item">$birth %from% $town</div>
-                <div class="list-group-item">%last_login% $lastlogin</div>
-                <div class="list-group-item">%registered_since% $registered</div>
-                <div class="list-group-item">$pm</div>
+            <div class="col-sm-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">%equipment%</h1>
+                    </div>
+                    <div class="list-group">
+                        $equipment
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">%cup_achievements%</h1>
+                    </div>
+                    <div class="list-group">
+                        $achievements
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">Gameaccounts</h1>
+                    </div>
+                    <div class="list-group">
+                        $gameaccounts
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h1 class="panel-title">%equipment%</h1>
-            </div>
-            <div class="list-group">
-                $equipment
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h1 class="panel-title">Teams</h1>
             </div>
             <div class="list-group">
                 $teams
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h1 class="panel-title">Gameaccounts</h1>
-            </div>
-            <div class="list-group">
-                $gameaccounts
             </div>
         </div>
     </div>

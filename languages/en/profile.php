@@ -27,9 +27,11 @@
 
 $language_array = array(
 
+    'cup_achievements'=>'cup achievements',
     'equipment'=>'equipment',
     'from'=>'from',
     'microphone'=>'microphone',
+    'no_achievement'=>'no achievements yet',
     'no_equipment'=>'no equipment',
     'no_gameacc'=>'no gameaccount',
     'no_team'=>'no team',
