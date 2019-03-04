@@ -2,8 +2,6 @@
 
 try {
 
-    //$_language->readModule('cups');
-
     if (!$loggedin) {
         throw new \Exception('access_denied');
     }
@@ -15,26 +13,22 @@ try {
     $whereClause_base .= ' OR (`team1_confirmed` = 1 AND `team2_confirmed` = 0))';
     $whereClause_base .= ' AND `admin_confirmed` = 0';
 
-    $selectQuery = mysqli_query(
-        $_database,
+    $selectQuery = cup_query(
         "SELECT
                 `teamID`
             FROM `" . PREFIX . "cups_teams_member`
-            WHERE `userID` = " . $userID . " AND `active` = 1"
+            WHERE `userID` = " . $userID . " AND `active` = 1",
+        __FILE__
     );
-
-    if (!$selectQuery) {
-        throw new \Exception('query_select_failed');
-    }
 
     while ($get = mysqli_fetch_array($selectQuery)) {
 
         $team_id = $get['teamID'];
 
         $whereClause = $whereClause_base . ' AND (`team1` = ' . $team_id . ' OR `team2` = ' . $team_id . ')';
+        $whereClause .= ' AND `mode` != \'1on1\'';
 
-        $matchQuery = mysqli_query(
-            $_database,
+        $matchQuery = cup_query(
             "SELECT
                     cmp.`matchID` AS `match_id`,
                     cmp.`cupID` AS `cup_id`,
@@ -43,30 +37,16 @@ try {
                     c.`mode` AS `cup_mode`
                 FROM `" . PREFIX . "cups_matches_playoff` cmp
                 JOIN `" . PREFIX . "cups` c ON cmp.`cupID` = c.`cupID`
-                WHERE " . $whereClause
+                WHERE " . $whereClause,
+            __FILE__
         );
-
-        if (!$matchQuery) {
-            throw new \Exception('query_select_failed');
-        }
 
         while ($getMatch = mysqli_fetch_array($matchQuery)) {
 
-            if ($getMatch['cup_mode'] != '1on1') {
+            $opponent = ($getMatch['team1_id'] == $userID) ?
+                $getMatch['team2_id'] : $getMatch['team1_id'];
 
-                $opponent = ($getMatch['team1_id'] == $team_id) ?
-                    $getMatch['team2_id'] : $getMatch['team1_id'];
-
-                $opponent_name = getteam($opponent, 'name');
-
-            } else {
-
-                $opponent = ($getMatch['team1_id'] == $userID) ?
-                    $getMatch['team2_id'] : $getMatch['team1_id'];
-
-                $opponent_name = getnickname($opponent);
-
-            }
+            $opponent_name = getnickname($opponent);
 
             $matchArray[] = array(
                 'match_id' =>  $getMatch['match_id'],
@@ -75,6 +55,37 @@ try {
             );
 
         }
+
+    }
+
+    $whereClause = $whereClause_base . ' AND (`team1` = ' . $userID . ' OR `team2` = ' . $userID . ')';
+    $whereClause .= ' AND `mode` = \'1on1\'';
+
+    $matchQuery = cup_query(
+        "SELECT
+                cmp.`matchID` AS `match_id`,
+                cmp.`cupID` AS `cup_id`,
+                cmp.`team1` AS `team1_id`,
+                cmp.`team2` AS `team2_id`,
+                c.`mode` AS `cup_mode`
+            FROM `" . PREFIX . "cups_matches_playoff` cmp
+            JOIN `" . PREFIX . "cups` c ON cmp.`cupID` = c.`cupID`
+            WHERE " . $whereClause,
+        __FILE__
+    );
+
+    while ($getMatch = mysqli_fetch_array($matchQuery)) {
+
+        $opponent = ($getMatch['team1_id'] == $team_id) ?
+            $getMatch['team2_id'] : $getMatch['team1_id'];
+
+        $opponent_name = getteam($opponent, 'name');
+
+        $matchArray[] = array(
+            'match_id' =>  $getMatch['match_id'],
+            'cup_id' => $getMatch['cup_id'],
+            'opponent' => $opponent_name
+        );
 
     }
 
