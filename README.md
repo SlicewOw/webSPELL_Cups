@@ -25,9 +25,10 @@ Feel free to use this add-on for webSPELL NOR, but be aware that we (myRisk e.V)
 
 # Communication
 
-To talk about the add-on, I created a Slack channel. Feel free to join us and you may have some question to be answered:
+To talk about the add-on, I created a Slack channel. You may have some question to be answered:
 
 * https://webspellcup-addon.slack.com
+* IMPORTANT: You need to contact me in order to receive an invite!
 
 # Optional stuff
 
