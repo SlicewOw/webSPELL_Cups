@@ -8,11 +8,68 @@
             $username $badge<span class="caret"></span>
         </a>
         <ul class="dropdown-menu dropdown-bootstrap">
-            <li><a href="index.php?site=profile&amp;id=$userID#content">%overview%</a></li>
-            <li><a href="index.php?site=myprofile#content">%edit_account%</a></li>
-            <li><a href="index.php?site=messenger#content">$newmessages</a></li>
-            <li><a href="logout.php" style="color: #FF0000;">%logout%</a></li>
+            <li>
+                <a href="index.php?site=profile&amp;id=$userID#content">%overview%</a>
+            </li>
+            <li>
+                <a href="index.php?site=myprofile#content">%edit_account%</a>
+            </li>
+            <li>
+                <a href="index.php?site=messenger#content">$newmessages</a>
+            </li>
+            <li>
+                <a href="logout.php" style="color: #FF0000;">%logout%</a>
+            </li>
         </ul>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+             <span class="fa fa-globe"></span> <span class="badge" id="notifyBadge"></span> <span class="caret"></span>
+        </a>
+        <ul id="notifyContainer" class="dropdown-menu dropdown-bootstrap"></ul>
     </li>
     $loginList
 </ul>
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    getNotification();
+
+    setInterval(
+        function() {
+            getNotification();
+        },
+        60000
+    );
+
+});
+
+function getNotification() {
+    'use strict';
+
+    $.get(
+        "ajax.php?site=get_notification",
+        function (data) {
+
+            var varData = JSON.parse(data);
+            if (varData.status) {
+
+                if (varData.notification.badge > 0) {
+                    $("#notifyBadge").html(varData.notification.badge);
+                }
+
+                $("#notifyContainer").html(varData.notification.container);
+
+            }
+
+        }
+    );
+
+}
+
+</script>

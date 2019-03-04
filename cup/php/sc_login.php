@@ -8,13 +8,14 @@ try {
 
         $admin = '';
         if (isanyadmin($userID)) {
-            $admin = '<li><a href="' . $admin_url . '" target="_blank">'.$_language->module['admin'].'</a></li>';
+            $admin = '<li><a href="' . $admin_url . '" target="_blank">' . $_language->module['admin'] . '</a></li>';
         }
 
         $anz = getnewmessages($userID);
-        $newmessages = ($anz == '1') ? '1 '.$_language->module['nachricht'] : $anz.' '.$_language->module['nachrichten'];
+        $newmessages = ($anz == '1') ?
+            '1 '.$_language->module['nachricht'] : $anz.' '.$_language->module['nachrichten'];
 
-        $badge = ($anz > 0) ? '<span class="badge">'.$anz.'</span> ' : '';
+        $badge = ($anz > 0) ? '<span class="badge">' . $anz . '</span> ' : '';
 
         $loginList = '';
 
@@ -52,9 +53,9 @@ try {
             $newTicketCounter = '';
         }
 
-        $loginList .= ($getSite == 'support') ? 
-            '<li class="active"><a href="index.php?site=support#content">Support'.$newTicketCounter.'</a></li>' :
-            '<li><a href="index.php?site=support#content">Support'.$newTicketCounter.'</a></li>';
+        $loginList .= ($getSite == 'support') ?
+            '<li class="active"><a href="index.php?site=support#content">Support' . $newTicketCounter . '</a></li>' :
+            '<li><a href="index.php?site=support#content">Support' . $newTicketCounter . '</a></li>';
 
         $loginList .= $admin;
 

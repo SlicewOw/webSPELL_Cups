@@ -970,6 +970,37 @@ try {
             MODIFY `logID` int(11) NOT NULL AUTO_INCREMENT;"
     );
 
+    /**
+     * Notifications
+     */
+
+    $createTableQuery = mysqli_query(
+        $_database,
+        "CREATE TABLE `" . PREFIX . "user_notifications` (
+            `notifyID` int(11) NOT NULL,
+            `receiver_id` int(11) NOT NULL,
+            `transmitter_id` int(11) NOT NULL,
+            `parent_url` varchar(255) COLLATE latin1_german1_ci NOT NULL,
+            `parent_id` int(11) NOT NULL,
+            `date` int(11) NOT NULL,
+            `message` varchar(300) COLLATE latin1_german1_ci NOT NULL,
+            `notify_seen` int(1) NOT NULL DEFAULT '0',
+            `notify_seen_date` int(11) DEFAULT NULL
+        ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;"
+    );
+
+    $alterTableQuery = mysqli_query(
+        $_database,
+        "ALTER TABLE `" . PREFIX . "user_notifications`
+            ADD PRIMARY KEY (`notifyID`);"
+    );
+
+    $alterTableQuery = mysqli_query(
+        $_database,
+        "ALTER TABLE `" . PREFIX . "ws_j12_user_notifications`
+            MODIFY `notifyID` int(11) NOT NULL AUTO_INCREMENT;"
+    );
+
     echo "Delete this file!";
 
     $sendmail = \webspell\Email::sendEmail(

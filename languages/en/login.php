@@ -27,6 +27,7 @@
 
 $language_array = array(
 
+    'no_notification'=>'no notifications',
     'register_team'=>'create team',
 
 /* do not edit above this line */

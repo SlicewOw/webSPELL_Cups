@@ -739,10 +739,9 @@ function setNotification($receiver_id, $parent_url, $parent_id, $message) {
     // Receiver ID      = Empfänger
     // Transmitter ID   = Sender
 
-    global $_database, $userID;
+    global $userID;
 
-    $saveQuery = mysqli_query(
-        $_database,
+    $saveQuery = cup_query(
         "INSERT INTO `" . PREFIX . "user_notifications`
             (
                 `receiver_id`,
@@ -760,7 +759,8 @@ function setNotification($receiver_id, $parent_url, $parent_id, $message) {
                 " . $parent_id . ",
                 " . time() . ",
                 '" . $message . "'
-            )"
+            )",
+        __FILE__
     );
 
     if (!$saveQuery) {

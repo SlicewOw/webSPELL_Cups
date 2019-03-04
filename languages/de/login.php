@@ -27,11 +27,12 @@
 
 $language_array = array(
 
+    'no_notification'=>'keine Benachrichtigungen',
     'register_team'=>'Team erstellen',
 
 /* do not edit above this line */
 
-    'admin' => 'Administration',
+    'admin' => 'Admin',
     'buddy_list' => 'Freundesliste',
     'cash-box' => 'Kasse',
     'edit_account' => 'Konto bearbeiten',
