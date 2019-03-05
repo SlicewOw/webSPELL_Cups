@@ -8,6 +8,7 @@ module.exports = function (grunt) {
                 src: [
                     'cup/js/pnotify.custom.min.js',
                     'cup/js/bootstrap.js',
+                    'cup/js/jquery.viewbox.js',
                     'cup/js/ckeditor.js',
                     'cup/js/config.js',
                     'cup/js/flipclock.js',
@@ -22,6 +23,7 @@ module.exports = function (grunt) {
             css_main: {
                 src: [
                     'cup/css/bootstrap-select.css',
+                    'cup/css/viewbox.css',
                     'cup/css/flipclock.css',
                     'cup/css/pnotify.custom.min.css',
                     'cup/css/cup.css',

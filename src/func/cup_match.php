@@ -170,7 +170,14 @@ function getMatchStatusAsListByMatchId($cup_array, $match_id) {
         foreach ($screenshotArray as $screenshot) {
 
             if (file_exists($screenshot_local_url . $screenshot['file'])) {
-                $statusScreenshotArray[] = '<a href="' . $screenshot_url . $screenshot['file'] . '" target="_blank">' . $screenshot['category_name'] . '</a>';
+
+                $linkAttributeArray = array();
+                $linkAttributeArray[] = 'href="' . $screenshot_url . $screenshot['file'] . '"';
+                $linkAttributeArray[] = 'class="cup-match-screenshot-viewer"';
+                $linkAttributeArray[] = '';
+
+                $statusScreenshotArray[] = '<a ' . implode(' ', $linkAttributeArray) . '>' . $screenshot['category_name'] . '</a>';
+
             } else {
                 $statusScreenshotArray[] = '<del>' . $screenshot['category_name'] . '</del>';
             }
