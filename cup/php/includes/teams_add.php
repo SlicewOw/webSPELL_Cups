@@ -65,6 +65,8 @@ try {
                     $team->uploadLogotype($_FILES['logotype']);
                 }
 
+                $team->setAdminId($userID);
+
                 //
                 // Team speichern in DB
                 $team->saveTeam();

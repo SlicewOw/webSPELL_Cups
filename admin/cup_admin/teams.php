@@ -70,7 +70,13 @@ try {
                         $team->uploadLogotype($_FILES['logotype']);
                     }
 
-                    $team->setAdminTeamOnly();
+                    if (isset($_POST['admin_only']) && ($_POST['admin_only'] == '1')) {
+                        $team->setAdminTeamOnly(true);
+                    }
+
+                    if (isset($_POST['admin'])) {
+                        $team->setAdminId($_POST['admin']);
+                    }
 
                     //
                     // Team speichern in DB
@@ -78,11 +84,41 @@ try {
 
                     setPlayerLog($userID, $team->getTeamId(), 'cup_team_created');
 
+                    if (isset($_POST['player']) && validate_array($_POST['player'], true)) {
+
+                        $insertPlayerArray = array();
+
+                        $playerArray = array_unique($_POST['player']);
+                        foreach ($playerArray as $player_id) {
+                            if (validate_int($player_id, true)) {
+                                $insertPlayerArray[] = '(' . $player_id . ', ' . $team->getTeamId() . ', 3, ' . time() . ')';
+                            }
+                        }
+
+                        if (validate_array($insertPlayerArray, true)) {
+
+                            $insertQuery = cup_query(
+                                "INSERT INTO `" . PREFIX . "cups_teams_member`
+                                    (
+                                        `userID`,
+                                        `teamID`,
+                                        `position`,
+                                        `join_date`
+                                    )
+                                    VALUES
+                                    " . implode(', ', $insertPlayerArray),
+                                __FILE__
+                            );
+
+                        }
+
+                    }
+
                     unset($_SESSION['cup']);
 
                     $parent_url .= '&action=admin&id=' . $team->getTeamId();
 
-                } catch(Exception $e) {
+                } catch (Exception $e) {
 
                     $_SESSION['cup']['team']['error'] = showError($e->getMessage());
 
@@ -106,36 +142,57 @@ try {
 
     } else {
 
+        $team_id = (isset($_POST['id']) && validate_int($_POST['id'], true)) ?
+            (int)$_POST['id'] : 0;
+
+        $breadcrumbArray = array();
+
+        if (empty($getAction) || ($getAction == 'home')) {
+            $breadcrumbArray[] = '<li class="active">Home</li>';
+        } else if ($getAction == 'add') {
+            $breadcrumbArray[] = '<li class="active">' . $_language->module['add_team'] . '</li>';
+        }
+
+        $data_array = array();
+        $data_array['$breadcrumbs'] = implode(' ', $breadcrumbArray);
+        $teams_menu = $GLOBALS["_template_cup"]->replaceTemplate("teams_admin_menu", $data_array);
+        echo $teams_menu;
+
         if ($getAction == 'add') {
+
+            $error = '';
+            if (isset($_SESSION['cup']['team']['error']) && !empty($_SESSION['cup']['team']['error'])) {
+                $error = $_SESSION['cup']['team']['error'];
+                unset($_SESSION['cup']['team']['error']);
+            }
+
+            $logotype_max_size = (isset($cup_team_logotype_max_size) && $cup_team_logotype_max_size) ?
+                $cup_team_logotype_max_size : 500;
+
+            $image_response = str_replace(
+                '%max_pixels%',
+                $logotype_max_size,
+                $_language->module['image_response']
+            );
 
             $data_array = array();
             $data_array['$title'] = $_language->module['add_team'];
-            $data_array['$error_add'] = '';
+            $data_array['$logotype_is_required'] = (isset($cup_team_logotype_is_required) && $cup_team_logotype_is_required) ?
+                ' *' : '';
+            $data_array['$image_response'] = $image_response;
+            $data_array['$error_add'] = $error;
             $data_array['$teamname'] = '';
             $data_array['$teamtag'] = '';
+            $data_array['$userlist'] = getuserlist();
             $data_array['$homepage'] = '';
             $data_array['$countries'] = getcountries('de');
             $data_array['$pic'] = '';
             $data_array['$team_id'] = 0;
             $data_array['$postName'] = 'submitAddCupTeam';
-            $team_add = $GLOBALS["_template_cup"]->replaceTemplate("teams_action", $data_array);
+            $team_add = $GLOBALS["_template_cup"]->replaceTemplate("teams_action_admin", $data_array);
             echo $team_add;
 
         } else {
-
-            $team_id = (isset($_POST['id']) && validate_int($_POST['id'], true)) ?
-                (int)$_POST['id'] : 0;
-
-            $breadcrumbArray = array();
-
-            if (empty($getAction) || ($getAction == 'home')) {
-                $breadcrumbArray[] = '<li class="active">Home</li>';
-            }
-
-            $data_array = array();
-            $data_array['$breadcrumbs'] = implode(' ', $breadcrumbArray);
-            $teams_menu = $GLOBALS["_template_cup"]->replaceTemplate("teams_admin_menu", $data_array);
-            echo $teams_menu;
 
             $showEntries = 20;
 

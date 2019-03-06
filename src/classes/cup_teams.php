@@ -5,10 +5,6 @@ namespace myrisk;
 class cup_team {
 
     //
-    // Activity Feed Kategorie
-    var $cat_id = null;
-
-    //
     // Language
     var $lang = null;
 
@@ -17,7 +13,7 @@ class cup_team {
     var $team_id = null;
     var $team_name = null;
     var $team_tag = null;
-    var $team_hp = null;
+    var $team_hp = '';
     var $team_admin = null;
     var $team_country = null;
     var $team_logotype = null;
@@ -65,38 +61,42 @@ class cup_team {
 
     private function loadCupSettings() {
 
+        //
+        // teams need to upload logotype
+        $this->cup_team_logotype_is_required = TRUE;
+
+        //
+        // Max. site of logotype
+        // 500 -> 500x500 pixel
+        $this->logotype_max_size = 500;
+
+        //
+        // Mmax count of chars of team tag
+        $this->team_tag_max_length = 16;
+
         $settingsFile = __DIR__ . '/../../cup/settings.php';
-        if (!file_exists($settingsFile)) {
-
-            //
-            // teams need to upload logotype
-            $this->cup_team_logotype_is_required = TRUE;
-
-            //
-            // Max. site of logotype
-            // 500 -> 500x500 pixel
-            $this->logotype_max_size = 500;
-
-            //
-            // Mmax count of chars of team tag
-            $this->team_tag_max_length = 16;
-
-        } else {
+        if (file_exists($settingsFile)) {
 
             include($settingsFile);
 
             //
             // teams need to upload logotype
-            $this->cup_team_logotype_is_required = $cup_team_logotype_is_required;
+            if (isset($cup_team_logotype_is_required)) {
+                $this->cup_team_logotype_is_required = $cup_team_logotype_is_required;
+            }
 
             //
             // Max. site of logotype
             // 500 -> 500x500 pixel
-            $this->logotype_max_size = $cup_team_logotype_max_size;
+            if (isset($cup_team_logotype_max_size)) {
+                $this->logotype_max_size = $cup_team_logotype_max_size;
+            }
 
             //
             // Mmax count of chars of team tag
-            $this->team_tag_max_length = $cup_team_tag_max_length;
+            if (isset($cup_team_tag_max_length)) {
+                $this->team_tag_max_length = $cup_team_tag_max_length;
+            }
 
         }
 
@@ -104,7 +104,7 @@ class cup_team {
 
     public function setName($name) {
 
-        if(empty($name)) {
+        if (empty($name)) {
             throw new \Exception($this->lang->module['wrong_parameter_name']);
         }
 
@@ -116,7 +116,7 @@ class cup_team {
 
     public function setTag($tag) {
 
-        if(empty($tag)) {
+        if (empty($tag)) {
             throw new \Exception($this->lang->module['wrong_parameter_tag']);
         }
 
@@ -128,7 +128,7 @@ class cup_team {
 
     public function setHomepage($homepage) {
 
-        if(validate_url($homepage)) {
+        if (validate_url($homepage)) {
             $this->team_hp = $homepage;
         }
 
@@ -136,13 +136,24 @@ class cup_team {
 
     public function setCountry($country = 'de') {
 
-        if(empty($country)) {
+        if (empty($country)) {
             $country = 'de';
         }
 
         $country = trim($country);
 
         $this->team_country = $country;
+
+    }
+
+    public function setAdminId($user_id) {
+
+        if (empty($user_id) || !validate_int($user_id, true)) {
+            global $userID;
+            $this->team_admin = $userID;
+        }
+
+        $this->team_admin = $user_id;
 
     }
 
@@ -259,21 +270,21 @@ class cup_team {
         // true     : Team existiert
         // false    : Team existiert nicht
 
-        if(is_null($this->team_id) || ($this->team_id < 1)) {
+        if (is_null($this->team_id) || ($this->team_id < 1)) {
             throw new \Exception($this->lang->module['wrong_parameter_id']);
         }
 
-        global $_database;
-
-        $checkIf = mysqli_fetch_array(
-            mysqli_query(
-                $_database,
-                "SELECT COUNT(*) AS exist FROM `".PREFIX."cups_teams`
-                    WHERE `teamID` = ".$this->team_id
-            )
+        $selectQuery = cup_query(
+            "SELECT
+                    COUNT(*) AS `exist`
+                FROM `" . PREFIX . "cups_teams`
+                WHERE `teamID` = " . $this->team_id,
+            __FILE__
         );
 
-        if($checkIf['exist'] == 1) {
+        $checkIf = mysqli_fetch_array($selectQuery);
+
+        if ($checkIf['exist'] == 1) {
             return true;
         } else {
             return false;
@@ -287,7 +298,7 @@ class cup_team {
         // true     : Team existiert
         // false    : Team existiert nicht
 
-        if(is_null($this->team_name)) {
+        if (is_null($this->team_name)) {
             throw new \Exception($this->lang->module['wrong_parameter_name']);
         }
 
@@ -297,7 +308,7 @@ class cup_team {
 
         global $_database;
 
-        if(is_null($this->team_id)) {
+        if (is_null($this->team_id)) {
 
             $checkIf = mysqli_fetch_array(
                 mysqli_query(
@@ -307,7 +318,7 @@ class cup_team {
                 )
             );
 
-            if($checkIf['exist'] > 0) {
+            if ($checkIf['exist'] > 0) {
                 throw new \Exception($this->lang->module['wrong_team_name_in_use']);
             }
 
@@ -319,7 +330,7 @@ class cup_team {
                 )
             );
 
-            if($checkIf['exist'] > 0) {
+            if ($checkIf['exist'] > 0) {
                 throw new \Exception($this->lang->module['wrong_team_tag_in_use']);
             }
 
@@ -333,7 +344,7 @@ class cup_team {
                 )
             );
 
-            if($checkIf['exist'] > 0) {
+            if ($checkIf['exist'] > 0) {
                 throw new \Exception($this->lang->module['wrong_team_name_in_use']);
             }
 
@@ -345,7 +356,7 @@ class cup_team {
                 )
             );
 
-            if($checkIf['exist'] > 0) {
+            if ($checkIf['exist'] > 0) {
                 throw new \Exception($this->lang->module['wrong_team_tag_in_use']);
             }
 
@@ -363,28 +374,27 @@ class cup_team {
             throw new \Exception($this->lang->module['wrong_parameter_tag']);
         }
 
-        if (is_null($this->team_logotype)) {
-            throw new \Exception($this->lang->module['wrong_parameter_icon'] . ' (1)');
-        }
-
         if ($this->cup_team_logotype_is_required) {
 
             if (empty($this->team_logotype)) {
-                throw new \Exception($this->lang->module['wrong_parameter_icon'] . ' (2)');
+                throw new \Exception($this->lang->module['wrong_parameter_icon']);
             }
 
         } else if (is_null($this->team_logotype)) {
             $this->team_logotype = '';
         }
 
+        if (is_null($this->team_admin)) {
+            throw new \Exception($this->lang->module['wrong_parameter_admin_id']);
+        }
+
         //
         // Prüfe ob Name und Tag noch verfügbar sind
         $this->isTeamExisting();
 
-        global $_database, $userID;
+        global $_database;
 
-        $saveQuery = mysqli_query(
-            $_database,
+        $saveQuery = cup_query(
             "INSERT INTO `" . PREFIX . "cups_teams`
                 (
                     `date`,
@@ -402,25 +412,21 @@ class cup_team {
                     " . time() . ",
                     '" . $this->team_name . "',
                     '" . $this->team_tag . "',
-                    " . $userID . ",
+                    " . $this->team_admin . ",
                     '" . $this->team_hp . "',
                     '" . $this->team_logotype . "',
                     '" . RandPass(20) . "',
                     '" . $this->team_country . "',
                     " . $this->admin_team . "
-                )"
+                )",
+            __FILE__
         );
-
-        if (!$saveQuery) {
-            throw new \Exception($this->lang->module['wrong_query_insert']);
-        }
 
         $this->team_id = mysqli_insert_id($_database);
 
         setCupTeamLog($this->team_id, $this->team_name, 'team_created');
 
-        $query = mysqli_query(
-            $_database,
+        $query = cup_query(
             "INSERT INTO `" . PREFIX . "cups_teams_member`
                 (
                     `userID`,
@@ -430,16 +436,13 @@ class cup_team {
                 )
                 VALUES
                 (
-                    " . $userID . ",
+                    " . $this->team_admin . ",
                     " . $this->team_id . ",
                     1,
                     " . time() . "
-                )"
+                )",
+            __FILE__
         );
-
-        if (!$query) {
-            throw new \Exception($this->lang->module['wrong_query_insert']);
-        }
 
         if (!is_null($this->logotype_type) && !empty($this->team_logotype)) {
 
@@ -447,11 +450,11 @@ class cup_team {
 
             if (rename($this->logotype_path . $this->team_logotype, $this->logotype_path . $fileName)) {
 
-                $updateQuery = mysqli_query(
-                    $_database,
+                $updateQuery = cup_query(
                     "UPDATE `" . PREFIX . "cups_teams`
-                        SET logotype = '" . $fileName . "'
-                        WHERE teamID = " . $this->team_id
+                        SET `logotype` = '" . $fileName . "'
+                        WHERE `teamID` = " . $this->team_id,
+                    __FILE__
                 );
 
             } else {
@@ -488,11 +491,15 @@ class cup_team {
             $updateArray[] = '`tag` = \'' . $this->team_tag . '\'';
         }
 
+        if (!is_null($this->team_admin) && validate_int($this->team_admin, true)) {
+            $updateArray[] = '`userID` = ' . $this->team_admin;
+        }
+
         if (!is_null($this->team_country)) {
             $updateArray[] = '`country` = \'' . $this->team_country . '\'';
         }
 
-        if (!is_null($this->team_hp)) {
+        if (!is_null($this->team_hp) && !empty($this->team_hp)) {
             $updateArray[] = '`hp` = \'' . $this->team_hp . '\'';
         }
 
@@ -505,22 +512,16 @@ class cup_team {
         }
 
         $anzUpdateValues = count($updateArray);
-        if($anzUpdateValues > 0) {
+        if ($anzUpdateValues > 0) {
 
             $updateString = implode(', ', $updateArray);
 
-            global $_database, $userID;
-
-            $query = mysqli_query(
-                $_database,
+            $query = cup_query(
                 "UPDATE `" . PREFIX . "cups_teams`
                     SET " . $updateString . "
-                    WHERE `teamID` = " . $this->team_id
+                    WHERE `teamID` = " . $this->team_id,
+                __FILE__
             );
-
-            if(!$query) {
-                throw new \Exception($this->lang->module['wrong_query_update']);
-            }
 
             setCupTeamLog($this->team_id, $this->team_name, 'team_changed');
 
@@ -532,7 +533,7 @@ class cup_team {
 
         $parent_url = 'index.php?site=teams&action=admin&teamID=' . $this->team_id;
 
-        if(!$this->is_new_team) {
+        if (!$this->is_new_team) {
             $parent_url .= '&message=edit_ok';
         }
 

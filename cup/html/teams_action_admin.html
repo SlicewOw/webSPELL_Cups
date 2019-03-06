@@ -1,0 +1,131 @@
+<form name="post" method="post" enctype="multipart/form-data">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">$title</h1>
+        </div>
+        <div class="panel-body">
+            $error_add
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Teamname *</label>
+                        <input type="text" name="teamname"
+                               value="$teamname"
+                               placeholder="Name"
+                               class="form-control"
+                               required="required" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Team-Tag *</label>
+                        <input type="text" name="teamtag"
+                               value="$teamtag"
+                               placeholder="Tag"
+                               class="form-control"
+                               required="required" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Homepage</label>
+                        <input type="url" name="homepage"
+                               value="$homepage"
+                               placeholder="https://"
+                               class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>%country% *</label>
+                        <select name="country" class="form-control">
+                            $countries
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Logotype$logotype_is_required ($image_response)</label>
+                        <input type="file" name="logotype"
+                               value=""
+                               accept="image/*"
+                               class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    $pic
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>%admin_team_only%</label>
+                        <select name="admin_only" class="form-control">
+                            <option value="0">%no%</option>
+                            <option value="1">%yes%</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Team-Admin</label>
+                        <select name="admin" class="form-control selectpicker"
+                                data-live-search="true">
+                            $userlist
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>%player%</label>
+                        <select name="player[]" class="form-control selectpicker"
+                                data-live-search="true">
+                            $userlist
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>%player%</label>
+                        <select name="player[]" class="form-control selectpicker"
+                                data-live-search="true">
+                            $userlist
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>%player%</label>
+                        <select name="player[]" class="form-control selectpicker"
+                                data-live-search="true">
+                            $userlist
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>%player%</label>
+                        <select name="player[]" class="form-control selectpicker"
+                                data-live-search="true">
+                            $userlist
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <input type="hidden" name="team_id"
+                   value="$team_id" />
+            <button type="submit" name="$postName"
+                    class="btn btn-info btn-sm white darkshadow">
+                %save%
+            </button>
+        </div>
+    </div>
+</form>

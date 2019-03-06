@@ -79,6 +79,7 @@ $language_array = Array(
     'wrong_parameter_id'=>'Team ID wurde nicht richtig gesetzt.',
     'wrong_parameter_name'=>'Es wurde kein Name für das Team eingegeben.',
     'wrong_parameter_tag'=>'Es wurde kein Tag für das Team eingegeben.',
+    'wrong_parameter_admin_id'=>'Es wurde keine ID f&uuml;r den Team Admin &uuml;bermittelt.',
     'wrong_pw'=>'Das Passwort f&uuml;r dieses Team ist falsch.',
     'wrong_query_insert'=>'Team konnte nicht gespeichert werden, bitte Webmaster kontaktieren!',
     'wrong_query_update'=>'Team konnte nicht aktualisiert werden, bitte Webmaster kontaktieren!',
