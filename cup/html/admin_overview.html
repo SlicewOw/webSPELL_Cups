@@ -1,0 +1,73 @@
+<div class="clearfix">
+    <div class="pull-right">
+        <a href="admincenter.php?site=cup"
+           class="btn btn-default btn-sm">
+            Cup %overview%
+        </a>
+        <a href="admincenter.php?site=cup&amp;mod=teams"
+           class="btn btn-default btn-sm">
+            Cup Teams
+        </a>
+        <a href="admincenter.php?site=cup&amp;mod=penalty"
+           class="btn btn-default btn-sm">
+            %penalty%
+        </a>
+        <a href="admincenter.php?site=cup&amp;mod=gameaccounts"
+           class="btn btn-default btn-sm">
+            Gameaccounts
+        </a>
+        <a href="admincenter.php?site=cup&amp;mod=support"
+           class="btn btn-default btn-sm">
+            Support
+        </a>
+        <a href="admincenter.php?site=cup&amp;mod=admin_team"
+           class="btn btn-default btn-sm">
+            Cup Admins
+        </a>
+        <a href="admincenter.php?site=streams"
+           class="btn btn-default btn-sm">
+            Streams
+        </a>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">
+                    Cups <span class="badge">$running_cups_count</span>
+                </h1>
+            </div>
+            <div class="list-group">$running_cups_list</div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">
+                    %open_tickets% <span class="badge">$open_tickets_count</span>
+                </h1>
+            </div>
+            <div class="list-group">$ticket_open</div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">
+                    %your_tickets% <span class="badge">$tickets_in_progress_count</span>
+                </h1>
+            </div>
+            <div class="list-group">$ticket_in_progress</div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">
+                    %gameaccounts_to_be_activated% <span class="badge">$inactive_gameaccount_count</span>
+                </h1>
+            </div>
+            <div class="list-group">$gameaccounts_not_activated</div>
+        </div>
+    </div>
+</div>

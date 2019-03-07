@@ -280,6 +280,7 @@ $admin_url = 'admin/admincenter.php';
                         <li>
                             <a href="#"><i class="fa fa-trophy"></i> <?php echo $_language->module['cup_administration']; ?><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
+                                <li><a href="admincenter.php?site=cup&amp;mod=overview"><?php echo $_language->module['overview']; ?></a></li>
                                 <li><a href="admincenter.php?site=cup&amp;mod=categories"><?php echo $_language->module['categories']; ?></a></li>
                                 <li><a href="admincenter.php?site=cup">Cups</a></li>
                                 <li><a href="admincenter.php?site=cup&amp;mod=mappool"><?php echo $_language->module['mappool']; ?></a></li>
