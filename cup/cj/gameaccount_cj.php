@@ -52,10 +52,6 @@ try {
 
     }
 
-    if ($isDebugMode) {
-        $returnArray['debug']['steamIdArray'] = $gameaccountList;
-    }
-
     $anz = 0;
 
     $maxLists = 2;
@@ -74,10 +70,6 @@ try {
                 throw new \Exception(
                     'Gameaccount CJ Error: ' . $n . ', ' . implode(', ', $accountDetails['error'])
                 );
-            }
-
-            if($isDebugMode) {
-                $returnArray['debug']['steamDataArray'] = $accountDetails;
             }
 
             $anzAccounts = count($accountDetails['vac_status']);
