@@ -23,6 +23,8 @@ try {
         $data_array = array();
         $data_array['$overview'] = (empty($getAction)) ?
             'btn-info white darkshadow' : 'btn-default';
+        $data_array['$archive'] = ($getAction == 'archive') ?
+            'btn-info white darkshadow' : 'btn-default';
         $data_array['$add'] = ($getAction == 'add') ?
             'btn-info white darkshadow' : 'btn-default';
         $cups_controls = $GLOBALS["_template_cup"]->replaceTemplate("cups_controls_admin", $data_array);
@@ -31,21 +33,9 @@ try {
         $getStatus = (isset($_GET['status'])) ?
             getinput($_GET['status']) : '';
 
-        if ( $getAction == "add" ) {
-
-            // Cup hinzufuegen
-            if (file_exists(__DIR__ . '/cup_admin/cup_add.php')) {
-                include(__DIR__ . '/cup_admin/cup_add.php');
-            } else {
-                throw new \Exception($_language->module['access_denied']);
-            }
-
-        } else if ( $getAction == "edit" && isset($_GET['id']) ) {
-            // Cup bearbeiten
-            include(__DIR__ . '/cup_admin/cup_edit.php');
-        } else if ( $getAction == "delete" && isset($_GET['id'])) {
-            // Cup loeschen
-            include(__DIR__ . '/cup_admin/cup_delete.php');
+        $cupDetailsFile = __DIR__ . '/cup_admin/cup_' . $getAction . '.php';
+        if (file_exists($cupDetailsFile)) {
+            include($cupDetailsFile);
         } else if (($getAction == "cup") || ($getAction == "status")) {
             // Detail Ansicht des Cups
             include(__DIR__ . '/cup_admin/cup_admin_details.php');

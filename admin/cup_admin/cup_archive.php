@@ -2,8 +2,14 @@
 
 try {
 
+    $_language->readModule('cups', false, true);
+
+    if (!$loggedin || !iscupadmin($userID)) {
+        throw new \Exception($_language->module['login']);
+    }
+
     $whereClauseArray = array();
-    $whereClauseArray[] = '`status` < 4';
+    $whereClauseArray[] = '`status` = 4';
 
     if (!iscupadmin($userID)) {
         $whereClauseArray[] = '`saved` = 1';
