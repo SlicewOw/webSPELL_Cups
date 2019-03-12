@@ -100,8 +100,14 @@ try {
         $pic = isset($json_array['streams'][$x]['preview']['medium']) ?
             $json_array['streams'][$x]['preview']['medium'] : '';
 
-        if (!empty($pic) && @copy($pic, __DIR__ . '/../../images/cup/streams/' . $twitch_id . '.jpg')) {
-            $setValueArray[] = 'preview = \'' . addslashes($twitch_id) . '.jpg\'';
+        if (!empty($pic)) {
+
+            if (@copy($pic, __DIR__ . '/../../images/cup/streams/' . $twitch_id . '.jpg')) {
+                $setValueArray[] = 'preview = \'' . addslashes($twitch_id) . '.jpg\'';
+            } else {
+                $returnArray['messages'][] = 'copy_of_image_failed: ' . $twitch_id;
+            }
+
         }
 
         //
