@@ -30,12 +30,14 @@ images/banner/
 !images/avatars/index.php
 images/bannerrotation/
 !images/bannerrotation/index.php
-images/carousel/
 !images/bannerrotation/1.jpg
 !images/bannerrotation/2.jpg
 !images/bannerrotation/3.jpg
+images/carousel/
 images/clanwar-screens/
 !images/clanwar-screens/index.php
+images/cup/streams/
+!images/cup/streams/index.php
 images/flags/
 !images/flags/*.gif
 images/gallery/large/
