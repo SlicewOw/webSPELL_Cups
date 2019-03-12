@@ -102,10 +102,12 @@ try {
 
         if (!empty($pic)) {
 
-            if (@copy($pic, __DIR__ . '/../../images/cup/streams/' . $twitch_id . '.jpg')) {
+            if (!validate_url($pic)) {
+                throw new \Exception('unknown_parameter_of_stream_thumb (`pic`=\'' . $pic . '\')');
+            } else if (@copy($pic, __DIR__ . '/../../images/cup/streams/' . $twitch_id . '.jpg')) {
                 $setValueArray[] = 'preview = \'' . addslashes($twitch_id) . '.jpg\'';
             } else {
-                $returnArray['messages'][] = 'copy_of_image_failed: ' . $twitch_id;
+                $returnArray['message'][] = 'copy_of_image_failed: ' . $twitch_id;
             }
 
         }
