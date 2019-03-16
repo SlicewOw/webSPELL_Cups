@@ -997,7 +997,7 @@ try {
 
     $alterTableQuery = mysqli_query(
         $_database,
-        "ALTER TABLE `" . PREFIX . "ws_j12_user_notifications`
+        "ALTER TABLE `" . PREFIX . "user_notifications`
             MODIFY `notifyID` int(11) NOT NULL AUTO_INCREMENT;"
     );
 
