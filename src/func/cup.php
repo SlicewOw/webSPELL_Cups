@@ -1048,19 +1048,15 @@ function getPlayerPosition($position, $cat = '', $game_id = NULL, $addPublicOpti
 
         $whereClause = implode(' AND ', $whereClauseArray);
 
-        $selectQuery = mysqli_query(
-            $_database, 
-            "SELECT 
-                    `name`, 
-                    `tag`, 
-                    `game_id` 
-                FROM `" . PREFIX . "user_position_static` 
-                WHERE " . $whereClause
+        $selectQuery = cup_query(
+            "SELECT
+                    `name`,
+                    `tag`,
+                    `game_id`
+                FROM `" . PREFIX . "user_position_static`
+                WHERE " . $whereClause,
+            __FILE__
         );
-
-        if (!$selectQuery) {
-            return '';
-        }
 
         $ds = mysqli_fetch_array($selectQuery);
 
@@ -1085,34 +1081,32 @@ function getPlayerPosition($position, $cat = '', $game_id = NULL, $addPublicOpti
         }
 
         $whereClauseArray = array();
-        if (is_null($game_id)) {
-            $whereClauseArray[] = 'game_id IS NULL';
-        }
 
         $whereClause = (validate_array($whereClauseArray, true)) ?
             'WHERE ' . implode(' AND ', $whereClauseArray) : '';
 
-        $query = mysqli_query(
-            $_database, 
-            "SELECT 
-                    `positionID`,
-                    `tag`, 
-                    `name`, 
-                    `game_id` 
-                FROM `" . PREFIX . "user_position_static` 
+        $query = cup_query(
+            "SELECT
+                    ups.`positionID`,
+                    ups.`tag`,
+                    ups.`name`,
+                    ups.`game_id`,
+                    g.`tag` AS `game_tag`,
+                    g.`short` AS `game_short`
+                FROM `" . PREFIX . "user_position_static` ups
+                LEFT JOIN `" . PREFIX . "games` g ON ups.`game_id` = g.`gameID`
                 " . $whereClause . "
-                ORDER BY `sort` ASC"
+                ORDER BY `sort` ASC",
+            __FILE__
         );
-
-        if (!$query) {
-            return '<option value="0">Query failed.</option>';
-        }
 
         while ($ds = mysqli_fetch_array($query)) {
 
             $option = $ds['name'];
-            if(!is_null($ds['game_id']) && ($ds['game_id'] > 0)) {
-                $option .= ' (' . getGame($ds['game_id'], 'short') . ')';
+            if (!is_null($ds['game_id']) && ($ds['game_id'] > 0)) {
+                $option .= (!empty($ds['game_short'])) ?
+                    ' (' . $ds['game_short'] . ')' :
+                    ' (' . $ds['game_tag'] . ')';
             }
 
             $optionValue = ($idAsAttribute) ?
@@ -1132,19 +1126,23 @@ function getPlayerPosition($position, $cat = '', $game_id = NULL, $addPublicOpti
             return 0;
         }
 
+        $whereClause = 'tag = \'' . $position . '\'';
+
         if (validate_int($game_id, true)) {
-            $whereClause = ' AND game_id = ' . $game_id;
+            $whereClause .= ' AND game_id = ' . $game_id;
         } else {
-            $whereClause = ' AND game_id IS NULL';
+            $whereClause .= ' AND game_id IS NULL';
         }
 
-        $ds = mysqli_fetch_array(
-            mysqli_query(
-                $_database, 
-                "SELECT positionID FROM `".PREFIX."user_position_static` 
-                    WHERE tag = '" . $position . "'" . $whereClause
-            )
+        $selectQuery = cup_query(
+            "SELECT
+                    `positionID`
+                FROM `" . PREFIX . "user_position_static`
+                WHERE " . $whereClause,
+            __FILE__
         );
+
+        $ds = mysqli_fetch_array($selectQuery);
 
         $returnValue = $ds['positionID'];
         return $returnValue;
@@ -1177,15 +1175,11 @@ function getPlayerPosition($position, $cat = '', $game_id = NULL, $addPublicOpti
 
         $whereClause = implode(' AND ', $whereClauseArray);
 
-        $selectQuery = mysqli_query(
-            $_database, 
-            "SELECT * FROM `" . PREFIX . "user_position_static` 
-                WHERE " . $whereClause
+        $selectQuery = cup_query(
+            "SELECT * FROM `" . PREFIX . "user_position_static`
+                WHERE " . $whereClause,
+            __FILE__
         );
-
-        if (!$selectQuery) {
-            return $basicArray;
-        }
 
         $ds = mysqli_fetch_array($selectQuery);
 
