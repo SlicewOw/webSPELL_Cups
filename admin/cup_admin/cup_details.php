@@ -13,16 +13,12 @@ try {
     $whereClause = (validate_array($whereClauseArray, true)) ?
         'WHERE ' . implode(' AND ', $whereClauseArray) : '';
 
-    $ergebnis = mysqli_query(
-        $_database,
+    $ergebnis = cup_query(
         "SELECT * FROM `" . PREFIX . "cups`
             " . $whereClause . "
-            ORDER BY `status` ASC, `start_date` ASC"
+            ORDER BY `status` ASC, `start_date` ASC",
+        __FILE__
     );
-
-    if (!$ergebnis) {
-        throw new \Exception($_language->module['query_select_failed']);
-    }
 
     if (mysqli_num_rows($ergebnis) > 0) {
 
@@ -56,7 +52,7 @@ try {
         }
 
     } else {
-        $cupList = '<tr><td colspan="7">'.$_language->module['no_cup'].'</td></tr>';
+        $cupList = '<tr><td colspan="9">' . $_language->module['no_cup'] . '</td></tr>';
     }
 
     $data_array = array();
