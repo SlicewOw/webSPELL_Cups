@@ -27,16 +27,12 @@ try {
                     throw new \Exception($_language->module['error_gameaccount_id_type']);
                 }
 
-                $query = mysqli_query(
-                    $_database,
+                $query = cup_query(
                     "UPDATE `".PREFIX."cups_gameaccounts_csgo`
                         SET `validated` = 1
-                        WHERE `gameaccID` = " . $gameaccount_id
+                        WHERE `gameaccID` = " . $gameaccount_id,
+                    __FILE__
                 );
-
-                if (!$query) {
-                    throw new \Exception($_language->module['query_failed_update']);
-                }
 
             } else if(isset($_POST['activateMCAccount'])) {
 
@@ -102,21 +98,21 @@ try {
 
                 $gameaccount = new \myrisk\gameaccount();
 
-                if(isset($_POST['gameaccount_id']) && validate_int($_POST['gameaccount_id'])) {
+                if (isset($_POST['gameaccount_id']) && validate_int($_POST['gameaccount_id'])) {
                     $gameaccount_id = (int)$_POST['gameaccount_id'];
                 } else {
                     $gameaccount_id = null;
                 }
 
-                if(isset($_POST['game_id']) && validate_int($_POST['game_id'])) {
+                if (isset($_POST['game_id']) && validate_int($_POST['game_id'])) {
                     $game_id = $_POST['game_id'];
-                } else if(isset($_POST['game_tag'])) {
+                } else if (isset($_POST['game_tag'])) {
                     $game_id = getGame($_POST['game_tag'], 'id');
                 } else {
                     $game_id = null;
                 }
 
-                if(isset($_POST['id'])) {
+                if (isset($_POST['id'])) {
                     $var_value = $_POST['id'];
                 } else {
                     $var_value = null;
@@ -124,11 +120,15 @@ try {
 
                 $gameaccount->insertGameaccount(
                     $gameaccount_id,
-                    $game_id, 
+                    $game_id,
                     $var_value
                 );
 
                 $_SESSION['successArray'][] = $_language->module['query_saved_insert'];
+
+                if (iscupadmin($userID)) {
+                    $_SESSION['successArray'][] = $_language->module['gameaccount_activated_admin'];
+                }
 
             } else {
 

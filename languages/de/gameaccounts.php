@@ -32,6 +32,7 @@ $language_array = Array(
     'gameacc_active'=>'aktiv',
     'gameacc_active_no'=>'nicht aktiviert',
     'gameacc_admin'=>'aktivieren',
+    'gameaccount_activated_admin'=>'Gameaccount direkt aktiviert, da ausreichend Rechte vorhanden.',
     'gameaccount_validation'=>'Gameaccount Validierung',
     'gameaccount_validation_text'=>'Bitte kontrolliere deine Daten und best&auml;tige, dass es sich um deinen Gameaccount handelt.<br /><br />Dein Account hat den Namen <span id="accountName" class="bold">%account_name%</span> und die ID <span id="accountID" class="bold">%account_id%</span>.',
     'gameaccount_validation_csgo'=>'<br /><br />Steam Community Profil:<br /><a href="%account_url%" id="accountLink" class="blue" target="_blank">%account_url%</a>',
