@@ -5,7 +5,7 @@ Feel free to use this add-on for webSPELL NOR, but be aware that we (myRisk e.V)
 
 # Demo
 
-* https://cup-addon.slicewow.de/
+* https://cup-addon.slicewuff.de/
 
 # Precondition
 
