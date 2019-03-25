@@ -15,7 +15,7 @@ $language_array = Array(
     'description_is_public'=>'Beschreibung wird dem <span class="bold">Benutzer</span> angezeigt, bitte beachten!',
     'error_getting_data'=>'Fehler beim Laden der Daten!',
     'finde_account'=>'Account suchen',
-    'gameacc_active'=>'',
+    'gameaccount_activated'=>'Gameaccount aktiviert!',
     'gameaccount_deleted_title'=>'Dein Gameaccount wurde gel&ouml;scht!',
     'gameaccount_deleted_text'=>'Der Gameaccount hatte nicht die richtige ID und wurde gel&ouml;scht. Bitte trage die richtige ID ein und warte auf die Aktivierung.',
     'last_update'=>'aktualisiert am',
@@ -45,4 +45,3 @@ $language_array = Array(
     'validate_done'=>' <span class="btn btn-success btn-xs white darkshadow">validiert</span>',
     'validate_missing'=>' <span class="btn btn-danger btn-xs white darkshadow">nicht validiert</span>'
 );
-

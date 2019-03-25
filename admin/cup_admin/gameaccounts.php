@@ -48,7 +48,7 @@ try {
                 $messageText = 'Dein Gameaccount wurde von ' . getnickname($userID) . ' aktiviert';
                 setNotification($user_id, 'index.php?site=gameaccount', $gameaccount_id, $messageText);
 
-                $_SESSION['successArray'][]  = $_language->module['query_saved'];
+                $_SESSION['successArray'][]  = $_language->module['gameaccount_activated'];
 
                 $parent_url .= '&action=log&user_id=' . $user_id;
 

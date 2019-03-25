@@ -12,8 +12,7 @@ try {
 
     $teams = '';
 
-    $teamQuery = mysqli_query(
-        $_database,
+    $teamQuery = cup_query(
         "SELECT
                 `teamID`,
                 `checked_in`,
@@ -21,12 +20,9 @@ try {
                 `date_checkin`
             FROM `".PREFIX."cups_teilnehmer`
             WHERE `cupID` = " . $cup_id . "
-            ORDER BY `checked_in` DESC, `date_checkin` ASC, `date_register` ASC"
+            ORDER BY `checked_in` DESC, `date_checkin` ASC, `date_register` ASC",
+        __FILE__
     );
-
-    if (!$teamQuery) {
-        throw new \Exception($_language->module['query_select_failed']);
-    }
 
     if (mysqli_num_rows($teamQuery) > 0) {
 

@@ -15,6 +15,7 @@ $language_array = Array(
     'description_is_public'=>'Description will be shown to the <span class="bold">user</span>!',
     'error_getting_data'=>'error getting data!',
     'finde_account'=>'find account',
+    'gameaccount_activated'=>'Gameaccount activated!',
     'gameaccount_deleted_title'=>'Gameaccount deleted!',
     'gameaccount_deleted_text'=>'Gameaccount was invalid, please enter a correct one.',
     'last_update'=>'last update',

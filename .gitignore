@@ -8,6 +8,7 @@
 *.txt
 images/*
 install/*
+js/plugins/*
 languages/*
 _plugins/
 components/
