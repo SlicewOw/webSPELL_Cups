@@ -29,7 +29,7 @@ try {
     // Bracket zu gross?
     $anzTeams = $cupArray['teams']['checked_in'];
     if ($anzTeams < 1) {
-        throw new \Exception($_language->module['no_teams']);
+        throw new \Exception($_language->module['no_teams_checkedin']);
     }
 
     if ($anzTeams < 3) {
@@ -83,5 +83,6 @@ try {
 
 } catch (Exception $e) {
     echo showError($e->getMessage());
+    echo '<a href="' . $parent_url . '" class="btn btn-default btn-sm">Cup Details</a>';
 }
 

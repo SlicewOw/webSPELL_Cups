@@ -97,8 +97,7 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
 
             //
             // Match Query
-            $query1 = mysqli_query(
-                $_database,
+            $query1 = cup_query(
                 "INSERT INTO `" . PREFIX . "cups_matches_playoff`
                     (
                         `cupID`,
@@ -118,12 +117,9 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                         '" . $format . "',
                         " . $date . ",
                         '" . $maps . "'
-                    )"
+                    )",
+                __FILE__
             );
-
-            if (!$query1) {
-                throw new \Exception('cups_matches_playoff_query_insert_failed');
-            }
 
             $match_id = mysqli_insert_id($_database);
 
@@ -150,8 +146,7 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                 $freilos1 = ($team1 == 0) ? 1 : 0;
                 $freilos2 = ($team2 == 0) ? 1 : 0;
 
-                $query2 = mysqli_query(
-                    $_database,
+                $query2 = cup_query(
                     "UPDATE `" . PREFIX . "cups_matches_playoff`
                         SET `team1` = " . $team1 . ",
                             `team1_freilos` = " . $freilos1 . ",
@@ -160,16 +155,13 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                             `team2_freilos` = " . $freilos2 . ",
                             `ergebnis2` = 0,
                             `active` = 1
-                        WHERE `matchID` = " . $match_id
+                        WHERE `matchID` = " . $match_id,
+                    __FILE__
                 );
-
-                if (!$query2) {
-                    throw new \Exception('cups_matches_playoff_query_update_failed');
-                }
 
             }
 
-            if ($cupArray['anz_teams'] > 2) {
+            if (($anzRunden > 1) && ($cupArray['anz_teams'] > 2)) {
 
                 //
                 // Spiel um Platz 3
@@ -177,8 +169,7 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
 
                     //
                     // Match Query
-                    $query1 = mysqli_query(
-                        $_database,
+                    $query1 = cup_query(
                         "INSERT INTO `" . PREFIX . "cups_matches_playoff`
                             (
                                 `cupID`,
@@ -198,12 +189,9 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                                 '" . $format . "',
                                 " . $date . ",
                                 '" . $maps . "'
-                            )"
+                            )",
+                        __FILE__
                     );
-
-                    if (!$query1) {
-                        throw new \Exception('cups_matches_playoff_query_insert_failed');
-                    }
 
                     $match_id = mysqli_insert_id($_database);
 

@@ -96,6 +96,7 @@ $language_array = Array(
     'no_stream'=>'no stream',
     'no_team'=>'no team',
     'no_teams'=>'no teams',
+    'no_teams_checkedin'=>'no team checked-in yet!',
     'no_tickets_in_progress'=>'no tickets in progress',
     'no_tickets_open'=>'no tickets open',
     'open_tickets'=>'open support tickets',
