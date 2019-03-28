@@ -1001,14 +1001,19 @@ try {
             MODIFY `notifyID` int(11) NOT NULL AUTO_INCREMENT;"
     );
 
+    $alterTableQuery = mysqli_query(
+        $_database,
+        "ALTER TABLE `" . PREFIX . "cups`
+            ADD `cup_icon` VARCHAR(200) NULL AFTER `name`,
+            ADD `cup_banner` VARCHAR(200) NULL AFTER `cup_icon`;"
+    );
+
     echo "Delete this file!";
 
-    $sendmail = \webspell\Email::sendEmail(
-        $admin_email,
-        'Cup Add-On Installation',
-        "slicewow@myrisk-gaming.de",
-        "Cup Addon installiert",
-        'von: ' . $myclanname . '<br />URL: ' . $hp_url
+    @mail(
+        "me@slicewuff.de",
+        'Neue Cup Add-On Installation',
+        'Cup Addon installiert von: ' . $myclanname . '<br />URL: ' . $hp_url
     );
 
 } catch (Exception $e) {

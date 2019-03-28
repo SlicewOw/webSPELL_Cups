@@ -1582,43 +1582,47 @@ function getcup($id, $cat = '') {
             }
 
             $returnValue = array(
-                "id"			=> $cup_id,
-                "name"			=> $get['name'],
-                "registration"	=> $get['registration'],	// Registration? Open/Invite/Closed
-                "priority"		=> $get['priority'],		// Priorität? normal/main
-                "elimination"	=> $get['elimination'],		// Elimination? Single/Double/Swiss/...
-                "phase"			=> $cupPhase,
-                "checkin"		=> $get['checkin_date'],
-                "start"			=> $get['start_date'],
-                "game"			=> $get['game'],            // Game-Tag
-                "server"		=> $get['server'],          // Server enabeld? 1/0
-                "bot"			=> $get['bot'],             // Bot enabled? 1/0
-                "map_vote"		=> $get['mapvote_enable'],  // Map-Vote? 1/0
-                "mappool"		=> $get['mappool'],         // Map-Pool ID
-                "mode"			=> $cup_mode,               // 1on1, 2on2, 5on5
-                "max_mode"		=> $maxSize,                // 1=1on1, 2=2on2, 5=5on5
-                "rule_id"		=> $get['ruleID'],          // Rule ID
-                "size"			=> $get['max_size'],        // 2, 4, 8, 16, 32, 64
-                'teams' => array(
-                    'registered' => getcup($cup_id, 'anz_teams'),
-                    'checked_in' => getcup($cup_id, 'anz_teams_checkedin')
+                "id"            => $cup_id,
+                "name"          => $get['name'],
+                "images"        => array(
+                    "icon"      => getCupIcon($cup_id, true),
+                    "banner"    => getCupBanner($cup_id, true)
                 ),
-                "anz_runden"	=> $anzRunden,              // 1 (2er Bracket), 2 (4er Bracket), 3, 4, 5, 6
-                "max_pps"		=> $get['max_penalty'],
-                "groupstage"	=> $get['groupstage'],      // Groupstage enabled? 1/0
-                "status"		=> $get['status'],          // Cup State: 1=open, 2=groupstage, 3=playoffs, 4=finished
-                "hits"			=> $hits_total,
-                "hits_detail"	=> array(
-                    "home"		=> $get['hits'],
-                    "teams"		=> $get['hits_teams'],
-                    "groups"	=> $get['hits_groups'],
-                    "bracket"	=> $get['hits_bracket'],
-                    "rules"		=> $get['hits_rules']
+                "registration"  => $get['registration'],        // Registration? Open/Invite/Closed
+                "priority"      => $get['priority'],            // Prioritization? normal/main
+                "elimination"   => $get['elimination'],         // Elimination? Single/Double/Swiss/...
+                "phase"         => $cupPhase,
+                "checkin"       => $get['checkin_date'],
+                "start"         => $get['start_date'],
+                "game"          => $get['game'],                // Game-Tag (e.g. "csg")
+                "server"        => $get['server'],              // Server enabeld? 1/0
+                "bot"           => $get['bot'],                 // Bot enabled? 1/0
+                "map_vote"      => $get['mapvote_enable'],      // Map-Vote? 1/0
+                "mappool"       => $get['mappool'],             // Map-Pool ID
+                "mode"          => $cup_mode,                   // 1on1, 2on2, 5on5
+                "max_mode"      => $maxSize,                    // 1=1on1, 2=2on2, 5=5on5
+                "rule_id"       => $get['ruleID'],
+                "size"          => $get['max_size'],            // 2, 4, 8, 16, 32, 64
+                "teams" => array(
+                    "registered" => getcup($cup_id, 'anz_teams'),
+                    "checked_in" => getcup($cup_id, 'anz_teams_checkedin')
                 ),
-                "settings"		=> $settingsArray,
-                "description"	=> $get['description'],
-                "saved"			=> $get['saved'],           // Cup oeffentlich? 1/0
-                "admin"			=> $get['admin_visible']    // Admin only? 1/0
+                "anz_runden"    => $anzRunden,                  // 1 (2er Bracket), 2 (4er Bracket), 3, 4, 5, 6
+                "max_pps"       => $get['max_penalty'],
+                "groupstage"    => $get['groupstage'],          // Groupstage enabled? 1/0
+                "status"        => $get['status'],              // Cup State: 1=open, 2=groupstage, 3=playoffs, 4=finished
+                "hits"          => $hits_total,
+                "hits_detail"   => array(
+                    "home"      => $get['hits'],
+                    "teams"     => $get['hits_teams'],
+                    "groups"    => $get['hits_groups'],
+                    "bracket"   => $get['hits_bracket'],
+                    "rules"     => $get['hits_rules']
+                ),
+                "settings"      => $settingsArray,
+                "description"   => $get['description'],
+                "saved"         => $get['saved'],               // Cup is public? 1/0
+                "admin"         => $get['admin_visible']        // Admin only? 1/0
             );
 
         }

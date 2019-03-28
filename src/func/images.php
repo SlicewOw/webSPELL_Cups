@@ -237,7 +237,8 @@ function getGameIcon($game_tag, $returnAsFullImageLink = TRUE) {
 
     foreach ($iconExtensionsAllowed as $icon_extension) {
 
-        $imagePath = '/games/' . $game_tag . '.' . $icon_extension;
+        $imageName = $game_tag . '.' . $icon_extension;
+        $imagePath = '/games/' . $imageName;
         $filePath = __DIR__ . '/../../images' . $imagePath;
 
         if (file_exists($filePath)) {
@@ -255,7 +256,7 @@ function getGameIcon($game_tag, $returnAsFullImageLink = TRUE) {
     if ($returnAsFullImageLink) {
         return $image_url . $imagePath;
     } else {
-        return $game_tag . '.gif';
+        return $imageName;
     }
 
 }
@@ -303,6 +304,86 @@ function getCupTeamImage($team_id, $returnAsFullImageLink = TRUE) {
         return $image_url . $imagePath;
     } else {
         return $get[ 'logotype' ];
+    }
+
+}
+
+function getCupIcon($cup_id, $returnAsFullImageLink = TRUE) {
+
+    $default_image = '';
+
+    if (!validate_int($cup_id, true)) {
+        return $default_image;
+    }
+
+    $iconExtensionsAllowed = array(
+        'gif',
+        'png',
+        'jpg'
+    );
+
+    foreach ($iconExtensionsAllowed as $icon_extension) {
+
+        $imageName = $cup_id . '.' . $icon_extension;
+        $imagePath = '/cup/icons/' . $imageName;
+        $filePath = __DIR__ . '/../../images' . $imagePath;
+
+        if (file_exists($filePath)) {
+            break;
+        }
+
+    }
+
+    if (!file_exists($filePath)) {
+        return $default_image;
+    }
+
+    global $image_url;
+
+    if ($returnAsFullImageLink) {
+        return $image_url . $imagePath;
+    } else {
+        return $imageName;
+    }
+
+}
+
+function getCupBanner($cup_id, $returnAsFullImageLink = TRUE) {
+
+    $default_image = '';
+
+    if (!validate_int($cup_id, true)) {
+        return $default_image;
+    }
+
+    $iconExtensionsAllowed = array(
+        'gif',
+        'png',
+        'jpg'
+    );
+
+    foreach ($iconExtensionsAllowed as $icon_extension) {
+
+        $imageName = $cup_id . '.' . $icon_extension;
+        $imagePath = '/cup/banner/' . $imageName;
+        $filePath = __DIR__ . '/../../images' . $imagePath;
+
+        if (file_exists($filePath)) {
+            break;
+        }
+
+    }
+
+    if (!file_exists($filePath)) {
+        return $default_image;
+    }
+
+    global $image_url;
+
+    if ($returnAsFullImageLink) {
+        return $image_url . $imagePath;
+    } else {
+        return $imageName;
     }
 
 }

@@ -10,6 +10,12 @@ try {
 
     checkCupDetails($cupArray, $cup_id);
 
+    $cupname = $cupArray['name'];
+
+    if (isset($cupArray['images']['icon']) && !empty($cupArray['images']['icon'])) {
+        $cupname = '<img src="' . $cupArray['images']['icon'] . '" alt="" /> ' . $cupname;
+    }
+
     $getPage = (isset($_GET['page'])) ?
         getinput($_GET['page']) : 'home';
 
@@ -98,7 +104,7 @@ try {
     $data_array['$error'] = $cupInfoMessage;
     $data_array['$cupID'] = $cup_id;
     $data_array['$navTeams'] = ($cupArray['mode'] == '1on1') ? $_language->module['player'] : 'Teams';
-    $data_array['$cupname'] = $cupArray['name'];
+    $data_array['$cupname'] = $cupname;
     $data_array['$navi_home'] = $navi_home;
     $data_array['$navi_teams'] = $navi_teams;
     $data_array['$groupstage_navi'] = $groupstage_navi;
