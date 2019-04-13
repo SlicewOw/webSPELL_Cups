@@ -5,6 +5,8 @@
  */
 $steam_api_key = '';
 $twitch_client_id = '';
+$discord_client_id = '';
+$discord_client_secret = '';
 
 /**
  * Cup Team settings

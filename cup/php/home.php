@@ -13,8 +13,7 @@ try {
             $cup_id = (int)$_POST['cupCupID'];
             $team_id = (int)$_POST['cupTeamID'];
 
-            $query = mysqli_query(
-                $_database,
+            $query = cup_query(
                 "INSERT INTO `" . PREFIX . "cups_teilnehmer`
                     (
                         `cupID`,
@@ -24,7 +23,8 @@ try {
                     (
                         " . $cup_id . ",
                         " . $team_id . "
-                    )"
+                    )",
+                __FILE__
             );
 
         } else if (isset($_POST['submitRegisterLogoff'])) {
@@ -32,10 +32,10 @@ try {
             $cup_id = (int)$_POST['cupCupID'];
             $team_id = (int)$_POST['team_id'];
 
-            $query = mysqli_query(
-                $_database,
+            $query = cup_query(
                 "DELETE FROM `" . PREFIX . "cups_teilnehmer`
-                    WHERE `cupID` = " . $cup_id . " AND `teamID` = " . $team_id
+                    WHERE `cupID` = " . $cup_id . " AND `teamID` = " . $team_id,
+                __FILE__
             );
 
         }
@@ -60,20 +60,16 @@ try {
 
         $whereClause = implode(' AND ', $whereClauseArray);
 
-        $query = mysqli_query(
-            $_database,
-            "SELECT 
-                    `cupID`, 
-                    `admin_visible` 
+        $query = cup_query(
+            "SELECT
+                    `cupID`,
+                    `admin_visible`
                 FROM `" . PREFIX . "cups`
                 WHERE " . $whereClause . "
                 ORDER BY `start_date` ASC
-                LIMIT 0, 10"
+                LIMIT 0, 10",
+            __FILE__
         );
-
-        if (!$query) {
-            throw new \Exception($_language->module['query_select_failed']);
-        }
 
         while ($getCup = mysqli_fetch_array($query)) {
 
@@ -105,7 +101,7 @@ try {
 
             $listClass = empty($upcomingCup) ? ' alert-info' : '';
 
-            if(empty($upcomingCup)) {
+            if (empty($upcomingCup)) {
 
                 $detailList .= '<div class="list-group-item">Check-In: '.getformatdatetime($cupArray['checkin']).'</div>';
                 $detailList .= '<div class="list-group-item">Start: '.getformatdatetime($cupArray['start']).'</div>';
@@ -151,9 +147,8 @@ try {
 
         $whereClause = implode(' AND ', $whereClauseArray);
 
-        $query = mysqli_query(
-            $_database, 
-            "SELECT 
+        $query = cup_query(
+            "SELECT
                     `cupID` AS `cup_id`,
                     `name` AS `cup_name`,
                     `game` AS `game_tag`,
@@ -161,12 +156,9 @@ try {
                 FROM `" . PREFIX . "cups`
                 WHERE " . $whereClause . "
                 ORDER BY `start_date` DESC, `cupID` ASC
-                LIMIT 0, 5"
+                LIMIT 0, 5",
+            __FILE__
         );
-
-        if (!$query) {
-            throw new \Exception($_language->module['query_select_failed']);
-        }
 
         while ($get = mysqli_fetch_array($query)) {
 
@@ -197,21 +189,23 @@ try {
             );
 
             if ($get['mode'] == '1on1') {
-                $subquery = mysqli_query(
-                    $_database,
-                    "SELECT 
+
+                $subquery = cup_query(
+                    "SELECT
                             a.teamID AS team_id,
                             a.platzierung AS platzierung,
                             b.nickname AS team_name,
                             b.nickname AS team_tag
                         FROM `".PREFIX."cups_platzierungen` a
                         JOIN `".PREFIX."user` b ON a.teamID = b.userID
-                        WHERE a.cupID = '".$cup_id."' AND (a.platzierung = '1' OR a.platzierung = '2' OR a.platzierung = '3')
-                        ORDER BY a.platzierung ASC"
+                        WHERE a.`cupID` = " . $cup_id . " AND (a.`platzierung` = '1' OR a.`platzierung` = '2' OR a.`platzierung` = '3')
+                        ORDER BY a.`platzierung` ASC",
+                    __FILE__
                 );
+
             } else {
-                $subquery = mysqli_query(
-                    $_database,
+
+                $subquery = cup_query(
                     "SELECT
                             a.teamID AS team_id,
                             a.platzierung AS platzierung,
@@ -220,9 +214,12 @@ try {
                         FROM `" . PREFIX . "cups_platzierungen` a
                         JOIN `" . PREFIX . "cups_teams` b ON a.teamID = b.teamID
                         WHERE a.cupID = '".$cup_id."' AND (a.platzierung = '1' OR a.platzierung = '2' OR a.platzierung = '3')
-                        ORDER BY a.platzierung ASC"
+                        ORDER BY a.platzierung ASC",
+                    __FILE__
                 );
+
             }
+
             while ($subget = mysqli_fetch_array($subquery)) {
 
                 if (strlen($subget['team_name']) > 14) {

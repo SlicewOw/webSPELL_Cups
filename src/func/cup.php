@@ -4,6 +4,79 @@
  * General
  **/
 
+function getDiscordAuthUrl() {
+
+    $discordCredentialArray = getDiscordCredentials();
+
+    global $hp_url;
+
+    $discordUrlAttributeArray = array();
+    $discordUrlAttributeArray[] = 'client_id=' . $discordCredentialArray['id'];
+    $discordUrlAttributeArray[] = 'response_type=code';
+    $discordUrlAttributeArray[] = 'scope=email%20identify';
+    $discordUrlAttributeArray[] = 'state=' . $discordCredentialArray['secret'];
+    $discordUrlAttributeArray[] = 'redirect_uri=' . urlencode($hp_url);
+
+    $discord_url = 'https://discordapp.com/api/oauth2/authorize?' . implode('&amp;', $discordUrlAttributeArray);
+    $discord_url = 'https://discordapp.com/api/oauth2/authorize?client_id=561982093702332436&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcups%2F&response_type=code&scope=email%20identify';
+    return $discord_url;
+
+}
+
+function getDiscordCredentials() {
+
+    $settingsFile = __DIR__ . '/../../cup/settings.php';
+
+    if (!file_exists($settingsFile)) {
+        throw new \Exception('unknown_settings_file');
+    }
+
+    include($settingsFile);
+
+    if (!isset($discord_client_id) || empty($discord_client_id)) {
+        throw new \Exception('unknown_discord_client_id');
+    }
+
+    if (!isset($discord_client_secret) || empty($discord_client_secret)) {
+        throw new \Exception('unknown_discord_client_secret');
+    }
+
+    $discordArray = array(
+        'id' => $discord_client_id,
+        'secret' => $discord_client_secret
+    );
+
+    return $discordArray;
+
+}
+
+function discordApiRequest($url, $post=FALSE, $headers=array()) {
+
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+    $response = curl_exec($ch);
+
+    if ($post) {
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+    }
+
+    $headers[] = 'Accept: application/json';
+
+    if (isset($_SESSION['access_token'])) {
+        $headers[] = 'Authorization: Bearer ' . $_SESSION['access_token'];
+    }
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+    $response = curl_exec($ch);
+
+    return json_decode($response);
+
+}
+
 function cup_query($query, $file, $line = 0) {
 
     global $_database;
