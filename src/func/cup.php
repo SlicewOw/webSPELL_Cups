@@ -18,7 +18,6 @@ function getDiscordAuthUrl() {
     $discordUrlAttributeArray[] = 'redirect_uri=' . urlencode($hp_url);
 
     $discord_url = 'https://discordapp.com/api/oauth2/authorize?' . implode('&amp;', $discordUrlAttributeArray);
-    $discord_url = 'https://discordapp.com/api/oauth2/authorize?client_id=561982093702332436&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcups%2F&response_type=code&scope=email%20identify';
     return $discord_url;
 
 }
