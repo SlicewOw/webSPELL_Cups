@@ -80,6 +80,7 @@ try {
             'bracket',
             'groups',
             'home',
+            'images',
             'rules',
             'settings',
             'teams'
@@ -316,6 +317,8 @@ try {
                 'btn-info white darkshadow' : 'btn-default';
             $navi_settings = ($getPage == 'settings') ?
                 'btn-info white darkshadow' : 'btn-default';
+            $navi_images = ($getPage == 'images') ?
+                'btn-info white darkshadow' : 'btn-default';
             $navi_teams = ($getPage == 'teams') ?
                 'btn-info white darkshadow' : 'btn-default';
             $navi_groups = ($getPage == 'groups') ?
@@ -373,6 +376,7 @@ try {
             $data_array['$cupname'] = $cupArray['name'];
             $data_array['$navi_home'] = $navi_home;
             $data_array['$navi_settings'] = $navi_settings;
+            $data_array['$navi_images'] = $navi_images;
             $data_array['$navi_teams'] = $navi_teams;
             $data_array['$team_tab_txt'] = ($cupArray['mode'] != '1on1') ?
                 'Teams' : 'Players';

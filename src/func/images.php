@@ -309,52 +309,35 @@ function getCupTeamImage($team_id, $returnAsFullImageLink = TRUE) {
 }
 
 function getCupIcon($cup_id, $returnAsFullImageLink = TRUE) {
-
-    $default_image = '';
-
-    if (!validate_int($cup_id, true)) {
-        return $default_image;
-    }
-
-    $iconExtensionsAllowed = array(
-        'gif',
-        'png',
-        'jpg'
-    );
-
-    foreach ($iconExtensionsAllowed as $icon_extension) {
-
-        $imageName = $cup_id . '.' . $icon_extension;
-        $imagePath = '/cup/icons/' . $imageName;
-        $filePath = __DIR__ . '/../../images' . $imagePath;
-
-        if (file_exists($filePath)) {
-            break;
-        }
-
-    }
-
-    if (!file_exists($filePath)) {
-        return $default_image;
-    }
-
-    global $image_url;
-
-    if ($returnAsFullImageLink) {
-        return $image_url . $imagePath;
-    } else {
-        return $imageName;
-    }
-
+    return getCupImage($cup_id, 'cup_icon', $returnAsFullImageLink);
 }
 
 function getCupBanner($cup_id, $returnAsFullImageLink = TRUE) {
+    return getCupImage($cup_id, 'cup_banner', $returnAsFullImageLink);
+}
 
+function getCupImage($cup_id, $category, $returnAsFullImageLink) {
+    
     $default_image = '';
 
-    if (!validate_int($cup_id, true)) {
+    $allowedCategoryArray = array(
+        'cup_icon',
+        'cup_banner'
+    );
+    
+    if (empty($category) || !in_array($category, $allowedCategoryArray)) {
         return $default_image;
     }
+    
+    $selectQuery = cup_query(
+        "SELECT
+                `" . $category . "`
+            FROM `" . PREFIX . "cups`
+            WHERE `cupID` = " . $cup_id,
+        __FILE__
+    );
+    
+    $get = mysqli_fetch_array($selectQuery);
 
     $iconExtensionsAllowed = array(
         'gif',
@@ -364,7 +347,7 @@ function getCupBanner($cup_id, $returnAsFullImageLink = TRUE) {
 
     foreach ($iconExtensionsAllowed as $icon_extension) {
 
-        $imageName = $cup_id . '.' . $icon_extension;
+        $imageName = $cup_id . '_' . $category . '.' . $icon_extension;
         $imagePath = '/cup/banner/' . $imageName;
         $filePath = __DIR__ . '/../../images' . $imagePath;
 
