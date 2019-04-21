@@ -98,9 +98,9 @@ try {
                 if (!empty($image) && file_exists($imagePath)) {
 
                     if (unlink($imagePath)) {
-                        $_SESSION['successArray'][] = 'OK';
+                        $_SESSION['successArray'][] = $_language->module['delete_ok'];
                     } else {
-                        $_SESSION['errorArray'][] = 'NICHT OK';
+                        $_SESSION['errorArray'][] = $_language->module['delete_failed'];
                     }
 
                 }
