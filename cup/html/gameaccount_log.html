@@ -33,54 +33,58 @@
     </form>
 </div>
 <script type="text/javascript">
-$("#submitAddSmurf").click(function(e) {
+$(document).ready(function () {
 
-    e.preventDefault();
+    $("#submitAddSmurf").click(function (e) {
 
-    var value = $("input[name=smurfValue]").val();
-    if (value === "") {
-        alert('%enter_value%');
-        return;
-    }
+        e.preventDefault();
 
-    $.post(
-        "ajax.php?site=admin_gameaccounts",
-        {
-            action : 'addSmurf',
-            smurfValue : value,
-            smurfGame : $("select[name=smurfGame]").val(),
-            user_id : $("input[name=user_id]").val()
-        },
-        function(data, status){
+        var value = $("input[name=smurfValue]").val();
+        if (value === "") {
+            alert('%enter_value%');
+            return;
+        }
 
-            if(status === "success") {
+        $.post(
+            "ajax.php?site=admin_gameaccounts",
+            {
+                action : 'addSmurf',
+                smurfValue : value,
+                smurfGame : $("select[name=smurfGame]").val(),
+                user_id : $("input[name=user_id]").val()
+            },
+            function (data, status) {
 
-                var varData = JSON.parse(data);
+                if(status === "success") {
 
-                var notifyState;
-                if (varData.status) {
+                    var varData = JSON.parse(data);
 
-                    notifyTitle = '%smurf_saved%';
-                    notifyState = 'success';
+                    var notifyState;
+                    if (varData.status) {
 
-                    getCSGOContent();
+                        notifyTitle = '%smurf_saved%';
+                        notifyState = 'success';
+
+                        getCSGOContent();
+
+                    } else {
+                        notifyTitle = '%smurf_failed%';
+                        notifyState = 'error';
+                    }
+
+                    showNotify(notifyTitle, '', notifyState);
 
                 } else {
-                    notifyTitle = '%smurf_failed%';
-                    notifyState = 'error';
+                    showNotify('%error_getting_data%', '', 'error');
                 }
 
-                showMultipleNotifies(notifyTitle, notifyState);
-
-            } else {
-                showNotify('%error_getting_data%', '', 'error');
             }
+        );
 
-        }
-    );
+        $("input[name=smurfValue]").val('');
 
-    $("input[name=smurfValue]").val('');
-
+    });
+    
 });
 </script>
 <div class="panel panel-default">
