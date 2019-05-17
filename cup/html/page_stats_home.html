@@ -1,18 +1,18 @@
 <ul class="nav nav-pills" role="tablist">
     <li role="presentation" class="active">
-        <a href="#cup" aria-controls="cup" role="tab" data-toggle="tab">Cup</a>
+        <a href="#cup" aria-controls="cup" role="tab" data-toggle="tab">%cup%</a>
     </li>
     <li role="presentation">
-        <a href="#teams" aria-controls="teams" role="tab" data-toggle="tab">Teams</a>
+        <a href="#teams" aria-controls="teams" role="tab" data-toggle="tab">%teams%</a>
     </li>
     <li role="presentation">
-        <a href="#matches" aria-controls="matches" role="tab" data-toggle="tab">Matches</a>
+        <a href="#matches" aria-controls="matches" role="tab" data-toggle="tab">%matches%</a>
     </li>
     <li role="presentation">
-        <a href="#gameaccounts" aria-controls="gameaccounts" role="tab" data-toggle="tab">Gameaccounts</a>
+        <a href="#gameaccounts" aria-controls="gameaccounts" role="tab" data-toggle="tab">%gameaccounts%</a>
     </li>
     <li role="presentation">
-        <a href="#support" aria-controls="support" role="tab" data-toggle="tab">Support</a>
+        <a href="#support" aria-controls="support" role="tab" data-toggle="tab">%support%</a>
     </li>
 </ul>
 <br />
@@ -21,25 +21,25 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Cups</div>
+                    <div class="panel-heading">%cups%</div>
                     <div class="list-group">
                         $cups_detailed_stats_list
                     </div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">Cup Hits</div>
+                    <div class="panel-heading">%cup_hits%</div>
                     <div class="list-group">$cuphit_list</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Cup Teams</div>
+                    <div class="panel-heading">%cup% %teams%</div>
                     <div class="list-group">$cupteams_list</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Cup %participants%</div>
+                    <div class="panel-heading">%cup% %participants%</div>
                     <div class="list-group">$cupteam_list</div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Teams</div>
+                    <div class="panel-heading">%teams%</div>
                     <div class="list-group">
                         $teams_detailed_stats_list
                     </div>
@@ -58,13 +58,13 @@
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Teams (%hits%)</div>
+                    <div class="panel-heading">%teams% (%hits%)</div>
                     <div class="list-group">$teams_list</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Team %members%</div>
+                    <div class="panel-heading">%team% %members%</div>
                     <div class="list-group">$team_member_list</div>
                 </div>
             </div>
@@ -74,25 +74,25 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Matches</div>
+                    <div class="panel-heading">%matches%</div>
                     <div class="list-group">
                         $match_detailed_stats_list
                     </div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">Match %hits%</div>
+                    <div class="panel-heading">%match% %hits%</div>
                     <div class="list-group">$matchhit_list</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">%matches_count% (Team)</div>
+                    <div class="panel-heading">%matches_count% (%team%)</div>
                     <div class="list-group">$matchanz_list_team</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">%matches_count% (Player)</div>
+                    <div class="panel-heading">%matches_count% (%player%)</div>
                     <div class="list-group">$matchanz_list_player</div>
                 </div>
             </div>
@@ -102,28 +102,28 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Gameaccounts (aktiv)</div>
+                    <div class="panel-heading">%gameaccounts% (%active%)</div>
                     <div class="list-group">$gameacc_act_list</div>
                 </div>
                 <div id="gameaccount_chart"></div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Gameaccounts %deleted%</div>
+                    <div class="panel-heading">%gameaccounts% (%deleted%)</div>
                     <div class="list-group">$gameacc_del_list</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">CS:GO Gameaccounts</div>
+                    <div class="panel-heading">%csgo% %gameaccounts%</div>
                     <div class="list-group">$gameacc_csgo_list</div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">CS:GO Gameaccounts</div>
+                    <div class="panel-heading">%csgo% %gameaccounts%</div>
                     <div class="list-group">$gameacc_acc_min</div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">CS:GO Gameaccounts</div>
+                    <div class="panel-heading">%csgo% %gameaccounts%</div>
                     <div class="list-group">$gameacc_acc_max</div>
                 </div>
                 <div id="gameaccount_csgo_validate_chart" style="height: auto; min-height: 800px;"></div>
@@ -174,13 +174,13 @@ function drawChart() {
     /* Cup Hits */
     /************/
     data = google.visualization.arrayToDataTable([
-      ['Name', 'Total', 'Home', 'Teams', 'Groups', 'Bracket', 'Rules'],
+      ['%name%', '%total%', '%home%', '%teams%', '%groups%', '%bracket%', '%rules%'],
       $cupChartHits
     ]);
 
     options = {
       chart: {
-        title: 'Cup Hits',
+        title: '%cup_hits%',
         subtitle: '',
       },
       bars: 'horizontal'
@@ -193,15 +193,15 @@ function drawChart() {
     /* Gameaccounts */
     /****************/
     data = new google.visualization.DataTable();
-    data.addColumn('string', 'Game');
-    data.addColumn('number', 'Total');
+    data.addColumn('string', '%game%');
+    data.addColumn('number', '%total%');
     data.addRows([
       $gameaccChartRows
     ]);
 
     // Set chart options
     options = {
-        'title':'Gameaccounts',
+        'title':'%gameaccounts%',
         'width':400,
         'height':300
     };
@@ -213,15 +213,15 @@ function drawChart() {
     /* CS:GO Gameaccount */
     /*********************/
     data = new google.visualization.DataTable();
-    data.addColumn('string', 'Game');
-    data.addColumn('number', 'Total');
+    data.addColumn('string', '%game%');
+    data.addColumn('number', '%total%');
     data.addRows([
         $gameaccCSGOValidateRows
     ]);
 
     // Set chart options
     options = {
-        'title':'CS:GO Gameaccount Validierung',
+        'title':'%csgo_gameaccount_validation%',
         'width':400,
         'height':300
     };

@@ -3,6 +3,7 @@
 try {
 
     $_language->readModule('page_stats', false, true);
+    $_language->readModule('cups', true, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
         throw new \Exception($_language->module['access_denied']);

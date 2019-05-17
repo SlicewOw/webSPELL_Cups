@@ -27,7 +27,9 @@
 
 $language_array = array(
 
+    'admins'=>'Admins',
     'copyright'=>'Copyright %year_now% by %clanname% - all rights reserved.',
+    'cups'=>'Cups',
     'data_protection'=>'data protection',
     'hall_of_fame'=>'Hall of Fame',
     'home'=>'Home',
@@ -35,6 +37,7 @@ $language_array = array(
     'open_match'=>'match open',
     'open_matches'=>'matches open',
     'policy'=>'Terms of Use',
+    'teams'=>'Teams',
 
 /* do not edit above this line */
 
