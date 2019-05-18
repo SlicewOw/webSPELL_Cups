@@ -1,0 +1,25 @@
+{
+  "name": "webspell_cupaddon",
+  "version": "1.0.0",
+  "description": "This add-on can be used with webSPELL NOR to create and manage your own tournaments.",
+  "url": "https://demo.cup-addon.de",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SlicewOw/webSPELL_Cups.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SlicewOw/webSPELL_Cups/issues"
+  },
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "grunt": "^1.0.4",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-uglify": "^4.0.1",
+    "grunt-contrib-watch": "^1.1.0"
+  },
+  "scripts": {
+    "test": "grunt codecheck --verbose"
+  },
+  "dependencies": {}
+}

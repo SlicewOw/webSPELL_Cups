@@ -16,6 +16,8 @@ node_modules/
 !cups/*
 !cups/**/*.php
 !cups/**/*.html
+!package.json
+!package-lock.json
 
 # webSPELL #
 ############
