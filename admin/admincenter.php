@@ -29,28 +29,23 @@ chdir('../');
 include("_mysql.php");
 include("_settings.php");
 include("_functions.php");
-Include("_plugin.php");
+include("_plugin.php");
 chdir('admin');
 
 $load = new plugin_manager();
 $_language->readModule('admincenter', false, true);
 
-if(isset($_GET['site'])) $site = $_GET['site'];
-else
-if(isset($site)) unset($site);
-$username='<b>'.getnickname($userID).'</b>';
-
-
 if (isset($_GET['site'])) {
     $site = $_GET['site'];
-} elseif (isset($site)) {
+} else if (isset($site)) {
     unset($site);
 }
 
-$admin=isanyadmin($userID);
 if (!$loggedin) {
     die($_language->module['not_logged_in']);
 }
+
+$admin=isanyadmin($userID);
 if (!$admin) {
     die($_language->module['access_denied']);
 }
@@ -100,8 +95,16 @@ function addonnav()
     return $links;
 }
 if ($userID && !isset($_GET[ 'userID' ]) && !isset($_POST[ 'userID' ])) {
-$ds =
-        mysqli_fetch_array(safe_query("SELECT registerdate FROM `" . PREFIX . "user` WHERE userID='" . $userID . "'"));
+
+    $ds = mysqli_fetch_array(
+        safe_query(
+            "SELECT
+                    `registerdate`
+                FROM `" . PREFIX . "user`
+                WHERE `userID` = " . $userID
+        )
+    );
+
     $username = '<a href="../index.php?site=profile&amp;id=' . $userID . '">' . getnickname($userID) . '</a>';
     $lastlogin = getformatdatetime($_SESSION[ 'ws_lastlogin' ]);
     $registerdate = getformatdatetime($ds[ 'registerdate' ]);
@@ -112,13 +115,11 @@ $ds =
     $data_array['$registerdate'] = $registerdate;
 }
 
-   
-    if ($getavatar = getavatar($userID)) {
-        $l_avatar = '<img src="../images/avatars/' . $getavatar . '" alt="Avatar" class="img-circle profile_img">';
-    } else {
-        $l_avatar = $_language->module[ 'n_a' ];
-    }
-
+if ($getavatar = getavatar($userID)) {
+    $l_avatar = '<img src="../images/avatars/' . $getavatar . '" alt="Avatar" class="img-circle profile_img">';
+} else {
+    $l_avatar = $_language->module[ 'n_a' ];
+}
 
 $getSite = (isset($_GET['site'])) ?
     getinput($_GET['site']) : 'home';
@@ -275,32 +276,12 @@ $admin_url = 'admin/admincenter.php';
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-
-                        <?php if (iscupadmin($userID)) { ?>
-                        <li>
-                            <a href="#"><i class="fa fa-trophy"></i> <?php echo $_language->module['cup_administration']; ?><span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li><a href="admincenter.php?site=cup&amp;mod=overview"><?php echo $_language->module['overview']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=categories"><?php echo $_language->module['categories']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup">Cups</a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=mappool"><?php echo $_language->module['mappool']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=rules"><?php echo $_language->module['rules']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=policy"><?php echo $_language->module['policy']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=teams"><?php echo $_language->module['teams']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=penalty"><?php echo $_language->module['penalty']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=gameaccounts"><?php echo $_language->module['gameaccounts']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=page_stats"><?php echo $_language->module['statistics']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=support"><?php echo $_language->module['support']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=admin_team"><?php echo $_language->module['admins']; ?></a></li>
-                                <li><a href="admincenter.php?site=cup&amp;mod=awards"><?php echo $_language->module['awards']; ?></a></li>
-                                <li><a href="admincenter.php?site=member_positions"><?php echo $_language->module['member_positions']; ?></a></li>
-                                <li><a href="admincenter.php?site=streams">Streams</a></li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <?php } ?>
-
-                        <?php if(isuseradmin($userID)) { ?>
+                        <?php 
+                        
+                        include(__DIR__ . '/cup_admin/navigation.php');
+                        
+                        if (isuseradmin($userID)) {
+                        ?>
                         <li>
                             <a href="#"><i class="fa fa-user"></i> <?php echo $_language->module['user_administration']; ?><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
