@@ -155,7 +155,7 @@ try {
         $admin_only = '<option value="1">'.$_language->module['yes'].'</option><option value="0" selected="selected">'.$_language->module['no'].'</option>';
 
         $days = date('d');
-        $months = date('n');
+        $months = date('m');
         $years = date('Y');
 
         $hours_ci = '';
@@ -167,10 +167,20 @@ try {
 
         $hours = '';
         for ($i = 0; $i < 25; $i++) {
-            $sel = '';
-            if ($i == 20) { $sel = ' selected="selected"'; }
-            $hours .= '<option value="' . $i . '"' . $sel . '>' . $i . '</option>';
+            $hours .= '<option value="' . $i . '">' . $i . '</option>';
         }
+        
+        $hours_checkin = str_replace(
+            'value="19"',
+            'value="19" selected="selected"',
+            $hours
+        );
+        
+        $hours_start = str_replace(
+            'value="20"',
+            'value="20" selected="selected"',
+            $hours
+        );
 
         $minutes = '<option value="0">00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>';
 
@@ -206,10 +216,10 @@ try {
         $data_array['$registration'] = $cupOptions['registration'];
         $data_array['$elimination'] = $cupOptions['elimination'];
         $data_array['$date_checkin'] = $years . '-' . $months . '-' . $days;
-        $data_array['$hours_ci'] = $hours;
+        $data_array['$hours_ci'] = $hours_checkin;
         $data_array['$minutes_ci'] = $minutes;
         $data_array['$date_start'] = $years . '-' . $months . '-' . $days;
-        $data_array['$hours_sd'] = $hours;
+        $data_array['$hours_sd'] = $hours_start;
         $data_array['$minutes_sd'] = $minutes;
         $data_array['$games'] = $games;
         $data_array['$mode'] = $mode;
