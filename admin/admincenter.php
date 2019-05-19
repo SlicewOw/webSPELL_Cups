@@ -154,7 +154,6 @@ $admin_url = 'admin/admincenter.php';
     <!-- Bootstrap Core CSS -->
     <link href="../components/bootstrap/bootstrap.min.css" rel="stylesheet">
 
-   
     <!-- Custom CSS -->
     <link href="../components/admin/css/page.css" rel="stylesheet">
 
@@ -168,6 +167,7 @@ $admin_url = 'admin/admincenter.php';
     <link href="../components/admin/css/style.css" rel="stylesheet">
     <link href="../css/button.css.php" rel="styleSheet" type="text/css">
     <link href="../components/admin/css/bootstrap-switch.css" rel="stylesheet">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -182,6 +182,9 @@ $admin_url = 'admin/admincenter.php';
         echo '<script src="../' . $component . '"></script>';
     }
     ?>
+
+    <!-- CKEditor -->
+    <script src="../components/ckeditor5/ckeditor.js"></script>
 
   </head>
 
@@ -415,10 +418,10 @@ $admin_url = 'admin/admincenter.php';
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
-        <!-- Copy -->
-        <div class="copy">
-        <em>&nbsp;&copy; 2016 webspell-nor.de<br />Admin Template by <a href="http://designperformance.de/" target="_blank">T-Seven</a></em>
-        </div>
+                <!-- Copy -->
+                <div class="copy">
+                    <em>&nbsp;&copy; 2016 webspell-nor.de<br />Admin Template by <a href="http://designperformance.de/" target="_blank">T-Seven</a></em>
+                </div>
             </div>
             <!-- /.navbar-static-side -->
         </nav>

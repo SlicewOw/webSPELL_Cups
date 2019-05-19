@@ -18,8 +18,13 @@
 </form>
 <script type="text/javascript">
 $(document).ready(function () {
-    CKEDITOR.replace( 'ticketAnswer', {
-        stylesSet: []
-    });
+	ClassicEditor
+		.create( document.querySelector( '#ticketAnswer' ) )
+		.then( editor => {
+			console.log( editor );
+		} )
+		.catch( error => {
+			console.error( error );
+		} );
 });
 </script>

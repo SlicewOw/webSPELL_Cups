@@ -9,7 +9,6 @@ module.exports = function (grunt) {
                     'cup/js/pnotify.custom.min.js',
                     'cup/js/bootstrap.js',
                     'cup/js/jquery.viewbox.js',
-                    'cup/js/ckeditor.js',
                     'cup/js/config.js',
                     'cup/js/flipclock.js',
                     'cup/js/google_graphs.js',
