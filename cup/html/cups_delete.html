@@ -1,14 +1,16 @@
 <form method="post" name="cup_delete">
 	<div class="panel panel-default">
     	<div class="panel-heading">
-        	<h1 class="panel-title">Cup %delete%</h1>
+        	<h1 class="panel-title">%cup% %delete%</h1>
         </div>
         <div class="panel-body">
         	$text
         </div>
         <div class="panel-footer">
         	<input name="cupID" type="hidden" value="$cupID" />
-            <input type="submit" name="delete" class="btn btn-info btn-sm white darkshadow" value="%delete%" />
+            <button type="submit" name="delete" class="btn btn-info btn-sm white darkshadow">
+				%delete%
+			</button>
         </div>
 	</div>
 </form>
