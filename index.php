@@ -58,6 +58,7 @@ if (!$userID) {
     }
     ?>
     <script src="./js/bbcode.js"></script>
+    <script src="./components/ckeditor5/ckeditor.js"></script>
     <script src="./cup/dist/js/scripts.min.js"></script>
 
     <title><?php echo PAGETITLE; ?></title>
