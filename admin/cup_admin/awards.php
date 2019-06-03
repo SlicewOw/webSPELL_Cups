@@ -19,7 +19,7 @@ try {
         $parent_url = 'admincenter.php?site=cup&mod=awards';
 
         try {
-            
+
             if (isset($_POST['settings'])) {
 
                 $parent_url .= '&settings';
@@ -105,7 +105,7 @@ try {
                     }
 
                     $_SESSION['successArray'][] = $_language->module['cat_query_saved'];
-                    
+
                 } else if (isset($_POST['sortCategories'])) {
 
                     $awardCategoryList = (isset($_POST['categoryList'])) ?
@@ -142,7 +142,7 @@ try {
             }
 
         } catch (Exception $e) {
-            
+            $_SESSION['errorArray'][] = $e->getMessage();
         }
 
         header('Location: ' . $parent_url);

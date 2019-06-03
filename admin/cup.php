@@ -20,6 +20,8 @@ try {
 
     if ($mod == 'cup') {
 
+        updateCupStatistics();
+
         $data_array = array();
         $data_array['$overview'] = (empty($getAction)) ?
             'btn-info white darkshadow' : 'btn-default';

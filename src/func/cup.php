@@ -4,6 +4,77 @@
  * General
  **/
 
+function updateCupStatistics() {
+
+    $query = cup_query(
+        "SELECT
+                `teamID`
+            FROM `" . PREFIX . "cups_teilnehmer`
+            WHERE `checked_in` = 1
+            GROUP BY `teamID`",
+        __FILE__
+    );
+
+    while ($get = mysqli_fetch_array($query)) {
+
+        $team_id = $get['teamID'];
+
+        $updateCupAwardsCategories = array(
+            'anz_cups',
+            'anz_matches'
+        );
+
+        foreach ($updateCupAwardsCategories as $category) {
+
+            $statistics = getteam($team_id, $category);
+
+            $subQuery = cup_query(
+                "SELECT
+                        `awardID`,
+                        `name`
+                    FROM `" . PREFIX . "cups_awards_category`
+                    WHERE " . $statistics . " >= `" . $category . "`
+                    ORDER BY `" . $category . "` DESC
+                    LIMIT 0, 1",
+                __FILE__
+            );
+
+            $subget = mysqli_fetch_array($subQuery);
+
+            if (!empty($subget['awardID'])) {
+
+                $insertQuery = cup_query(
+                    "INSERT INTO `" . PREFIX . "cups_awards`
+                        (
+                            `teamID`,
+                            `userID`,
+                            `cupID`,
+                            `award`,
+                            `date`
+                        )
+                        VALUES
+                        (
+                            " . $team_id . ",
+                            0,
+                            0,
+                            " . $subget['awardID'] . ",
+                            " . time() . "
+                        )",
+                    __FILE__
+                );
+
+                $teamname = getteam($get['teamID'], 'name');
+
+                setCupTeamLog($team_id, $teamname, 'award_received_' . $subget['awardID']);
+
+            }
+
+        }
+
+    }
+
+}
+
 function getDiscordAuthUrl() {
 
     $discordCredentialArray = getDiscordCredentials();
