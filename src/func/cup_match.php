@@ -493,7 +493,6 @@ function getmap($matchID, $format) {
 
 }
 
-
 function getScreenshots($match_id) {
 
     if (!validate_int($match_id, true)) {
@@ -535,5 +534,33 @@ function getScreenshots($match_id) {
     }
 
     return $returnArray;
+
+}
+
+function addMatchLog($match_id, $action_message) {
+
+    if (!validate_int($match_id, true)) {
+        throw new \Exception('unknown_match_id');
+    }
+
+    if (empty($action_message)) {
+        throw new \Exception('unknown_match_log_message');
+    }
+
+    $insertQuery = cup_query(
+        "INSERT INTO `" . PREFIX . "cups_matches_playoff_logs`
+            (
+                `match_id`,
+                `date`,
+                `action`
+            )
+            VALUES
+            (
+                " . $match_id . ",
+                " . time() . ",
+                '" . $action_message . "'
+            )",
+        __FILE__
+    );
 
 }

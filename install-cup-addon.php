@@ -986,7 +986,7 @@ try {
             `message` varchar(300) COLLATE latin1_german1_ci NOT NULL,
             `notify_seen` int(1) NOT NULL DEFAULT '0',
             `notify_seen_date` int(11) DEFAULT NULL
-        ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;"
+        ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=utf8_bin;"
     );
 
     $alterTableQuery = mysqli_query(
@@ -1006,6 +1006,19 @@ try {
         "ALTER TABLE `" . PREFIX . "cups`
             ADD `cup_icon` VARCHAR(200) NULL AFTER `name`,
             ADD `cup_banner` VARCHAR(200) NULL AFTER `cup_icon`;"
+    );
+
+    /**
+     * Match Logs
+     */
+
+    $createTableQuery = mysqli_query(
+        $_database,
+        "CREATE TABLE `ws_j12_cups_matches_playoff_logs` (
+            `match_id` int(11) NOT NULL,
+            `date` int(11) NOT NULL,
+            `action` varchar(100) COLLATE utf8_bin NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;"
     );
 
     echo "Delete this file!";
