@@ -123,6 +123,8 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
 
             $match_id = mysqli_insert_id($_database);
 
+            addMatchLog($match_id, 'match_created');
+
             //
             // Update Matches Round 1
             // Set Teams and Def-Wins
@@ -194,6 +196,8 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                     );
 
                     $match_id = mysqli_insert_id($_database);
+
+                    addMatchLog($match_id, 'match_created');
 
                 }
 

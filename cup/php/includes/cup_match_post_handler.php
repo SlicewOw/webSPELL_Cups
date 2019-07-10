@@ -42,6 +42,8 @@ if (validate_array($_POST, true)) {
                 __FILE__
             );
 
+            addMatchLog($match_id, 'match_reset');
+
             $_SESSION['successArray'][] = $_language->module['admin_match_reset'];
 
         } else if (isset($_POST['submitMapvoteReset'])) {
@@ -63,6 +65,8 @@ if (validate_array($_POST, true)) {
                     WHERE `matchID` = " . $match_id,
                 __FILE__
             );
+
+            addMatchLog($match_id, 'map_vote_reset');
 
             $_SESSION['successArray'][] = $_language->module['admin_map_reset'];
 
@@ -127,6 +131,8 @@ if (validate_array($_POST, true)) {
                         __FILE__
                     );
 
+                    addMatchLog($match_id, 'match_admin_confirmation');
+
                     //
                     // Next Game
                     $winner_id = ($adminPanel < 3) ? $matchArray['team'.$adminPanel.'_id'] : 0;
@@ -152,6 +158,20 @@ if (validate_array($_POST, true)) {
                             WHERE " . $whereClause,
                         __FILE__
                     );
+
+                    $selectMatch = cup_query(
+                        "SELECT
+                                `matchID`
+                            FROM `" . PREFIX . "cups_matches_playoff`
+                            WHERE " . $whereClause,
+                        __FILE__
+                    );
+
+                    $get_match = mysqli_fetch_array($selectMatch);
+
+                    $match_id_next_match = $get_match['matchID'];
+
+                    addMatchLog($match_id_next_match, 'match_active_' . $nextTeam);
 
                 }
 
@@ -243,6 +263,20 @@ if (validate_array($_POST, true)) {
                         __FILE__
                     );
 
+                    $selectMatch = cup_query(
+                        "SELECT
+                                `matchID`
+                            FROM `" . PREFIX . "cups_matches_playoff`
+                            WHERE " . $winnerBracketWhereClause,
+                        __FILE__
+                    );
+
+                    $get_match = mysqli_fetch_array($selectMatch);
+
+                    $match_id_winner_match = $get_match['matchID'];
+
+                    addMatchLog($match_id_winner_match, 'match_activation_' . $nextTeam);
+
                     //
                     // Spiel um Platz 3
                     if ($matchArray['runde'] == ($cupArray['anz_runden'] - 1)) {
@@ -268,6 +302,20 @@ if (validate_array($_POST, true)) {
                                 WHERE " . $loserBracketWhereClause,
                             __FILE__
                         );
+
+                        $selectMatch = cup_query(
+                            "SELECT
+                                    `matchID`
+                                FROM `" . PREFIX . "cups_matches_playoff`
+                                WHERE " . $loserBracketWhereClause,
+                            __FILE__
+                        );
+
+                        $get_match = mysqli_fetch_array($selectMatch);
+
+                        $match_id_loser_match = $get_match['matchID'];
+
+                        addMatchLog($match_id_loser_match, 'match_activation_' . $nextTeam);
 
                     }
 
