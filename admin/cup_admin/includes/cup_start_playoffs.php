@@ -55,16 +55,17 @@ try {
     // 2: Gruppenphase
     // 3: Playoffs
     // 4: beendet
-    $updateQuery = mysqli_query(
-        $_database,
+    $updateQuery = cup_query(
         "UPDATE `" . PREFIX . "cups`
             SET " . $setValues . "
-            WHERE `cupID` = " . $cup_id
+            WHERE `cupID` = " . $cup_id,
+        __FILE__
     );
 
-    if (!$updateQuery) {
-        throw new \Exception($_language->module['error_update_query_failed']);
-    }
+    /**
+     * Recreate Cup Array in case something changed automatically
+     */
+    $cupArray = getcup($cup_id);
 
     //
     // Bracket erstellen
