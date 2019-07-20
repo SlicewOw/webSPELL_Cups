@@ -1014,7 +1014,7 @@ try {
 
     $createTableQuery = mysqli_query(
         $_database,
-        "CREATE TABLE `ws_j12_cups_matches_playoff_logs` (
+        "CREATE TABLE `" . PREFIX . "cups_matches_playoff_logs` (
             `match_id` int(11) NOT NULL,
             `date` int(11) NOT NULL,
             `action` varchar(100) COLLATE utf8_bin NOT NULL
