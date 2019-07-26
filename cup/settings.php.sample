@@ -7,6 +7,7 @@ $steam_api_key = '';
 $twitch_client_id = '';
 $discord_client_id = '';
 $discord_client_secret = '';
+$challonge_api_key = '';
 
 /**
  * Cup Team settings

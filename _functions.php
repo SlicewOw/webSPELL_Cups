@@ -313,6 +313,7 @@ systeminc('func/cup_match');
 systeminc('func/convert');
 systeminc('func/validation');
 systeminc('func/images');
+systeminc('func/challonge');
 
 // -- Streams -- //
 
