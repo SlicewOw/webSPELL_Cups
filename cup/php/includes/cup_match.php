@@ -51,18 +51,10 @@ try {
 
     //
     // Access
-    if ($cupArray['mode'] == '1on1') {
-        $matchAdminAccess_team1 = (($matchArray['team1_id'] > 0) && ($userID == $matchArray['team1_id'])) ? TRUE : FALSE;
-        $matchAdminAccess_team2 = (($matchArray['team2_id'] > 0) && ($userID == $matchArray['team2_id'])) ? TRUE : FALSE;
-    } else {
-        $matchAdminAccess_team1 = (($matchArray['team1_id'] > 0) && isinteam($userID, $matchArray['team1_id'], 'admin')) ? TRUE : FALSE;
-        $matchAdminAccess_team2 = (($matchArray['team2_id'] > 0) && isinteam($userID, $matchArray['team2_id'], 'admin')) ? TRUE : FALSE;
-    }
+    $teamAdminAccess = getMatchAdminPanelAccesslevel($cup_id, $match_id);
 
     $matchAdminAccess_player = FALSE;
-    if (!($matchAdminAccess_team1) && (!$matchAdminAccess_team2)) {
-
-        $teamAdminAccess = FALSE;
+    if (!$teamAdminAccess) {
 
         if (isinteam($userID, $matchArray['team1_id'], 'player')) {
             $matchAdminAccess_player = TRUE;
@@ -70,8 +62,6 @@ try {
             $matchAdminAccess_player = TRUE;
         }
 
-    } else {
-        $teamAdminAccess = TRUE;
     }
 
     //
@@ -105,9 +95,6 @@ try {
         // Team Details
         $teamArray = getTeamDetailsByMatchId($cupArray, $match_id);
 
-        $bracket_ext = ($matchArray['bracket'] == 1) ?
-            'Winner Bracket' : 'Loser Bracket';
-
         //
         // Match Detail Info
         $match_info = getMatchDetailsByMatchId($cupArray, $match_id);
@@ -123,81 +110,51 @@ try {
         if (($cupArray['server'] == 1) && ($matchArray['match_confirm'] == 0)) {
 
             $server_info = '';
-            if (($cupArray['bot'] == 1) && empty($matchArray['server'])) {
 
-                //
-                // Team1 Admin: Request
-                if ($matchArray['mapvote']) {
+            $serverArray = unserialize($matchArray['server']);
 
-                    if ($matchAdminAccess_team1) {
+            if (!empty($serverArray['ip']) && (!empty($serverArray['password']) || ($cupArray['bot'] == 1))) {
 
-                        $data_array = array();
-                        $data_array['$image_url'] = $image_url;
-                        $data_array['$cupID'] = $cup_id;
-                        $data_array['$matchID'] = $match_id;
-                        $server_info = $GLOBALS["_template_cup"]->replaceTemplate("cup_server_request", $data_array);
+                if ($matchAdminAccess_player || $teamAdminAccess || $cupAdminAccess) {
 
-                    } else {
-
-                        $server_info = '<div class="list-group-item lh_twenty">' . $_language->module['server_request_info'] . '</div>';
-                        $server_info = str_replace(
-                            '%team1%',
-                            '"'.$teamArray[1]['name'].'"',
-                            $server_info
-                        );
-
+                    $server_url = 'steam://connect/' . $serverArray['ip'];
+                    if (!empty($serverArray['password'])) {
+                        $server_url .= '/' . $serverArray['password'];
                     }
+
+                    $server_info_txt = 'connect '.$serverArray['ip'];
+                    if (!empty($serverArray['password'])) {
+                        $server_info_txt = ';password ' . $serverArray['password'];
+                    }
+
+                    $data_array = array();
+                    $data_array['$server_url'] = $server_url;
+                    $data_array['$server_info_txt'] = $server_info_txt;
+                    $server_info .= $GLOBALS["_template_cup"]->replaceTemplate("cup_match_server", $data_array);
 
                 }
 
-            } else {
-
-                $serverArray = unserialize($matchArray['server']);
-
-                if (!empty($serverArray['ip']) && (!empty($serverArray['password']) || ($cupArray['bot'] == 1))) {
-
-                    if ($matchAdminAccess_player || $matchAdminAccess_team1 || $matchAdminAccess_team2 || $cupAdminAccess) {
-
-                        $server_url = 'steam://connect/' . $serverArray['ip'];
-                        if (!empty($serverArray['password'])) {
-                            $server_url .= '/' . $serverArray['password'];
-                        }
-
-                        $server_info_txt = 'connect '.$serverArray['ip'];
-                        if (!empty($serverArray['password'])) {
-                            $server_info_txt = ';password ' . $serverArray['password'];
-                        }
-
-                        $data_array = array();
-                        $data_array['$server_url'] = $server_url;
-                        $data_array['$server_info_txt'] = $server_info_txt;
-                        $server_info .= $GLOBALS["_template_cup"]->replaceTemplate("cup_match_server", $data_array);
-
-                    }
-
-                    if (!empty($serverArray['rcon']) && ($matchAdminAccess_team1 || $cupAdminAccess)) {
-                        $server_info .= '<div class="list-group-item">rcon_password ' . $serverArray['rcon'] . '</div>';
-                    }
-
+                if (!empty($serverArray['rcon']) && ($teamAdminAccess || $cupAdminAccess)) {
+                    $server_info .= '<div class="list-group-item">rcon_password ' . $serverArray['rcon'] . '</div>';
                 }
-
-                if (!empty($serverArray['gotv'])) {
-                    $server_url = 'steam://connect/' . $serverArray['gotv'];
-                    $gotv_connect = 'connect ' . $serverArray['gotv'];
-                    if (!empty($serverArray['gotv_pw'])) {
-                        $server_url .= '/' . $serverArray['gotv_pw'];
-                        $gotv_connect .= ';password ' . $serverArray['gotv_pw'];
-                    }
-                    $server_info .= '<a href="' . $server_url . '" class="list-group-item">GOTV: ' . $gotv_connect . '</a>';
-                }
-
-                $data_array = array();
-                $data_array['$panel_type'] = 'panel-default';
-                $data_array['$panel_title'] = 'Server';
-                $data_array['$panel_content'] = $server_info;
-                $admin .= $GLOBALS["_template_cup"]->replaceTemplate("panel_list_group", $data_array);
 
             }
+
+            if (!empty($serverArray['gotv'])) {
+                $server_url = 'steam://connect/' . $serverArray['gotv'];
+                $gotv_connect = 'connect ' . $serverArray['gotv'];
+                if (!empty($serverArray['gotv_pw'])) {
+                    $server_url .= '/' . $serverArray['gotv_pw'];
+                    $gotv_connect .= ';password ' . $serverArray['gotv_pw'];
+                }
+                $server_info .= '<a href="' . $server_url . '" class="list-group-item">GOTV: ' . $gotv_connect . '</a>';
+            }
+
+            $data_array = array();
+            $data_array['$panel_type'] = 'panel-default';
+            $data_array['$panel_title'] = 'Server';
+            $data_array['$panel_content'] = $server_info;
+            $admin .= $GLOBALS["_template_cup"]->replaceTemplate("panel_list_group", $data_array);
 
         }
 
@@ -214,9 +171,9 @@ try {
             } else if ($cupArray['status'] < 4) {
 
                 $scoreEditable = 1;
-                if ($matchAdminAccess_team1 && ($matchArray['team1_confirm'] == 1)) {
+                if (getMatchAdminAccessByTeam(1, $cup_id, $match_id) && ($matchArray['team1_confirm'] == 1)) {
                     $scoreEditable = 0;
-                } else if ($matchAdminAccess_team2 && ($matchArray['team2_confirm'] == 1)) {
+                } else if (getMatchAdminAccessByTeam(2, $cup_id, $match_id) && ($matchArray['team2_confirm'] == 1)) {
                     $scoreEditable = 0;
                 }
 
@@ -238,7 +195,7 @@ try {
                 $data_array['$ergebnis1'] = $ergebnis1;
                 $data_array['$ergebnis1'] = $ergebnis1;
                 $data_array['$ergebnis2'] = $ergebnis2;
-                $data_array['$team'] = ($matchAdminAccess_team1) ?
+                $data_array['$team'] = (getMatchAdminAccessByTeam(1, $cup_id, $match_id)) ?
                     'team1' : 'team2';
                 $data_array['$matchID'] = $match_id;
                 $data_array['$screenshotCategories'] = getScreenshotCategoriesAsOptions($gameArray['id'], false);

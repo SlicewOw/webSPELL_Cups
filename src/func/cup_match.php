@@ -100,6 +100,9 @@ function getMatchDetailsByMatchId($cup_array, $match_id) {
     $matchInfoArray[] = $_language->module['cup_match_start'] . ': ' . getformatdatetime($matchArray['date']);
     $matchInfoArray[] = 'Format: ' . ucfirst($matchArray['format']);
 
+    $matchInfoArray[] = ($matchArray['bracket'] == 1) ?
+        $_language->module['winner_bracket'] : $_language->module['loser_bracket'];
+
     if (in_array($matchArray['format'], $formatArray) && ($matchArray['mapvote'] == 1)) {
 
         if (($matchArray['team1_freilos'] == 0) && ($matchArray['team2_freilos'] == 0)) {
@@ -562,5 +565,63 @@ function addMatchLog($match_id, $action_message) {
             )",
         __FILE__
     );
+
+}
+
+/**
+ * Match Admin Access
+ **/
+function getMatchAdminPanelAccesslevel($cup_id, $match_id) {
+
+    if (!validate_int($cup_id, true)) {
+        return FALSE;
+    }
+
+    if (!validate_int($match_id, true)) {
+        return FALSE;
+    }
+
+    $matchAdminAccess_team1 = getMatchAdminAccessByTeam(1, $cup_id, $match_id);
+    $matchAdminAccess_team2 = getMatchAdminAccessByTeam(2, $cup_id, $match_id);
+
+    $matchAdminAccess_player = FALSE;
+    if (!$matchAdminAccess_team1 && !$matchAdminAccess_team2) {
+        $teamAdminAccess = FALSE;
+    } else {
+        $teamAdminAccess = TRUE;
+    }
+
+    return $teamAdminAccess;
+
+}
+
+function getMatchAdminAccessByTeam($team, $cup_id, $match_id) {
+
+    if (!validate_int($team, true)) {
+        return FALSE;
+    }
+
+    if (!validate_int($cup_id, true)) {
+        return FALSE;
+    }
+
+    if (!validate_int($match_id, true)) {
+        return FALSE;
+    }
+
+    global $userID;
+
+    $team_id = 'team' . $team . '_id';
+
+    $cupArray = getcup($cup_id);
+    $matchArray = getmatch($match_id);
+
+    if ($cupArray['mode'] == '1on1') {
+        $matchAdminAccess_team = (($matchArray[$team_id] > 0) && ($userID == $matchArray[$team_id])) ? TRUE : FALSE;
+    } else {
+        $matchAdminAccess_team = (($matchArray[$team_id] > 0) && isinteam($userID, $matchArray[$team_id], 'admin')) ? TRUE : FALSE;
+    }
+
+    return $matchAdminAccess_team;
 
 }

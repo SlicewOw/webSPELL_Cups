@@ -151,6 +151,7 @@ $language_array = Array(
     'lifetime'=>'lebenslang',
     'login'=>'Du musst eingloggt sein, um diesen Bereich sehen zu k&ouml;nnen.<br />&raquo; <a href="index.php?site=login">Login</a><br />&raquo; <a href="index.php?site=register">jetzt registrieren</a>',
     'join_cup'=>'Cup Anmeldung',
+    'loser_bracket'=>'Loser Bracket',
     'mappool_still_exist'=>'Name wird bereits verwendet',
     'map_vote_info'=>'Klicke auf die Map, die Du bannen m&ouml;chtest',
     'match_admin_confirmed'=>'Admin hat das Ergebnis best&auml;tigt',
@@ -348,5 +349,6 @@ myRisk e.V.',
     'where_overview'=>'&Uuml;bersicht',
     'where_team_join'=>'Team beitreten',
     'where_team_new'=>'Team erstellen',
+    'winner_bracket'=>'Winner Bracket',
     'yes'=>'ja'
 );
