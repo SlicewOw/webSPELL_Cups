@@ -61,33 +61,46 @@ function updateCupStatistics() {
 
             $subget = mysqli_fetch_array($subQuery);
 
-            if (!empty($subget['awardID'])) {
-
-                $insertQuery = cup_query(
-                    "INSERT INTO `" . PREFIX . "cups_awards`
-                        (
-                            `teamID`,
-                            `userID`,
-                            `cupID`,
-                            `award`,
-                            `date`
-                        )
-                        VALUES
-                        (
-                            " . $team_id . ",
-                            0,
-                            0,
-                            " . $subget['awardID'] . ",
-                            " . time() . "
-                        )",
-                    __FILE__
-                );
-
-                $teamname = getteam($get['teamID'], 'name');
-
-                setCupTeamLog($team_id, $teamname, 'award_received_' . $subget['awardID']);
-
+            if (empty($subget['awardID'])) {
+                continue;
             }
+
+            $award_id = $subget['awardID'];
+
+            $selectAwardQuery = cup_query(
+                "SELECT
+                        `awardID`
+                    FROM `" . PREFIX . "cups_awards`
+                    WHERE `teamID` = " . $team_id . " AND award = " . $award_id,
+                __FILE__
+            );
+
+            $verifyIfAwardIsAlreadySet = mysqli_num_rows($selectAwardQuery);
+            if ($verifyIfAwardIsAlreadySet > 0) {
+                continue;
+            }
+
+            $insertQuery = cup_query(
+                "INSERT INTO `" . PREFIX . "cups_awards`
+                    (
+                        `teamID`,
+                        `cupID`,
+                        `award`,
+                        `date`
+                    )
+                    VALUES
+                    (
+                        " . $team_id . ",
+                        0,
+                        " . $award_id . ",
+                        " . time() . "
+                    )",
+                __FILE__
+            );
+
+            $teamname = getteam($get['teamID'], 'name');
+
+            setCupTeamLog($team_id, $teamname, 'award_received_' . $award_id);
 
         }
 
