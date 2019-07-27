@@ -1,17 +1,17 @@
 <?php
 
-if (!isset($content)) {
-    $content = '';
-}
-
 try {
+
+    if (!isset($content)) {
+        $content = '';
+    }
 
     if (!iscupadmin($userID)) {
         throw new \Exception($_language->module['access_denied']);
     }
 
-    if (!isset($cup_id)) {
-        $cup_id = (isset($_GET['id']) && validate_int($_GET['id'])) ? 
+    if (!isset($cup_id) || !validate_int($_GET['id'], true)) {
+        $cup_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
             (int)$_GET['id'] : 0;
     }
 
@@ -66,15 +66,15 @@ try {
 
         $round = ($x + 1);
 
-        $selectQuery = mysqli_query(
-            $_database,
+        $selectQuery = cup_query(
             "SELECT
                     `format`
                 FROM `" . PREFIX . "cups_settings`
-                WHERE `cup_id` = " . $cup_id . " AND `round` = " . $round
+                WHERE `cup_id` = " . $cup_id . " AND `round` = " . $round,
+            __FILE__
         );
 
-        if ($selectQuery && mysqli_num_rows($selectQuery) == 1) {
+        if (mysqli_num_rows($selectQuery) == 1) {
 
             $getFormat = mysqli_fetch_array($selectQuery);
 

@@ -329,7 +329,7 @@ try {
                 'btn-info white darkshadow' : 'btn-default';
 
             $groupstage_navi = '';
-            if($cupArray['groupstage'] == 1) {
+            if ($cupArray['groupstage'] == 1) {
                 $groupstage_url = 'admincenter.php?site=cup&amp;mod=cup&amp;action=cup&amp;id=' . $cup_id . '&amp;page=groups';
                 $groupstage_navi = '<div class="btn-group" role="group"><a href="' . $groupstage_url . '" class="btn ' . $navi_groups . '">' . $_language->module['groupstage'] . '</a></div>';
             }

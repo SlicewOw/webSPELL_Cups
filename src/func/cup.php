@@ -3196,33 +3196,36 @@ function getMapsAsOptions($pool_id, $selected_id = '', $addEmptyOption = FALSE) 
 
 }
 function getMappool($pool_id = 0, $cat = 'list') {
-    global $_database, $_language;
-    $_language->readModule('cups');
+
+    global $_language;
+
+    $_language->readModule('cups', true);
 
     $returnValue = '';
-    $category = '';
 
-    $query = mysqli_query(
-        $_database,
-        "SELECT 
-            a.mappoolID AS pool_id, 
-            a.name AS name, 
-            a.maps AS maps,
-            b.tag AS tag,
-            b.name AS game
-        FROM `".PREFIX."cups_mappool` a
-        JOIN `".PREFIX."games` b ON a.gameID = b.gameID
-        ORDER BY game ASC, name ASC"
-    );
     if ($cat == 'list') {
+
+        $query = cup_query(
+            "SELECT
+                a.mappoolID AS pool_id,
+                a.name AS name,
+                a.maps AS maps,
+                b.tag AS tag,
+                b.name AS game
+            FROM `".PREFIX."cups_mappool` a
+            JOIN `".PREFIX."games` b ON a.gameID = b.gameID
+            ORDER BY game ASC, name ASC",
+            __FILE__
+        );
 
         $returnValue .= '<option value="0">'.$_language->module['no_mappool2'].'</option>';
 
-        while($get = mysqli_fetch_array($query)) {
+        $category = '';
+        while ($get = mysqli_fetch_array($query)) {
 
-            if(empty($category) || ($category != $get['tag'])) {
+            if (empty($category) || ($category != $get['tag'])) {
                 $category = $get['tag'];
-                if(!empty($category)) {
+                if (!empty($category)) {
                     $returnValue .= '</optgroup>';
                 }
                 $returnValue .= '<optgroup label="'.$get['game'].'">';
