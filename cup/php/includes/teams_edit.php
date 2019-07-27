@@ -63,7 +63,7 @@ try {
             }
 
             $country = (isset($_POST['country'])) ?
-                $_POST['country'] : 'de';
+                $_POST['country'] : getCupDefaultLanguage();
             $team->setCountry($country);
 
             //

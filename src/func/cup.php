@@ -4,6 +4,26 @@
  * General
  **/
 
+function getCupDefaultLanguage() {
+
+    $fallback_language = 'de';
+
+    $settingsFile = __DIR__ . '/../../cup/settings.php';
+
+    if (!file_exists($settingsFile)) {
+        throw new \Exception('unknown_settings_file');
+    }
+
+    include($settingsFile);
+
+    if (!isset($default_language)) {
+        return $fallback_language;
+    }
+
+    return $default_language;
+
+}
+
 function updateCupStatistics() {
 
     $query = cup_query(

@@ -55,7 +55,7 @@ try {
                     $_SESSION['cup']['team']['country'] = $country;
 
                 } else {
-                    $country = 'de';
+                    $country = getCupDefaultLanguage();
                 }
                 $team->setCountry($country);
 
@@ -97,8 +97,11 @@ try {
 
         if (!isset($countries)) {
 
-            $setCountry = (isset($_SESSION['cup']['team']['country'])) ?
-                $_SESSION['cup']['team']['country'] : 'de';
+            if (isset($_SESSION['cup']['team']['country'])) {
+                $setCountry = $_SESSION['cup']['team']['country'];
+            } else {
+                $setCountry = getCupDefaultLanguage();
+            }
 
             $countries = getcountries($setCountry);
 

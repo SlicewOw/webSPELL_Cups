@@ -60,7 +60,7 @@ try {
                         $_SESSION['cup']['team']['country'] = $country;
 
                     } else {
-                        $country = 'de';
+                        $country = getCupDefaultLanguage();
                     }
                     $team->setCountry($country);
 
@@ -185,7 +185,7 @@ try {
             $data_array['$teamtag'] = '';
             $data_array['$userlist'] = getuserlist();
             $data_array['$homepage'] = '';
-            $data_array['$countries'] = getcountries('de');
+            $data_array['$countries'] = getcountries(getCupDefaultLanguage());
             $data_array['$pic'] = '';
             $data_array['$team_id'] = 0;
             $data_array['$postName'] = 'submitAddCupTeam';
@@ -199,14 +199,14 @@ try {
             $page = (isset($_GET['page']) && validate_int($_GET['page'], true)) ?
                 (int)$_GET['page'] : 1;
 
-            $getTeam = mysqli_fetch_array(
-                mysqli_query(
-                    $_database,
-                    "SELECT
-                            COUNT(*) AS `count`
-                        FROM `" . PREFIX . "cups_teams`"
-                )
+            $teamCountQuery = cup_query(
+                "SELECT
+                        COUNT(*) AS `count`
+                    FROM `" . PREFIX . "cups_teams`",
+                __FILE__
             );
+
+            $getTeam = mysqli_fetch_array($teamCountQuery);
 
             $pages = ceil($getTeam['count'] / $showEntries);
 
@@ -215,8 +215,7 @@ try {
 
             $end = $showEntries;
 
-            $selectQuery = mysqli_query(
-                $_database,
+            $selectQuery = cup_query(
                 "SELECT
                         ct.`teamID` AS `team_id`,
                         ct.`name` AS `team_name`,
@@ -230,14 +229,11 @@ try {
                         ct.`userID` AS `team_admin_id`,
                         u.`username` AS `team_admin_name`
                     FROM `" . PREFIX . "cups_teams` ct
-                    JOIN `" . PREFIX . "user` u ON ct.`userID` = u.`userID`
+                    LEFT JOIN `" . PREFIX . "user` u ON ct.`userID` = u.`userID`
                     ORDER BY ct.`name` ASC
-                    LIMIT " . $start . ", " . $end
+                    LIMIT " . $start . ", " . $end,
+                __FILE__
             );
-
-            if (!$selectQuery) {
-                throw new \Exception($_language->module['query_select_failed']);
-            }
 
             if (mysqli_num_rows($selectQuery) > 0) {
 

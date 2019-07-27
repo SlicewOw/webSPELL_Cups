@@ -47,7 +47,7 @@ class cup_team {
 
         //
         // Default Country
-        $this->team_country = 'de';
+        $this->team_country = getCupDefaultLanguage();
 
         //
         // Team-Logotype Bildpfad
@@ -134,10 +134,10 @@ class cup_team {
 
     }
 
-    public function setCountry($country = 'de') {
+    public function setCountry($country = '') {
 
         if (empty($country)) {
-            $country = 'de';
+            $country = getCupDefaultLanguage();
         }
 
         $country = trim($country);

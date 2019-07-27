@@ -12,6 +12,11 @@ $challonge_api_key = '';
 /**
  * Cup Team settings
  */
+$default_language = 'de'; // shortcut of language which is used as default language in comboboxes (default='de')
+
+/**
+ * Cup Team settings
+ */
 $cup_team_tag_max_length = 16; // max count of chars (default=16)
 $cup_team_logotype_max_size = 500; // value in pixels, 500 -> 500x500px (default=500)
 $cup_team_logotype_is_required = TRUE; // if teams need to add a logotype or not (default=TRUE)
