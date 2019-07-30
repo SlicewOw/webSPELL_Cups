@@ -17,17 +17,18 @@ function getChallongeApiKey() {
     if (empty($challonge_api_key)) {
         throw new \Exception('challonge_api_key_is_not_set');
     }
-    
+
     return $challonge_api_key;
-    
+
 }
 
 function getChallongeApiObject() {
 
     $challonge_api_key = getChallongeApiKey();
-    
+
     include(__DIR__ . '/../../cup/api/challonge.php');
-    
+
     $challonge_api = new \ChallongeAPI($challonge_api_key);
+    return $challonge_api;
 
 }

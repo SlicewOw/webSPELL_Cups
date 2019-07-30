@@ -8,9 +8,22 @@ try {
 
     $navi_bracket = 'btn-info white darkshadow';
 
-    if (($cupArray['status'] > 1)) {
+    $bracket = '';
 
-        $bracket = '';
+    if (isset($cupArray['settings']['challonge']['state']) && ($cupArray['settings']['challonge']['state'] == 1)) {
+
+        $challonge_api = getChallongeApiObject();
+
+        $tournament_parameter = array();
+        $tournament_parameter['include_participants'] = '1';
+        $tournament_parameter['include_matches'] = '1';
+
+        $tournament_data = $challonge_api->getTournaments($tournament_parameter);
+
+        echo showInfo('You will see a bracket soon.');
+
+    } else if (($cupArray['status'] > 1)) {
+
 
         $bracketFile = __DIR__ . '/cup_bracket.php';
         if (file_exists($bracketFile)) {
