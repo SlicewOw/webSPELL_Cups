@@ -106,6 +106,8 @@ try {
     $data_array['$cup_game'] = $cupArray['game'];
     $content .= $GLOBALS["_template_cup"]->replaceTemplate("cup_details_settings", $data_array);
 
+    include(__DIR__ . '/cup_details_settings_challonge.php');
+
 } catch (Exception $e) {
     $content .= showError($e->getMessage());
 }

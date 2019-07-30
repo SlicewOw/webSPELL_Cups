@@ -26,7 +26,7 @@ try {
 
     if ($postAction == 'saveCupSettings') {
 
-        $cup_id = (isset($_POST['cup_id']) && validate_int($_POST['cup_id'])) ?
+        $cup_id = (isset($_POST['cup_id']) && validate_int($_POST['cup_id'], true)) ?
             (int)$_POST['cup_id'] : 0;
 
         if ($cup_id < 1) {
@@ -48,30 +48,22 @@ try {
         $admin = (isset($_POST['adminVisible']) && is_numeric($_POST['adminVisible'])) ?
             (int)$_POST['adminVisible'] : 0;
 
-        $updateQuery = mysqli_query(
-            $_database,
+        $updateQuery = cup_query(
             "UPDATE `" . PREFIX . "cups`
                 SET `registration` = '" . $registration . "',
                     `mapvote_enable` = " . $mapVoteEnable . ",
                     `mappool` = " . $mapPool_id . ",
                     `saved` = " . $saved . ",
                     `admin_visible` = " . $admin . "
-                WHERE `cupID` = " . $cup_id
+                WHERE `cupID` = " . $cup_id,
+            __FILE__
         );
 
-        if (!$updateQuery) {
-            throw new \Exception('cannot_save_cup_settings');
-        }
-
-        $deleteQuery = mysqli_query(
-            $_database,
+        $deleteQuery = cup_query(
             "DELETE FROM `". PREFIX . "cups_settings`
-                WHERE `cup_id` = " . $cup_id
+                WHERE `cup_id` = " . $cup_id,
+            __FILE__
         );
-
-        if (!$deleteQuery) {
-            throw new \Exception('cannot_delete_old_cup_serttings');
-        }
 
         $roundArray = (isset($_POST['round']) && validate_array($_POST['round'], true)) ?
             $_POST['round'] : array();
@@ -81,8 +73,7 @@ try {
 
             for ($x = 1; $x < ($roundCounter + 1); $x++) {
 
-                $insertQuery = mysqli_query(
-                    $_database,
+                $insertQuery = cup_query(
                     "INSERT INTO `" . PREFIX . "cups_settings`
                         (
                             `cup_id`,
@@ -94,18 +85,60 @@ try {
                             " . $cup_id . ",
                             " . $x . ",
                             '" . $roundArray[$x - 1] . "'
-                        )"
+                        )",
+                    __FILE__
                 );
-
-                if (!$insertQuery) {
-                    throw new \Exception('cannot_save_match_rounds');
-                }
 
             }
 
         }
 
         $returnArray['message'][] = $_language->module['cup_settings_saved'];
+
+    } else if ($postAction == 'saveChallongeApiSettings') {
+
+        $cup_id = (isset($_POST['cup_id']) && validate_int($_POST['cup_id'], true)) ?
+            (int)$_POST['cup_id'] : 0;
+
+        if ($cup_id < 1) {
+            throw new \Exception('unknown_cup_id');
+        }
+
+        $activate_challonge_api = (isset($_POST['activate_challonge']) && validate_int($_POST['activate_challonge'])) ?
+            (int)$_POST['activate_challonge'] : 0;
+
+        if (($activate_challonge_api < 0) || ($activate_challonge_api > 1)) {
+            $activate_challonge_api = 0;
+        }
+
+        $challonge_url = (isset($_POST['challonge_url']) && validate_url($_POST['challonge_url'])) ?
+            getinput($_POST['challonge_url']) : '';
+
+        if (empty($challonge_url)) {
+            $activate_challonge_api = 0;
+        }
+
+        $setValuesArray = array();
+        $setValuesArray[] = '`challonge_api` = ' . $activate_challonge_api;
+
+        if (!empty($challonge_url)) {
+            $setValuesArray[] = '`challonge_url` = \'' . $challonge_url . '\'';
+        } else {
+            $setValuesArray[] = '`challonge_url` = NULL';
+        }
+
+        if (count($setValuesArray) < 1) {
+            throw new \Exception('cannot_set_any_value');
+        }
+
+        $updateQuery = cup_query(
+            "UPDATE `" . PREFIX . "cups`
+                SET " . implode(', ', $setValuesArray) . "
+                WHERE `cupID` = " . $cup_id,
+            __FILE__
+        );
+
+        $returnArray['message'][] = $_language->module['cup_settings_saved_challonge'];
 
     } else {
         throw new \Exception($_language->module['unknown_action']);

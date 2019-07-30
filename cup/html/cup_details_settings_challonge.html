@@ -1,0 +1,91 @@
+<form method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">%challonge%</h1>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>%challonge_api_usage%</label>
+                        <select name="activateChallongeApi" class="form-control">
+                            $challongeApiOptions
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>%challonge_cup_url%</label>
+                        <input type="url" name="challongeCupUrl"
+                               class="form-control challonge-api-input"
+                               placeholder="https://test.challonge.com/mytourney"
+                               value="$challongeUrl"
+                               disabled="disabled" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button type="submit" name="submitChallongeApi"
+                    class="btn btn-info btn-sm white darkshadow">
+                %save%
+            </button>
+        </div>
+    </div>
+</form>
+<script>
+$(document).ready(function() {
+
+    updateChallongeInputs();
+
+    $("select[name=activateChallongeApi]").change(function () {
+        updateChallongeInputs();
+    });
+
+    function updateChallongeInputs() {
+
+        var challonge_api_usage_status = $("select[name=activateChallongeApi]").val();
+        if (challonge_api_usage_status === "1") {
+            $(".challonge-api-input").removeAttr('disabled');
+        } else {
+            $(".challonge-api-input").attr('disabled', 'disabled');
+        }
+
+    }
+
+    $("button[name=submitChallongeApi]").click(function (e) {
+
+        e.preventDefault();
+
+        saveChallongeApi();
+
+    })
+
+    function saveChallongeApi() {
+
+        $.post(
+            "ajax.php?site=admin_cup_settings",
+            {
+                action : 'saveChallongeApiSettings',
+                cup_id : $cup_id,
+                activate_challonge : $("select[name=activateChallongeApi]").val(),
+                challonge_url : $("input[name=challongeCupUrl]").val()
+            },
+            function (data, status) {
+
+                var varData = JSON.parse(data),
+                    alert_type = 'error';
+
+                if ((status === "success") && (varData.status)) {
+                    alert_type = 'success';
+                }
+
+                showMultipleNotifies(varData.message, alert_type);
+
+            }
+        );
+
+    }
+
+});
+</script>

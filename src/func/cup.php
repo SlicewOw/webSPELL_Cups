@@ -1657,15 +1657,11 @@ function getcup($id, $cat = '') {
 
             $whereClause = implode(' AND ', $whereClauseArray);
 
-            $query = mysqli_query(
-                $_database,
+            $query = cup_query(
                 "SELECT * FROM `" . PREFIX . "cups`
-                    WHERE " . $whereClause
+                    WHERE " . $whereClause,
+                __FILE__
             );
-
-            if (!$query) {
-                throw new \Exception('cups_query_select_failed');
-            }
 
             $get = mysqli_fetch_array($query);
 
@@ -1736,20 +1732,24 @@ function getcup($id, $cat = '') {
             $hits_total += $get['hits_rules'];
 
             $settingsArray = array(
-                'format' => array()
+                'format' => array(),
+                'challonge' => array()
             );
 
-            $selectQuery = mysqli_query(
-                $_database,
+            $settingsArray['challonge']['state'] = $get['challonge_api'];
+            $settingsArray['challonge']['url'] = $get['challonge_url'];
+
+            $selectQuery = cup_query(
                 "SELECT
                         `round`,
                         `format`
                     FROM `" . PREFIX . "cups_settings`
                     WHERE `cup_id` = " . $cup_id . "
-                    ORDER BY `round` ASC"
+                    ORDER BY `round` ASC",
+                __FILE__
             );
 
-            if ($selectQuery && (mysqli_num_rows($selectQuery) > 0)) {
+            if (mysqli_num_rows($selectQuery) > 0) {
 
                 while ($getFormat = mysqli_fetch_array($selectQuery)) {
                     $settingsArray['format'][$getFormat['round']] = $getFormat['format'];

@@ -1021,6 +1021,17 @@ try {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;"
     );
 
+    /**
+     * Challonge
+     */
+
+    $alterTableQuery = mysqli_query(
+        $_database,
+        "ALTER TABLE `" . PREFIX . "cups`
+            ADD `challonge_api` INT(1) NOT NULL DEFAULT '0' AFTER `admin_visible`,
+            ADD `challonge_url` VARCHAR(300) NULL AFTER `challonge_api`;"
+    );
+
     echo "Delete this file!";
 
     @mail(
