@@ -27,6 +27,9 @@ Feel free to use this add-on for webSPELL NOR, but be aware that we (myRisk e.V)
         * Copy "client id" and "client secret" and paste it to settings.php
         * IMPORTANT: your hp_url must have http/https in front as a prefix!
         * Go to menu "OAuth2" and enter your "redirect" URL in the given page
+    * Challonge API Key
+        * Create a developer key: https://challonge.com/de/settings/developer (you need to be registered and logged in first)
+        * Copy the API key and paste it to settings.php as a value of variable '$challonge_api_key'
 
 # Communication
 
@@ -37,7 +40,7 @@ To talk about the add-on, I created a Slack channel. You may have some question 
 
 # Optional stuff
 
-* Cronjobs: 
+* Cronjobs:
     * /cup/cj/cup_cj.php (once a day is enough)
     * /cup/cj/gameaccount_cj.php (should be every hour once)
     * /cup/cj/twitch_cj.php?cj_id={1-5} (every 5 minutes, use 5 cronjobs from 1 up to 5)
