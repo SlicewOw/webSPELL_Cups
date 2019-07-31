@@ -1,90 +1,134 @@
 <?php
 
-if(isset($cupArray) && is_array($cupArray)) {
-	
-	$navi_teams = 'btn-info white darkshadow';
+try {
 
-	$teams = '';
+    if (!isset($content)) {
+        $content = '';
+    }
 
-	for($x=0;$x<2;$x++) {
+    if (!isset($cupArray) || !validate_array($cupArray, true)) {
+        throw new \Exception($_language->module['access_denied']);
+    }
 
-		//
-		// 1: Teams (Checked-In)
-		// 0: Teams (Registered)
-		$isChecked = ($x == 0) ? 1 : 0;
-		if($cupArray['mode'] == '1on1') {
-			$teamsTitle = ($x == 0) ? 'player_checked_in' : 'player_registered';
-		} else {
-			$teamsTitle = ($x == 0) ? 'teams_checked_in' : 'teams_registered';
-		}
+    $navi_teams = 'btn-info white darkshadow';
 
-		$team = mysqli_query(
-			$_database, 
-			"SELECT teamID FROM ".PREFIX."cups_teilnehmer 
-				WHERE cupID = " . $cup_id . " AND checked_in = '".$isChecked."'"
-		);
-		if(mysqli_num_rows($team) > 0) {
+    $teams = '';
 
-			if($cupArray['mode'] == '1on1') {
+    if (isset($cupArray['settings']['challonge']['state']) && ($cupArray['settings']['challonge']['state'] == 1)) {
 
-				$teams .= '<div class="panel panel-default"><div class="panel-heading">'.$_language->module[$teamsTitle].'</div>';
-				$teams .= '<div class="list-group">';	
+        $challonge_api = getChallongeApiObject();
+        $challonge_id = getChallongeTournamentId($cup_id);
 
-				while( $db = mysqli_fetch_array($team) ) {
+        $participants = $challonge_api->getParticipants($challonge_id);
+        $participantArray = $participants->participant;
 
-					$user_id = $db['teamID'];
+        $panel_content = '';
 
-					$url = 'index.php?site=profile&id='.$user_id.'#content';
+        foreach ($participantArray as $participant) {
 
-					$data_array = array();
-					$data_array['$url'] 		= $url;
-					$data_array['$name'] 		= getnickname($user_id);
-					$data_array['$team_info'] 	= getnickname($user_id);
-					$teams .= $GLOBALS["_template_cup"]->replaceTemplate("teams_list", $data_array);
+            $data_array = array();
+            $data_array['$url'] = '#';
+            $data_array['$name'] = $participant->name;
+            $data_array['$team_info'] = $participant->name;
+            $panel_content .= $GLOBALS["_template_cup"]->replaceTemplate("teams_list", $data_array);
 
-				}
+        }
 
-				$teams .= '</div></div>';	
+        $panel_title = ($cupArray['mode'] == '1on1') ? 'player_checked_in' : 'teams_registered';
 
-			} else {
+        $data_array = array();
+        $data_array['$panel_type'] = 'panel-default';
+        $data_array['$panel_title'] = $_language->module[$panel_title];
+        $data_array['$panel_content'] = $panel_content;
+        $teams .= $GLOBALS["_template_cup"]->replaceTemplate("panel_list_group", $data_array);
 
-				$teams .= '<div class="panel panel-default"><div class="panel-heading">'.$_language->module[$teamsTitle].'</div>';
-				$teams .= '<div class="list-group">';	
-				while( $db = mysqli_fetch_array($team) ) {
+    } else {
 
-                    $team_id = $db['teamID'];
-                    
-					$teamArray = getteam($team_id, '');
-					$url 	= 'index.php?site=teams&amp;action=details&amp;id=' . $team_id;
-					$name	= $teamArray['name'];
-					$logo	= $teamArray['logotype'];
+        if (getcup($cup_id, 'anz_teams') == 0) {
+            $teams = '<div class="panel panel-default"><div class="panel-body">' . $_language->module['no_team'] . '</div></div>';
+        } else {
 
-					$team_info = '<img src="' . $teamArray['logotype'] . '" class="img-rounded" alt="" width="16" height="16" />';
-					$team_info .= '<span style="margin: 0 0 0 10px">' . $name . '</span>';
+            for ($x = 0; $x < 2; $x++) {
 
-					$data_array = array();
-					$data_array['$url'] = $url;
-					$data_array['$name'] = $name;
-					$data_array['$team_info'] = $team_info;
-					$teams .= $GLOBALS["_template_cup"]->replaceTemplate("teams_list", $data_array);
+                //
+                // 1: Teams (Checked-In)
+                // 0: Teams (Registered)
+                $isChecked = ($x == 0) ? 1 : 0;
 
-				}
-				$teams .= '</div></div>';	
+                if ($cupArray['mode'] == '1on1') {
+                    $teamsTitle = ($x == 0) ? 'player_checked_in' : 'player_registered';
+                } else {
+                    $teamsTitle = ($x == 0) ? 'teams_checked_in' : 'teams_registered';
+                }
 
-			}
+                $team = cup_query(
+                    "SELECT
+                            `teamID`
+                        FROM `" . PREFIX . "cups_teilnehmer`
+                        WHERE `cupID` = " . $cup_id . " AND `checked_in` = " . $isChecked,
+                    __FILE__
+                );
 
-		}
+                if (mysqli_num_rows($team) > 0) {
 
-	}
+                    $panel_content = '';
 
-	if(getcup($cup_id, 'anz_teams') == 0) { 
-		$teams = '<div class="panel panel-default"><div class="panel-body">'.$_language->module['no_team'].'</div></div>';	
-	}
+                    if ($cupArray['mode'] == '1on1') {
 
-	if(!isset($content)) {
-		$content = '';
-	}
+                        while ($db = mysqli_fetch_array($team)) {
 
-	$content .= $teams;
+                            $user_id = $db['teamID'];
 
+                            $url = 'index.php?site=profile&id=' . $user_id . '#content';
+
+                            $data_array = array();
+                            $data_array['$url'] = $url;
+                            $data_array['$name'] = getnickname($user_id);
+                            $data_array['$team_info'] = getnickname($user_id);
+                            $panel_content .= $GLOBALS["_template_cup"]->replaceTemplate("teams_list", $data_array);
+
+                        }
+
+                    } else {
+
+                        while ($db = mysqli_fetch_array($team)) {
+
+                            $team_id = $db['teamID'];
+
+                            $teamArray = getteam($team_id, '');
+                            $url = 'index.php?site=teams&amp;action=details&amp;id=' . $team_id;
+                            $name = $teamArray['name'];
+                            $logo = $teamArray['logotype'];
+
+                            $team_info = '<img src="' . $teamArray['logotype'] . '" class="img-rounded" alt="" width="16" height="16" />';
+                            $team_info .= '<span style="margin: 0 0 0 10px">' . $name . '</span>';
+
+                            $data_array = array();
+                            $data_array['$url'] = $url;
+                            $data_array['$name'] = $name;
+                            $data_array['$team_info'] = $team_info;
+                            $panel_content .= $GLOBALS["_template_cup"]->replaceTemplate("teams_list", $data_array);
+
+                        }
+
+                    }
+
+                    $data_array = array();
+                    $data_array['$panel_type'] = 'panel-default';
+                    $data_array['$panel_title'] = $_language->module[$teamsTitle];
+                    $data_array['$panel_content'] = $panel_content;
+                    $teams .= $GLOBALS["_template_cup"]->replaceTemplate("panel_list_group", $data_array);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    $content .= $teams;
+
+} catch (Exception $e) {
+    $content .= showError($e->getMessage());
 }
