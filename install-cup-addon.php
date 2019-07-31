@@ -279,7 +279,7 @@ try {
 
     $createTableQuery = mysqli_query(
         $_database,
-        "CREATE TABLE `" . PREFIX . "cups_preise` (
+        "CREATE TABLE `" . PREFIX . "cups_prizes` (
       `preisID` int(11) NOT NULL,
       `cupID` int(11) NOT NULL,
       `preis` varchar(255) COLLATE latin1_german1_ci NOT NULL,
@@ -592,7 +592,7 @@ try {
 
     $alterTableQuery = mysqli_query(
         $_database,
-        "ALTER TABLE `" . PREFIX . "cups_preise`
+        "ALTER TABLE `" . PREFIX . "cups_prizes`
       ADD PRIMARY KEY (`preisID`),
       ADD UNIQUE KEY `preisID` (`preisID`);"
     );
@@ -794,7 +794,7 @@ try {
 
     $alterTableQuery = mysqli_query(
         $_database,
-        "ALTER TABLE `" . PREFIX . "cups_preise`
+        "ALTER TABLE `" . PREFIX . "cups_prizes`
       MODIFY `preisID` int(11) NOT NULL AUTO_INCREMENT;"
     );
 

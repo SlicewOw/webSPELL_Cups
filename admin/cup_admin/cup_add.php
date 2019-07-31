@@ -8,7 +8,7 @@ try {
         throw new \Exception($_language->module['login']);
     }
 
-    $maxPreise = 6;
+    $maxPrizes = 6;
 
     function convertStringToDateInMs($string, $hours, $minutes) {
         $returnValue = strtotime($string);
@@ -106,33 +106,20 @@ try {
                 $cup_id = mysqli_insert_id($_database);
 
                 //
-                // Preise speichern
-                for ($x = 1; $x < ($maxPreise + 1); $x++) {
+                // Save prizes
+                for ($x = 1; $x < ($maxPrizes + 1); $x++) {
 
-                    if (isset($_POST['preis'][$x])) {
-
-                        $preis = $_POST['preis'][$x];
-                        if (!empty($preis)) {
-
-                            $insertQuery = cup_query(
-                                "INSERT INTO `" . PREFIX . "cups_preise`
-                                    (
-                                        `cupID`,
-                                        `preis`,
-                                        `platzierung`
-                                    )
-                                    VALUES
-                                    (
-                                        " . $cup_id . ",
-                                        '".$preis."',
-                                        " . $x . "
-                                    )",
-                                __FILE__
-                            );
-
-                        }
-
+                    if (!isset($_POST['prize'][$x])) {
+                        continue;
                     }
+
+                    $prize = $_POST['prize'][$x];
+
+                    if (empty($prize)) {
+                        continue;
+                    }
+
+                    savePrize($cup_id, $prize, $x);
 
                 }
 
@@ -169,13 +156,13 @@ try {
         for ($i = 0; $i < 25; $i++) {
             $hours .= '<option value="' . $i . '">' . $i . '</option>';
         }
-        
+
         $hours_checkin = str_replace(
             'value="19"',
             'value="19" selected="selected"',
             $hours
         );
-        
+
         $hours_start = str_replace(
             'value="20"',
             'value="20" selected="selected"',
@@ -227,8 +214,8 @@ try {
         $data_array['$rules'] = $rules;
         $data_array['$pps'] = $penalty;
 
-        for ($x = 1; $x < ($maxPreise + 1); $x++) {
-            $data_array['$preis'.$x] = '';
+        for ($x = 1; $x < ($maxPrizes + 1); $x++) {
+            $data_array['$prize'.$x] = '';
         }
 
         $data_array['$postName'] = 'add';

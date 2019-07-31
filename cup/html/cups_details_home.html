@@ -9,7 +9,14 @@ $error
         <button id="btn_home"
                 onclick="getCupContent($cupID, 'home');"
                 class="btn btn-sm $navi_home">
-            Details
+            %details%
+        </button>
+    </div>
+    <div class="btn-group" role="group">
+        <button id="btn_prizes"
+                onclick="getCupContent($cupID, 'prizes');"
+                class="btn btn-sm $navi_prizes">
+            %prizes%
         </button>
     </div>
     <div class="btn-group" role="group">
@@ -24,7 +31,7 @@ $error
         <button id="btn_playoffs"
                 onclick="getCupContent($cupID, 'bracket');"
                 class="btn btn-sm $navi_bracket">
-            Playoffs
+            %playoffs%
         </button>
     </div>
     <div class="btn-group" role="group">
@@ -52,13 +59,15 @@ function getCupContent(id, page) {
         '</div>'
     );
 
-    var home_btn = document.getElementById("btn_home");
-    var teams_btn = document.getElementById("btn_teams");
+    var home_btn = document.getElementById("btn_home"),
+        prizes_btn = document.getElementById("btn_prizes"),
+        teams_btn = document.getElementById("btn_teams"),
+        playoffs_btn = document.getElementById("btn_playoffs"),
+        rules_btn = document.getElementById("btn_rules");
     //var groups_btn = document.getElementById("btn_groups");
-    var playoffs_btn = document.getElementById("btn_playoffs");
-    var rules_btn = document.getElementById("btn_rules");
 
     home_btn.setAttribute('class', 'btn btn-default btn-sm');
+    prizes_btn.setAttribute('class', 'btn btn-default btn-sm');
     teams_btn.setAttribute('class', 'btn btn-default btn-sm');
     //groups_btn.setAttribute('class', 'btn btn-default btn-sm');
     playoffs_btn.setAttribute('class', 'btn btn-default btn-sm');
@@ -66,6 +75,8 @@ function getCupContent(id, page) {
 
     if (page === 'home') {
         home_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
+    } else if (page === 'prizes') {
+        prizes_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
     } else if (page === 'teams') {
         teams_btn.setAttribute('class', 'btn btn-info btn-sm white darkshadow');
     } else if (page === 'groups') {

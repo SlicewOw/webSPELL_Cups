@@ -1,13 +1,12 @@
 <?php
 
-if (!isset($content)) {
-    $content = '';
-}
-
 try {
 
-    $getCupPlacementsQuery = mysqli_query(
-        $_database,
+    if (!isset($content)) {
+        $content = '';
+    }
+
+    $getCupPlacementsQuery = cup_query(
         "SELECT
                 cp.`teamID` AS `team_id`,
                 cp.`platzierung` AS `team_placement`,
@@ -15,12 +14,9 @@ try {
             FROM `" . PREFIX . "cups_platzierungen` cp
             JOIN `" . PREFIX . "cups` c ON cp.`cupID` = c.`cupID`
             WHERE cp.`cupID` = " . $cup_id . "
-            ORDER BY cp.`platzierung` ASC"
+            ORDER BY cp.`platzierung` ASC",
+        __FILE__
     );
-
-    if (!$getCupPlacementsQuery) {
-
-    }
 
     if (mysqli_num_rows($getCupPlacementsQuery) > 0) {
 

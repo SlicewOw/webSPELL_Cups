@@ -97,41 +97,27 @@ try {
 
                 $_SESSION['successArray'][] = $_language->module['query_saved'];
 
-                $deleteQuery = mysqli_query(
-                    $_database,
-                    "DELETE FROM `".PREFIX."cups_preise`
-                        WHERE `cupID` = " . $cup_id
+                $deleteQuery = cup_query(
+                    "DELETE FROM `".PREFIX."cups_prizes`
+                        WHERE `cup_id` = " . $cup_id,
+                    __FILE__
                 );
 
                 //
-                // Speichere Preise
+                // Save prizes
                 for ($x = 1; $x < ($maxPrices + 1); $x++) {
 
-                    if (isset($_POST['preis'][$x])) {
-
-                        $preis = $_POST['preis'][$x];
-
-                        if (!empty($preis)) {
-
-                            $insertQuery = mysqli_query(
-                                $_database,
-                                "INSERT INTO `".PREFIX."cups_preise`
-                                    (
-                                        `cupID`,
-                                        `preis`,
-                                        `platzierung`
-                                    )
-                                    VALUES
-                                    (
-                                        " . $cup_id . ",
-                                        '" . $preis . "',
-                                        '" . $x . "'
-                                    )"
-                            );
-
-                        }
-
+                    if (!isset($_POST['prize'][$x])) {
+                        continue;
                     }
+
+                    $prize = $_POST['prize'][$x];
+
+                    if (empty($prize)) {
+                        continue;
+                    }
+
+                    savePrize($cup_id, $prize, $x);
 
                 }
 
@@ -262,12 +248,12 @@ try {
         $preisArray = array();
         $preisQuery = mysqli_query(
             $_database,
-            "SELECT * FROM `" . PREFIX . "cups_preise`
-                WHERE `cupID` = " . $cup_id
+            "SELECT * FROM `" . PREFIX . "cups_prizes`
+                WHERE `cup_id` = " . $cup_id
         );
         while ($dx = mysqli_fetch_array($preisQuery)) {
-            if (!empty($dx['preis'])) {
-                $preisArray[$dx['platzierung']] = $dx['preis'];
+            if (!empty($dx['prize'])) {
+                $preisArray[$dx['placement']] = $dx['prize'];
             }
         }
 
@@ -295,7 +281,7 @@ try {
             $data_array['$pps'] = $pps;
 
             for ($x = 1; $x < ($maxPrices + 1); $x++) {
-                $data_array['$preis' . $x] = (isset($preisArray[$x])) ? $preisArray[$x] : '';
+                $data_array['$prize' . $x] = (isset($preisArray[$x])) ? $preisArray[$x] : '';
             }
 
             $data_array['$postName'] = 'edit';

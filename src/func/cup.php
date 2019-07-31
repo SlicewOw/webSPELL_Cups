@@ -3248,6 +3248,41 @@ function getMappool($pool_id = 0, $cat = 'list') {
 }
 
 /**
+ * Prizes
+ */
+function savePrize($cup_id, $prize, $placement) {
+
+    if (!validate_int($cup_id, true)) {
+        throw new \Exception('unknown_cup_id');
+    }
+
+    if (empty($prize)) {
+        throw new \Exception('unknown_prize');
+    }
+
+    if (!validate_int($placement, true)) {
+        throw new \Exception('unknown_placemenet');
+    }
+
+    $insertQuery = cup_query(
+        "INSERT INTO `" . PREFIX . "cups_prizes`
+            (
+                `cup_id`,
+                `prize`,
+                `placement`
+            )
+            VALUES
+            (
+                " . $cup_id . ",
+                '" . $prize . "',
+                " . $placement . "
+            )",
+        __FILE__
+    );
+
+}
+
+/**
  * Support
  */
 function ticket($userID, $ticketID, $cat) {

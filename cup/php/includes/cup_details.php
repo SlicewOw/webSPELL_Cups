@@ -21,6 +21,7 @@ try {
 
     $allowedPagesArray = array(
         'home',
+        'prizes',
         'teams',
         'groups',
         'bracket',
@@ -38,7 +39,8 @@ try {
 
     $time_now = time();
 
-    $navi_home 	= 'btn-default';
+    $navi_home = 'btn-default';
+    $navi_prizes = 'btn-default';
     $navi_teams = 'btn-default';
     $navi_groups = 'btn-default';
     $navi_bracket = 'btn-default';
@@ -106,6 +108,7 @@ try {
     $data_array['$navTeams'] = ($cupArray['mode'] == '1on1') ? $_language->module['player'] : 'Teams';
     $data_array['$cupname'] = $cupname;
     $data_array['$navi_home'] = $navi_home;
+    $data_array['$navi_prizes'] = $navi_prizes;
     $data_array['$navi_teams'] = $navi_teams;
     $data_array['$groupstage_navi'] = $groupstage_navi;
     $data_array['$navi_bracket'] = $navi_bracket;
