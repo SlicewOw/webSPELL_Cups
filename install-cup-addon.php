@@ -280,10 +280,10 @@ try {
     $createTableQuery = mysqli_query(
         $_database,
         "CREATE TABLE `" . PREFIX . "cups_prizes` (
-      `preisID` int(11) NOT NULL,
-      `cupID` int(11) NOT NULL,
-      `preis` varchar(255) COLLATE latin1_german1_ci NOT NULL,
-      `platzierung` int(11) NOT NULL
+            `preisID` int(11) NOT NULL,
+            `cup_id` int(11) NOT NULL,
+            `prize` varchar(255) COLLATE latin1_german1_ci NOT NULL,
+            `placement` int(11) NOT NULL
     ) ENGINE=MyISAM;");
 
     $createTableQuery = mysqli_query(
