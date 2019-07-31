@@ -97,7 +97,7 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
 
             //
             // Match Query
-            $query1 = cup_query(
+            $insertMatchQuery = cup_query(
                 "INSERT INTO `" . PREFIX . "cups_matches_playoff`
                     (
                         `cupID`,
@@ -148,7 +148,7 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
                 $freilos1 = ($team1 == 0) ? 1 : 0;
                 $freilos2 = ($team2 == 0) ? 1 : 0;
 
-                $query2 = cup_query(
+                $updateMatchQuery = cup_query(
                     "UPDATE `" . PREFIX . "cups_matches_playoff`
                         SET `team1` = " . $team1 . ",
                             `team1_freilos` = " . $freilos1 . ",
