@@ -32,3 +32,51 @@ function getChallongeApiObject() {
     return $challonge_api;
 
 }
+
+function getChallongeUrl($cup_id) {
+
+    if (!validate_int($cup_id, true)) {
+        throw new \Exception('unknown_cup_id');
+    }
+
+    $selectQuery = cup_query(
+        "SELECT
+                `challonge_url`
+            FROM `" . PREFIX . "cups`
+            WHERE `cupID` = " . $cup_id,
+        __FILE__
+    );
+
+    $get = mysqli_fetch_array($selectQuery);
+
+    return $get['challonge_url'];
+
+}
+
+function getChallongeTournamentId($cup_id) {
+
+    if (!validate_int($cup_id, true)) {
+        throw new \Exception('unknown_cup_id');
+    }
+
+    $challonge_url = getChallongeUrl($cup_id);
+
+    if (is_null($challonge_url) || empty($challonge_url)) {
+        throw new \Exception('unknown_challonge_url');
+    }
+
+    $tournament_id = '';
+
+    $parsed_url = parse_url($challonge_url, PHP_URL_HOST);
+    $domainArray = explode('.', $parsed_url);
+    if (count($domainArray) > 2) {
+        $tournament_id = $domainArray[0] . '-';
+    }
+
+    $domainArray = explode('/', $challonge_url);
+
+    $tournament_id .= $domainArray[count($domainArray) - 1];
+
+    return $tournament_id;
+
+}

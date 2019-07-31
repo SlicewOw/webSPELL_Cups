@@ -12,15 +12,7 @@ try {
 
     if (isset($cupArray['settings']['challonge']['state']) && ($cupArray['settings']['challonge']['state'] == 1)) {
 
-        $challonge_api = getChallongeApiObject();
-
-        $tournament_parameter = array();
-        $tournament_parameter['include_participants'] = '1';
-        $tournament_parameter['include_matches'] = '1';
-
-        $tournament_data = $challonge_api->getTournaments($tournament_parameter);
-
-        echo showInfo('You will see a bracket soon.');
+        $bracket = '<iframe src="' . getChallongeUrl($cup_id) . '/module" width="100%" height="500" frameborder="0" scrolling="auto" allowtransparency="true"></iframe>';
 
     } else if (($cupArray['status'] > 1)) {
 
