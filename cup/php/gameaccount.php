@@ -5,7 +5,7 @@ try {
     $_language->readModule('gameaccounts');
 
     if (!$loggedin) {
-        throw new \Exception($_language->module['login']);
+        throw new \Exception($_language->module['access_denied']);
     }
 
     if (validate_array($_POST, true)) {
