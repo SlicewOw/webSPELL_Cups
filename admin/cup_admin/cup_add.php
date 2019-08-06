@@ -23,7 +23,9 @@ try {
 
         try {
 
-            if (isset($_POST['add'])) {
+            if (!isset($_POST['add'])) {
+                throw new \Exception($_language->module['unknown_action']);    
+            }
 
                 if (!isset($_POST['cupname']) || empty($_POST['cupname'])) {
                     throw new \Exception($_language->module['cup_no_name']);
@@ -219,6 +221,7 @@ try {
         }
 
         $data_array['$postName'] = 'add';
+        $data_array['$challonge_url'] = '';
         $cups_add = $GLOBALS["_template_cup"]->replaceTemplate("cups_action", $data_array);
         echo $cups_add;
 

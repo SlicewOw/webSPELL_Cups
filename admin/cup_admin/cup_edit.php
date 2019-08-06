@@ -257,6 +257,11 @@ try {
             }
         }
 
+        $challonge_url = '';
+        if (isset($cupArray['settings']['challonge']['url'])) {
+            $challonge_url = $cupArray['settings']['challonge']['url'];
+        }
+        
         if ($status) {
 
             $data_array = array();
@@ -285,6 +290,7 @@ try {
             }
 
             $data_array['$postName'] = 'edit';
+            $data_array['$challonge_url'] = $challonge_url;
             $cups_edit = $GLOBALS["_template_cup"]->replaceTemplate("cups_action", $data_array);
             echo $cups_edit;
 
