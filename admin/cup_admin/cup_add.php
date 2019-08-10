@@ -27,109 +27,107 @@ try {
                 throw new \Exception($_language->module['unknown_action']);    
             }
 
-                if (!isset($_POST['cupname']) || empty($_POST['cupname'])) {
-                    throw new \Exception($_language->module['cup_no_name']);
+            if (!isset($_POST['cupname']) || empty($_POST['cupname'])) {
+                throw new \Exception($_language->module['cup_no_name']);
+            }
+
+            $cupname = getinput($_POST['cupname']);
+
+            $priority = (isset($_POST['priority'])) ?
+                $_POST['priority'] : 'normal';
+
+            $registration = (isset($_POST['registration'])) ?
+                $_POST['registration'] : 'open';
+
+            $elimination = (isset($_POST['elimination'])) ?
+                $_POST['elimination'] : 'single';
+
+            $date_checkin = convertStringToDateInMs($_POST['date_checkin'], $_POST['hour_ci'], $_POST['minute_ci']);
+            $date_start = convertStringToDateInMs($_POST['date_start'], $_POST['hour'], $_POST['minute']);
+
+            if ($date_checkin >= $date_start) {
+                $date_start = $date_checkin + 900;
+                $_SESSION['errorArray'][] = $_language->module['cup_start_time_fixed'];
+            }
+
+            $game_tag = (isset($_POST['game'])) ?
+                $_POST['game'] : 'csg';
+
+            $gameArray = getGame($game_tag);
+
+            $mode = (isset($_POST['mode'])) ? $_POST['mode'] : '5on5';
+
+            $rule_id = (isset($_POST['ruleID']) && validate_int($_POST['ruleID'])) ?
+                (int)$_POST['ruleID'] : 0;
+
+            $size = (isset($_POST['size']) && validate_int($_POST['size'])) ?
+                (int)$_POST['size'] : 32;
+
+            $pps = (isset($_POST['max_pps']) && is_numeric($_POST['max_pps'])) ?
+                (int)$_POST['max_pps'] : 12;
+
+            $admin_visible 	= (isset($_POST['admin_visible']) && is_numeric($_POST['admin_visible'])) ?
+                (int)$_POST['admin_visible'] : 0;
+
+            $insertQuery = cup_query(
+                "INSERT INTO `" . PREFIX . "cups`
+                    (
+                        `priority`,
+                        `name`,
+                        `registration`,
+                        `checkin_date`,
+                        `start_date`,
+                        `game`,
+                        `gameID`,
+                        `elimination`,
+                        `mode`,
+                        `ruleID`,
+                        `max_size`,
+                        `max_penalty`,
+                        `admin_visible`
+                    )
+                    VALUES
+                    (
+                        '" . $priority . "',
+                        '" . $cupname . "',
+                        '" . $registration . "',
+                        " . $date_checkin . ",
+                        " . $date_start . ",
+                        '" . $game_tag . "',
+                        " . $gameArray['id'] . ",
+                        '" . $elimination . "',
+                        '" . $mode . "',
+                        " . $rule_id . ",
+                        " . $size . ",
+                        " . $pps . ",
+                        " . $admin_visible . "
+                    )",
+                __FILE__
+            );
+
+            $cup_id = mysqli_insert_id($_database);
+
+            //
+            // Save prizes
+            for ($x = 1; $x < ($maxPrizes + 1); $x++) {
+
+                if (!isset($_POST['prize'][$x])) {
+                    continue;
                 }
 
-                $cupname = getinput($_POST['cupname']);
+                $prize = $_POST['prize'][$x];
 
-                $priority = (isset($_POST['priority'])) ?
-                    $_POST['priority'] : 'normal';
-
-                $registration = (isset($_POST['registration'])) ?
-                    $_POST['registration'] : 'open';
-
-                $elimination = (isset($_POST['elimination'])) ?
-                    $_POST['elimination'] : 'single';
-
-                $date_checkin = convertStringToDateInMs($_POST['date_checkin'], $_POST['hour_ci'], $_POST['minute_ci']);
-                $date_start = convertStringToDateInMs($_POST['date_start'], $_POST['hour'], $_POST['minute']);
-
-                if ($date_checkin >= $date_start) {
-                    $date_start = $date_checkin + 900;
-                    $_SESSION['errorArray'][] = $_language->module['cup_start_time_fixed'];
+                if (empty($prize)) {
+                    continue;
                 }
 
-                $game_tag = (isset($_POST['game'])) ?
-                    $_POST['game'] : 'csg';
-
-                $gameArray = getGame($game_tag);
-
-                $mode = (isset($_POST['mode'])) ? $_POST['mode'] : '5on5';
-
-                $rule_id = (isset($_POST['ruleID']) && validate_int($_POST['ruleID'])) ?
-                    (int)$_POST['ruleID'] : 0;
-
-                $size = (isset($_POST['size']) && validate_int($_POST['size'])) ?
-                    (int)$_POST['size'] : 32;
-
-                $pps = (isset($_POST['max_pps']) && is_numeric($_POST['max_pps'])) ?
-                    (int)$_POST['max_pps'] : 12;
-
-                $admin_visible 	= (isset($_POST['admin_visible']) && is_numeric($_POST['admin_visible'])) ?
-                    (int)$_POST['admin_visible'] : 0;
-
-                $insertQuery = cup_query(
-                    "INSERT INTO `" . PREFIX . "cups`
-                        (
-                            `priority`,
-                            `name`,
-                            `registration`,
-                            `checkin_date`,
-                            `start_date`,
-                            `game`,
-                            `gameID`,
-                            `elimination`,
-                            `mode`,
-                            `ruleID`,
-                            `max_size`,
-                            `max_penalty`,
-                            `admin_visible`
-                        )
-                        VALUES
-                        (
-                            '" . $priority . "',
-                            '" . $cupname . "',
-                            '" . $registration . "',
-                            " . $date_checkin . ",
-                            " . $date_start . ",
-                            '" . $game_tag . "',
-                            " . $gameArray['id'] . ",
-                            '" . $elimination . "',
-                            '" . $mode . "',
-                            " . $rule_id . ",
-                            " . $size . ",
-                            " . $pps . ",
-                            " . $admin_visible . "
-                        )",
-                    __FILE__
-                );
-
-                $cup_id = mysqli_insert_id($_database);
-
-                //
-                // Save prizes
-                for ($x = 1; $x < ($maxPrizes + 1); $x++) {
-
-                    if (!isset($_POST['prize'][$x])) {
-                        continue;
-                    }
-
-                    $prize = $_POST['prize'][$x];
-
-                    if (empty($prize)) {
-                        continue;
-                    }
-
-                    savePrize($cup_id, $prize, $x);
-
-                }
-
-                $parent_url = 'admincenter.php?site=cup&mod=cup&action=cup&id=' . $cup_id;
-
-                $_SESSION['successArray'][] = $_language->module['cup_saved'];
+                savePrize($cup_id, $prize, $x);
 
             }
+
+            $parent_url = 'admincenter.php?site=cup&mod=cup&action=cup&id=' . $cup_id;
+
+            $_SESSION['successArray'][] = $_language->module['cup_saved'];
 
         } catch (Exception $e) {
             $_SESSION['errorArray'][] = $e->getMessage();
