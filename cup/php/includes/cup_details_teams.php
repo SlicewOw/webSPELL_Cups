@@ -17,7 +17,8 @@ try {
     if (isset($cupArray['settings']['challonge']['state']) && ($cupArray['settings']['challonge']['state'] == 1)) {
 
         $challonge_api = getChallongeApiObject();
-        $challonge_id = getChallongeTournamentId($cup_id);
+		$challonge_url = getChallongeUrl($cup_id);
+        $challonge_id = getChallongeTournamentId($challonge_url);
 
         $participants = $challonge_api->getParticipants($challonge_id);
         $participantArray = $participants->participant;

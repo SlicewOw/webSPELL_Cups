@@ -72,6 +72,7 @@ $language_array = Array(
     'edit_category'=>'Edit category',
     'edit_category_screenshot'=>'Edit screenshot category',
     'edit_category_support'=>'Edit support category',
+    'error_challonge_url'=>'Please fil in a correct URL!',
     'error_file_get_contents'=>'Error getting data!',
     'error_id'=>'Map-Pool ID cannot be found.',
     'error_insert_query_failed'=>'Query failed while saving data.',

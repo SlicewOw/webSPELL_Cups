@@ -53,13 +53,7 @@ function getChallongeUrl($cup_id) {
 
 }
 
-function getChallongeTournamentId($cup_id) {
-
-    if (!validate_int($cup_id, true)) {
-        throw new \Exception('unknown_cup_id');
-    }
-
-    $challonge_url = getChallongeUrl($cup_id);
+function getChallongeTournamentId($challonge_url) {
 
     if (is_null($challonge_url) || empty($challonge_url)) {
         throw new \Exception('unknown_challonge_url');
@@ -78,5 +72,13 @@ function getChallongeTournamentId($cup_id) {
     $tournament_id .= $domainArray[count($domainArray) - 1];
 
     return $tournament_id;
+
+}
+
+function getChallongeTournament($tournament_id) {
+
+    $challonge_api = getChallongeApiObject();
+
+    return $challonge_api->getTournament($tournament_id);
 
 }

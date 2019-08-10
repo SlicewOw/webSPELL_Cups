@@ -27,48 +27,108 @@ try {
                 throw new \Exception($_language->module['unknown_action']);    
             }
 
-            if (!isset($_POST['cupname']) || empty($_POST['cupname'])) {
-                throw new \Exception($_language->module['cup_no_name']);
+            if (isset($_POST['challonge_url'])) {
+                
+                $challonge_url = (validate_url($_POST['challonge_url'])) ?
+                    getinput($_POST['challonge_url']) : '';
+                
+                if (empty($challonge_url)) {
+                    throw new \Exception($_language->module['error_challonge_url']);
+                }
+                
+                $challonge_id = getChallongeTournamentId($challonge_url);
+
+                $challonge_tournament = getChallongeTournament($challonge_id);
+                
+                if (empty($challonge_tournament)) {
+                    throw new \Exception($_language->module['error_challonge_url']);
+                }
+
+                $cupname = $challonge_tournament->name;
+                
+                $priority = 'normal';
+                $registration = 'closed';
+                
+                $date_checkin = $challonge_tournament['created-at'];
+                $date_start = $challonge_tournament['started-at'];
+
+                $game_name = $challonge_tournament['game-name'];
+
+                $game_tag = getgametag($game_name);
+                $gameArray = getGame($game_tag);
+
+                if (validate_array($gameArray, true)) {
+                    $game_id = $gameArray['id'];    
+                } else {
+                    $game_id = 0;
+                }
+                
+
+                if (preg_match('/double/', $challonge_tournament['tournament-type'])) {
+                    $elimination = 'double';
+                } else {
+                    $elimination = 'single';
+                }
+                
+                if ($challonge_tournament['teams']) {
+                    $mode = '5on5';
+                } else {
+                    $mode = '1on1';
+                }
+                
+                $rule_id = 0;
+                $size = $challonge_tournament['signup-cap'];
+                $pps = 12;
+                $admin_visible = 0;
+                    
+            } else {
+
+                if (!isset($_POST['cupname']) || empty($_POST['cupname'])) {
+                    throw new \Exception($_language->module['cup_no_name']);
+                }
+
+                $cupname = getinput($_POST['cupname']);
+
+                $priority = (isset($_POST['priority'])) ?
+                    $_POST['priority'] : 'normal';
+
+                $registration = (isset($_POST['registration'])) ?
+                    $_POST['registration'] : 'open';
+
+                $elimination = (isset($_POST['elimination'])) ?
+                    $_POST['elimination'] : 'single';
+
+                $date_checkin = convertStringToDateInMs($_POST['date_checkin'], $_POST['hour_ci'], $_POST['minute_ci']);
+                $date_start = convertStringToDateInMs($_POST['date_start'], $_POST['hour'], $_POST['minute']);
+
+                if ($date_checkin >= $date_start) {
+                    $date_start = $date_checkin + 900;
+                    $_SESSION['errorArray'][] = $_language->module['cup_start_time_fixed'];
+                }
+
+                $game_tag = (isset($_POST['game'])) ?
+                    $_POST['game'] : 'csg';
+
+                $gameArray = getGame($game_tag);
+
+                $game_id = $gameArray['id'];
+
+                $mode = (isset($_POST['mode'])) ? $_POST['mode'] : '5on5';
+
+                $rule_id = (isset($_POST['ruleID']) && validate_int($_POST['ruleID'])) ?
+                    (int)$_POST['ruleID'] : 0;
+
+                $size = (isset($_POST['size']) && validate_int($_POST['size'])) ?
+                    (int)$_POST['size'] : 32;
+
+                $pps = (isset($_POST['max_pps']) && is_numeric($_POST['max_pps'])) ?
+                    (int)$_POST['max_pps'] : 12;
+
+                $admin_visible 	= (isset($_POST['admin_visible']) && is_numeric($_POST['admin_visible'])) ?
+                    (int)$_POST['admin_visible'] : 0;
+
             }
-
-            $cupname = getinput($_POST['cupname']);
-
-            $priority = (isset($_POST['priority'])) ?
-                $_POST['priority'] : 'normal';
-
-            $registration = (isset($_POST['registration'])) ?
-                $_POST['registration'] : 'open';
-
-            $elimination = (isset($_POST['elimination'])) ?
-                $_POST['elimination'] : 'single';
-
-            $date_checkin = convertStringToDateInMs($_POST['date_checkin'], $_POST['hour_ci'], $_POST['minute_ci']);
-            $date_start = convertStringToDateInMs($_POST['date_start'], $_POST['hour'], $_POST['minute']);
-
-            if ($date_checkin >= $date_start) {
-                $date_start = $date_checkin + 900;
-                $_SESSION['errorArray'][] = $_language->module['cup_start_time_fixed'];
-            }
-
-            $game_tag = (isset($_POST['game'])) ?
-                $_POST['game'] : 'csg';
-
-            $gameArray = getGame($game_tag);
-
-            $mode = (isset($_POST['mode'])) ? $_POST['mode'] : '5on5';
-
-            $rule_id = (isset($_POST['ruleID']) && validate_int($_POST['ruleID'])) ?
-                (int)$_POST['ruleID'] : 0;
-
-            $size = (isset($_POST['size']) && validate_int($_POST['size'])) ?
-                (int)$_POST['size'] : 32;
-
-            $pps = (isset($_POST['max_pps']) && is_numeric($_POST['max_pps'])) ?
-                (int)$_POST['max_pps'] : 12;
-
-            $admin_visible 	= (isset($_POST['admin_visible']) && is_numeric($_POST['admin_visible'])) ?
-                (int)$_POST['admin_visible'] : 0;
-
+            
             $insertQuery = cup_query(
                 "INSERT INTO `" . PREFIX . "cups`
                     (
@@ -94,7 +154,7 @@ try {
                         " . $date_checkin . ",
                         " . $date_start . ",
                         '" . $game_tag . "',
-                        " . $gameArray['id'] . ",
+                        " . $game_id . ",
                         '" . $elimination . "',
                         '" . $mode . "',
                         " . $rule_id . ",
@@ -123,6 +183,18 @@ try {
 
                 savePrize($cup_id, $prize, $x);
 
+            }
+            
+            if (isset($challonge_url)) {
+                
+                $updateQuery = cup_query(
+                    "UPDATE `" . PREFIX . "cups`
+                        SET `challonge_api` = 1,
+                            `challonge_url` = '" . $challonge_url . "'
+                        WHERE `cupID` = " . $cup_id,
+                    __FILE__
+                );
+                
             }
 
             $parent_url = 'admincenter.php?site=cup&mod=cup&action=cup&id=' . $cup_id;
