@@ -146,6 +146,7 @@ $language_array = Array(
     'team'=>'Team',
     'team_deleted_from_cup'=>'Team/Spieler wurde vom Cup entfernt',
     'teams'=>'Teams',
+    'teams_checkedin'=>'best&auml;tigte Teams',
     'teams_search_toomuch'=>'Zu viele Teams, Suche einschr&auml;nken!',
     'ticket_no_cup'=>'w&auml;hle einen Cup aus',
     'type'=>'Typ',

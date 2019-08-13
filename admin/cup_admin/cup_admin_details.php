@@ -17,16 +17,12 @@ try {
             throw new \Exception($_language->module['access_denied']);
         }
 
-        $ergebnis = mysqli_query(
-            $_database,
+        $ergebnis = cup_query(
             "SELECT * FROM `" . PREFIX . "cups`
                 WHERE `status` = " . $status_id . "
-                ORDER BY `start_date` ASC"
+                ORDER BY `start_date` ASC",
+            __FILE__
         );
-
-        if (!$ergebnis) {
-            throw new \Exception($_language->module['query_select_failed']);
-        }
 
         if (!mysqli_num_rows($ergebnis)) {
             throw new \Exception($_language->module['no_cup']);
@@ -37,20 +33,23 @@ try {
             $cup_id = $ds['cupID'];
             $name = $ds['name'];
 
-            $info = '<font class="uppercase">'.getshortname($ds['game'], 1).'</font>';
-            if($status_id == 1) {
-                $info .= ' / Check-In: '.getformatdatetime($ds['checkin_date']);
-                $info .= ' / Start: '.getformatdatetime($ds['start_date']);
+            $infoArray = array();
+
+            $infoArray[] = '<font class="uppercase">' . getshortname($ds['game'], 1) . '</font>';
+            if ($status_id == 1) {
+                $infoArray[] = $_language->module['checkin'] . ': ' . getformatdatetime($ds['checkin_date']);
+                $infoArray[] = $_language->module['start'] . ': ' . getformatdatetime($ds['start_date']);
             } else {
-                $info .= ' / Status: '.$_language->module['cup_status_'.$status_id];
+                $infoArray[] = $_language->module['status'] . ': ' . $_language->module['cup_status_' . $status_id];
             }
 
-            $link = '<a href="admincenter.php?site=cup&amp;mod=cup&amp;action=cup&amp;id='.$cup_id.'">'.$_language->module['view'].'</a>';
+            $cup_url = 'admincenter.php?site=cup&amp;mod=cup&amp;action=cup&amp;id=' . $cup_id;
+            $link = '<a href="' . $cup_url . '">' . $_language->module['view'] . '</a>';
 
             $data_array = array();
             $data_array['$cupID'] = $cupID;
             $data_array['$name'] = $name;
-            $data_array['$info'] = $info;
+            $data_array['$info'] = implode(' / ', $infoArray);
             $data_array['$link'] = $link;
             $cups_home = $GLOBALS["_template_cup"]->replaceTemplate("cups_home", $data_array);
             echo $cups_home;

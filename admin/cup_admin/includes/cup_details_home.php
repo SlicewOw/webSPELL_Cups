@@ -12,7 +12,8 @@ try {
         $cupMaps = getMaps($cupArray['mappool']);
 
         if (validate_array($cupMaps, true)) {
-            $cup_maps .= '<span class="list-group-item">Maps: ' . implode(', ', $cupMaps) . '</span>';
+            $maps = implode(', ', $cupMaps);
+            $cup_maps .= '<span class="list-group-item">' . $_language->module['maps'] . ': ' . $maps . '</span>';
         }
 
     }
