@@ -23,6 +23,22 @@ try {
 
         try {
 
+            $insertAttributeArray = array(
+                '`priority`',
+                '`name`',
+                '`registration`',
+                '`checkin_date`',
+                '`start_date`',
+                '`game`',
+                '`gameID`',
+                '`elimination`',
+                '`mode`',
+                '`ruleID`',
+                '`max_size`',
+                '`max_penalty`',
+                '`admin_visible`'
+            );
+
             if (!isset($_POST['add'])) {
                 throw new \Exception($_language->module['unknown_action']);    
             }
@@ -39,22 +55,31 @@ try {
                 $challonge_id = getChallongeTournamentId($challonge_url);
 
                 $challonge_tournament = getChallongeTournament($challonge_id);
-                
+
                 if (empty($challonge_tournament)) {
                     throw new \Exception($_language->module['error_challonge_url']);
                 }
 
-                $cupname = $challonge_tournament->name;
+                $cupname = (String)$challonge_tournament->{'name'}[0];
                 
                 $priority = 'normal';
                 $registration = 'closed';
                 
-                $date_checkin = $challonge_tournament['created-at'];
-                $date_start = $challonge_tournament['started-at'];
+                $date_checkin = convertStringToMktime((String)$challonge_tournament->{'created-at'}[0]);
+                $date_start = convertStringToMktime((String)$challonge_tournament->{'started-at'}[0]);
 
-                $game_name = $challonge_tournament['game-name'];
+                $game_name = (String)$challonge_tournament->{'game-name'}[0];
+
+                if (empty($game_name)) {
+                    throw new \Exception($_language->module['unknown_game']);
+                }
 
                 $game_tag = getgametag($game_name);
+
+                if (empty($game_tag)) {
+                    throw new \Exception($_language->module['unknown_game_tag']);
+                }
+
                 $gameArray = getGame($game_tag);
 
                 if (validate_array($gameArray, true)) {
@@ -63,21 +88,20 @@ try {
                     $game_id = 0;
                 }
                 
-
-                if (preg_match('/double/', $challonge_tournament['tournament-type'])) {
+                if (preg_match('/double/', (String)$challonge_tournament->{'tournament-type'}[0])) {
                     $elimination = 'double';
                 } else {
                     $elimination = 'single';
                 }
                 
-                if ($challonge_tournament['teams']) {
+                if ((String)$challonge_tournament->{'teams'}[0]) {
                     $mode = '5on5';
                 } else {
                     $mode = '1on1';
                 }
                 
                 $rule_id = 0;
-                $size = $challonge_tournament['signup-cap'];
+                $size = (int)$challonge_tournament->{'signup-cap'}[0];
                 $pps = 12;
                 $admin_visible = 0;
                     
@@ -129,39 +153,27 @@ try {
 
             }
             
+            $insertValueArray = array(
+                '\'' . $priority . '\'',
+                '\'' . $cupname . '\'',
+                '\'' . $registration . '\'',
+                $date_checkin,
+                $date_start,
+                '\'' . $game_tag . '\'',
+                $game_id,
+                '\'' . $elimination . '\'',
+                '\'' . $mode . '\'',
+                $rule_id,
+                $size,
+                $pps,
+                $admin_visible
+            );
+
             $insertQuery = cup_query(
                 "INSERT INTO `" . PREFIX . "cups`
-                    (
-                        `priority`,
-                        `name`,
-                        `registration`,
-                        `checkin_date`,
-                        `start_date`,
-                        `game`,
-                        `gameID`,
-                        `elimination`,
-                        `mode`,
-                        `ruleID`,
-                        `max_size`,
-                        `max_penalty`,
-                        `admin_visible`
-                    )
+                    (" . implode(', ', $insertAttributeArray) . ")
                     VALUES
-                    (
-                        '" . $priority . "',
-                        '" . $cupname . "',
-                        '" . $registration . "',
-                        " . $date_checkin . ",
-                        " . $date_start . ",
-                        '" . $game_tag . "',
-                        " . $game_id . ",
-                        '" . $elimination . "',
-                        '" . $mode . "',
-                        " . $rule_id . ",
-                        " . $size . ",
-                        " . $pps . ",
-                        " . $admin_visible . "
-                    )",
+                    (" . implode(', ', $insertValueArray) . ")",
                 __FILE__
             );
 

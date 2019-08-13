@@ -222,25 +222,23 @@ function getgametag($name) {
         return '';
     }
 
-    global $_database;
-
     $gameName = addslashes($name);
 
-    $selectQuery = mysqli_query(
-        $_database,
+    $selectQuery = cup_query(
         "SELECT
                 `tag`
             FROM `" . PREFIX . "games`
-            WHERE `name` = '" . $gameName . "'"
+            WHERE `name` = '" . $gameName . "'",
+        __FILE__
     );
 
-    if ($selectQuery) {
+    if (!$selectQuery) {
         return '';
     }
 
-    $ds = mysqli_fetch_array($query);
+    $get = mysqli_fetch_array($selectQuery);
 
-    return (!empty($ds['tag'])) ?
-        $ds['tag'] : '';
+    return (!empty($get['tag'])) ?
+        $get['tag'] : '';
 
 }

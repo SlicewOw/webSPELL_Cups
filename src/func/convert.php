@@ -141,3 +141,44 @@ function convert2days($time) {
     return (int) ($timeDiff / 60 / 60 / 24);
 
 }
+
+function convertStringToMktime($date_string) {
+    
+    $default_date = time();
+    
+    if (empty($date_string)) {
+        return $default_date;
+    }
+    
+    $datetimeArray = explode('T', $date_string);
+    
+    if (count($datetimeArray) != 2) {
+        return $default_date;
+    }
+    
+    $date_string = $datetimeArray[0];
+    $time_string = $datetimeArray[1];
+    
+    $dateArray = explode('-', $date_string);
+    
+    if (count($dateArray) != 3) {
+        return $default_date;
+    }
+    
+    $timeArray = explode(':', $time_string);
+
+    if (count($timeArray) < 3) {
+        return $default_date;
+    }
+    
+    $hours = $timeArray[0];
+    $minutes = $timeArray[1];
+    $seconds = $timeArray[2];
+
+    $year = $dateArray[0];
+    $month = $dateArray[1];
+    $day = $dateArray[2];
+
+    return mktime($hours, $minutes, $seconds, $month, $day, $year);
+    
+}
