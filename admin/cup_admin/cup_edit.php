@@ -27,99 +27,136 @@ try {
 
         try {
 
-            if (isset($_POST['edit'])) {
+            if (!isset($_POST['edit'])) {
+                throw new \Exception($_language->module['unknown_action']);
+            }
 
+            $setValueArray = array();
+
+            if (isset($_POST['challonge_url'])) {
+                
+                $challonge_url = (validate_url($_POST['challonge_url'])) ?
+                    getinput($_POST['challonge_url']) : '';
+                
+                if (empty($challonge_url)) {
+                    
+                    $setValueArray[] = '`challonge_api` = 0';
+                    $setValueArray[] = '`challonge_url` = NULL';
+                    
+                } else {
+                    
+                    $setValueArray[] = '`challonge_api` = 1';
+                    $setValueArray[] = '`challonge_url` = \'' . $challonge_url . '\'';
+
+                }
+
+            } else {
+                
                 $cupname = (isset($_POST['cupname']) && !empty($_POST['cupname'])) ?
                     getinput($_POST['cupname']) : '';
 
-                if(empty($cupname)) {
+                if (empty($cupname)) {
                     throw new \Exception($_language->module['cup_noname']);
                 }
+
+                $setValueArray[] = '`name` = \'' . $cupname . '\'';
 
                 $priority = (isset($_POST['priority'])) ?
                     getinput($_POST['priority']) : 'normal';
 
+                $setValueArray[] = '`priority` = \'' . $priority . '\'';
+
                 $registration = (isset($_POST['registration'])) ?
                     getinput($_POST['registration']) : 'open';
+
+                $setValueArray[] = '`registration` = \'' . $registration . '\'';
 
                 $elimination = (isset($_POST['elimination'])) ?
                     getinput($_POST['elimination']) : 'single';
 
-                $date_checkin = strtotime($_POST['date_checkin']);
-                $date_checkin += ((int)$_POST['hour_ci'] * 3600);
-                $date_checkin += ((int)$_POST['minute_ci'] * 60);
+                $setValueArray[] = '`elimination` = \'' . $elimination . '\'';
 
-                $date_start = strtotime($_POST['date_start']);
-                $date_start += ((int)$_POST['hour'] * 3600);
-                $date_start += ((int)$_POST['minute'] * 60);
+                $date_checkin = convertStringToDateInMs($_POST['date_checkin'], $_POST['hour_ci'], $_POST['minute_ci']);
+
+                $setValueArray[] = '`checkin_date` = ' . $date_checkin;
+
+                $date_start = convertStringToDateInMs($_POST['date_start'], $_POST['hour'], $_POST['minute']);
+
+                $setValueArray[] = '`start_date` = ' . $date_start;
 
                 $game_tag = (isset($_POST['game'])) ? 
-                    getinput($_POST['game']) : 'csg';
+                    getinput($_POST['game']) : '';
+
+                $setValueArray[] = '`game` = \'' . $gameArray['tag'] . '\'';
+                $setValueArray[] = '`gameID` = ' . $gameArray['id'];
+
+                if (empty($game_tag)) {
+                    throw new \Exception($_language->module['unknown_game_tag']);
+                }
+
                 $gameArray = getGame($game_tag);
 
                 $mode = (isset($_POST['mode'])) ? 
                     getinput($_POST['mode']) : '5on5';
 
-                $ruleID = (isset($_POST['ruleID']) && validate_int($_POST['ruleID'])) ?
+                $setValueArray[] = '`mode` = \'' . $mode . '\'';
+
+                $rule_id = (isset($_POST['ruleID']) && validate_int($_POST['ruleID'], true)) ?
                     (int)$_POST['ruleID'] : 0;
+
+                $setValueArray[] = '`ruleID` = ' . $rule_id;
 
                 $size = (isset($_POST['size']) && validate_int($_POST['size'])) ?
                     (int)$_POST['size'] : 32;
 
+                $setValueArray[] = '`max_size` = ' . $size;
+
                 $pps = (isset($_POST['max_pps']) && validate_int($_POST['max_pps'])) ?
                     (int)$_POST['max_pps'] : 12;
+
+                $setValueArray[] = '`max_penalty` = ' . $pps;
 
                 $admin_visible 	= (isset($_POST['admin_visible']) && validate_int($_POST['admin_visible'])) ?
                     (int)$_POST['admin_visible'] : 0;
 
-                $query = mysqli_query(
-                    $_database,
-                    "UPDATE `" . PREFIX . "cups`
-                        SET	priority = '".$priority."',
-                            name = '".$cupname."',
-                            registration = '".$registration."',
-                            checkin_date = " . $date_checkin . ",
-                            start_date = " . $date_start . ",
-                            game = '".$gameArray['tag']."',
-                            gameID = " . $gameArray['id'] . ",
-                            elimination = '".$elimination."',
-                            mode = '".$mode."',
-                            ruleID = " . $ruleID . ",
-                            max_size = '".$size."',
-                            max_penalty = ".$pps.",
-                            admin_visible = '".$admin_visible."'
-                        WHERE cupID = " . $cup_id
-                );
+                $setValueArray[] = '`admin_visible` = ' . $admin_visible;
 
-                if (!$query) {
-                    throw new \Exception($_language->module['query_update_failed']);
+            }
+
+            if (!validate_array($setValueArray, true)) {
+                throw new \Exception($_language->module['unexpected_empty_array']);
+            }
+
+            $query = cup_query(
+                "UPDATE `" . PREFIX . "cups`
+                    SET	" . implode(', ', $setValueArray) . "
+                    WHERE cupID = " . $cup_id,
+                __FILE__
+            );
+
+            $_SESSION['successArray'][] = $_language->module['query_saved'];
+
+            $deleteQuery = cup_query(
+                "DELETE FROM `".PREFIX."cups_prizes`
+                    WHERE `cup_id` = " . $cup_id,
+                __FILE__
+            );
+
+            //
+            // Save prizes
+            for ($x = 1; $x < ($maxPrices + 1); $x++) {
+
+                if (!isset($_POST['prize'][$x])) {
+                    continue;
                 }
 
-                $_SESSION['successArray'][] = $_language->module['query_saved'];
+                $prize = $_POST['prize'][$x];
 
-                $deleteQuery = cup_query(
-                    "DELETE FROM `".PREFIX."cups_prizes`
-                        WHERE `cup_id` = " . $cup_id,
-                    __FILE__
-                );
-
-                //
-                // Save prizes
-                for ($x = 1; $x < ($maxPrices + 1); $x++) {
-
-                    if (!isset($_POST['prize'][$x])) {
-                        continue;
-                    }
-
-                    $prize = $_POST['prize'][$x];
-
-                    if (empty($prize)) {
-                        continue;
-                    }
-
-                    savePrize($cup_id, $prize, $x);
-
+                if (empty($prize)) {
+                    continue;
                 }
+
+                savePrize($cup_id, $prize, $x);
 
             }
 
@@ -135,7 +172,6 @@ try {
 
     } else {
 
-        $status = 1;
         $error = '';
 
         //
@@ -144,11 +180,13 @@ try {
 
         $cupOptions = getCupOption();
 
-        if ($cupArray['admin'] == 1) {
-            $admin_only = '<option value="1" selected="selected">'.$_language->module['yes'].'</option><option value="0">'.$_language->module['no'].'</option>';
-        } else {
-            $admin_only = '<option value="1">'.$_language->module['yes'].'</option><option value="0" selected="selected">'.$_language->module['no'].'</option>';
-        }
+        $admin_only = $cupOptions['true_false'];
+
+        $admin_only = str_replace(
+            'value="' . $cupArray['admin'] . '"',
+            'value="' . $cupArray['admin'] . '" selected="selected"',
+            $admin_only
+        );
 
         $priority = str_replace(
             'value="'.$cupArray['priority'].'"',
@@ -168,29 +206,16 @@ try {
             $cupOptions['elimination']
         );
 
-        $days = '';
-        $months = '';
         $hours = '';
-        for ($i = 1; $i < 32; $i++) {
-            $value = ($i < 10) ? '0'.$i : $i;
-            $days .= '<option value="'.$value.'">'.$value.'</option>';
-            if ($i<13) {
-                $months .= '<option value="'.$value.'">'.$value.'</option>';
-            }
-            if ($i<25) {
-                $hours .= '<option value="'.$value.'">'.$value.'</option>';
-            }
-        }
-
-        $years = '';
-        for ( $i=2014; $i<2018; $i++ ) {
-            $years .= '<option value="'.$i.'">'.$i.'</option>';
+        for ($i = 1; $i < 25; $i++) {
+            $value = ($i < 10) ? '0' . $i : $i;
+            $hours .= '<option value="' . $value . '">' . $value . '</option>';
         }
 
         $minutes = '';
-        for ($i=0;$i<4;$i++) {
+        for ($i = 0; $i < 4; $i++) {
             $value = (($i * 15) > 0) ? ($i * 15) : '00';
-            $minutes .= '<option value="'.$value.'">'.$value.'</option>';
+            $minutes .= '<option value="' . $value . '">' . $value . '</option>';
         }
 
         $date_checkin = date('Y-m-d', $cupArray['checkin']);
@@ -200,6 +225,7 @@ try {
             'value="'.date('H', $cupArray['checkin']).'" selected="selected"',
             $hours
         );
+
         $minutes_ci = str_replace(
             'value="'.date('i', $cupArray['checkin']).'"',
             'value="'.date('i', $cupArray['checkin']).'" selected="selected"',
@@ -213,6 +239,7 @@ try {
             'value="'.date('H', $cupArray['start']).'" selected="selected"',
             $hours
         );
+
         $minutes_sd = str_replace(
             'value="'.date('i', $cupArray['start']).'"',
             'value="'.date('i', $cupArray['start']).'" selected="selected"',
@@ -245,15 +272,17 @@ try {
             $cupOptions['penalty']
         );
 
-        $preisArray = array();
-        $preisQuery = mysqli_query(
-            $_database,
+        $prizeArray = array();
+
+        $prizeQuery = cup_query(
             "SELECT * FROM `" . PREFIX . "cups_prizes`
-                WHERE `cup_id` = " . $cup_id
+                WHERE `cup_id` = " . $cup_id,
+            __FILE__
         );
-        while ($dx = mysqli_fetch_array($preisQuery)) {
+
+        while ($dx = mysqli_fetch_array($prizeQuery)) {
             if (!empty($dx['prize'])) {
-                $preisArray[$dx['placement']] = $dx['prize'];
+                $prizeArray[$dx['placement']] = $dx['prize'];
             }
         }
 
@@ -261,40 +290,36 @@ try {
         if (isset($cupArray['settings']['challonge']['url'])) {
             $challonge_url = $cupArray['settings']['challonge']['url'];
         }
-        
-        if ($status) {
 
-            $data_array = array();
-            $data_array['$title'] = $_language->module['cup_add'].' - '.$cupArray['name'];
-            $data_array['$cupID'] = $cup_id;
-            $data_array['$error'] = $error;
-            $data_array['$cupname'] = $cupArray['name'];
-            $data_array['$admin_only'] = $admin_only;
-            $data_array['$priority'] = $priority;
-            $data_array['$registration'] = $registration;
-            $data_array['$elimination'] = $elimination;
-            $data_array['$date_checkin'] = $date_checkin;
-            $data_array['$hours_ci'] = $hours_ci;
-            $data_array['$minutes_ci'] = $minutes_ci;
-            $data_array['$date_start'] = $date_start;
-            $data_array['$hours_sd'] = $hours_sd;
-            $data_array['$minutes_sd'] = $minutes_sd;
-            $data_array['$games'] = $games;
-            $data_array['$mode'] = $mode;
-            $data_array['$rules'] = $rules;
-            $data_array['$size'] = $size;
-            $data_array['$pps'] = $pps;
+        $data_array = array();
+        $data_array['$title'] = $_language->module['cup_add'] . ' - ' . $cupArray['name'];
+        $data_array['$cupID'] = $cup_id;
+        $data_array['$error'] = $error;
+        $data_array['$cupname'] = $cupArray['name'];
+        $data_array['$admin_only'] = $admin_only;
+        $data_array['$priority'] = $priority;
+        $data_array['$registration'] = $registration;
+        $data_array['$elimination'] = $elimination;
+        $data_array['$date_checkin'] = $date_checkin;
+        $data_array['$hours_ci'] = $hours_ci;
+        $data_array['$minutes_ci'] = $minutes_ci;
+        $data_array['$date_start'] = $date_start;
+        $data_array['$hours_sd'] = $hours_sd;
+        $data_array['$minutes_sd'] = $minutes_sd;
+        $data_array['$games'] = $games;
+        $data_array['$mode'] = $mode;
+        $data_array['$rules'] = $rules;
+        $data_array['$size'] = $size;
+        $data_array['$pps'] = $pps;
 
-            for ($x = 1; $x < ($maxPrices + 1); $x++) {
-                $data_array['$prize' . $x] = (isset($preisArray[$x])) ? $preisArray[$x] : '';
-            }
-
-            $data_array['$postName'] = 'edit';
-            $data_array['$challonge_url'] = $challonge_url;
-            $cups_edit = $GLOBALS["_template_cup"]->replaceTemplate("cups_action", $data_array);
-            echo $cups_edit;
-
+        for ($x = 1; $x < ($maxPrices + 1); $x++) {
+            $data_array['$prize' . $x] = (isset($prizeArray[$x])) ? $prizeArray[$x] : '';
         }
+
+        $data_array['$postName'] = 'edit';
+        $data_array['$challonge_url'] = $challonge_url;
+        $cups_edit = $GLOBALS["_template_cup"]->replaceTemplate("cups_action", $data_array);
+        echo $cups_edit;
 
     }
 

@@ -182,3 +182,10 @@ function convertStringToMktime($date_string) {
     return mktime($hours, $minutes, $seconds, $month, $day, $year);
     
 }
+
+function convertStringToDateInMs($string, $hours, $minutes) {
+    $returnValue = strtotime($string);
+    $returnValue += ((int)$hours * 3600);
+    $returnValue += ((int)$minutes * 60);
+    return $returnValue;
+}

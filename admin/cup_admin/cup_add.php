@@ -10,13 +10,6 @@ try {
 
     $maxPrizes = 6;
 
-    function convertStringToDateInMs($string, $hours, $minutes) {
-        $returnValue = strtotime($string);
-        $returnValue += ((int)$hours * 3600);
-        $returnValue += ((int)$minutes * 60);
-        return $returnValue;
-    }
-
     if (validate_array($_POST, true)) {
 
         $parent_url = 'admincenter.php?site=cup&mod=cup&action=add';
@@ -40,7 +33,7 @@ try {
             );
 
             if (!isset($_POST['add'])) {
-                throw new \Exception($_language->module['unknown_action']);    
+                throw new \Exception($_language->module['unknown_action']);   
             }
 
             if (isset($_POST['challonge_url'])) {
@@ -131,7 +124,11 @@ try {
                 }
 
                 $game_tag = (isset($_POST['game'])) ?
-                    $_POST['game'] : 'csg';
+                    $_POST['game'] : '';
+
+                if (empty($game_tag)) {
+                    throw new \Exception($_language->module['unknown_game_tag']);
+                }
 
                 $gameArray = getGame($game_tag);
 

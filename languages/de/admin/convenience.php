@@ -64,6 +64,7 @@ $language_array = Array(
     'to_sort'=>'sortieren',
     'total'=>'Gesamt',
     'transaction_invalid'=>'Transaktions ID ung&uuml;ltig',
+    'unexpected_empty_array'=>'Es wurden keine Inhalte gefunden!',
     'unknown_action'=>'unbekannte Aktion',
     'update'=>'aktualisieren',
     'yes'=>'ja'
