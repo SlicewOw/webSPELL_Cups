@@ -20,6 +20,7 @@ try {
 
     $data_array = array();
     $data_array['$game'] = getgamename($cupArray['game']);
+    $data_array['$platform'] = $cupArray['platform'];
     $data_array['$mode'] = $cupArray['mode'];
     $data_array['$date_checkin'] = getformatdatetime($cupArray['checkin']);
     $data_array['$date_start'] = getformatdatetime($cupArray['start']);

@@ -1760,6 +1760,7 @@ function getcup($id, $cat = '') {
             $returnValue = array(
                 "id"            => $cup_id,
                 "name"          => $get['name'],
+                "platform"      => $get['platform'],
                 "images"        => array(
                     "icon"      => getCupIcon($cup_id, true),
                     "banner"    => getCupBanner($cup_id, true)
@@ -3758,6 +3759,10 @@ function getawardcat($award_id, $cat = '') {
 
 /* Cup Options */
 function getCupOption($cat = '') {
+
+    global $_language;
+    $_language->readModule('cups', true, true);
+
     if ($cat == 'size') {
         $returnValue = '';
         $returnValue .= '<option value="2">2</option>';
@@ -3794,9 +3799,9 @@ function getCupOption($cat = '') {
         $returnValue .= '<option value="6_10">6 (MR3) - 10.000$</option>';
     } else if ($cat == 'registration') {
         $returnValue = '';
-        $returnValue .= '<option value="open">Open</option>';
-        $returnValue .= '<option value="invite">Invite</option>';
-        $returnValue .= '<option value="closed">Closed</option>';
+        $returnValue .= '<option value="open">' . $_language->module['open'] . '</option>';
+        $returnValue .= '<option value="invite">' . $_language->module['invite'] . '</option>';
+        $returnValue .= '<option value="closed">' . $_language->module['closed'] . '</option>';
     } else if ($cat == 'rounds') {
         $returnValue = '';
         $returnValue .= '<option value="bo1">Best-of-One (Bo1)</option>';
@@ -3805,18 +3810,21 @@ function getCupOption($cat = '') {
         $returnValue .= '<option value="bo7">Best-of-Seven (Bo7)</option>';
     } else if ($cat == 'priority') {
         $returnValue = '';
-        $returnValue .= '<option value="normal">normal</option>';
-        $returnValue .= '<option value="main">Main</option>';
+        $returnValue .= '<option value="normal">' . $_language->module['normal'] . '</option>';
+        $returnValue .= '<option value="main">' . $_language->module['main'] . '</option>';
     } else if ($cat == 'elimination') {
         $returnValue = '';
-        $returnValue .= '<option value="single">Single-Elimination</option>';
-        $returnValue .= '<option value="double" disabled="disabled">Double-elimination</option>';
-        $returnValue .= '<option value="swiss" disabled="disabled">Swiss-Format</option>';
+        $returnValue .= '<option value="single">' . $_language->module['single_elimination'] . '</option>';
+        $returnValue .= '<option value="double" disabled="disabled">' . $_language->module['double_elimination'] . '</option>';
+    } else if ($cat == 'platform') {
+        $returnValue = '';
+        $returnValue .= '<option value="PC">' . $_language->module['pc'] . '</option>';
+        $returnValue .= '<option value="Xbox">' . $_language->module['xbox'] . '</option>';
+        $returnValue .= '<option value="PlayStation 4">' . $_language->module['playstation4'] . '</option>';
+        $returnValue .= '<option value="iOS">' . $_language->module['ios'] . '</option>';
+        $returnValue .= '<option value="Android">' . $_language->module['android'] . '</option>';
+        $returnValue .= '<option value="Nintendo Switch">' . $_language->module['nintendo_switch'] . '</option>';
     } else {
-
-        global $_language;
-
-        $_language->readModule('cups', true, true);
 
         $returnValue = array(
             'size' => getCupOption('size'),
@@ -3828,6 +3836,7 @@ function getCupOption($cat = '') {
             'priority' => getCupOption('priority'),
             'elimination' => getCupOption('elimination'),
             'rounds' => getCupOption('rounds'),
+            'platform' => getCupOption('platform'),
             'true_false' => '<option value="1">' . $_language->module['yes'] . '</option><option value="0">' . $_language->module['no'] . '</option>'
         );
 

@@ -19,6 +19,7 @@ try {
             $insertAttributeArray = array(
                 '`priority`',
                 '`name`',
+                '`platform`',
                 '`registration`',
                 '`checkin_date`',
                 '`start_date`',
@@ -54,7 +55,8 @@ try {
                 }
 
                 $cupname = (String)$challonge_tournament->{'name'}[0];
-                
+
+                $platform = 'PC';
                 $priority = 'normal';
                 $registration = 'closed';
                 
@@ -134,6 +136,9 @@ try {
 
                 $game_id = $gameArray['id'];
 
+                $platform = (isset($_POST['platform'])) ?
+                    getinput($_POST['platform']) : 'PC';
+                
                 $mode = (isset($_POST['mode'])) ? $_POST['mode'] : '5on5';
 
                 $rule_id = (isset($_POST['ruleID']) && validate_int($_POST['ruleID'])) ?
@@ -153,6 +158,7 @@ try {
             $insertValueArray = array(
                 '\'' . $priority . '\'',
                 '\'' . $cupname . '\'',
+                '\'' . $platform . '\'',
                 '\'' . $registration . '\'',
                 $date_checkin,
                 $date_start,
@@ -256,6 +262,8 @@ try {
 
         $rules = getrules(0, 'list', true);
 
+        $platform = $cupOptions['platform'];
+
         $mode = str_replace(
             'value="5on5"',
             'value="5on5" selected="selected"',
@@ -290,6 +298,7 @@ try {
         $data_array['$hours_sd'] = $hours_start;
         $data_array['$minutes_sd'] = $minutes;
         $data_array['$games'] = $games;
+        $data_array['$platform'] = $platform;
         $data_array['$mode'] = $mode;
         $data_array['$size'] = $size;
         $data_array['$rules'] = $rules;

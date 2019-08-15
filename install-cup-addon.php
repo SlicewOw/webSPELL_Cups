@@ -1032,6 +1032,16 @@ try {
             ADD `challonge_url` VARCHAR(300) NULL AFTER `challonge_api`;"
     );
 
+    /**
+     * Cup platform
+     */
+
+    $alterTableQuery = mysqli_query(
+        $_database,
+        "ALTER TABLE `" . PREFIX . "cups`
+            ADD `platform` VARCHAR(200) NOT NULL DEFAULT 'pc' AFTER `name`;"
+    );
+
     echo "Delete this file!";
 
     @mail(

@@ -210,6 +210,7 @@ $language_array = Array(
     'penalty_lifetime'=>'Lebenslang',
     'penalty_show_deleted'=>'Zeige gel&ouml;schte Strafpunkte',
     'penalty_show_finished'=>'Zeige abgelaufene Strafpunkte',
+    'platform'=>'Plattform',
     'player'=>'Spieler',
     'player_checked_in'=>'Best&auml;tigte Spieler',
     'player_not_registered'=>'Du bist nicht beim Cup angemeldet!',

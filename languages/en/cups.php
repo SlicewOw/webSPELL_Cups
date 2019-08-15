@@ -210,6 +210,7 @@ $language_array = Array(
     'penalty_lifetime'=>'lifetime',
     'penalty_show_deleted'=>'Show deleted penalty points',
     'penalty_show_finished'=>'Show expired penalty points',
+    'platform'=>'Platform',
     'player'=>'Player',
     'player_checked_in'=>'player checked in',
     'player_registered'=>'player registered',

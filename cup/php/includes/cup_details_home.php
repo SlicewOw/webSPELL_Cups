@@ -29,6 +29,7 @@ try {
 
     $info = '<span class="list-group-item">Status: ' . $status . '</span>';
     $info .= '<span class="list-group-item">' . $cup_game . '</span>';
+    $info .= '<span class="list-group-item">' . $_language->module['platform'] . ': ' . $cupArray['platform'] . '</span>';
     $info .= '<span class="list-group-item">' . $_language->module['mode'] . ': ' . $cupArray['mode'] . '</span>';
     $info .= '<span class="list-group-item">Check-In: ' . getformatdatetime($cupArray['checkin']) . '</span>';
     $info .= '<span class="list-group-item">Start: ' . getformatdatetime($cupArray['start']) . '</span>';

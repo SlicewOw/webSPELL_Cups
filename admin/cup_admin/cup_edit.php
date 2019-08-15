@@ -87,14 +87,19 @@ try {
                 $game_tag = (isset($_POST['game'])) ? 
                     getinput($_POST['game']) : '';
 
-                $setValueArray[] = '`game` = \'' . $gameArray['tag'] . '\'';
-                $setValueArray[] = '`gameID` = ' . $gameArray['id'];
-
                 if (empty($game_tag)) {
                     throw new \Exception($_language->module['unknown_game_tag']);
                 }
 
                 $gameArray = getGame($game_tag);
+
+                $setValueArray[] = '`game` = \'' . $gameArray['tag'] . '\'';
+                $setValueArray[] = '`gameID` = ' . $gameArray['id'];
+
+                $platform = (isset($_POST['platform'])) ? 
+                    getinput($_POST['platform']) : 'PC';
+
+                $setValueArray[] = '`platform` = \'' . $platform . '\'';
 
                 $mode = (isset($_POST['mode'])) ? 
                     getinput($_POST['mode']) : '5on5';
@@ -250,6 +255,12 @@ try {
 
         $games = getGamesAsOptionList($game_id, FALSE);
 
+        $platform = str_replace(
+            'value="' . $cupArray['platform'] . '"',
+            'value="' . $cupArray['platform'] . '" selected="selected"',
+            $cupOptions['platform']
+        );
+
         $mode = str_replace(
             'value="'.$cupArray['mode'].'"',
             'value="'.$cupArray['mode'].'" selected="selected"',
@@ -307,6 +318,7 @@ try {
         $data_array['$hours_sd'] = $hours_sd;
         $data_array['$minutes_sd'] = $minutes_sd;
         $data_array['$games'] = $games;
+        $data_array['$platform'] = $platform;
         $data_array['$mode'] = $mode;
         $data_array['$rules'] = $rules;
         $data_array['$size'] = $size;
