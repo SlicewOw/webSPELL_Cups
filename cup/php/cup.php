@@ -126,7 +126,7 @@ try {
             }
 
         } else {
-            $cupList = '<tr><td colspan="7">' . $_language->module['no_cup'] . '</td></tr>';
+            $cupList = '<tr><td colspan="8">' . $_language->module['no_cup'] . '</td></tr>';
         }
 
         $data_array = array();
