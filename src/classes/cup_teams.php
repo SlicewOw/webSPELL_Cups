@@ -102,6 +102,16 @@ class cup_team {
 
     }
 
+    public function setId($team_id) {
+
+        if (!validate_int($team_id, true)) {
+            throw new \Exception($this->lang->module['wrong_parameter_id']);
+        }
+
+        $this->team_id = (int)$team_id;
+
+    }
+
     public function setName($name) {
 
         if (empty($name)) {
@@ -526,6 +536,38 @@ class cup_team {
             setCupTeamLog($this->team_id, $this->team_name, 'team_changed');
 
         }
+
+    }
+
+    public function deleteTeam() {
+
+        if (is_null($this->team_id)) {
+            throw new \Exception($this->lang->module['wrong_parameter_id']);
+        }
+
+        $saveQuery = cup_query(
+            "UPDATE `" . PREFIX . "cups_teams`
+                SET `deleted` = 1
+                WHERE `teamID` = " . $this->team_id,
+            __FILE__
+        );
+
+        $query = cup_query(
+            "UPDATE `" . PREFIX . "cups_teams_member`
+                SET `left_date` = " . time() . ",
+                    `active` = 0
+                WHERE `teamID` = " . $this->team_id,
+            __FILE__
+        );
+
+        $team_name = $ds['name'];
+
+        // Team Log
+        setCupTeamLog($this->team_id, $team_name, 'team_deleted');
+
+        // Player log
+        global $userID;
+        setPlayerLog($userID, $team_id, 'cup_team_deleted');
 
     }
 

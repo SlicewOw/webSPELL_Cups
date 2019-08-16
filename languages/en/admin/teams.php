@@ -3,7 +3,10 @@
 $language_array = Array(
     'add_team'=>'add team',
     'admin_team_only'=>'visible for admins only',
-    'country'=>'country',
+    'country'=>'Country',
+    'cup'=>'Cup',
+    'delete_info_text'=>'Are you sure that you want to delete team <span class="bold">%team_name%</span>?',
+    'delete_team'=>'Delete team',
     'error_logotype'=>'Error while saving logotype',
     'existing_teams'=>'Existing teams',
     'general_stats'=>'general statistics',
@@ -12,6 +15,7 @@ $language_array = Array(
     'info_admin_team'=>'Teams, visible for admins only!',
     'info_deleted_team'=>'Teams, deleted by team admin.',
     'legend'=>'legend',
+    'logotype'=>'Logotype',
     'most_played_matches'=>'Most played matches',
     'new'=>'add team',
     'newest_clan'=>'newest clan',
@@ -27,5 +31,6 @@ $language_array = Array(
     'total_deleted'=>'Delete totally',
     'turl'=>'URL',
     'purl'=>'Teampic',
+    'unknown_team_id'=>'unknown team id',
     'url'=>'URLs'
 );

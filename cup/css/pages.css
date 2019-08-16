@@ -458,6 +458,9 @@ li.cup_admin_submenu_list a			{ width: 95%; height: 30px; padding: 0 0 0 5%; dis
 .panel > .table-responsive > .table > tbody > .alert-info {
     background-color: #d9edf7;
 }
+.panel > .table-responsive > .table > tbody > .alert-danger {
+    background-color: #f2dede;
+}
 .panel > .list-group > div > .list-group-item:first-child {
     border-top: 1px #dddddd solid;
     border-top-width: 1px;

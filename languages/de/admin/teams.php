@@ -4,6 +4,9 @@ $language_array = Array(
     'add_team'=>'Team hinzufügen',
     'admin_team_only'=>'sichtbar nur f&uuml;r Admins',
     'country'=>'Herkunft',
+    'cup'=>'Cup',
+    'delete_info_text'=>'Bist du sicher, dass du das Team <span class="bold">%team_name%</span> l&ouml;schen willst?',
+    'delete_team'=>'Team l&ouml;schen',
     'error_logotype'=>'Fehler beim Hochladen des Logotypes',
     'existing_teams'=>'Bestehende Teams',
     'general_stats'=>'Allgemeine Statistiken',
@@ -12,6 +15,7 @@ $language_array = Array(
     'info_admin_team'=>'Teams, die nur f&uuml;r Admins sichtbar sind!',
     'info_deleted_team'=>'Teams, die durch Team Admin gel&ouml;scht worden sind.',
     'legend'=>'Legende',
+    'logotype'=>'Logotype',
     'most_played_matches'=>'Am Meisten gegeneinander gespielt',
     'new'=>'neues Team',
     'newest_clan'=>'Neuste Clans',
@@ -27,5 +31,6 @@ $language_array = Array(
     'total_deleted'=>'Total gel&ouml;scht',
     'turl'=>'Seitenlink',
     'purl'=>'Teampic',
+    'unknown_team_id'=>'unbekannte Team ID',
     'url'=>'URLs'
 );

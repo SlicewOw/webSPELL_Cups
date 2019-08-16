@@ -15,11 +15,11 @@ try {
 
         try {
 
+            systeminc('classes/cup_teams');
+
+            $team = new \myrisk\cup_team();
+
             if (isset($_POST['submitAddCupTeam'])) {
-
-                systeminc('classes/cup_teams');
-
-                $team = new \myrisk\cup_team();
 
                 try {
 
@@ -130,6 +130,18 @@ try {
 
                 }
 
+            } else if (isset($_POST['submitDeleteTeam'])) {
+                
+                $team_id = (isset($_POST['team_id']) && validate_int($_POST['team_id'], true)) ?
+                    (int)$_POST['team_id'] : 0;
+
+                if ($team_id < 1) {
+                    throw new \Exception($_language->module['unknown_team_id']);
+                }
+
+                $team->setId($team_id);
+                $team->deleteTeam();
+
             } else {
                 throw new \Exception($_language->module['unknown_action']);
             }
@@ -151,6 +163,8 @@ try {
             $breadcrumbArray[] = '<li class="active">Home</li>';
         } else if ($getAction == 'add') {
             $breadcrumbArray[] = '<li class="active">' . $_language->module['add_team'] . '</li>';
+        } else if ($getAction == 'delete') {
+            $breadcrumbArray[] = '<li class="active">' . $_language->module['delete_team'] . '</li>';
         }
 
         $data_array = array();
@@ -192,6 +206,30 @@ try {
             $team_add = $GLOBALS["_template_cup"]->replaceTemplate("teams_action_admin", $data_array);
             echo $team_add;
 
+        } else if ($getAction == 'delete') {
+
+            $team_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
+                (int)$_GET['id'] : 0;
+
+            if ($team_id < 1) {
+                throw new \Exception('unknown_team');
+            }
+
+            $teamArray = getteam($team_id);
+
+            $delete_info_text = str_replace(
+                '%team_name%',
+                $teamArray['name'],
+                $_language->module['delete_info_text']
+            );
+
+            $data_array = array();
+            $data_array['$delete_info_text'] = $delete_info_text;
+            $data_array['$team_id'] = $team_id;
+            $team_add = $GLOBALS["_template_cup"]->replaceTemplate("teams_admin_delete", $data_array);
+            echo $team_add;
+            
+            
         } else {
 
             $showEntries = 20;
@@ -271,7 +309,7 @@ try {
                 }
 
             } else {
-                $teamList = '<tr><td colspan="8">' . $_language->module['no_teams'] . '</td></tr>';
+                $teamList = '<tr><td colspan="9">' . $_language->module['no_teams'] . '</td></tr>';
             }
 
             $page_link = makepagelink("admincenter.php?site=cup&amp;mod=teams", $page, $pages);
