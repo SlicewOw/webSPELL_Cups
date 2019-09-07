@@ -625,3 +625,39 @@ function getMatchAdminAccessByTeam($team, $cup_id, $match_id) {
     return $matchAdminAccess_team;
 
 }
+
+/**
+ * Placements
+ */
+function setCupPlacement($cup_id, $team_id, $placement) {
+
+    safe_query(
+        "INSERT INTO `" . PREFIX . "cups_platzierungen`
+            (
+                `cupID`,
+                `teamID`,
+                `platzierung`
+            )
+            VALUES
+            (
+                " . $cup_id. ",
+                " . $team_id . ",
+                '" . $placement . "'
+            )"
+    );
+
+}
+
+/**
+ * Cup Awards
+ */
+function setCupAward($cup_id, $team_id, $award) {
+
+    safe_query(
+        "INSERT INTO `" . PREFIX . "cups_awards`
+            (`teamID`, `cupID`, `award`, `date`)
+            VALUES
+            (" . $team_id . ", " . $cup_id . ", " . $award. ", " . time() . ")"
+    );
+
+}

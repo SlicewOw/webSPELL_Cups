@@ -24,26 +24,31 @@ try {
 
     $setValueArray = array();
     $setValueArray[] = '`status` = 3';
+    $setValueArray[] = '`saved` = 1';
 
-    //
-    // Bracket zu gross?
-    $anzTeams = $cupArray['teams']['checked_in'];
-    if ($anzTeams < 1) {
-        throw new \Exception($_language->module['no_teams_checkedin']);
-    }
+    if (!isChallongeCup($cup_id)) {
 
-    if ($anzTeams < 3) {
-        $setValueArray[] = '`max_size` = 2';
-    } else if ($anzTeams < 5) {
-        $setValueArray[] = '`max_size` = 4';
-    } else if ($anzTeams < 9) {
-        $setValueArray[] = '`max_size` = 8';
-    } else if ($anzTeams < 17) {
-        $setValueArray[] = '`max_size` = 16';
-    } else if ($anzTeams < 33) {
-        $setValueArray[] = '`max_size` = 32';
-    } else if ($anzTeams < 65) {
-        $setValueArray[] = '`max_size` = 64';
+        //
+        // Bracket zu gross?
+        $anzTeams = $cupArray['teams']['checked_in'];
+        if ($anzTeams < 1) {
+            throw new \Exception($_language->module['no_teams_checkedin']);
+        }
+
+        if ($anzTeams < 3) {
+            $setValueArray[] = '`max_size` = 2';
+        } else if ($anzTeams < 5) {
+            $setValueArray[] = '`max_size` = 4';
+        } else if ($anzTeams < 9) {
+            $setValueArray[] = '`max_size` = 8';
+        } else if ($anzTeams < 17) {
+            $setValueArray[] = '`max_size` = 16';
+        } else if ($anzTeams < 33) {
+            $setValueArray[] = '`max_size` = 32';
+        } else if ($anzTeams < 65) {
+            $setValueArray[] = '`max_size` = 64';
+        }
+
     }
 
     $setValues = implode(', ', $setValueArray);
@@ -62,21 +67,25 @@ try {
         __FILE__
     );
 
-    /**
-     * Recreate Cup Array in case something changed automatically
-     */
-    $cupArray = getcup($cup_id);
+    if (!isChallongeCup($cup_id)) {
 
-    //
-    // Bracket erstellen
-    $createBracket = __DIR__ . '/cup_start_playoffs_bracket.php';
-    if (!file_exists($createBracket)) {
-        throw new \Exception($_language->module['unknown_file']);
+        /**
+         * Recreate Cup Array in case something changed automatically
+         */
+        $cupArray = getcup($cup_id);
+
+        //
+        // Bracket erstellen
+        $createBracket = __DIR__ . '/cup_start_playoffs_bracket.php';
+        if (!file_exists($createBracket)) {
+            throw new \Exception($_language->module['unknown_file']);
+        }
+
+        include($createBracket);
+
+        $_SESSION['successArray'][] = $_language->module['bracket_created'];
+
     }
-
-    include($createBracket);
-
-    $_SESSION['successArray'][] = $_language->module['bracket_created'];
 
     $parent_url .= '&page=bracket';
 

@@ -82,3 +82,22 @@ function getChallongeTournament($tournament_id) {
     return $challonge_api->getTournament($tournament_id);
 
 }
+
+function isChallongeCup($cup_id) {
+
+    if (!validate_int($cup_id, true)) {
+        return false;
+    }
+
+    $selectQuery = safe_query(
+        "SELECT
+                `challonge_api`
+            FROM `" . PREFIX . "cups`
+            WHERE `cupID` = " . $cup_id
+    );
+
+    $get = mysqli_fetch_array($selectQuery);
+
+    return ($get['challonge_api'] == 1);
+
+}
