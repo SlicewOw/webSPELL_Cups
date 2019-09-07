@@ -297,6 +297,26 @@ body {
 }
 
 /**
+ * Discord
+ */
+#sc-discord-login > a {
+
+    background: #7289da;
+    border: #DDDDDD 1px solid;
+    border-radius: 5px;
+    width: 100%;
+    height: 40px;
+    display: block;
+
+    color: #FFFFFF;
+    line-height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+
+}
+
+/**
  * Footer
  */
 #footer_navigation > .list-group {

@@ -1373,27 +1373,27 @@ li.cup_admin_submenu_list a			{ width: 95%; height: 30px; padding: 0 0 0 5%; dis
 /* MAIN */
 body,
 html,
-a, 
+a,
 a:hover,
 a:visited,
-small { 
-    font-family: Verdana, Arial, Helvetica, sans-serif; 
-    font-weight: normal; 
-    color: #000000; 
-    font-size-adjust: none; 
+small {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    color: #000000;
+    font-size-adjust: none;
 }
 body,
 html,
-small{ 
-    font-size: 12px; 
+small{
+    font-size: 12px;
 }
 
 /* FONT SIZE */
 .ten,
 .ten a,
 .ten a:hover,
-#notifyContainer > li > a { 
-    font-size: 10px; 
+#notifyContainer > li > a {
+    font-size: 10px;
 }
 .eleven,
 .eleven a,
@@ -1549,7 +1549,7 @@ a.white,
 .left a							{ text-align: left; }
 
 /* TEXT DECORATION */
-a, 
+a,
 a:hover,
 .none-decoration,
 .none-decoration a,

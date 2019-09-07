@@ -132,7 +132,6 @@ try {
         $data_array = array();
         $data_array['$discord_url'] = getDiscordAuthUrl();
         $sc_discord = $GLOBALS["_template_cup"]->replaceTemplate("sc_discord", $data_array);
-        echo $sc_discord;
 
     }
 
