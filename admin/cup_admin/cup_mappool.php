@@ -3,7 +3,7 @@
 try {
 
     $_language->readModule('cups', false, true);
-    
+
 	if(!$loggedin || !iscupadmin($userID)) {
 		throw new \Exception($_language->module['access_denied']);
 	}
@@ -19,9 +19,8 @@ try {
 		for($x=1;$x<($maxMaps + 1);$x++) {
 
 			$isRequired = ($x == 1) ? ' required="required"' : '';
-			$value = (isset($mapArray[$x-1])) ? $mapArray[$x-1] : '';
 
-			$mapList .= '<input type="text" name="map'.$x.'" placeholder="Map '.$x.'" value="'.$value.'" class="form-control"'.$isRequired.' />';	
+			$mapList .= '<input type="text" name="map'.$x.'" placeholder="Map '.$x.'" value="" class="form-control"'.$isRequired.' />';
 
 			if($x < $maxMaps) {
 				$mapList .= '<br />';
@@ -44,21 +43,21 @@ try {
 				$mappool_id = (isset($_POST['mappool_id']) && validate_int($_POST['mappool_id'])) ?
 					(int)$_POST['mappool_id'] : 0;
 
-				if($mappool_id < 1) {	
+				if($mappool_id < 1) {
 					throw new \Exception($_language->module['error_id']);
 				}
 
-				$name = (isset($_POST['name'])) ? 
+				$name = (isset($_POST['name'])) ?
 					getinput($_POST['name']) : '';
-				
+
 				$query = mysqli_query(
-					$_database, 
-					"UPDATE `".PREFIX."cups_mappool`  
+					$_database,
+					"UPDATE `".PREFIX."cups_mappool`
 						SET deleted = 1
 						WHERE mappoolID = " . $mappool_id
 				);
 
-				if(!$query) {	
+				if(!$query) {
 					throw new \Exception($_language->module['query_delete_failed']);
 				}
 
@@ -77,24 +76,24 @@ try {
 						$mapArray[] = $_POST['map'.$x];
 					}
 				}
-				$maps = serialize($mapArray);	
+				$maps = serialize($mapArray);
 
 				if(isset($_POST['submitAddMapPool'])) {
 
 					$query = mysqli_query(
-						$_database, 
-						"INSERT INTO `" . PREFIX . "cups_mappool` 
+						$_database,
+						"INSERT INTO `" . PREFIX . "cups_mappool`
 							(
-								name, 
-								game, 
-								gameID, 
+								name,
+								game,
+								gameID,
 								maps
-							) 
-							VALUES 
+							)
+							VALUES
 							(
-								'".$name."', 
-								'".$game_tag."', 
-								'".$gameArray['id']."', 
+								'".$name."',
+								'".$game_tag."',
+								'".$gameArray['id']."',
 								'".$maps."'
 							)"
 					);
@@ -104,7 +103,7 @@ try {
 					}
 
 					$mappool_id = mysqli_insert_id($_database);
-                    
+
                     $text = 'Map Pool "'.$name.'" wurde hinzugef&uuml;gt';
 
 				} else {
@@ -113,16 +112,16 @@ try {
 						(int)$_POST['mappool_id'] : 0;
 
 					if($mappool_id < 1) {
-						throw new \Exception($_language->module['error_id']);	
+						throw new \Exception($_language->module['error_id']);
 					}
-					
+
 					$query = mysqli_query(
-						$_database, 
-						"UPDATE `".PREFIX."cups_mappool` 
-							SET name = '" . $name . "', 
-								game = '" . $game_tag . "', 
-								gameID = " . $gameArray['id'] . ", 
-								maps = '" . $maps . "' 
+						$_database,
+						"UPDATE `".PREFIX."cups_mappool`
+							SET name = '" . $name . "',
+								game = '" . $game_tag . "',
+								gameID = " . $gameArray['id'] . ",
+								maps = '" . $maps . "'
 							WHERE mappoolID = " . $mappool_id
 					);
 
@@ -138,9 +137,9 @@ try {
             if (isset($text) && !empty($text)) {
                 $_SESSION['successArray'][] = $text;
             }
-            
+
 		} catch(Exception $e) {
-			$_SESSION['errorArray'][] = $e->getMessage();	
+			$_SESSION['errorArray'][] = $e->getMessage();
 		}
 
 		header('Location: ' . $parent_url);
@@ -157,7 +156,7 @@ try {
 			$data_array['$mappool_id'] 	= 0;
 			$data_array['$postName'] 	= 'submitAddMapPool';
 			$pool_add = $GLOBALS["_template_cup"]->replaceTemplate("cup_mappool_action", $data_array);
-			echo $pool_add;	
+			echo $pool_add;
 
 		} else if($getAction == 'edit') {
 
@@ -170,8 +169,8 @@ try {
 
 			$ds = mysqli_fetch_array(
 				mysqli_query(
-					$_database, 
-					"SELECT name, game, gameID, maps FROM `".PREFIX."cups_mappool` 
+					$_database,
+					"SELECT name, game, gameID, maps FROM `".PREFIX."cups_mappool`
 						WHERE mappoolID = " . $mappool_id
 				)
 			);
@@ -182,13 +181,13 @@ try {
 				$anzMaps = count($maps);
 				for($x=0;$x<$maxMaps;$x++) {
 					if($x<$anzMaps) {
-						$map[] = $maps[$x];	
+						$map[] = $maps[$x];
 					} else {
 						$map[] = '';
 					}
 				}
 
-			} 
+			}
 
 			$mapList = '';
 
@@ -196,13 +195,13 @@ try {
 
 				$isRequired = ($x == 1) ? ' required="required"' : '';
 
-				$mapList .= '<input type="text" name="map'.$x.'" placeholder="Map '.$x.'" value="'.$map[$x - 1].'" class="form-control"'.$isRequired.' />';	
+				$mapList .= '<input type="text" name="map'.$x.'" placeholder="Map '.$x.'" value="'.$map[$x - 1].'" class="form-control"'.$isRequired.' />';
 
 				if($x < $maxMaps) {
 					$mapList .= '<br />';
 				}
 
-			}   
+			}
 
 			$data_array = array();
 			$data_array['$title'] 		= $_language->module['edit'];
@@ -213,7 +212,7 @@ try {
 			$data_array['$postName'] 	= 'submitEditMapPool';
 			$pool_edit = $GLOBALS["_template_cup"]->replaceTemplate("cup_mappool_action", $data_array);
 			echo $pool_edit;
- 
+
 		} else if($getAction == 'delete') {
 
 			$mappool_id = (isset($_GET['id']) && validate_int($_GET['id'])) ?
@@ -225,10 +224,10 @@ try {
 
 			$ds = mysqli_fetch_array(
 				mysqli_query(
-					$_database, 
-					"SELECT 
-							m.*, 
-							g.name AS `game_name` 
+					$_database,
+					"SELECT
+							m.*,
+							g.name AS `game_name`
 						FROM `".PREFIX."cups_mappool` m
 						LEFT JOIN `".PREFIX."games` g ON m.gameID = g.gameID
 						WHERE mappoolID = " . $mappool_id
@@ -236,18 +235,18 @@ try {
 			);
 
 			$maps = unserialize($ds['maps']);
-			$anzMaps = count($maps);        
+			$anzMaps = count($maps);
 
 			$mapList = '';
 			for($x=0;$x<$anzMaps;$x++) {
-				
-                $mapList .= '<input type="text" name="map'.($x + 1).'" value="'.$maps[$x].'" class="form-control" readonly="readonly" />';	
-				
+
+                $mapList .= '<input type="text" name="map'.($x + 1).'" value="'.$maps[$x].'" class="form-control" readonly="readonly" />';
+
 				if($x != $maxMaps) {
-                    $mapList .= '<br />';	
+                    $mapList .= '<br />';
                 }
-                
-			}   
+
+			}
 
 			$data_array = array();
 			$data_array['$name'] 		= $ds['name'];
@@ -260,8 +259,8 @@ try {
 		} else {
 
 			$ergebnis = mysqli_query(
-				$_database, 
-				"SELECT 
+				$_database,
+				"SELECT
 						m.*,
 						g.name AS `game_name`
 					FROM `".PREFIX."cups_mappool` m
@@ -299,14 +298,14 @@ try {
 				$data_array['$mappool_id'] 	= 0;
 				$data_array['$postName'] 	= 'submitAddMapPool';
 				$pool_add = $GLOBALS["_template_cup"]->replaceTemplate("cup_mappool_action", $data_array);
-				echo $pool_add;	
+				echo $pool_add;
 
-			}   
+			}
 
 		}
 
 	}
-	
+
 } catch(Exception $e) {
 	echo showError($e->getMessage());
 }

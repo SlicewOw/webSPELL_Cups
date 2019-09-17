@@ -526,7 +526,7 @@ class cup_team {
 
             $updateString = implode(', ', $updateArray);
 
-            $query = cup_query(
+            cup_query(
                 "UPDATE `" . PREFIX . "cups_teams`
                     SET " . $updateString . "
                     WHERE `teamID` = " . $this->team_id,
@@ -545,14 +545,14 @@ class cup_team {
             throw new \Exception($this->lang->module['wrong_parameter_id']);
         }
 
-        $saveQuery = cup_query(
+        cup_query(
             "UPDATE `" . PREFIX . "cups_teams`
                 SET `deleted` = 1
                 WHERE `teamID` = " . $this->team_id,
             __FILE__
         );
 
-        $query = cup_query(
+        cup_query(
             "UPDATE `" . PREFIX . "cups_teams_member`
                 SET `left_date` = " . time() . ",
                     `active` = 0
@@ -560,14 +560,14 @@ class cup_team {
             __FILE__
         );
 
-        $team_name = $ds['name'];
+        $team_name = getteam($this->team_id, 'name');
 
         // Team Log
         setCupTeamLog($this->team_id, $team_name, 'team_deleted');
 
         // Player log
         global $userID;
-        setPlayerLog($userID, $team_id, 'cup_team_deleted');
+        setPlayerLog($userID, $this->team_id, 'cup_team_deleted');
 
     }
 
