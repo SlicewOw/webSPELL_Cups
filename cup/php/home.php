@@ -234,12 +234,15 @@ try {
                 $teamArray[$subget['platzierung'] - 1]['visible'] = '';
 
                 if ($get['mode'] == '1on1') {
-                    $description = ' alt="'.$subget['team_name'].'" title="'.$subget['team_name'].'"';
                     $logotype = getuserpic($subget['team_id'], true);
                 } else {
-                    $description = ' alt="'.$subget['team_name'].'" title="'.$subget['team_name'].'"';
                     $logotype = getCupTeamImage($subget['team_id'], true);
                 }
+
+                $imageAttributeArray = array();
+                $imageAttributeArray[] = 'src="' . $logotype . '"';
+                $imageAttributeArray[] = 'alt="' . $subget['team_name'] . '"';
+                $imageAttributeArray[] = 'title="' . $subget['team_name'] . '"';
 
                 $cssStyleArray = array();
                 $cssStyleArray[] = 'width: 50px;';
@@ -248,7 +251,9 @@ try {
                 $cssStyleArray[] = 'display: block;';
                 $cssStyleArray[] = 'border-radius: 50px;';
 
-                $teamArray[$subget['platzierung'] - 1]['logotype'] = '<img src="' . $logotype . '"' . $description . ' style="' . implode(' ', $cssStyleArray) . '" />';
+                $imageAttributeArray[] = 'style="' . implode(' ', $cssStyleArray) . '"';
+
+                $teamArray[$subget['platzierung'] - 1]['logotype'] = '<img ' . implode(' ', $imageAttributeArray) . ' />';
 
             }
 

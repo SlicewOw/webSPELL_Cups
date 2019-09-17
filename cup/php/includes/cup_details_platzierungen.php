@@ -54,7 +54,10 @@ try {
             $placement = $get['team_placement'];
             if ($placement < 4) {
 
-                $description = ' alt="' . $name . '" title="' . $name . '"';
+                $imageAttributeArray = array();
+                $imageAttributeArray[] = 'src="' . $logotype . '"';
+                $imageAttributeArray[] = 'alt="' . $name . '"';
+                $imageAttributeArray[] = 'title="' . $name . '"';
 
                 $cssStyleArray = array();
                 $cssStyleArray[] = 'width: 50px;';
@@ -63,10 +66,12 @@ try {
                 $cssStyleArray[] = 'display: block;';
                 $cssStyleArray[] = 'border-radius: 50px;';
 
+                $imageAttributeArray[] = 'style="' . implode(' ', $cssStyleArray) . '"';
+
                 $firstThreeTeamsArray[$placement] = array(
                     'url' => $url,
                     'name' => $name,
-                    'logotpye' => '<img src="' . $logotype . '"' . $description . ' style="' . implode(' ', $cssStyleArray) . '" />',
+                    'logotpye' => '<img ' . implode(' ', $imageAttributeArray) . ' />',
                     'visible' => ''
                 );
 
