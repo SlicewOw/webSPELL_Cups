@@ -125,3 +125,7 @@ _mysql.php
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# SonarQube #
+######################
+.scannerwork/
