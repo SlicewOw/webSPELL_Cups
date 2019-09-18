@@ -91,7 +91,7 @@ try {
                     (int)$_POST['selectCupID'] : 0;
 
                 if($cupID > 0) {
-                    $_SESSION['support']['cup_id'] = $cupID;
+                    $_SESSION['support'][getConstNameCupIdWithUnderscore()] = $cupID;
                 }
 
                 $matchID = (isset($_POST['selectMatchID']) && validate_int($_POST['selectMatchID'])) ?
@@ -244,7 +244,7 @@ try {
         $name = '';
 
         $catID = isset($_GET['catID']) ? (int)$_GET['catID'] : '0';
-        $cupID 		= isset($_GET['cupID']) ? (int)$_GET['cupID'] : '0';
+        $cupID 		= isset($_GET[getConstNameCupId()]) ? (int)$_GET[getConstNameCupId()] : '0';
         $matchID 	= isset($_GET['mID']) ? (int)$_GET['mID'] : '0';
         $teamID 	= isset($_GET['teamID']) ? (int)$_GET['teamID'] : '0';
         $user_id 	= isset($_GET['userID']) ? (int)$_GET['userID'] : '0';
@@ -377,11 +377,11 @@ try {
 
             }
 
-            if(isset($_SESSION['support']['cup_id'])) {
+            if(isset($_SESSION['support'][getConstNameCupIdWithUnderscore()])) {
 
                 $cups = str_replace(
-                    'value="'.$_SESSION['support']['cup_id'].'"',
-                    'value="'.$_SESSION['support']['cup_id'].'" selected="selected"',
+                    'value="'.$_SESSION['support'][getConstNameCupIdWithUnderscore()].'"',
+                    'value="'.$_SESSION['support'][getConstNameCupIdWithUnderscore()].'" selected="selected"',
                     $cups
                 );
 

@@ -30,7 +30,7 @@ try {
 
         while ($ds = mysqli_fetch_array($ergebnis)) {
 
-            $cup_id = $ds['cupID'];
+            $cup_id = $ds[getConstNameCupId()];
             $name = $ds['name'];
 
             $infoArray = array();
@@ -67,7 +67,7 @@ try {
             throw new \UnexpectedValueException($_language->module['access_denied']);
         }
 
-        if (!checkIfContentExists($cup_id, 'cupID', 'cups')) {
+        if (!checkIfContentExists($cup_id, getConstNameCupId(), 'cups')) {
             throw new \UnexpectedValueException($_language->module['unknown_cup']);
         }
 

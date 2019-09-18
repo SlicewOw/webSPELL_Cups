@@ -45,7 +45,7 @@ try {
     // Match Array
     $matchArray = getmatch($match_id);
 
-    if (!isset($matchArray['cup_id']) || ($matchArray['cup_id'] != $cup_id)) {
+    if (!isset($matchArray[getConstNameCupIdWithUnderscore()]) || ($matchArray[getConstNameCupIdWithUnderscore()] != $cup_id)) {
         throw new \UnexpectedValueException($_language->module['no_match']);
     }
 

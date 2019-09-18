@@ -30,7 +30,7 @@ try {
 
         while ($get = mysqli_fetch_array($selectQuery)) {
 
-            $cup_details_url = $cup_url . $get['cupID'];
+            $cup_details_url = $cup_url . $get[getConstNameCupId()];
 
             $cup_description = $get['name'];
             $cup_description .= '<span class="pull-right grey">' . getformatdatetime($get['checkin_date']) . '</span>';

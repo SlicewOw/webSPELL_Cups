@@ -14,8 +14,8 @@ try {
         throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
-    $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ?
-        (int)$_GET['cup_id'] : 0;
+    $cup_id = (isset($_GET[getConstNameCupIdWithUnderscore()]) && validate_int($_GET[getConstNameCupIdWithUnderscore()], true)) ?
+        (int)$_GET[getConstNameCupIdWithUnderscore()] : 0;
 
     if ($cup_id < 1) {
         throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
@@ -29,7 +29,7 @@ try {
     }
 
     $returnArray['data'] = array(
-        'cup_id' => $cup_id,
+        getConstNameCupIdWithUnderscore() => $cup_id,
         'round_id' => $round_id
     );
 

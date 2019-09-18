@@ -77,7 +77,7 @@ try {
             ORDER BY cupID ASC"
     );
     while($get = mysqli_fetch_array($query)) {
-        $cupDataArray[] = $get['cupID'];
+        $cupDataArray[] = $get[getConstNameCupId()];
     }
 
     //

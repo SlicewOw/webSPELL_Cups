@@ -60,7 +60,7 @@ if ($checkIf['exist'] > 0) {
 
     while ($ds = mysqli_fetch_array($info)) {
 
-        $cup_id = $ds['cupID'];
+        $cup_id = $ds[getConstNameCupId()];
 
         $hits = 0;
         $hits += $ds['hits'];
@@ -69,8 +69,8 @@ if ($checkIf['exist'] > 0) {
         $hits += $ds['hits_bracket'];
         $hits += $ds['hits_rules'];
 
-        $cupArray['list'][$ds['cupID']] =  $hits;
-        $cupArray['details'][$ds['cupID']] = $ds['name'];
+        $cupArray['list'][$ds[getConstNameCupId()]] =  $hits;
+        $cupArray['details'][$ds[getConstNameCupId()]] = $ds['name'];
 
         $chartValueArray = array();
         $chartValueArray[] = '\''.$ds['name'].'\'';
@@ -127,7 +127,7 @@ if (mysqli_num_rows($info) > 0) {
 
     while ($ds = mysqli_fetch_array($info)) {
 
-        $cupArray = getcup($ds['cupID']);
+        $cupArray = getcup($ds[getConstNameCupId()]);
 
         $anzTeams = $ds['anz'];
         $maxTeams = $cupArray['size'];
@@ -142,7 +142,7 @@ if (mysqli_num_rows($info) > 0) {
             $relativeText = $relative.'%';
         }
 
-        $cupteams_list .= '<a href="' . $base_cup_url . $ds['cupID'] . '" class="list-group-item">';
+        $cupteams_list .= '<a href="' . $base_cup_url . $ds[getConstNameCupId()] . '" class="list-group-item">';
         $cupteams_list .= $cupArray['name'];
         $cupteams_list .= '<span class="pull-right grey">' . $anzTeams . ' / ' . $maxTeams . ' (' . $relativeText . ')</span>';
         $cupteams_list .= '</a>';

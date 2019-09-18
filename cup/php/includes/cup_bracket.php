@@ -8,7 +8,7 @@ try {
             (int)$_GET['id'] : 0;
 
         if ($cup_id == 0) {
-            $cup_id = isset($_GET['cup_id']) ? (int)$_GET['cup_id'] : 0;
+            $cup_id = isset($_GET[getConstNameCupIdWithUnderscore()]) ? (int)$_GET[getConstNameCupIdWithUnderscore()] : 0;
         }
 
         $cupArray = getcup($cupID, 'all');

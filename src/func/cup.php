@@ -1537,7 +1537,7 @@ function getcup($id, $cat = '') {
             throw new \UnexpectedValueException('error_unknown_parameter_cup_id');
         }
 
-        if (!checkIfContentExists($id, 'cupID', 'cups')) {
+        if (!checkIfContentExists($id, getConstNameCupId(), 'cups')) {
             throw new \UnexpectedValueException('unknown_cup (' . $id . ', ' . $cat . ')');
         }
 
@@ -1662,11 +1662,11 @@ function getcup($id, $cat = '') {
 
             $get = mysqli_fetch_array($query);
 
-            if (!validate_int($get['cupID'], true)) {
+            if (!validate_int($get[getConstNameCupId()], true)) {
                 throw new \UnexpectedValueException('unknown_cup_id (all, ' . $whereClause . ')');
             }
 
-            $cup_id = $get['cupID'];
+            $cup_id = $get[getConstNameCupId()];
             $cup_mode = $get['mode'];
 
             $mode = explode('on', $cup_mode);
@@ -1852,7 +1852,7 @@ function getcups($cat = '', $selected = '') {
             if($ds['cup_isVisible']) {
                 $cupName .= ' (Admin Cup)';
             }
-            $returnValue .= '<option value="'.$ds['cup_id'].'">'.$cupName.'</option>';
+            $returnValue .= '<option value="'.$ds[getConstNameCupIdWithUnderscore()].'">'.$cupName.'</option>';
 
         }
 
@@ -1890,7 +1890,7 @@ function getcups($cat = '', $selected = '') {
             if($ds['cup_isVisible']) {
                 $cupName .= ' (Admin Cup)';
             }
-            $returnValue .= '<option value="'.$ds['cup_id'].'">'.$cupName.'</option>';
+            $returnValue .= '<option value="'.$ds[getConstNameCupIdWithUnderscore()].'">'.$cupName.'</option>';
 
         }
 

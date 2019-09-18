@@ -32,8 +32,8 @@ try {
                 $opponent_id = (isset($_POST['opponentID']) && validate_int($_POST['opponentID'])) ?
                     (int)$_POST['opponentID'] : 0;
 
-                $cup_id = (isset($_POST['cupID']) && validate_int($_POST['cupID'])) ?
-                    (int)$_POST['cupID'] : 0;
+                $cup_id = (isset($_POST[getConstNameCupId()]) && validate_int($_POST[getConstNameCupId()])) ?
+                    (int)$_POST[getConstNameCupId()] : 0;
 
                 $match_id = (isset($_POST['matchID']) && validate_int($_POST['matchID'])) ?
                     (int)$_POST['matchID'] : 0;

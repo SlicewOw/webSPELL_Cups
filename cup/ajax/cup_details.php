@@ -4,8 +4,8 @@ try {
 
     $_language->readModule('cups');
 
-    $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'])) ?
-        (int)$_GET['cup_id'] : 0;
+    $cup_id = (isset($_GET[getConstNameCupIdWithUnderscore()]) && validate_int($_GET[getConstNameCupIdWithUnderscore()])) ?
+        (int)$_GET[getConstNameCupIdWithUnderscore()] : 0;
 
     if ($cup_id < 1) {
         throw new \UnexpectedValueException($_language->module['no_cup']);

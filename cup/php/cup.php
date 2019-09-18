@@ -98,7 +98,7 @@ try {
             $cupList = '';
             while ($ds = mysqli_fetch_array($ergebnis)) {
 
-                $cup_id = $ds['cupID'];
+                $cup_id = $ds[getConstNameCupId()];
 
                 $cupArray = getcup($cup_id);
 

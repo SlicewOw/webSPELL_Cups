@@ -15,7 +15,7 @@ try {
         throw new \UnexpectedValueException($_language->module['unknown_cup']);
     }
 
-    if (!checkIfContentExists($cup_id, 'cupID', 'cups')) {
+    if (!checkIfContentExists($cup_id, getConstNameCupId(), 'cups')) {
         throw new \UnexpectedValueException($_language->module['unknown_cup']);
     }
 

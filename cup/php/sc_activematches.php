@@ -50,7 +50,7 @@ try {
 
             $matchArray[] = array(
                 'match_id' =>  $getMatch['match_id'],
-                'cup_id' => $getMatch['cup_id'],
+                getConstNameCupIdWithUnderscore() => $getMatch[getConstNameCupIdWithUnderscore()],
                 'opponent' => $opponent_name
             );
 
@@ -83,7 +83,7 @@ try {
 
         $matchArray[] = array(
             'match_id' =>  $getMatch['match_id'],
-            'cup_id' => $getMatch['cup_id'],
+            getConstNameCupIdWithUnderscore() => $getMatch[getConstNameCupIdWithUnderscore()],
             'opponent' => $opponent_name
         );
 
@@ -101,7 +101,7 @@ try {
                 throw new \UnexpectedValueException('unknown_array_entry (`match_id`)');
             }
 
-            if (!isset($matchArray[$x]['cup_id'])) {
+            if (!isset($matchArray[$x][getConstNameCupIdWithUnderscore()])) {
                 throw new \UnexpectedValueException('unknown_array_entry (`cup_id`)');
             }
 
@@ -109,7 +109,7 @@ try {
                 throw new \UnexpectedValueException('unknown_array_entry (`opoonent`)');
             }
 
-            $url = $base_url . $matchArray[$x]['cup_id'] . '&amp;mID=' . $matchArray[$x]['match_id'];
+            $url = $base_url . $matchArray[$x][getConstNameCupIdWithUnderscore()] . '&amp;mID=' . $matchArray[$x]['match_id'];
 
             $matchList .= '<li><a href="' . $url . '">Match vs. ' . $matchArray[$x]['opponent'] . '</a></li>';
 

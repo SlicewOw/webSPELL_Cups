@@ -23,7 +23,7 @@ try {
         $team_awards = '';
         while ($dx = mysqli_fetch_array($team_award)) {
 
-            if ($dx['cup_id'] > 0) {
+            if ($dx[getConstNameCupIdWithUnderscore()] > 0) {
                 $info = $dx['cup_name'];
                 $info .= '<span class="pull-right">' . $dx['award'] . '</span>';
             } else {

@@ -284,7 +284,7 @@ try {
 
             while ($get = mysqli_fetch_array($selectAwardsQuery)) {
 
-                $cup_url = 'index.php?site=cup&amp;action=details&amp;id=' . $get['cup_id'];
+                $cup_url = 'index.php?site=cup&amp;action=details&amp;id=' . $get[getConstNameCupIdWithUnderscore()];
                 $achievement_text = $get['user_placement'] . '. - ' . $get['cup_name'];
 
                 $achievements .= '<a href="' . $cup_url . '" class="list-group-item">' . $achievement_text . '</a>';

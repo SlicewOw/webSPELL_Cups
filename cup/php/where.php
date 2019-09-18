@@ -73,7 +73,7 @@ if ($mod_original === 'lostpassword') {
     $getAction = isset($getAction) ? $getAction : '';
     if (($getAction == 'joincup' || $getAction == 'details') && ($unique_id > 0)) {
 
-        if (checkIfContentExists($unique_id, 'cupID', 'cups')) {
+        if (checkIfContentExists($unique_id, getConstNameCupId(), 'cups')) {
 
             $getCupPage = (isset($_GET['page'])) ?
                 getinput($_GET['page']) : 'home';
@@ -85,7 +85,7 @@ if ($mod_original === 'lostpassword') {
 
     } else if ($getAction == 'match') {
 
-        if (($unique_id > 0) && checkIfContentExists($unique_id, 'cupID', 'cups')) {
+        if (($unique_id > 0) && checkIfContentExists($unique_id, getConstNameCupId(), 'cups')) {
 
             $value .= ' / <a href="' . $base_url . 'details&amp;id=' . $unique_id . '#content">' . getcup($unique_id, 'name') . '</a>';
 

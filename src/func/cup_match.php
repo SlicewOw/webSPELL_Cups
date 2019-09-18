@@ -293,7 +293,7 @@ function getmatch($id, $cat = '') {
             $matchConfirm = 0;
         }
 
-        $cupArray = getCup($get['cupID']);
+        $cupArray = getCup($get[getConstNameCupId()]);
 
         for ($x = 1; $x < 3; $x++) {
 
@@ -312,7 +312,7 @@ function getmatch($id, $cat = '') {
         }
 
         $returnValue = array(
-            "cup_id"		=> $get['cupID'],
+            "cup_id"		=> $get[getConstNameCupId()],
             "bracket"		=> $get['wb'],
             "runde"			=> $get['runde'],
             "spiel"			=> $get['spiel'],

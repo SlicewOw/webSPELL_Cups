@@ -12,16 +12,16 @@ if ($loggedin && ($team_id > 0) && ($user_id < 1) && isinteam($userID, $team_id,
 
     $ds = mysqli_fetch_array(
         mysqli_query(
-            $_database, 
-            "SELECT * FROM `".PREFIX."cups_teams` 
+            $_database,
+            "SELECT * FROM `".PREFIX."cups_teams`
                 WHERE teamID = " . $team_id . " AND userID = " . $userID
         )
     );
 
     $get_players = mysqli_fetch_array(
         mysqli_query(
-            $_database, 
-            "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teams_member` 
+            $_database,
+            "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teams_member`
                 WHERE teamID = ".$ds['teamID']." AND active = 1"
         )
     );
@@ -78,7 +78,7 @@ if ($loggedin && ($team_id > 0) && ($user_id < 1) && isinteam($userID, $team_id,
     $get = mysqli_fetch_array(
         mysqli_query(
             $_database,
-            "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teilnehmer` 
+            "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teilnehmer`
                 WHERE teamID = " . $team_id
         )
     );
@@ -88,17 +88,17 @@ if ($loggedin && ($team_id > 0) && ($user_id < 1) && isinteam($userID, $team_id,
         // Anzahl Member
         $member = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teams_member` 
+                $_database,
+                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teams_member`
                     WHERE teamID = " . $team_id . " AND active = 1"
             )
         );
 
         $query = mysqli_query(
-            $_database, 
+            $_database,
             "SELECT b.status FROM `".PREFIX."cups_teilnehmer` a
                 JOIN `".PREFIX."cups` b ON a.cupID = b.cupID
-                WHERE teamID = " . $team_id . " 
+                WHERE teamID = " . $team_id . "
                 ORDER BY checked_in ASC"
         );
         while($ds = mysqli_fetch_array($query)) {
@@ -135,11 +135,11 @@ if ($loggedin && ($team_id > 0) && ($user_id < 1) && isinteam($userID, $team_id,
     if ($canLeftTeam) {
 
         $query = mysqli_query(
-            $_database, 
-            "UPDATE `".PREFIX."cups_teams_member` 
-                SET 	left_date = " . time() . ", 
-                        kickID = " . $userID . ", 
-                        active = 0 
+            $_database,
+            "UPDATE `".PREFIX."cups_teams_member`
+                SET 	left_date = " . time() . ",
+                        kickID = " . $userID . ",
+                        active = 0
                 WHERE 	teamID = " . $team_id . " AND userID = " . $user_id
         );
         if($query) {
@@ -182,8 +182,8 @@ if ($loggedin && ($team_id > 0) && ($user_id < 1) && isinteam($userID, $team_id,
         // Active Cups?
         $get = mysqli_fetch_array(
             mysqli_query(
-            $_database, 
-            "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teilnehmer` 
+            $_database,
+            "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teilnehmer`
                 WHERE teamID = '".$team_id."'"
             )
         );
@@ -193,21 +193,21 @@ if ($loggedin && ($team_id > 0) && ($user_id < 1) && isinteam($userID, $team_id,
             // Anzahl Member
             $member = mysqli_fetch_array(
                 mysqli_query(
-                    $_database, 
-                    "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teams_member` 
+                    $_database,
+                    "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teams_member`
                         WHERE teamID = '".$team_id."' AND active = '1'"
                 )
             );
 
             $query = mysqli_query(
-                $_database, 
-                "SELECT cupID FROM `".PREFIX."cups_teilnehmer` 
-                    WHERE teamID = '".$team_id."' 
+                $_database,
+                "SELECT cupID FROM `".PREFIX."cups_teilnehmer`
+                    WHERE teamID = '".$team_id."'
                     ORDER BY checked_in ASC"
             );
             while($ds = mysqli_fetch_array($query)) {
 
-                $cupArray = getcup($ds['cupID']);
+                $cupArray = getcup($ds[getConstNameCupId()]);
                 if(($cupArray['status'] < 4) && (($member['anz'] - 1) < $cupArray['max_mode'])) {
                     $canLeftTeam = FALSE;
                     $message = $_language->module['delete_not_ok_1'];
@@ -224,7 +224,7 @@ if ($loggedin && ($team_id > 0) && ($user_id < 1) && isinteam($userID, $team_id,
         if($canLeftTeam) {
             $get = mysqli_fetch_array(
                 mysqli_query(
-                    $_database, 
+                    $_database,
                     "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_penalty`
                         WHERE teamID = '".$team_id."' AND duration_time > '".time()."'"
                 )
@@ -238,10 +238,10 @@ if ($loggedin && ($team_id > 0) && ($user_id < 1) && isinteam($userID, $team_id,
         if($canLeftTeam) {
 
             $query = mysqli_query(
-                $_database, 
-                "UPDATE `".PREFIX."cups_teams_member` 
-                    SET 	left_date = '".time()."', 
-                            active = '0' 
+                $_database,
+                "UPDATE `".PREFIX."cups_teams_member`
+                    SET 	left_date = '".time()."',
+                            active = '0'
                     WHERE 	teamID = '".$team_id."' AND userID = '".$userID."'"
             );
 

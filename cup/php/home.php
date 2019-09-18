@@ -73,7 +73,7 @@ try {
 
         while ($getCup = mysqli_fetch_array($query)) {
 
-            $cup_id = $getCup['cupID'];
+            $cup_id = $getCup[getConstNameCupId()];
 
             $cupArray = getcup($cup_id);
             $getGame = getGame($cupArray['game']);
@@ -162,7 +162,7 @@ try {
 
         while ($get = mysqli_fetch_array($query)) {
 
-            $cup_id = $get['cup_id'];
+            $cup_id = $get[getConstNameCupIdWithUnderscore()];
 
             $teamArray = array(
                 array(

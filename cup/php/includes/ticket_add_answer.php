@@ -232,7 +232,7 @@ try {
 
         if ($db['ticket_matchID'] > 0) {
             $matchArray = getmatch($db['ticket_matchID']);
-            $match_url = $hp_url . '/index.php?site=cup&amp;action=match&amp;id=' . $matchArray['cup_id'] . '&amp;mID=' . $db['ticket_matchID'];
+            $match_url = $hp_url . '/index.php?site=cup&amp;action=match&amp;id=' . $matchArray[getConstNameCupIdWithUnderscore()] . '&amp;mID=' . $db['ticket_matchID'];
             $ticketInfoArray[] = 'Match: <a href="' . $match_url . '" target="_blank" class="blue">#' . $db['ticket_matchID'] . '</a>';
         }
 

@@ -26,8 +26,8 @@ try {
 
     if ($postAction == 'saveCupSettings') {
 
-        $cup_id = (isset($_POST['cup_id']) && validate_int($_POST['cup_id'], true)) ?
-            (int)$_POST['cup_id'] : 0;
+        $cup_id = (isset($_POST[getConstNameCupIdWithUnderscore()]) && validate_int($_POST[getConstNameCupIdWithUnderscore()], true)) ?
+            (int)$_POST[getConstNameCupIdWithUnderscore()] : 0;
 
         if ($cup_id < 1) {
             throw new \UnexpectedValueException('unknown_cup_id');
@@ -97,8 +97,8 @@ try {
 
     } else if ($postAction == 'saveChallongeApiSettings') {
 
-        $cup_id = (isset($_POST['cup_id']) && validate_int($_POST['cup_id'], true)) ?
-            (int)$_POST['cup_id'] : 0;
+        $cup_id = (isset($_POST[getConstNameCupIdWithUnderscore()]) && validate_int($_POST[getConstNameCupIdWithUnderscore()], true)) ?
+            (int)$_POST[getConstNameCupIdWithUnderscore()] : 0;
 
         if ($cup_id < 1) {
             throw new \UnexpectedValueException('unknown_cup_id');

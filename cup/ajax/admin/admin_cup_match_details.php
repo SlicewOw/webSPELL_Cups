@@ -261,7 +261,7 @@ try {
 
         $returnArray = array(
             'status' => FALSE,
-            'cup_id' => 0,
+            getConstNameCupIdWithUnderscore() => 0,
             'cup_round'	=> 1,
             'server' => array(
                 'server' => array(
@@ -333,12 +333,12 @@ try {
 
         $get = mysqli_fetch_array($selectQuery);
 
-        if (empty($get['cupID']) || !validate_int($get['cupID'])) {
+        if (empty($get[getConstNameCupId()]) || !validate_int($get[getConstNameCupId()])) {
             throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
         }
 
-        $cup_id = $get['cupID'];
-        $returnArray['cup_id'] = $cup_id;
+        $cup_id = $get[getConstNameCupId()];
+        $returnArray[getConstNameCupIdWithUnderscore()] = $cup_id;
         $returnArray['cup_round'] = $get['runde'];
 
         $getCup = mysqli_fetch_array(

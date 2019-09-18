@@ -31,13 +31,13 @@ try {
                     "SELECT
                             `platzierung`
                         FROM `" . PREFIX . "cups_platzierungen`
-                        WHERE `teamID` = " . $team_id . " AND `cupID` = " . $dx['cupID']
+                        WHERE `teamID` = " . $team_id . " AND `cupID` = " . $dx[getConstNameCupId()]
                 )
             );
 
             $platz = (!empty($subget['platzierung'])) ? $subget['platzierung'] : '';
 
-            $url = 'index.php?site=cup&amp;action=details&amp;id=' . $dx['cupID'];
+            $url = 'index.php?site=cup&amp;action=details&amp;id=' . $dx[getConstNameCupId()];
 
             $played_cups .= '<a href="' . $url . '" class="list-group-item">';
             $played_cups .= $dx['name'];
