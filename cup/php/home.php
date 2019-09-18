@@ -89,7 +89,7 @@ try {
             $timeNow = time();
 
             if (preg_match('/register/', $cupArray[getConstNamePhase()])) {
-                $timeLeft = $cupArray['checkin'] - $timeNow;
+                $timeLeft = $cupArray[getConstNameCheckIn()] - $timeNow;
             } else if (preg_match('/checkin/', $cupArray[getConstNamePhase()]) || $cupArray[getConstNamePhase()] == 'finished') {
                 $timeLeft = $cupArray[getConstNameStart()] - $timeNow;
             } else if (($cupArray[getConstNameStart()] - $timeNow) > 0) {
@@ -103,7 +103,7 @@ try {
 
             if (empty($upcomingCup)) {
 
-                $detailList .= '<div class="list-group-item">Check-In: '.getformatdatetime($cupArray['checkin']).'</div>';
+                $detailList .= '<div class="list-group-item">Check-In: '.getformatdatetime($cupArray[getConstNameCheckIn()]).'</div>';
                 $detailList .= '<div class="list-group-item">Start: '.getformatdatetime($cupArray[getConstNameStart()]).'</div>';
 
                 $detailList .= '<div class="list-group-item">';

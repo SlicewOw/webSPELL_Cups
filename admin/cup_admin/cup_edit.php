@@ -223,17 +223,17 @@ try {
             $minutes .= '<option value="' . $value . '">' . $value . '</option>';
         }
 
-        $date_checkin = date('Y-m-d', $cupArray['checkin']);
+        $date_checkin = date('Y-m-d', $cupArray[getConstNameCheckIn()]);
 
         $hours_ci = str_replace(
-            'value="'.date('H', $cupArray['checkin']).'"',
-            'value="'.date('H', $cupArray['checkin']).'" selected="selected"',
+            'value="'.date('H', $cupArray[getConstNameCheckIn()]).'"',
+            'value="'.date('H', $cupArray[getConstNameCheckIn()]).'" selected="selected"',
             $hours
         );
 
         $minutes_ci = str_replace(
-            'value="'.date('i', $cupArray['checkin']).'"',
-            'value="'.date('i', $cupArray['checkin']).'" selected="selected"',
+            'value="'.date('i', $cupArray[getConstNameCheckIn()]).'"',
+            'value="'.date('i', $cupArray[getConstNameCheckIn()]).'" selected="selected"',
             $minutes
         );
 

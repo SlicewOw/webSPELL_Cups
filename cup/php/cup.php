@@ -104,7 +104,7 @@ try {
 
                 if ($cupArray['status'] == 1) {
                     $size = $cupArray['teams']['registered'] . ' / ' . $cupArray['size'];
-                    $date = getformatdatetime($cupArray['checkin']);
+                    $date = getformatdatetime($cupArray[getConstNameCheckIn()]);
                 } else {
                     $size = $cupArray['teams']['checked_in'] . ' / ' . $cupArray['size'];
                     $date = getformatdatetime($cupArray[getConstNameStart()]);

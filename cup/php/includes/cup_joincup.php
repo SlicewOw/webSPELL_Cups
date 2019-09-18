@@ -34,7 +34,7 @@ try {
     }
 
     $cupname = $cupArray['name'];
-    $checkin = getformatdatetime($cupArray['checkin']);
+    $checkin = getformatdatetime($cupArray[getConstNameCheckIn()]);
     $start = getformatdatetime($cupArray[getConstNameStart()]);
     $maxSize = $cupArray['size'];
     $maxMode = $cupArray['max_mode'];

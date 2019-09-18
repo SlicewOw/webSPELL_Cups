@@ -22,7 +22,7 @@ try {
     $data_array['$game'] = getgamename($cupArray['game']);
     $data_array['$platform'] = $cupArray['platform'];
     $data_array['$mode'] = $cupArray['mode'];
-    $data_array['$date_checkin'] = getformatdatetime($cupArray['checkin']);
+    $data_array['$date_checkin'] = getformatdatetime($cupArray[getConstNameCheckIn()]);
     $data_array['$date_start'] = getformatdatetime($cupArray[getConstNameStart()]);
     $data_array['$teams_registered'] = $cupArray['teams']['registered'];
     $data_array['$teams_checkedin'] = $cupArray['teams']['checked_in'];

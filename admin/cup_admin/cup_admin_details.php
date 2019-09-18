@@ -37,7 +37,7 @@ try {
 
             $infoArray[] = '<font class="uppercase">' . getshortname($ds['game'], 1) . '</font>';
             if ($status_id == 1) {
-                $infoArray[] = $_language->module['checkin'] . ': ' . getformatdatetime($ds['checkin_date']);
+                $infoArray[] = $_language->module[getConstNameCheckIn()] . ': ' . getformatdatetime($ds['checkin_date']);
                 $infoArray[] = $_language->module[getConstNameStart()] . ': ' . getformatdatetime($ds['start_date']);
             } else {
                 $infoArray[] = $_language->module['status'] . ': ' . $_language->module['cup_status_' . $status_id];
