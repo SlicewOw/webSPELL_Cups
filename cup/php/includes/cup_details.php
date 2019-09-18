@@ -65,10 +65,10 @@ try {
     //
     // Countdown
     $anmeldung = '';
-    if (preg_match('/register/', $cupArray['phase'])) {
+    if (preg_match('/register/', $cupArray[getConstNamePhase()])) {
         // Registration
         $anmeldung = '<div class="panel panel-default"><div class="panel-body center">Anmeldung: <span id="cup_details_countdown"></span></div></div>';
-    } else if (preg_match('/checkin/', $cupArray['phase'])) {
+    } else if (preg_match('/checkin/', $cupArray[getConstNamePhase()])) {
         // Check-In
         $anmeldung = '<div class="panel panel-default"><div class="panel-body center">Check-In: <span id="cup_details_countdown"></span></div></div>';
     }

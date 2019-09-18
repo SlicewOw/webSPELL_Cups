@@ -402,7 +402,7 @@ function getCupStatusContainer($cup_array) {
         return '<div class="list-group-item alert-info bold center">' . $_language->module['login'] . '</div>';
     }
 
-    if (($cup_array['phase'] == 'running') || ($cup_array['phase'] == 'finished')) {
+    if (($cup_array[getConstNamePhase()] == 'running') || ($cup_array[getConstNamePhase()] == 'finished')) {
         return '';
     }
 
@@ -410,7 +410,7 @@ function getCupStatusContainer($cup_array) {
 
     $cup_id = $cup_array['id'];
 
-    if (preg_match('/register/', $cup_array['phase'])) {
+    if (preg_match('/register/', $cup_array[getConstNamePhase()])) {
 
         //
         // Team Admin: Registrierung
@@ -425,7 +425,7 @@ function getCupStatusContainer($cup_array) {
             $link = '<a class="list-group-item alert-info bold center" href="index.php?site=cup&amp;action=joincup&amp;id=' . $cup_id . '">' . $_language->module['enter_cup'] . '</a>';
         }
 
-    } else if ($cup_array['phase'] == 'admin_checkin') {
+    } else if ($cup_array[getConstNamePhase()] == 'admin_checkin') {
 
         //
         // Team Admin: Check-In
@@ -452,7 +452,7 @@ function getCupStatusContainer($cup_array) {
 
         }
 
-    } else if (preg_match('/checkin/', $cup_array['phase'])) {
+    } else if (preg_match('/checkin/', $cup_array[getConstNamePhase()])) {
 
         //
         // Team: Check-In

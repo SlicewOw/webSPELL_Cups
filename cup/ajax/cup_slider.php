@@ -25,9 +25,9 @@ try {
     $timeLeft = 0;
     $timeNow = time();
 
-    if (preg_match('/register/', $cupArray['phase'])) {
+    if (preg_match('/register/', $cupArray[getConstNamePhase()])) {
         $timeLeft = $cupArray['checkin'] - $timeNow;
-    } else if (preg_match('/checkin/', $cupArray['phase']) || $cupArray['phase'] == 'finished') {
+    } else if (preg_match('/checkin/', $cupArray[getConstNamePhase()]) || $cupArray[getConstNamePhase()] == 'finished') {
         $timeLeft = $cupArray['start'] - $timeNow;
     } else if (($cupArray['start'] - $timeNow) > 0) {
         $timeLeft = $cupArray['start'] - $timeNow;
@@ -50,7 +50,7 @@ try {
     $data_array['$status'] = str_replace(
         '%cup_id%',
         $cup_id,
-        $_language->module['status_' . $cupArray['phase']]
+        $_language->module['status_' . $cupArray[getConstNamePhase()]]
     );
     $data_array['$cupName'] = $cupArray['name'];
     $data_array['$detailList'] = $detailList;

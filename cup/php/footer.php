@@ -18,7 +18,7 @@ try {
             $cupArray = getcup($cup_id, 'all');
         }
 
-        if (!isset($cupArray['phase'])) {
+        if (!isset($cupArray[getConstNamePhase()])) {
             throw new \UnexpectedValueException('unknown_cup_phase');
         }
 
@@ -30,9 +30,9 @@ try {
             throw new \UnexpectedValueException('unknown_cup_date_start');
         }
 
-        if (preg_match('/register/', $cupArray['phase'])) {
+        if (preg_match('/register/', $cupArray[getConstNamePhase()])) {
             $date = date('Y/m/d H:i:s', $cupArray['checkin']);
-        } else if (preg_match('/checkin/', $cupArray['phase'])) {
+        } else if (preg_match('/checkin/', $cupArray[getConstNamePhase()])) {
             $date = date('Y/m/d H:i:s', $cupArray['start']);
         }
 
