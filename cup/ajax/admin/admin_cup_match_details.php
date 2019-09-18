@@ -172,38 +172,21 @@ try {
             'gotv_pw' => ''
         );
 
-        if (isset($_POST['server_ip'])) {
-            $serverArray['ip'] = getinput($_POST['server_ip']);
-        }
+        foreach ($serverArray as $value) {
 
-        if (isset($_POST['server_pw'])) {
-            $serverArray['password'] = getinput($_POST['server_pw']);
-        }
+            if (isset($_POST[$value])) {
+                $serverArray[$value] = getinput($_POST[$value]);
+            }
 
-        if (isset($_POST['server_rcon'])) {
-            $serverArray['rcon'] = getinput($_POST['server_rcon']);
-        }
-
-        if (isset($_POST['gotv_ip'])) {
-            $serverArray['gotv'] = getinput($_POST['gotv_ip']);
-        }
-
-        if (isset($_POST['gotv_pw'])) {
-            $serverArray['gotv_pw'] = getinput($_POST['gotv_pw']);
         }
 
         $serverDetails = serialize($serverArray);
 
-        $saveQuery = mysqli_query(
-            $_database,
+        safe_query(
             "UPDATE `" . PREFIX . "cups_matches_playoff`
-                SET	`server` = '" . $serverDetails . "' 
+                SET	`server` = '" . $serverDetails . "'
                 WHERE `matchID` = " . $match_id
         );
-
-        if (!$saveQuery) {
-            throw new \Exception($_language->module['query_failed']);
-        }
 
         $returnArray['message'][] = $_language->module['query_saved'];
 

@@ -40,26 +40,26 @@
 </form>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+
 	$("button[name=submitMatchServer]").click(function(e) {
-		
+
 		e.preventDefault();
-		
+
 		var match_id = $("#match_id").val();
-		
+
 		$("button[name=submitMatchServer]").attr('disabled', 'disabled');
-		
+
 		$.post(
 			"ajax.php?site=admin_cup_match_details&action=saveMatchServer&match_id=" + match_id,
 			{
-				server_ip		: $("input[name=match_server]").val(),
-				server_pw		: $("input[name=match_pw]").val(),
-				server_rcon		: $("input[name=match_rcon]").val(),
-				gotv_ip			: $("input[name=match_gotv]").val(),
-				gotv_pw			: $("input[name=match_gotv_pw]").val()
+				ip : $("input[name=match_server]").val(),
+				password : $("input[name=match_pw]").val(),
+				rcon : $("input[name=match_rcon]").val(),
+				gotv : $("input[name=match_gotv]").val(),
+				gotv_pw : $("input[name=match_gotv_pw]").val()
 			},
 			function(data, status){
-				
+
 				var varData = JSON.parse(data),
                     alert_type;
 				if(varData.status) {
@@ -67,15 +67,15 @@ $(document).ready(function() {
 				} else {
 					alert_type = 'error';
 				}
-                
+
                 showMultipleNotifies(varData.message, alert_type);
-				
+
 				$("button[name=submitMatchServer]").removeAttr('disabled');
-				
+
 			}
 		);
-		
+
 	});
-	
+
 });
 </script>

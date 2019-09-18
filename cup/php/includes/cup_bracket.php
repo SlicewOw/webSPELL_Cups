@@ -128,90 +128,88 @@ try {
         $break = '';
         $prefix_id = '';
 
-        if ($cupArray['size'] == 64) {
+        $cup_size = $cupArray['size'];
+        if ($cup_size == 64) {
             if ($i < 33) {
                 if ($i < 32) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_32"></div>';
+                    $break = getCupBracketSpace32($cup_size);
                 }
                 $prefix_id = 0;
             } else if ($i < 49) {
                 if ($i < 48) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_16"></div>';
+                    $break = getCupBracketSpace16($cup_size);
                 }
                 $prefix_id = 1;
             } else if ($i < 57) {
                 if ($i < 56) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_8"></div>';
+                    $break = getCupBracketSpace8($cup_size);
                 }
                 $prefix_id = 2;
             } else if ($i < 61) {
                 if ($i < 60) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_4"></div>';
+                    $break = getCupBracketSpace4($cup_size);
                 }
                 $prefix_id = 3;
             } else if ($i < 63) {
                 if ($i < 62) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_2"></div>';
+                    $break = getCupBracketSpace2($cup_size);
                 }
                 $prefix_id = 4;
             }
         } else if ($cupArray['size'] == 32) {
             if ($i < 17) {
                 if ($i < 16) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_16"></div>';
+                    $break = getCupBracketSpace16($cup_size);
                 }
                 $prefix_id = 1;
             } else if (($i > 16) && ($i < 25)) {
                 if (($i > 16) && ($i < 24)) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_8"></div>';
+                    $break = getCupBracketSpace8($cup_size);
                 }
                 $prefix_id = 2;
             } else if (($i > 24) && ($i < 29)) {
                 if (($i > 24) && ($i < 28)) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_4"></div>';
+                    $break = getCupBracketSpace4($cup_size);
                 }
                 $prefix_id = 3;
             } else if (($i > 28) && ($i < 31)) {
                 if (($i > 28) && ($i < 30)) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_2"></div>';
+                    $break = getCupBracketSpace2($cup_size);
                 }
                 $prefix_id = 4;
             }
         } else if ($cupArray['size'] == 16) {
             if ($i < 9) {
-                // First round, match count: 8
                 if ($i < 8) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_8"></div>';
+                    $break = getCupBracketSpace8($cup_size);
                 }
                 $prefix_id = 2;
             } else if ($i < 13) {
-                // Second round, match count: 4
                 if ($i < 12) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_4"></div>';
+                    $break = getCupBracketSpace4($cup_size);
                 }
                 $prefix_id = 3;
             } else if ($i < 15) {
-                // Third round, match count: 2
                 if ($i < 14) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_2"></div>';
+                    $break = getCupBracketSpace2($cup_size);
                 }
                 $prefix_id = 4;
             }
         } else if ($cupArray['size'] == 8) {
             if ($i < 5) {
                 if ($i < 4) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_4"></div>';
+                    $break = getCupBracketSpace4($cup_size);
                 }
                 $prefix_id = 3;
             } else if ($i < 7) {
                 if (($i > 4) && ($i < 6)) {
-                    $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_2"></div>';
+                    $break = getCupBracketSpace2($cup_size);
                 }
                 $prefix_id = 4;
             }
         } else if ($cupArray['size'] == 4) {
             if ($i < 2) {
-                $break = '<div class="cup_bracket_' . $cupArray['size'] . '_break_2"></div>';
+                $break = getCupBracketSpace2($cup_size);
                 $prefix_id = 4;
             }
         }

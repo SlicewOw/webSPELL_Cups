@@ -661,3 +661,27 @@ function setCupAward($cup_id, $team_id, $award) {
     );
 
 }
+
+/**
+ * Cup Bracket
+ */
+function getCupBracketSpace($size, $column_size='') {
+    $class_extension = (!empty($column_size)) ?
+        '_' . $column_size : '';
+    return '<div class="cup_bracket_' . $size . '_break' . $class_extension . '"></div>';
+}
+function getCupBracketSpace32($size) {
+    return getCupBracketSpace($size, 32);
+}
+function getCupBracketSpace16($size) {
+    return getCupBracketSpace($size, 16);
+}
+function getCupBracketSpace8($size) {
+    return getCupBracketSpace($size, 8);
+}
+function getCupBracketSpace4($size) {
+    return getCupBracketSpace($size, 4);
+}
+function getCupBracketSpace2($size) {
+    return getCupBracketSpace($size, 2);
+}
