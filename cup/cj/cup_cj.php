@@ -11,6 +11,10 @@ try {
     include(__DIR__ . "/../../_settings.php");
     include(__DIR__ . "/../../_functions.php");
 
+    function getConstNameCupCjIdentifier() {
+        return 'Cup CJ Error';
+    }
+
     //
     // 1209600 entspricht 14 Tagen Differenz
     $diffTime = time() - 1209600;
@@ -46,7 +50,7 @@ try {
         }
 
     } catch (Exception $e) {
-        setLog('Cup CJ Error', $e->getMessage(), __FILE__, $e->getLine());
+        setLog(getConstNameCupCjIdentifier(), $e->getMessage(), __FILE__, $e->getLine());
     }
 
     try {
@@ -80,7 +84,7 @@ try {
         }
 
     } catch (Exception $e) {
-        setLog('Cup CJ Error', $e->getMessage(), __FILE__, $e->getLine());
+        setLog(getConstNameCupCjIdentifier(), $e->getMessage(), __FILE__, $e->getLine());
     }
 
     try {
@@ -91,7 +95,7 @@ try {
         updateCupStatistics();
 
     } catch (Exception $e) {
-        setLog('Cup CJ Error', $e->getMessage(), __FILE__, $e->getLine());
+        setLog(getConstNameCupCjIdentifier(), $e->getMessage(), __FILE__, $e->getLine());
     }
 
     $returnArray['status'] = TRUE;

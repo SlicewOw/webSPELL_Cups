@@ -167,7 +167,7 @@ try {
                 if ($json_data = getAPIData($json_url, 'twitch')) {
 
                     $twitchData = json_decode($json_data, TRUE);
-                    if (!isset($twitchData['status']) || ($twitchData['status'] != '404')) {
+                    if (!isset($twitchData[getConstNameStatus()]) || ($twitchData[getConstNameStatus()] != '404')) {
                         throw new \UnexpectedValueException('stream_is_existing_do_not_delete');
                     }
 
@@ -227,7 +227,7 @@ try {
 
     }
 
-    $returnArray['status'] = TRUE;
+    $returnArray[getConstNameStatus()] = TRUE;
 
 } catch (Exception $e) {
     $returnArray['message'][] = $e->getMessage();

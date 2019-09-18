@@ -66,9 +66,9 @@ try {
             $gameaccountListString = implode(',', $gameaccountList[$n]);
             $accountDetails = getCSGOAccountInfo($gameaccountListString, TRUE);
 
-            if (validate_array($accountDetails['error'], true)) {
+            if (validate_array($accountDetails[getConstNameError()], true)) {
                 throw new \UnexpectedValueException(
-                    'Gameaccount CJ Error: ' . $n . ', ' . implode(', ', $accountDetails['error'])
+                    'Gameaccount CJ Error: ' . $n . ', ' . implode(', ', $accountDetails[getConstNameError()])
                 );
             }
 
@@ -121,7 +121,7 @@ try {
             unset($accountDetails);
 
         } catch (Exception $e) {
-            $returnArray['error'][] = $e->getMessage();
+            $returnArray[getConstNameError()][] = $e->getMessage();
         }
 
     }
@@ -133,7 +133,7 @@ try {
     }
 
 } catch (Exception $e) {
-    $returnArray['error'][] = $e->getMessage();
+    $returnArray[getConstNameError()][] = $e->getMessage();
 }
 
 echo json_encode($returnArray);
