@@ -267,22 +267,22 @@ if (isset($_GET[ 'action' ]) && $_GET[ 'action' ] == "edit") {
                     <div class="col-md-6">' . $_language->module[ 'squad' ] . ':</div>
                     <div class="col-md-6"><span class="pull-right text-muted small"><em>' . getsquadname($ds[ 'squadID' ]) . '</em></span></div>
                 </div>
-            
+
 
                 <div class="row bt"><div class="col-md-6">' . $_language->module[ 'position' ] . ':</div>
                     <div class="col-md-6"><span class="pull-right text-muted small"><em><input type="text" name="position[' . $ds[ 'sqmID' ] . ']" value="' . getinput($ds[ 'position' ]) . '" size="20" />' . $activity . '</em></span></div>
                 </div>
-            
+
 
                 <div class="row bt"><hr>
                     <div class="col-md-6">' . $_language->module[ 'access_rights' ] . ':</div>
                     <div class="col-md-6"><span class="pull-right text-muted small"><em>' . $_language->module[ 'joinus_admin' ] . ': ' . $join . '</em></span></div>
                 </div>
-                    
+
                 <div class="row bt">
                     <div class="col-md-6">' . $_language->module[ 'access_rights' ] . ':</div>
                     <div class="col-md-6"><span class="pull-right text-muted small"><em>' . $_language->module[ 'fightus_admin' ] . ': ' . $fight . '</em></span></div>
-                </div><hr style="border:solid #0095db 1px"> 
+                </div><hr style="border:solid #0095db 1px">
 
             </div>
 ';
@@ -442,7 +442,7 @@ onmouseout="hideWMTT()" />';
 
         <div class="col-md-12"><hr>' . $_language->module[ 'description' ] . ':</div>
         <div class="col-md-12">' . $addflags . '<br>' . $addbbcode . '<br></div>
-        <div class="col-md-12"><textarea class="form-control" id="message" rows="5" cols="" name="message" style="width: 100%;">' . getuserdescription($id) . '</textarea></div>        
+        <div class="col-md-12"><textarea class="form-control" id="message" rows="5" cols="" name="message" style="width: 100%;">' . getuserdescription($id) . '</textarea></div>
 
         ';
 
@@ -499,8 +499,8 @@ onmouseout="hideWMTT()" />';
         <div class="tooltip" id="id11">' . $_language->module[ 'tooltip_11' ] . '</div>
         <div class="tooltip" id="id12">' . $_language->module[ 'tooltip_12' ] . '</div>
         <div class="tooltip" id="id13">' . $_language->module[ 'tooltip_13' ] . '</div>
-        
-        
+
+
 
 <div class="row">
     <div class="col-md-12">
@@ -511,11 +511,11 @@ onmouseout="hideWMTT()" />';
             strip_tags(stripslashes(getnickname($id))) . '</a></b></em></span></div>
         </div>
             <hr style="border:solid #0095db 1px">
-     
+
                         ' . $squads . '
                         ' . $userdes . '
 
-        
+
 
         <div class="row bt">
             <div class="col-md-3">' . $_language->module[ 'special_rank' ] . ':</div>
@@ -660,7 +660,7 @@ onmouseout="hideWMTT()" />';
     unset($squads);
     unset($userdes);
 } else {
-    
+
     $CAPCLASS = new \webspell\Captcha;
     $CAPCLASS->createTransaction();
     $hash = $CAPCLASS->getHash();
@@ -674,7 +674,7 @@ onmouseout="hideWMTT()" />';
                 </div>
             <div class="panel-body">';
         echo '<table class="table table-striped">
-    
+
         <thead>
             <tr>
                 <th colspan="5">' . $ds[ 'name' ] . ':</th>
@@ -731,7 +731,7 @@ onmouseout="hideWMTT()" />';
 
         <input class="hidden-xs hidden-sm btn btn-danger btn-xs" type="button" onclick="MM_confirm(\'' . $_language->module['really_delete'] . '\', \'admincenter.php?site=members&amp;delete=true&amp;id=' . $dm[ 'userID' ] . '&amp;squadID=' .
                 $dm[ 'squadID' ] . '&amp;captcha_hash=' . $hash . '\')" value="' . $_language->module['delete'] . '" />
-            
+
 
             <a href="admincenter.php?site=members&amp;action=edit&amp;id=' . $dm[ 'userID' ] . '"  class="mobile visible-xs visible-sm" type="button"><i class="fa fa-pencil"></i></a>
       <a class="mobile visible-xs visible-sm" type="button" onclick="MM_confirm(\'' . $_language->module['really_delete'] . '\', \'admincenter.php?site=members&amp;delete=true&amp;id=' . $dm[ 'userID' ] . '&amp;squadID=' .
@@ -755,6 +755,6 @@ onmouseout="hideWMTT()" />';
         }
         echo '</tbody></table></div></div><br />';
     }
-    echo '<div class="col-md-12" align="right"><input type="hidden" name="captcha_hash" value="' . $hash .
+    echo '<div class="col-md-12 right"><input type="hidden" name="captcha_hash" value="' . $hash .
         '" /><input type="submit" name="sortieren" class="btn btn-primary btn-xs" value="' . $_language->module[ 'to_sort' ] . '" /></form></div><br><br>';
 }
