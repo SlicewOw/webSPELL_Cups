@@ -211,16 +211,13 @@ function cup_query($query, $file, $line = 0) {
 
 }
 
-function setLog($query, $message, $file, $line) {
-
-    global $_database;
+function setLog($query, $message, $file, $line=0) {
 
     if (!validate_int($line, true)) {
         $line = 0;
     }
 
-    $insertQuery = mysqli_query(
-        $_database,
+    safe_query(
         "INSERT INTO `" . PREFIX . "cups_logs`
             (
                 `query`,

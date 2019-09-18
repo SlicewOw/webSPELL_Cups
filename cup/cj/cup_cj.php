@@ -1,8 +1,8 @@
 <?php
 
 $returnArray = array(
-    'status' => FALSE,
-    'message' => array()
+    getConstNameStatus() => FALSE,
+    getConstNameMessage() => array()
 );
 
 try {
@@ -21,18 +21,13 @@ try {
         Support Ticket
         *************/
 
-        $info = mysqli_query(
-            $_database,
+        $info = safe_query(
             "SELECT screenshot FROM `" . PREFIX . "cups_supporttickets`
                 WHERE
                     (closed_date > 0 AND closed_date < " . $diffTime . ")
                 AND
                     screenshot != ''"
         );
-
-        if (!$info) {
-            throw new \UnexpectedValueException(mysqli_error($_database));
-        }
 
         if (mysqli_num_rows($info) > 0) {
 
@@ -50,7 +45,9 @@ try {
 
         }
 
-    } catch (Exception $e) {}
+    } catch (Exception $e) {
+        setLog('Cup CJ Error', $e->getMessage(), __FILE__, $e->getLine());
+    }
 
     try {
 
@@ -58,18 +55,13 @@ try {
         Match Screenshots
         ****************/
 
-        $info = mysqli_query(
-            $_database,
+        $info = safe_query(
             "SELECT
                     `screenshotID`,
                     `file`
                 FROM `" . PREFIX . "cups_matches_playoff_screens`
                 WHERE date < " . $diffTime
         );
-
-        if (!$info) {
-            throw new \UnexpectedValueException(mysqli_error($_database));
-        }
 
         if (mysqli_num_rows($info) > 0) {
 
@@ -87,7 +79,9 @@ try {
 
         }
 
-    } catch (Exception $e) {}
+    } catch (Exception $e) {
+        setLog('Cup CJ Error', $e->getMessage(), __FILE__, $e->getLine());
+    }
 
     try {
 
@@ -96,7 +90,9 @@ try {
         *********/
         updateCupStatistics();
 
-    } catch (Exception $e) {}
+    } catch (Exception $e) {
+        setLog('Cup CJ Error', $e->getMessage(), __FILE__, $e->getLine());
+    }
 
     $returnArray['status'] = TRUE;
 

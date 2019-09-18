@@ -1,9 +1,9 @@
 <?php
 
 $returnArray = array(
-    'status' => FALSE,
-    'message' => array(),
-    'error' => array()
+    getConstNameStatus() => FALSE,
+    getConstNameMessage() => array(),
+    getConstNameError() => array()
 );
 
 try {
@@ -22,8 +22,7 @@ try {
     );
     $totalCount = 0;
 
-    $query = mysqli_query(
-        $_database,
+    $query = safe_query(
         "SELECT
                 a.`gameaccID` AS `gameaccount_id`,
                 b.`value` AS `steam64_id`
@@ -33,6 +32,7 @@ try {
             ORDER BY a.`date` ASC
             LIMIT 0, 20"
     );
+
     while ($get = mysqli_fetch_array($query)) {
 
         if($totalCount < 10) {
@@ -106,16 +106,11 @@ try {
                         $updateArray[] = '`hours` = ' . $accountDetails['csgo_stats']['time_played']['hours'];
                     }
 
-                    $saveQuery = mysqli_query(
-                        $_database,
+                    safe_query(
                         "UPDATE `" . PREFIX . "cups_gameaccounts_csgo`
                             SET " . implode(', ', $updateArray) . "
                             WHERE `gameaccID` = " . $gameaccount_id
                     );
-
-                    if (!$saveQuery) {
-                        throw new \UnexpectedValueException('Gameaccount CJ Update-Query failed: ' . $steam64_id);
-                    }
 
                     $anz++;
 

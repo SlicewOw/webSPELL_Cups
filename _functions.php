@@ -310,6 +310,7 @@ systeminc('func/captcha');
 
 systeminc('func/cup');
 systeminc('func/cup_match');
+systeminc('func/cup_constants');
 systeminc('func/convert');
 systeminc('func/validation');
 systeminc('func/images');

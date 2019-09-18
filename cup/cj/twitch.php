@@ -1,7 +1,7 @@
 <?php
 
 $returnArray = array(
-    'status' => FALSE
+    getConstNameStatus() => FALSE
 );
 
 try {
@@ -10,8 +10,8 @@ try {
     include(__DIR__ . "/../../_settings.php");
     include(__DIR__ . "/../../_functions.php");
 
-    $cronjob_id = (isset($_GET['cj_id']) && validate_int($_GET['cj_id'])) ?
-        (int)$_GET['cj_id'] : 0;
+    $cronjob_id = (isset($_GET[getConstNameCronjobId()]) && validate_int($_GET[getConstNameCronjobId()], true)) ?
+        (int)$_GET[getConstNameCronjobId()] : 0;
 
     if ($cronjob_id < 1) {
         throw new \UnexpectedValueException('unknown_cronjob');
@@ -56,20 +56,16 @@ try {
     // Data Array
     $json_array = json_decode($result, true);
 
-    if (isset($_GET['debug']) && validate_int($_GET['debug'])) {
+    if (isset($_GET[getConstNameDebug()]) && validate_int($_GET[getConstNameDebug()], true)) {
 
-        if ($_GET['debug'] >= 1) {
+        $returnArray['twitch_id'] = $idArray;
 
-            $returnArray['twitch_id'] = $idArray;
+        if($_GET[getConstNameDebug()] >= 2) {
 
-            if($_GET['debug'] >= 2) {
+            $returnArray['twitch_respond'] = $json_array;
 
-                $returnArray['twitch_respond'] = $json_array;
-
-                if($_GET['debug'] >= 3) {
-                    $returnArray['get_data_url'] = $json_url;
-                }
-
+            if($_GET[getConstNameDebug()] >= 3) {
+                $returnArray['get_data_url'] = $json_url;
             }
 
         }
@@ -89,7 +85,7 @@ try {
 
         //
         // twitch id
-        $twitch_id = $json_array['streams'][$x]['channel']['name'];
+        $twitch_id = $json_array[getConstNameStreams()][$x]['channel']['name'];
 
         $setValueArray = array();
         $setValueArray[] = '`online` = 1';
@@ -97,8 +93,8 @@ try {
 
         //
         // preview
-        $pic = isset($json_array['streams'][$x]['preview']['medium']) ?
-            $json_array['streams'][$x]['preview']['medium'] : '';
+        $pic = isset($json_array[getConstNameStreams()][$x]['preview']['medium']) ?
+            $json_array[getConstNameStreams()][$x]['preview']['medium'] : '';
 
         if (!empty($pic)) {
 
@@ -114,12 +110,12 @@ try {
 
         //
         // save stream details
-        if (isset($json_array['streams'][$x]['viewers'])) {
-            $setValueArray[] = '`viewer` = ' . (int)$json_array['streams'][$x]['viewers'];
+        if (isset($json_array[getConstNameStreams()][$x][getConstNameViewers()])) {
+            $setValueArray[] = '`viewer` = ' . (int)$json_array[getConstNameStreams()][$x][getConstNameViewers()];
         }
 
-        if (isset($json_array['streams'][$x]['viewers'])) {
-            $setValueArray[] = '`game` = \'' . addslashes($json_array['streams'][$x]['game']) . '\'';
+        if (isset($json_array[getConstNameStreams()][$x][getConstNameViewers()])) {
+            $setValueArray[] = '`game` = \'' . addslashes($json_array[getConstNameStreams()][$x]['game']) . '\'';
         }
 
         $setValue = implode(', ', $setValueArray);
@@ -183,7 +179,9 @@ try {
 
                 }
 
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+                setLog('Twitch CJ Error', $e->getMessage(), __FILE__, $e->getLine());
+            }
 
         }
 
