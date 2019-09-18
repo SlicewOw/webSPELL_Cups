@@ -5,7 +5,7 @@ try {
     $_language->readModule('games', false, true);
 
     if (!ispageadmin($userID) || (mb_substr(basename($_SERVER[ 'REQUEST_URI' ]), 0, 15) != "admincenter.php")) {
-        throw new \Exception($_language->module[ 'access_denied' ]);
+        throw new \UnexpectedValueException($_language->module[ 'access_denied' ]);
     }
 
     $filepath = "../images/games/";
@@ -26,14 +26,14 @@ try {
                 $tag_old = getinput($_POST[ "tag_old" ]);
 
                 if (empty($tag) || preg_match('/:/', $tag)) {
-                    throw new \Exception($_language->module['error_game_tag']);
+                    throw new \UnexpectedValueException($_language->module['error_game_tag']);
                 }
 
                 $cup_auto_active = (isset($_POST[ "cup_auto_active" ]) && ($_POST[ "cup_auto_active" ] == '1')) ?
                     1 : 0;
 
                 if (!checkforempty(array('name', 'short', 'tag'))) {
-                    throw new \Exception($_language->module['fill_correctly']);
+                    throw new \UnexpectedValueException($_language->module['fill_correctly']);
                 }
 
                 if (isset($_POST[ 'save' ])) {
@@ -55,7 +55,7 @@ try {
                     );
 
                     if (!$saveQuery) {
-                        throw new \Exception($_language->module['query_insert_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                     }
 
                     $game_id = mysqli_insert_id($_database);
@@ -65,7 +65,7 @@ try {
                     $game_id = (int)$_POST[ "game_id" ];
 
                     if (!validate_int($game_id, true)) {
-                        throw new \Exception($_language->module['unknown_game']);
+                        throw new \UnexpectedValueException($_language->module['unknown_game']);
                     }
 
                     $saveQuery = mysqli_query(
@@ -79,7 +79,7 @@ try {
                     );
 
                     if (!$saveQuery) {
-                        throw new \Exception($_language->module['query_update_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_update_failed']);
                     }
 
                     $updateCupsQuery = cup_query(
@@ -112,7 +112,7 @@ try {
                         try {
 
                             if ($upload->hasError() !== false) {
-                                throw new \Exception($upload->translateError());
+                                throw new \UnexpectedValueException($upload->translateError());
                             }
 
                             $mime_types = array(
@@ -122,13 +122,13 @@ try {
                             );
 
                             if (!$upload->supportedMimeType($mime_types)) {
-                                throw new \Exception($_language->module['unsupported_image_type']);
+                                throw new \UnexpectedValueException($_language->module['unsupported_image_type']);
                             }
 
                             $imageInformation = getimagesize($upload->getTempFile());
 
                             if (!is_array($imageInformation)) {
-                                throw new \Exception($_language->module['broken_image']);
+                                throw new \UnexpectedValueException($_language->module['broken_image']);
                             }
 
                             $filename = $tag . '.' . $upload->getExtension();
@@ -154,7 +154,7 @@ try {
                             }
 
                             if (!$upload->saveAs($filepath . $filename, true)) {
-                                throw new \Exception($_language->module['broken_image']);
+                                throw new \UnexpectedValueException($_language->module['broken_image']);
                             }
 
                             @chmod($filepath . $filename, 644);
@@ -187,7 +187,7 @@ try {
         if (isset($_GET[ "delete" ])) {
 
             if ($game_id < 1) {
-                throw new \Exception($_language->module['unknown_game']);
+                throw new \UnexpectedValueException($_language->module['unknown_game']);
             }
 
             $ds = mysqli_fetch_array(
@@ -214,7 +214,7 @@ try {
             }
 
             if (!$deleteQuery) {
-                throw new \Exception($_language->module['query_delete_failed'] . ' (`games`)');
+                throw new \UnexpectedValueException($_language->module['query_delete_failed'] . ' (`games`)');
             }
 
             $deleteQuery = mysqli_query(
@@ -224,7 +224,7 @@ try {
             );
 
             if (!$deleteQuery) {
-                throw new \Exception($_language->module['query_delete_failed'] . ' (`cups_gameaccounts`)');
+                throw new \UnexpectedValueException($_language->module['query_delete_failed'] . ' (`cups_gameaccounts`)');
             }
 
             header("Location: admincenter.php?site=games");
@@ -232,7 +232,7 @@ try {
         } else if ($getAction == "edit") {
 
             if ($game_id < 1) {
-                throw new \Exception($_language->module['unknown_game']);
+                throw new \UnexpectedValueException($_language->module['unknown_game']);
             }
 
             $ds = mysqli_fetch_array(

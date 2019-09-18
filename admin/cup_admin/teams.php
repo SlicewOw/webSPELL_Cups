@@ -6,7 +6,7 @@ try {
     $_language->readModule('teams', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (validate_array($_POST, true)) {
@@ -131,19 +131,19 @@ try {
                 }
 
             } else if (isset($_POST['submitDeleteTeam'])) {
-                
+
                 $team_id = (isset($_POST['team_id']) && validate_int($_POST['team_id'], true)) ?
                     (int)$_POST['team_id'] : 0;
 
                 if ($team_id < 1) {
-                    throw new \Exception($_language->module['unknown_team_id']);
+                    throw new \UnexpectedValueException($_language->module['unknown_team_id']);
                 }
 
                 $team->setId($team_id);
                 $team->deleteTeam();
 
             } else {
-                throw new \Exception($_language->module['unknown_action']);
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
             }
 
         } catch (Exception $e) {
@@ -212,7 +212,7 @@ try {
                 (int)$_GET['id'] : 0;
 
             if ($team_id < 1) {
-                throw new \Exception('unknown_team');
+                throw new \UnexpectedValueException('unknown_team');
             }
 
             $teamArray = getteam($team_id);
@@ -228,8 +228,8 @@ try {
             $data_array['$team_id'] = $team_id;
             $team_add = $GLOBALS["_template_cup"]->replaceTemplate("teams_admin_delete", $data_array);
             echo $team_add;
-            
-            
+
+
         } else {
 
             $showEntries = 20;

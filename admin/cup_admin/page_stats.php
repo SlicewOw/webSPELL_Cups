@@ -6,7 +6,7 @@ try {
     $_language->readModule('cups', true, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $maxEntries = 10;

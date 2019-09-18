@@ -11,14 +11,14 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $match_id = (isset($_GET['match_id']) && validate_int($_GET['match_id'])) ?
         (int)$_GET['match_id'] : 0;
 
     if ($match_id < 1) {
-        throw new \Exception($_language->module['unknown_match']);
+        throw new \UnexpectedValueException($_language->module['unknown_match']);
     }
 
     if ($getAction == 'mapvote') {
@@ -38,17 +38,17 @@ try {
         );
 
         if (!$selectQuery) {
-            throw new \Exception($_language->module['query_failed']);
+            throw new \UnexpectedValueException($_language->module['query_failed']);
         }
 
         $get = mysqli_fetch_array($selectQuery);
 
         if ($match_id != $get['match_id']) {
-            throw new \Exception($_language->module['unknown_match']);
+            throw new \UnexpectedValueException($_language->module['unknown_match']);
         }
 
         if (empty($get['maps'])) {
-            throw new \Exception($_language->module['unknown_match_maps']);
+            throw new \UnexpectedValueException($_language->module['unknown_match_maps']);
         }
 
         $mapArray = unserialize($get['maps']);
@@ -239,7 +239,7 @@ try {
         }
 
         if (!validate_array($updateValueArray, true)) {
-            throw new \Exception($_language->module['no_data']);
+            throw new \UnexpectedValueException($_language->module['no_data']);
         }
 
         $updateValues = implode(', ', $updateValueArray);
@@ -252,7 +252,7 @@ try {
         );
 
         if (!$saveQuery) {
-            throw new \Exception($_language->module['query_failed']);
+            throw new \UnexpectedValueException($_language->module['query_failed']);
         }
 
         $returnArray['message'][] = $_language->module['match_settings_saved'];
@@ -328,13 +328,13 @@ try {
         );
 
         if (!$selectQuery) {
-            throw new \Exception($_language->module['query_failed']);
+            throw new \UnexpectedValueException($_language->module['query_failed']);
         }
 
         $get = mysqli_fetch_array($selectQuery);
 
         if (empty($get['cupID']) || !validate_int($get['cupID'])) {
-            throw new \Exception($_language->module['unknown_cup_id']);
+            throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
         }
 
         $cup_id = $get['cupID'];
@@ -417,7 +417,7 @@ try {
                     );
 
                     if (!$selectGameaccountQuery) {
-                        throw new \Exception($_language->module['query_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_failed']);
                     }
 
                     $getGameaccount = mysqli_fetch_array($selectGameaccountQuery);
@@ -461,7 +461,7 @@ try {
                         );
 
                         if (!$selectQuery) {
-                            throw new \Exception($_language->module['query_failed']);
+                            throw new \UnexpectedValueException($_language->module['query_failed']);
                         }
 
                         $getSteamData = mysqli_fetch_array($selectQuery);
@@ -544,7 +544,7 @@ try {
                     );
 
                     if (!$getProfileQuery) {
-                        throw new \Exception($_language->module['query_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_failed']);
                     }
 
                     while ($getProfile = mysqli_fetch_array($getProfileQuery)) {

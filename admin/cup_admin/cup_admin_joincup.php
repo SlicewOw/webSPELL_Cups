@@ -3,7 +3,7 @@
 try {
 
     if (!$loggedin) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $actionArray = array(
@@ -12,24 +12,24 @@ try {
     );
 
     if (!in_array($getAction, $actionArray)) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $cup_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
         (int)$_GET['id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     $cupArray = getcup($cup_id);
 
     if (!validate_array($cupArray)) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     if (!isset($cupArray['id']) || ($cupArray['id'] != $cup_id)) {
-        throw new \Exception($_language->module['no_cup']);
+        throw new \UnexpectedValueException($_language->module['no_cup']);
     }
 
     $cupname = $cupArray['name'];
@@ -51,7 +51,7 @@ try {
 
                 if (!cup($cup_id, $team_id, 'join')) {
                     // Team/Spieler bereits fuer den Cup angemeldet
-                    throw new \Exception($_language->module['cup_join_error1']);
+                    throw new \UnexpectedValueException($_language->module['cup_join_error1']);
                 }
 
                 $anzMember = getteam($team_id, 'anz_member');
@@ -76,18 +76,18 @@ try {
 
                     // Team Mitglieder Anzahl nicht korrekt
                     if ($mode == '2on2') {
-                        throw new \Exception($_language->module['cup_join_error2_2on2']);
+                        throw new \UnexpectedValueException($_language->module['cup_join_error2_2on2']);
                     } else if ($mode == '5on5') {
-                        throw new \Exception($_language->module['cup_join_error2_5on5']);
+                        throw new \UnexpectedValueException($_language->module['cup_join_error2_5on5']);
                     } else {
-                        throw new \Exception($_language->module['cup_join_error2']);
+                        throw new \UnexpectedValueException($_language->module['cup_join_error2']);
                     }
 
                 }
 
                 if (!cup($cup_id, $team_id, 'gameaccount')) {
                     // fehlende Gameaccounts
-                    throw new \Exception($_language->module['cup_join_error3']);
+                    throw new \UnexpectedValueException($_language->module['cup_join_error3']);
                 }
 
                 $saveQuery = cup_query(

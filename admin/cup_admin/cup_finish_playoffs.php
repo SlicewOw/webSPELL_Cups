@@ -5,27 +5,27 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $cup_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
         (int)$_GET['id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     $cupArray = getcup($cup_id);
 
     if (($cupArray['status'] > 3) || ($cupArray['status'] != 3)) {
-        throw new \Exception($_language->module['cup_already_closed']);
+        throw new \UnexpectedValueException($_language->module['cup_already_closed']);
     }
 
     if (!isChallongeCup($cup_id)) {
 
         if (!getmatch($cup_id, 'confirmed_final')) {
             // Finish cup if final is confirmed only
-            throw new \Exception($_language->module['cup_wrong_status']);
+            throw new \UnexpectedValueException($_language->module['cup_wrong_status']);
         }
 
         $baseWhereClauseArray = array();

@@ -11,7 +11,7 @@ try {
     }
 
     if (!checkIfContentExists($user_id, 'userID', 'user')) {
-        throw new \Exception($_language->module['user_doesnt_exist']);
+        throw new \UnexpectedValueException($_language->module['user_doesnt_exist']);
     }
 
     if (isbanned($user_id)) {

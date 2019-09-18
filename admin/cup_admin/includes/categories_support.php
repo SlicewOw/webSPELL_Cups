@@ -87,7 +87,7 @@ try {
     } else if ($getAction == 'edit') {
 
         if ($category_id < 1) {
-            throw new \Exception('unknown_id');
+            throw new \UnexpectedValueException('unknown_id');
         }
 
         if (isset($_POST['submit_support'])) {
@@ -140,7 +140,7 @@ try {
     } else if ($getAction == 'delete') {
 
         if ($category_id < 1) {
-            throw new \Exception('unknown_id');
+            throw new \UnexpectedValueException('unknown_id');
         }
 
         if (isset($_POST['submit_support'])) {
@@ -162,7 +162,7 @@ try {
                             `categoryID`,
                             `name_de`,
                             `name_uk`
-                        FROM `" . PREFIX . "cups_supporttickets_category` 
+                        FROM `" . PREFIX . "cups_supporttickets_category`
                         WHERE `categoryID` = " . $category_id
                 )
             );

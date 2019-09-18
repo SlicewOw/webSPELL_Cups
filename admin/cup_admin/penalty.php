@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $points = '';
@@ -31,14 +31,14 @@ try {
                     (int)$_POST['team_id'] : 0;
 
                 if (($user_id < 1) && ($team_id < 1)) {
-                    throw new \Exception($_language->module['error_penalty_no_parent_id']);
+                    throw new \UnexpectedValueException($_language->module['error_penalty_no_parent_id']);
                 }
 
                 $reason_id = (isset($_POST['reason_id']) && validate_int($_POST['reason_id'], true)) ?
                     (int)$_POST['reason_id'] : 0;
 
                 if ($reason_id < 1) {
-                    throw new \Exception($_language->module['error_penalty_no_reason']);
+                    throw new \UnexpectedValueException($_language->module['error_penalty_no_reason']);
                 }
 
                 $comment = (isset($_POST['comment'])) ?
@@ -57,7 +57,7 @@ try {
                         $penalty_points = getPenaltyCategory($reason_id, 'points');
 
                         if (!validate_int($penalty_points, true)) {
-                            throw new \Exception($_language->module['error_penalty_no_points']);
+                            throw new \UnexpectedValueException($_language->module['error_penalty_no_points']);
                         }
 
                         // 1 point = 1 week
@@ -90,7 +90,7 @@ try {
                     );
 
                     if (!$query) {
-                        throw new \Exception($_language->module['query_insert_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                     }
 
                     $ppID = mysqli_insert_id($_database);
@@ -101,7 +101,7 @@ try {
                         (int)$_POST['penalty_id'] : 0;
 
                     if ($penalty_id < 1) {
-                        throw new \Exception($_language->module['unknown_penalty_id']);
+                        throw new \UnexpectedValueException($_language->module['unknown_penalty_id']);
                     }
 
                     $query = mysqli_query(
@@ -115,7 +115,7 @@ try {
                     );
 
                     if (!$query) {
-                        throw new \Exception($_language->module['query_update_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_update_failed']);
                     }
 
                 }
@@ -152,7 +152,7 @@ try {
                     );
 
                     if (!$query) {
-                        throw new \Exception($_language->module['query_insert_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                     }
 
                 } else {
@@ -161,7 +161,7 @@ try {
                         (int)$_POST['reason_id'] : 0;
 
                     if ($reason_id < 1) {
-                        throw new \Exception($_language->module['unknown_reason_id']);
+                        throw new \UnexpectedValueException($_language->module['unknown_reason_id']);
                     }
 
                     $query = mysqli_query(
@@ -175,7 +175,7 @@ try {
                     );
 
                     if (!$query) {
-                        throw new \Exception($_language->module['query_update_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_update_failed']);
                     }
 
                 }
@@ -186,7 +186,7 @@ try {
                     (int)$_POST['reason_id'] : 0;
 
                 if ($reason_id < 1) {
-                    throw new \Exception($_language->module['unknown_reason_id']);
+                    throw new \UnexpectedValueException($_language->module['unknown_reason_id']);
                 }
 
                 $deleteQuery = mysqli_query(
@@ -196,7 +196,7 @@ try {
                 );
 
                 if (!$deleteQuery) {
-                    throw new \Exception($_language->module['query_delete_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_delete_failed']);
                 }
 
                 $deleteQuery = mysqli_query(
@@ -206,7 +206,7 @@ try {
                 );
 
                 if (!$deleteQuery) {
-                    throw new \Exception($_language->module['query_delete_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_delete_failed']);
                 }
 
             } else if (isset($_POST['submitDeletePenalty'])) {
@@ -215,7 +215,7 @@ try {
                     (int)$_POST['penalty_details_id'] : 0;
 
                 if ($penalty_id < 1) {
-                    throw new \Exception($_language->module['unknown_penalty_id']);
+                    throw new \UnexpectedValueException($_language->module['unknown_penalty_id']);
                 }
 
                 $updateQuery = mysqli_query(
@@ -226,13 +226,13 @@ try {
                 );
 
                 if (!$updateQuery) {
-                    throw new \Exception($_language->module['query_update_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_update_failed']);
                 }
 
                 $_SESSION['errorArray'][] = $_language->module['penalty_deleted'];
 
             } else {
-                throw new \Exception($_language->module['unknown_action']);
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
             }
 
         } catch (Exception $e) {
@@ -249,7 +249,7 @@ try {
                 (int)$_GET['id'] : 0;
 
             if ($ppID < 1) {
-                throw new \Exception($_language->module['unknown_penalty_id']);
+                throw new \UnexpectedValueException($_language->module['unknown_penalty_id']);
             }
 
             $updateQuery = mysqli_query(
@@ -260,7 +260,7 @@ try {
             );
 
             if (!$query) {
-                throw new \Exception($_language->module['query_delete_failed']);
+                throw new \UnexpectedValueException($_language->module['query_delete_failed']);
             }
 
             header('Location: admincenter.php?site=cup&mod=penalty');
@@ -308,7 +308,7 @@ try {
                     );
 
                     if (!$get_pp) {
-                        throw new \Exception($_language->module['query_delete_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_delete_failed']);
                     }
 
                     if (mysqli_num_rows($get_pp)) {
@@ -345,7 +345,7 @@ try {
                 } else if ($getAction == 'category_edit') {
 
                     if ($category_id < 1) {
-                        throw new \Exception($_language->module['unknown_id']);
+                        throw new \UnexpectedValueException($_language->module['unknown_id']);
                     }
 
                     $selectQuery = mysqli_query(
@@ -360,7 +360,7 @@ try {
                     );
 
                     if (!$selectQuery) {
-                        throw new \Exception($_language->module['query_select_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_select_failed']);
                     }
 
                     $get = mysqli_fetch_array($selectQuery);
@@ -384,7 +384,7 @@ try {
                 } else if ($getAction == 'category_delete') {
 
                     if ($category_id < 1) {
-                        throw new \Exception($_language->module['unknown_id']);
+                        throw new \UnexpectedValueException($_language->module['unknown_id']);
                     }
 
                     $selectQuery = mysqli_query(
@@ -399,7 +399,7 @@ try {
                     );
 
                     if (!$selectQuery) {
-                        throw new \Exception($_language->module['query_select_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_select_failed']);
                     }
 
                     $get = mysqli_fetch_array($selectQuery);
@@ -415,7 +415,7 @@ try {
                     echo $category_delete;
 
                 } else {
-                    throw new \Exception($_language->module['unknown_action']);
+                    throw new \UnexpectedValueException($_language->module['unknown_action']);
                 }
 
             } else {
@@ -442,12 +442,12 @@ try {
                         LEFT JOIN `" . PREFIX . "cups_teams` t ON a.teamID = t.teamID
                         JOIN `" . PREFIX . "user` c ON a.adminID = c.userID
                         LEFT JOIN `" . PREFIX . "cups_penalty_category` d ON a.reasonID = d.reasonID
-                        WHERE a.duration_time > " . $time_now . " AND a.deleted = 0 
+                        WHERE a.duration_time > " . $time_now . " AND a.deleted = 0
                         ORDER BY a.`teamID` ASC, a.`userID` ASC, a.`date` DESC"
                 );
 
                 if (!$get_pp) {
-                    throw new \Exception($_language->module['query_select_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_select_failed']);
                 }
 
                 if (mysqli_num_rows($get_pp) > 0) {

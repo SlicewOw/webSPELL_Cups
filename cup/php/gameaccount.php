@@ -5,7 +5,7 @@ try {
     $_language->readModule('gameaccounts');
 
     if (!$loggedin) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (validate_array($_POST, true)) {
@@ -24,7 +24,7 @@ try {
                     (int)$_POST['gameacc_id'] : 0;
 
                 if ($gameaccount_id < 1) {
-                    throw new \Exception($_language->module['error_gameaccount_id_type']);
+                    throw new \UnexpectedValueException($_language->module['error_gameaccount_id_type']);
                 }
 
                 $query = cup_query(
@@ -48,7 +48,7 @@ try {
                 );
 
                 if(empty($get['value'])) {
-                    throw new \Exception($_language->module['error_gameaccount_value']);
+                    throw new \UnexpectedValueException($_language->module['error_gameaccount_value']);
                 }
 
                 $gameaccount_id = $get['gameaccID'];
@@ -64,7 +64,7 @@ try {
                 );
 
                 if($checkIf['exist'] != 1) {
-                    throw new \Exception($_language->module['error_gameaccount_id_type']);
+                    throw new \UnexpectedValueException($_language->module['error_gameaccount_id_type']);
                 }
 
                 $subget = mysqli_fetch_array(
@@ -85,13 +85,13 @@ try {
                 $query = mysqli_query(
                     $_database,
                     "UPDATE `".PREFIX."cups_gameaccounts_mc`
-                        SET active = " . $active . ", 
+                        SET active = " . $active . ",
                             date = " . time() . "
                         WHERE gameaccID = " . $gameaccount_id
                 );
 
                 if(!$query) {
-                    throw new \Exception($_language->module['query_failed_update']);
+                    throw new \UnexpectedValueException($_language->module['query_failed_update']);
                 }
 
             } else if(isset($_POST['submitAddGameaccount']) || isset($_POST['submitEditGameaccount'])) {
@@ -136,7 +136,7 @@ try {
                 $postArray = explode('_', $arrayKeys[0]);
 
                 if((count($postArray) < 1) || !isset($postArray[0])) {
-                    throw new \Exception($_language->module['error']);
+                    throw new \UnexpectedValueException($_language->module['error']);
                 }
 
                 if ($postArray[0] == 'deleteGameacc') {
@@ -153,7 +153,7 @@ try {
                     );
 
                     if ($userID != $ds['userID']) {
-                        throw new \Exception($_language->module['error']);
+                        throw new \UnexpectedValueException($_language->module['error']);
                     }
 
                     try {
@@ -188,7 +188,7 @@ try {
         if ($getAction == 'edit') {
 
             if ($gameaccount_id < 1) {
-                throw new \Exception($_language->module['error_gameaccount_id_type']);
+                throw new \UnexpectedValueException($_language->module['error_gameaccount_id_type']);
             }
 
             $info = mysqli_query(
@@ -198,7 +198,7 @@ try {
             );
 
             if (!$info || (mysqli_num_rows($info) != 1)) {
-                throw new \Exception($_language->module['error_gameaccount_id_type']);
+                throw new \UnexpectedValueException($_language->module['error_gameaccount_id_type']);
             }
 
             $ds = mysqli_fetch_array($info);

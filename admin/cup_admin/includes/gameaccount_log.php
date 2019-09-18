@@ -5,14 +5,14 @@ try {
     $_language->readModule('gameaccounts', false, true);
 
     if (!iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $user_id = (isset($_GET['user_id']) && validate_int($_GET['user_id'])) ?
         (int)$_GET['user_id'] : 0;
 
     if ($user_id < 1) {
-        throw new \Exception($_language->module['unknown_user']);
+        throw new \UnexpectedValueException($_language->module['unknown_user']);
     }
 
     $csgoGameaccount = array(
@@ -30,7 +30,7 @@ try {
     );
 
     if (!$query) {
-        throw new \Exception($_language->module['query_failed']);
+        throw new \UnexpectedValueException($_language->module['query_failed']);
     }
 
     $anz = mysqli_num_rows($query);
@@ -73,7 +73,7 @@ try {
                 $get = mysqli_fetch_array(
                     mysqli_query(
                         $_database,
-                        "SELECT `validated` FROM `".PREFIX."cups_gameaccounts_csgo` 
+                        "SELECT `validated` FROM `".PREFIX."cups_gameaccounts_csgo`
                             WHERE `gameaccID` = " . $ds['gameaccID']
                     )
                 );

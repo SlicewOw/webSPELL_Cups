@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     if (validate_array($_POST, true)) {
@@ -18,21 +18,21 @@ try {
                     getinput($_POST['name']) : '';
 
                 if (empty($name)) {
-                    throw new \Exception($_language->module['error_rule_no_name']);
+                    throw new \UnexpectedValueException($_language->module['error_rule_no_name']);
                 }
 
                 $ruletext = isset($_POST['ruletext']) ?
                     getinput($_POST['ruletext']) : '';
 
                 if (empty($ruletext)) {
-                    throw new \Exception($_language->module['error_rule_no_text']);
+                    throw new \UnexpectedValueException($_language->module['error_rule_no_text']);
                 }
 
                 $game_id = (isset($_POST['game']) && validate_int($_POST['game'])) ?
                     (int)$_POST['game'] : 0;
 
                 if ($game_id < 1) {
-                    throw new \Exception($_language->module['error_rule_no_game']);
+                    throw new \UnexpectedValueException($_language->module['error_rule_no_game']);
                 }
 
                 if (isset($_POST['submitAddRule'])) {
@@ -56,7 +56,7 @@ try {
                     );
 
                     if (!$saveQuery) {
-                        throw new \Exception($_language->module['query_insert_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                     }
 
                     $rule_id = mysqli_insert_id($_database);
@@ -67,7 +67,7 @@ try {
                         (int)$_POST['rule_id'] : 0;
 
                     if ($rule_id < 1) {
-                        throw new \Exception($_language->module['unknown_rule_id']);
+                        throw new \UnexpectedValueException($_language->module['unknown_rule_id']);
                     }
 
                     $updateQuery = mysqli_query(
@@ -81,7 +81,7 @@ try {
                     );
 
                     if (!$updateQuery) {
-                        throw new \Exception($_language->module['query_update_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_update_failed']);
                     }
 
                 }
@@ -113,13 +113,13 @@ try {
         } else if ($getAction == 'edit') {
 
             if ($rule_id < 1) {
-                throw new \Exception($_language->module['unknown_rule_id']);
+                throw new \UnexpectedValueException($_language->module['unknown_rule_id']);
             }
 
             $ds = mysqli_fetch_array(
                 mysqli_query(
-                    $_database, 
-                    "SELECT * FROM `".PREFIX."cups_rules` 
+                    $_database,
+                    "SELECT * FROM `".PREFIX."cups_rules`
                         WHERE ruleID = " . $rule_id
                 )
             );
@@ -138,7 +138,7 @@ try {
             try {
 
                 if ($rule_id < 1) {
-                    throw new \Exception($_language->module['unknown_rule_id']);
+                    throw new \UnexpectedValueException($_language->module['unknown_rule_id']);
                 }
 
                 $deleteQuery = mysqli_query(
@@ -148,7 +148,7 @@ try {
                 );
 
                 if (!$deleteQuery) {
-                    throw new \Exception($_language->module['query_delete_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_delete_failed']);
                 }
 
                 $text = 'Regel #' . $rule_id . ' wurde gel&ouml;scht';

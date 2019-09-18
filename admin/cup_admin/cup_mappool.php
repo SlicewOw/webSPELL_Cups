@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups', false, true);
 
 	if(!$loggedin || !iscupadmin($userID)) {
-		throw new \Exception($_language->module['access_denied']);
+		throw new \UnexpectedValueException($_language->module['access_denied']);
 	}
 
 	$maxMaps = 10;
@@ -44,7 +44,7 @@ try {
 					(int)$_POST['mappool_id'] : 0;
 
 				if($mappool_id < 1) {
-					throw new \Exception($_language->module['error_id']);
+					throw new \UnexpectedValueException($_language->module['error_id']);
 				}
 
 				$name = (isset($_POST['name'])) ?
@@ -58,7 +58,7 @@ try {
 				);
 
 				if(!$query) {
-					throw new \Exception($_language->module['query_delete_failed']);
+					throw new \UnexpectedValueException($_language->module['query_delete_failed']);
 				}
 
 				$text = 'Map Pool "'.$name.'" wurde gel&ouml;scht';
@@ -99,7 +99,7 @@ try {
 					);
 
 					if(!$query) {
-						throw new \Exception($_language->module['query_insert_failed']);
+						throw new \UnexpectedValueException($_language->module['query_insert_failed']);
 					}
 
 					$mappool_id = mysqli_insert_id($_database);
@@ -112,7 +112,7 @@ try {
 						(int)$_POST['mappool_id'] : 0;
 
 					if($mappool_id < 1) {
-						throw new \Exception($_language->module['error_id']);
+						throw new \UnexpectedValueException($_language->module['error_id']);
 					}
 
 					$query = mysqli_query(
@@ -126,7 +126,7 @@ try {
 					);
 
 					if(!$query) {
-						throw new \Exception($_language->module['query_update_failed']);
+						throw new \UnexpectedValueException($_language->module['query_update_failed']);
 					}
 
 					$text = 'Map Pool "'.$name.'" wurde editiert';
@@ -164,7 +164,7 @@ try {
 				(int)$_GET['id'] : 0;
 
 			if($mappool_id < 1) {
-				throw new \Exception($_language->module['error_id']);
+				throw new \UnexpectedValueException($_language->module['error_id']);
 			}
 
 			$ds = mysqli_fetch_array(
@@ -219,7 +219,7 @@ try {
 				(int)$_GET['id'] : 0;
 
 			if($mappool_id < 1) {
-				throw new \Exception($_language->module['error_id']);
+				throw new \UnexpectedValueException($_language->module['error_id']);
 			}
 
 			$ds = mysqli_fetch_array(

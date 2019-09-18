@@ -13,20 +13,20 @@ try {
         getinput($_POST['action']) : '';
 
     if (empty($postAction)) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $cup_id = (isset($_POST['cup_id']) && validate_int($_POST['cup_id'], true)) ?
         (int)$_POST['cup_id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     $cupArray = getcup($cup_id);
 
     if (!isset($cupArray['status']) || ($cupArray['status'] > 1)) {
-        throw new \Exception($_language->module['cup_started']);
+        throw new \UnexpectedValueException($_language->module['cup_started']);
     }
 
     if ($postAction == 'deleteTeamFromCup') {
@@ -35,7 +35,7 @@ try {
             (int)$_POST['team_id'] : 0;
 
         if ($team_id < 1) {
-            throw new \Exception($_language->module['unknown_team_id']);
+            throw new \UnexpectedValueException($_language->module['unknown_team_id']);
         }
 
         $whereClauseArray = array();
@@ -51,7 +51,7 @@ try {
         );
 
         if (!$deleteQuery) {
-            throw new \Exception($_language->module['query_delete_failed'] . ' (' . $whereClause . ')');
+            throw new \UnexpectedValueException($_language->module['query_delete_failed'] . ' (' . $whereClause . ')');
         }
 
         if ($cupArray['mode'] == '1on1') {
@@ -64,7 +64,7 @@ try {
         $returnArray['message'][] = $_language->module['team_deleted_from_cup'];
 
     } else {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $returnArray['status'] = TRUE;

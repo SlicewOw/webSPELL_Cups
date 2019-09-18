@@ -16,7 +16,7 @@ try {
         (int)$_GET['cup_id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception('ERROR');
+        throw new \UnexpectedValueException('ERROR');
     }
 
     $cupArray = getcup($cup_id);

@@ -51,7 +51,7 @@ try {
     ) ENGINE=MyISAM;");
 
     if (!$createTableQuery) {
-        throw new \Exception('query_failed_cups');
+        throw new \UnexpectedValueException('query_failed_cups');
     }
 
     $createTableQuery = mysqli_query(

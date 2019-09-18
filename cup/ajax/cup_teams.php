@@ -11,14 +11,14 @@ try {
     $_language->readModule('teams');
 
     if (!validate_array($_POST, true)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $team_id = (isset($_POST['team_id']) && validate_int($_POST['team_id'], true)) ?
         (int)$_POST['team_id'] : 0;
 
     if ($team_id < 1) {
-        throw new \Exception($_language->module['team_not_found']);
+        throw new \UnexpectedValueException($_language->module['team_not_found']);
     }
 
     $postAction = (isset($_POST['action'])) ?
@@ -40,7 +40,7 @@ try {
         $returnArray['password'] = $password;
 
     } else {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $returnArray['status'] = TRUE;

@@ -10,15 +10,15 @@ try {
     $_language->readModule('gameaccounts', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception('access_denied');
+        throw new \UnexpectedValueException('access_denied');
     }
 
-    $userArray = (isset($_GET['user_id'])) ? 
+    $userArray = (isset($_GET['user_id'])) ?
         explode(',', $_GET['user_id']) : array();
 
     $anzUser = count($userArray);
     if ($anzUser < 1) {
-        throw new \Exception('unknwon_user_array');
+        throw new \UnexpectedValueException('unknwon_user_array');
     }
 
     $steamImagePath = __DIR__ . '/../../../images/cup/steam/';
@@ -31,7 +31,7 @@ try {
                 $userArray[$n] : 0;
 
             if($user_id < 1) {
-                throw new \Exception('unknown_user_id');
+                throw new \UnexpectedValueException('unknown_user_id');
             }
 
             $csgoGameaccount = array(
@@ -42,13 +42,13 @@ try {
             $gameaccount_list = '';
 
             $query = mysqli_query(
-                $_database, 
-                "SELECT 
+                $_database,
+                "SELECT
                         `gameaccID`,
-                        `category`, 
-                        `value`, 
-                        `active` 
-                    FROM `" . PREFIX . "cups_gameaccounts` 
+                        `category`,
+                        `value`,
+                        `active`
+                    FROM `" . PREFIX . "cups_gameaccounts`
                     WHERE `userID` = " . $user_id . " AND `category` IN ('csg')
                     ORDER BY `active` DESC, `category` ASC, `date` DESC"
             );
@@ -62,9 +62,9 @@ try {
 
                     $checkIf = mysqli_fetch_array(
                         mysqli_query(
-                            $_database, 
-                            "SELECT 
-                                    COUNT(*) AS exist 
+                            $_database,
+                            "SELECT
+                                    COUNT(*) AS exist
                                 FROM `" . PREFIX . "cups_gameaccounts_csgo`
                                 WHERE `gameaccID` = " . $gameaccount_id
                         )
@@ -73,17 +73,17 @@ try {
                     if(!$checkIf['exist']) {
 
                         $subquery = mysqli_query(
-                            $_database, 
+                            $_database,
                             "INSERT INTO `".PREFIX."cups_gameaccounts_csgo`
                                 (
-                                    `gameaccID`, 
-                                    `date`, 
+                                    `gameaccID`,
+                                    `date`,
                                     `hours`
                                 )
                                 VALUES
                                 (
-                                    " . $gameaccount_id . ", 
-                                    " . time() . ", 
+                                    " . $gameaccount_id . ",
+                                    " . time() . ",
                                     -1
                                 )");
 
@@ -117,7 +117,7 @@ try {
                     $accountDetails = getCSGOAccountInfo($steam64_id);
 
                     if(!isset($accountDetails['csgo_stats']['time_played']) || !is_array($accountDetails['csgo_stats']['time_played'])) {
-                        throw new \Exception('getCSGOAccountInfo() failed, time_played fehlerhaft');
+                        throw new \UnexpectedValueException('getCSGOAccountInfo() failed, time_played fehlerhaft');
                     }
 
                     $steamProfile = $accountDetails['steam_profile'];
@@ -138,8 +138,8 @@ try {
 
                     $activeStatus = $csgoGameaccount['data'][$x]['active'];
 
-                    $active = ($activeStatus) ? 
-                        '<span class="btn btn-success btn-xs">' . $_language->module['yes'] . '</span>' : 
+                    $active = ($activeStatus) ?
+                        '<span class="btn btn-success btn-xs">' . $_language->module['yes'] . '</span>' :
                         '<span class="btn btn-danger btn-xs">' . $_language->module['no'] . '</span>';
 
                     $isBanned = '0';
@@ -179,9 +179,9 @@ try {
                     }
 
                     $subquery = mysqli_query(
-                        $_database, 
+                        $_database,
                         "UPDATE `".PREFIX."cups_gameaccounts_csgo`
-                            SET `date` = " . time() . ", 
+                            SET `date` = " . time() . ",
                                 `hours` = " . $accountDetails['csgo_stats']['time_played']['hours'] . ",
                                 `vac_bann` = " . $isBanned . "
                             WHERE `gameaccID` = " . $csgoGameaccount['data'][$x]['gameaccID']

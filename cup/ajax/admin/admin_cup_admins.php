@@ -15,13 +15,13 @@ try {
         $includePath = __DIR__ . '/../../../admin/cup_admin/includes/admin_team.php';
 
         if (!file_exists($includePath)) {
-            throw new \Exception($_language->module['unknown_file']);
+            throw new \UnexpectedValueException($_language->module['unknown_file']);
         }
 
         include($includePath);
 
         if (!isset($adminList) || empty($adminList)) {
-            throw new \Exception($_language->module['unknown_action']);
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
         $returnArray['html'] = $adminList;
@@ -32,21 +32,21 @@ try {
             getinput($_POST['action']) : '';
 
         if (empty($postAction)) {
-            throw new \Exception($_language->module['unknown_action']);
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
         $admin_id = (isset($_POST['admin_id']) && validate_int($_POST['admin_id'])) ?
             (int)$_POST['admin_id'] : 0;
 
         if ($admin_id < 1) {
-            throw new \Exception($_language->module['unknown_admin']);
+            throw new \UnexpectedValueException($_language->module['unknown_admin']);
         }
 
         $user_id = (isset($_POST['user_id']) && validate_int($_POST['user_id'])) ?
             (int)$_POST['user_id'] : 0;
 
         if ($user_id < 1) {
-            throw new \Exception($_language->module['unknown_user']);
+            throw new \UnexpectedValueException($_language->module['unknown_user']);
         }
 
         if ($postAction == 'addAdmin' || $postAction == 'editAdmin') {
@@ -55,7 +55,7 @@ try {
                 getinput($_POST['position']) : '';
 
             if (empty($position)) {
-                throw new \Exception($_language->module['unknown_position']);
+                throw new \UnexpectedValueException($_language->module['unknown_position']);
             }
 
             $description = (isset($_POST['description'])) ?
@@ -82,7 +82,7 @@ try {
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['query_insert_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                 }
 
             } else {
@@ -97,7 +97,7 @@ try {
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['query_update_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_update_failed']);
                 }
 
             }
@@ -113,11 +113,11 @@ try {
             );
 
             if (!$query) {
-                throw new \Exception($_language->module['query_delete_failed']);
+                throw new \UnexpectedValueException($_language->module['query_delete_failed']);
             }
 
         } else {
-            throw new \Exception($_language->module['unknown_action']);
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
     }

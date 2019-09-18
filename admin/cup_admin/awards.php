@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!($loggedin && iscupadmin($userID))) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (validate_array($_POST, true)) {
@@ -68,7 +68,7 @@ try {
                         );
 
                         if (!$query) {
-                            throw new \Exception($_language->module['query_insert_failed']);
+                            throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                         }
 
                         $award_id = mysqli_insert_id($_database);
@@ -79,7 +79,7 @@ try {
                             (int)$_POST['award_id'] : 0;
 
                         if ($award_id < 1) {
-                            throw new \Exception($_language->module['unknown_action']);
+                            throw new \UnexpectedValueException($_language->module['unknown_action']);
                         }
 
                         unset($columnArray[$active_column]);
@@ -99,7 +99,7 @@ try {
                         );
 
                         if (!$query) {
-                            throw new \Exception($_language->module['query_update_failed']);
+                            throw new \UnexpectedValueException($_language->module['query_update_failed']);
                         }
 
                     }
@@ -112,12 +112,12 @@ try {
                         $_POST['categoryList'] : '';
 
                     if (empty($awardCategoryList)) {
-                        throw new \Exception($_language->module['unknown_action']);
+                        throw new \UnexpectedValueException($_language->module['unknown_action']);
                     }
 
                     $awardCategoryArray = explode(',', $awardCategoryList);
                     if(count($awardCategoryArray) < 1) {
-                        throw new \Exception($_language->module['unknown_action']);
+                        throw new \UnexpectedValueException($_language->module['unknown_action']);
                     }
 
                     $x = 0;
@@ -138,7 +138,7 @@ try {
                 }
 
             } else {
-                throw new \Exception($_language->module['unknown_action']);
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
             }
 
         } catch (Exception $e) {

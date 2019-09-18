@@ -7,11 +7,11 @@ $returnArray = array(
 );
 
 try {
-    
+
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if ($getAction == 'home') {
@@ -23,7 +23,7 @@ try {
         );
 
         if (!$query) {
-            throw new \Exception($_language->module['query_select_failed']);
+            throw new \UnexpectedValueException($_language->module['query_select_failed']);
         }
 
         $n = 1;
@@ -61,13 +61,13 @@ try {
             (int)$_GET['award_id'] : 0;
 
         if ($award_id < 1) {
-            throw new \Exception($_language->module['unknown_award']);
+            throw new \UnexpectedValueException($_language->module['unknown_award']);
         }
 
         if (!checkIfContentExists($award_id, 'awardID', 'cups_awards')) {
-            throw new \Exception($_language->module['unknown_award']);
+            throw new \UnexpectedValueException($_language->module['unknown_award']);
         }
-        
+
         if ($getAction == 'details') {
 
             $get = mysqli_fetch_array(
@@ -172,15 +172,15 @@ try {
             }
 
         } else {
-            throw new \Exception($_language->module['unknown_action']);
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
     } else {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
-    
+
     $returnArray['status'] = TRUE;
-    
+
 } catch (Exception $e) {
     $returnArray['message'][] = $e->getMessage();
 }

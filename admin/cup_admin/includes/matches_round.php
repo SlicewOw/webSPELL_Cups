@@ -7,11 +7,11 @@ try {
     }
 
     if (!iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (!isset($cup_id)) {
-        throw new \Exception($_language->module['unknown_cup']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup']);
     }
 
     if (!isset($round_id)) {
@@ -23,7 +23,7 @@ try {
     }
 
     if ($round_id < 1) {
-        throw new \Exception($_language->module['unknown_round']);
+        throw new \UnexpectedValueException($_language->module['unknown_round']);
     }
 
     $ergebnis = mysqli_query(

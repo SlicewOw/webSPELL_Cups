@@ -24,9 +24,9 @@ try {
 
     $query = mysqli_query(
         $_database,
-        "SELECT 
+        "SELECT
                 a.`gameaccID` AS `gameaccount_id`,
-                b.`value` AS `steam64_id` 
+                b.`value` AS `steam64_id`
             FROM `" . PREFIX . "cups_gameaccounts_csgo` a
             JOIN `" . PREFIX . "cups_gameaccounts` b ON a.gameaccID = b.gameaccID
             WHERE b.`active` = 1 OR b.`smurf` = 1
@@ -67,7 +67,7 @@ try {
             $accountDetails = getCSGOAccountInfo($gameaccountListString, TRUE);
 
             if (validate_array($accountDetails['error'], true)) {
-                throw new \Exception(
+                throw new \UnexpectedValueException(
                     'Gameaccount CJ Error: ' . $n . ', ' . implode(', ', $accountDetails['error'])
                 );
             }
@@ -87,7 +87,7 @@ try {
 
                     $steam64_id = $dataArray['SteamId'];
 
-                    $isBanned = (empty($dataArray['VACBanned'])) ? 
+                    $isBanned = (empty($dataArray['VACBanned'])) ?
                         0 : 1;
 
                     $updateArray[] = '`vac_bann` = ' . $isBanned;
@@ -107,14 +107,14 @@ try {
                     }
 
                     $saveQuery = mysqli_query(
-                        $_database, 
+                        $_database,
                         "UPDATE `" . PREFIX . "cups_gameaccounts_csgo`
                             SET " . implode(', ', $updateArray) . "
                             WHERE `gameaccID` = " . $gameaccount_id
                     );
 
                     if (!$saveQuery) {
-                        throw new \Exception('Gameaccount CJ Update-Query failed: ' . $steam64_id);
+                        throw new \UnexpectedValueException('Gameaccount CJ Update-Query failed: ' . $steam64_id);
                     }
 
                     $anz++;

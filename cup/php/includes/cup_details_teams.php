@@ -7,7 +7,7 @@ try {
     }
 
     if (!isset($cupArray) || !validate_array($cupArray, true)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $navi_teams = 'btn-info white darkshadow';

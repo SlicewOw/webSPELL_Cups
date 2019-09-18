@@ -3,7 +3,7 @@
 try {
 
     if (!$loggedin) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $result_checkin = FALSE;
@@ -14,11 +14,11 @@ try {
         (int)$_GET['id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['wrong_cup_id']);
+        throw new \UnexpectedValueException($_language->module['wrong_cup_id']);
     }
 
     if (!checkIfContentExists($cup_id, 'cupID', 'cups')) {
-        throw new \Exception($_language->module['wrong_cup_id']);
+        throw new \UnexpectedValueException($_language->module['wrong_cup_id']);
     }
 
     //
@@ -26,15 +26,15 @@ try {
     $cupArray = getcup($cup_id);
 
     if (!validate_array($cupArray)) {
-        throw new \Exception($_language->module['no_cup']);
+        throw new \UnexpectedValueException($_language->module['no_cup']);
     }
 
     if (!isset($cupArray['id']) || ($cupArray['id'] != $cup_id)) {
-        throw new \Exception($_language->module['no_cup']);
+        throw new \UnexpectedValueException($_language->module['no_cup']);
     }
 
     if (!isset($cupArray['status']) || ($cupArray['status'] > 1)) {
-        throw new \Exception($_language->module['status_running']);
+        throw new \UnexpectedValueException($_language->module['status_running']);
     }
 
     if ($cupArray['mode'] == '1on1') {
@@ -49,27 +49,27 @@ try {
         );
 
         if (!$selectQuery) {
-            throw new \Exception($_language->module['query_select_failed']);
+            throw new \UnexpectedValueException($_language->module['query_select_failed']);
         }
 
         $checkIf = mysqli_fetch_array($selectQuery);
 
         if ($checkIf['exist'] && $checkIf['checked_in']) {
-            throw new \Exception($_language->module['player_already_checked_in']);
+            throw new \UnexpectedValueException($_language->module['player_already_checked_in']);
         } else if ($checkIf['exist'] == 0) {
-            throw new \Exception($_language->module['player_not_registered']);
+            throw new \UnexpectedValueException($_language->module['player_not_registered']);
         }
 
         $player_pps = getUserPenalty($userID);
         if ($player_pps >= $cupArray['max_pps']) {
             // zu viele Strafpunkte
-            throw new \Exception($_language->module['error_too_much_pps']);
+            throw new \UnexpectedValueException($_language->module['error_too_much_pps']);
         }
 
         $team_anz = $cupArray['teams']['checked_in'];
         if ($team_anz >= $cupArray['size']) {
             // kein Platz mehr frei
-            throw new \Exception($_language->module['error_cup_full']);
+            throw new \UnexpectedValueException($_language->module['error_cup_full']);
         }
 
         $updateQuery = mysqli_query(
@@ -81,7 +81,7 @@ try {
         );
 
         if (!$updateQuery) {
-            throw new \Exception($_language->module['query_update_failed']);
+            throw new \UnexpectedValueException($_language->module['query_update_failed']);
         }
 
         //
@@ -95,7 +95,7 @@ try {
     } else {
 
         if (!isinteam($userID, 0, 0)) {
-            throw new \Exception($_language->module['cup_checkin_failure']);
+            throw new \UnexpectedValueException($_language->module['cup_checkin_failure']);
         }
 
         $checkIf = mysqli_fetch_array(
@@ -111,9 +111,9 @@ try {
         );
 
         if ($checkIf['exist'] && $checkIf['checked_in']) {
-            throw new \Exception($_language->module['team_already_checked_in']);
+            throw new \UnexpectedValueException($_language->module['team_already_checked_in']);
         } else if ($checkIf['exist'] == 0) {
-            throw new \Exception($_language->module['team_not_registered']);
+            throw new \UnexpectedValueException($_language->module['team_not_registered']);
         }
 
         $get_id = mysqli_query(
@@ -144,19 +144,19 @@ try {
                     $mode_ok = TRUE;
                 } else {
                     // Team hat nicht genuegend Spieler
-                    throw new \Exception($_language->module['error_team_player_count']);
+                    throw new \UnexpectedValueException($_language->module['error_team_player_count']);
                 }
 
                 $team_pps = getteam($teamID, 'anz_pps');
                 if ($team_pps >= $cupArray['max_pps']) {
                     // zu viele Strafpunkte
-                    throw new \Exception($_language->module['error_too_much_pps']);
+                    throw new \UnexpectedValueException($_language->module['error_too_much_pps']);
                 }
 
                 $team_anz = $cupArray['teams']['checked_in'];
                 if ($team_anz >= $cupArray['size']) {
                     // kein Platz mehr frei
-                    throw new \Exception($_language->module['error_cup_full']);
+                    throw new \UnexpectedValueException($_language->module['error_cup_full']);
                 }
 
                 $saveQuery = mysqli_query(
@@ -168,7 +168,7 @@ try {
                 );
 
                 if (!$saveQuery) {
-                    throw new \Exception($_language->module['query_update_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_update_failed']);
                 }
 
                 $teamname = getteam($teamID, 'name');

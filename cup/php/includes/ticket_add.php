@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups');
 
     if (!$loggedin) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     if (validate_array($_POST, true)) {
@@ -20,7 +20,7 @@ try {
                     getinput($_POST['name']) : '';
 
                 if (empty($name)) {
-                    throw new \Exception($_language->module['ticket_error_1']);
+                    throw new \UnexpectedValueException($_language->module['ticket_error_1']);
                 }
 
                 $category_id = (isset($_POST['categoryID']) && validate_int($_POST['categoryID'])) ?
@@ -42,7 +42,7 @@ try {
                     getinput($_POST['text']) : '';
 
                 if (empty($text)) {
-                    throw new \Exception($_language->module['ticket_error_2']);
+                    throw new \UnexpectedValueException($_language->module['ticket_error_2']);
                 }
 
                 $query = mysqli_query(
@@ -74,7 +74,7 @@ try {
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['query_insert_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                 }
 
                 $ticket_id = mysqli_insert_id($_database);
@@ -106,13 +106,13 @@ try {
                     $mime_types = array('image/jpeg', 'image/png', 'image/gif');
 
                     if (!$upload->supportedMimeType($mime_types)) {
-                        throw new \Exception($_language->module['unsupported_image_type']);
+                        throw new \UnexpectedValueException($_language->module['unsupported_image_type']);
                     }
 
                     $imageInformation = getimagesize($upload->getTempFile());
 
                     if (!is_array($imageInformation)) {
-                        throw new \Exception($_language->module['broken_image']);
+                        throw new \UnexpectedValueException($_language->module['broken_image']);
                     }
 
                     switch ($imageInformation[2]) {
@@ -130,7 +130,7 @@ try {
                     $fileName = convert2filename($ticket_id) . $type;
 
                     if (!$upload->saveAs($serverPath . $fileName, true)) {
-                        throw new \Exception($_language->module['broken_image']);
+                        throw new \UnexpectedValueException($_language->module['broken_image']);
                     }
 
                     @chmod($globalPath . $fileName, 0777);
@@ -143,7 +143,7 @@ try {
                     );
 
                     if (!$query) {
-                        throw new \Exception($_language->module['query_update_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_update_failed']);
                     }
 
                 }
@@ -151,7 +151,7 @@ try {
                 $parent_url .= '&action=details&id=' . $ticket_id;
 
             } else {
-                throw new \Exception($_language->module['unknown_action']);
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
             }
 
         } catch (Exception $e) {

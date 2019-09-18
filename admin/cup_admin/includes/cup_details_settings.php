@@ -7,7 +7,7 @@ try {
     }
 
     if (!iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (!isset($cup_id) || !validate_int($_GET['id'], true)) {
@@ -16,11 +16,11 @@ try {
     }
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     if (!checkIfContentExists($cup_id, 'cupID', 'cups')) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     if (!isset($cupArray)) {

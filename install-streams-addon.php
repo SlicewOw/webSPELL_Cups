@@ -31,7 +31,7 @@ try {
     );
 
     if (!$createTableQuery) {
-        throw new \Exception('query_failed_liveshow');
+        throw new \UnexpectedValueException('query_failed_liveshow');
     }
 
     $createTableQuery = mysqli_query(

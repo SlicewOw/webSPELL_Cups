@@ -8,7 +8,7 @@ try {
         (int)$_GET['id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['no_match']);
+        throw new \UnexpectedValueException($_language->module['no_match']);
     }
 
     //
@@ -21,14 +21,14 @@ try {
         (int)$_GET['mID'] : 0;
 
     if ($match_id < 1) {
-        throw new \Exception($_language->module['no_match']);
+        throw new \UnexpectedValueException($_language->module['no_match']);
     }
 
     $cupAdminAccess = (iscupadmin($userID)) ?
         TRUE : FALSE;
 
     if (!(getmatch($match_id, 'active_playoff') || $cupAdminAccess)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $debug = 0;
@@ -46,7 +46,7 @@ try {
     $matchArray = getmatch($match_id);
 
     if (!isset($matchArray['cup_id']) || ($matchArray['cup_id'] != $cup_id)) {
-        throw new \Exception($_language->module['no_match']);
+        throw new \UnexpectedValueException($_language->module['no_match']);
     }
 
     //
@@ -67,7 +67,7 @@ try {
     //
     // Content
     if (!((($matchArray['admin'] == 0) && ($cupArray['admin'] == 0)) || $cupAdminAccess)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     if (validate_array($_POST, true)) {

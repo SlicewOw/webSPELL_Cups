@@ -22,16 +22,16 @@ try {
         *************/
 
         $info = mysqli_query(
-            $_database, 
-            "SELECT screenshot FROM `" . PREFIX . "cups_supporttickets` 
-                WHERE 
-                    (closed_date > 0 AND closed_date < " . $diffTime . ") 
-                AND 
+            $_database,
+            "SELECT screenshot FROM `" . PREFIX . "cups_supporttickets`
+                WHERE
+                    (closed_date > 0 AND closed_date < " . $diffTime . ")
+                AND
                     screenshot != ''"
         );
 
         if (!$info) {
-            throw new \Exception(mysqli_error($_database));
+            throw new \UnexpectedValueException(mysqli_error($_database));
         }
 
         if (mysqli_num_rows($info) > 0) {
@@ -59,16 +59,16 @@ try {
         ****************/
 
         $info = mysqli_query(
-            $_database, 
-            "SELECT 
+            $_database,
+            "SELECT
                     `screenshotID`,
                     `file`
-                FROM `" . PREFIX . "cups_matches_playoff_screens` 
+                FROM `" . PREFIX . "cups_matches_playoff_screens`
                 WHERE date < " . $diffTime
         );
 
         if (!$info) {
-            throw new \Exception(mysqli_error($_database));
+            throw new \UnexpectedValueException(mysqli_error($_database));
         }
 
         if (mysqli_num_rows($info) > 0) {

@@ -10,11 +10,11 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (empty($getAction)) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     if ($getAction == 'getPenaltyDetails') {
@@ -23,7 +23,7 @@ try {
             (int)$_GET['penalty_id'] : 0;
 
         if ($penalty_id < 1) {
-            throw new \Exception('unknown_penalty_id');
+            throw new \UnexpectedValueException('unknown_penalty_id');
         }
 
         $selectQuery = mysqli_query(
@@ -51,7 +51,7 @@ try {
 
         if (!$selectQuery) {
             $returnArray['message'][] = mysqli_error($_database);
-            throw new \Exception($_language->module['query_select_failed']);
+            throw new \UnexpectedValueException($_language->module['query_select_failed']);
         }
 
         $get = mysqli_fetch_array($selectQuery);
@@ -77,7 +77,7 @@ try {
         );
 
     } else {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $returnArray['status'] = TRUE;

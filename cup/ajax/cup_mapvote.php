@@ -15,7 +15,7 @@ try {
     $_language->readModule('cups', true, false);
 
     if (!$loggedin) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (validate_array($_POST, true)) {
@@ -24,7 +24,7 @@ try {
             getinput($_POST['action']) : '';
 
         if (empty($postAction)) {
-            throw new \Exception($_language->module['unknown_action']);
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
         if ($postAction == 'voteMap') {
@@ -33,28 +33,28 @@ try {
                 getinput($_POST['map']) : '';
 
             if (strlen($banned_map) == 0) {
-                throw new \Exception('error_bann-map');
+                throw new \UnexpectedValueException('error_bann-map');
             }
 
             $cup_id = (isset($_POST['cup_id']) && validate_int($_POST['cup_id'], true)) ?
                 (int)$_POST['cup_id'] : 0;
 
             if ($cup_id < 1) {
-                throw new \Exception('error_cup-id');
+                throw new \UnexpectedValueException('error_cup-id');
             }
 
             $match_id = (isset($_POST['match_id']) && validate_int($_POST['match_id'], true)) ?
                 (int)$_POST['match_id'] : 0;
 
             if ($match_id < 1) {
-                throw new \Exception('error_match-id');
+                throw new \UnexpectedValueException('error_match-id');
             }
 
             $team_id = (isset($_POST['team_id']) && preg_match('/team/', $_POST['team_id'])) ?
                 getinput($_POST['team_id']) : '';
 
             if (strlen($team_id) == 0) {
-                throw new \Exception('error_team-id');
+                throw new \UnexpectedValueException('error_team-id');
             }
 
             $selectQuery = cup_query(
@@ -74,7 +74,7 @@ try {
             $cupArray = getCup($cup_id);
 
             if ($get['mapvote']) {
-                throw new \Exception('error_mapvote');
+                throw new \UnexpectedValueException('error_mapvote');
             }
 
             //
@@ -94,7 +94,7 @@ try {
             }
 
             if ($finalMapsLeft < 1) {
-                throw new \Exception('error_parsing_best-of');
+                throw new \UnexpectedValueException('error_parsing_best-of');
             }
 
             $mapvote_status = '';
@@ -137,7 +137,7 @@ try {
                     // Liste der offenen Maps
                     $anzMapsOpen = count($mapsArray['open']);
                     for ($x = 0; $x < $anzMapsOpen; $x++) {
-                        $mapList .= ' <span class="btn btn-default btn-sm">'.$mapsArray['open'][$x].'</span>';	
+                        $mapList .= ' <span class="btn btn-default btn-sm">'.$mapsArray['open'][$x].'</span>';
                     }
 
                     $returnArray['veto']['status'] = 'running';
@@ -190,7 +190,7 @@ try {
                     // Liste der offenen Maps
                     $anzMapsOpen = count($mapsArray['open']);
                     for ($x = 0; $x < $anzMapsOpen; $x++) {
-                        $mapList .= ' <span class="btn btn-default btn-sm">' . $mapsArray['open'][$x] . '</span>';	
+                        $mapList .= ' <span class="btn btn-default btn-sm">' . $mapsArray['open'][$x] . '</span>';
                     }
 
                     $returnArray['veto']['status'] = 'running';
@@ -220,7 +220,7 @@ try {
 
                     $info = str_replace(
                         '%team%',
-                        '<span class="bold">'.$teamname.'</span>', 
+                        '<span class="bold">'.$teamname.'</span>',
                         $info
                     );
 
@@ -279,7 +279,7 @@ try {
                 //
                 // WIP
                 //
-                throw new \Exception($_language->module['unknown_action']);
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
 
             }
 
@@ -295,7 +295,7 @@ try {
             );
 
         } else {
-            throw new \Exception($_language->module['unknown_action']);
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
     } else {
@@ -306,14 +306,14 @@ try {
                 (int)$_GET['cup_id'] : 0;
 
             if ($cup_id < 1) {
-                throw new \Exception('error_cup-id');
+                throw new \UnexpectedValueException('error_cup-id');
             }
 
             $match_id = (isset($_GET['match_id']) && validate_int($_GET['match_id'], true)) ?
                 (int)$_GET['match_id'] : 0;
 
             if ($match_id < 1) {
-                throw new \Exception('error_match-id');
+                throw new \UnexpectedValueException('error_match-id');
             }
 
             //
@@ -368,10 +368,10 @@ try {
                 if ($activeMapVote) {
 
                     $vote = 'voteMap(\''.$mapsArray['open'][$x].'\', \''.$team.'\');';
-                    $mapList .= ' <button class="btn btn-default btn-sm" onclick="'.$vote.'">' . $mapsArray['open'][$x] . '</button>';	
+                    $mapList .= ' <button class="btn btn-default btn-sm" onclick="'.$vote.'">' . $mapsArray['open'][$x] . '</button>';
 
                 } else {
-                    $mapList .= ' <span class="btn btn-default btn-sm">' . $mapsArray['open'][$x] . '</span>';	
+                    $mapList .= ' <span class="btn btn-default btn-sm">' . $mapsArray['open'][$x] . '</span>';
                 }
 
             }
@@ -406,7 +406,7 @@ try {
                 /**
                  * WiP
                  */
-                throw new \Exception($_language->module['unknown_action']);
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
 
             }
 
@@ -441,7 +441,7 @@ try {
             $returnArray['veto']['status'] = $status;
 
         } else {
-            throw new \Exception($_language->module['unknown_action']);
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
     }

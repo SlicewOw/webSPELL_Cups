@@ -7,7 +7,7 @@ if (!isset($content)) {
 try {
 
     if (!isset($cupArray) || !validate_array($cupArray, true)) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     if (($cupArray['status'] > 1) && ($cupArray['groupstage'] == 1)) {

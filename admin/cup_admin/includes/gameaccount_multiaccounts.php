@@ -5,7 +5,7 @@ try {
     $_language->readModule('gameaccounts', false, true);
 
     if(!iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $base_url = 'admincenter.php?site=cup&mod=gameaccounts&action=log&user_id=';

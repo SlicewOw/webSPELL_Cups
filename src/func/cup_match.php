@@ -543,11 +543,11 @@ function getScreenshots($match_id) {
 function addMatchLog($match_id, $action_message) {
 
     if (!validate_int($match_id, true)) {
-        throw new \Exception('unknown_match_id');
+        throw new \UnexpectedValueException('unknown_match_id');
     }
 
     if (empty($action_message)) {
-        throw new \Exception('unknown_match_log_message');
+        throw new \UnexpectedValueException('unknown_match_log_message');
     }
 
     $insertQuery = cup_query(

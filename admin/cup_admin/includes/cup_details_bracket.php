@@ -9,19 +9,19 @@ try {
     }
 
     if (($cupArray['status'] < 2)) {
-        throw new \Exception($_language->module['cup_not_started']);
+        throw new \UnexpectedValueException($_language->module['cup_not_started']);
     }
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (!isset($cupArray) || !validate_array($cupArray)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (!isset($cup_id) || !validate_int($cup_id, true)) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     if (validate_array($_POST, true)) {
@@ -34,7 +34,7 @@ try {
                 (int)$_POST['runde'] : 0;
 
             if ($cupRunde < 1) {
-                throw new \Exception($_language->module['unknown_round']);
+                throw new \UnexpectedValueException($_language->module['unknown_round']);
             }
 
             $whereClauseArray = array();
@@ -69,7 +69,7 @@ try {
                 );
 
                 if (!$saveQuery) {
-                    throw new \Exception($_language->module['query_update_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_update_failed']);
                 }
 
                 $text = 'Maps wurden zur&uuml;ckgesetzt für Runde ' . $cupRunde . ' vom Cup #' . $cup_id;
@@ -90,7 +90,7 @@ try {
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['query_select_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_select_failed']);
                 }
 
                 while ($get = mysqli_fetch_array($query)) {
@@ -120,7 +120,7 @@ try {
                     );
 
                     if (!$saveQuery) {
-                        throw new \Exception($_language->module['query_insert_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                     }
 
                     $comment_id = mysqli_insert_id($_database);
@@ -136,7 +136,7 @@ try {
                     (int)$_POST['match_id'] : 0;
 
                 if ($match_id < 1) {
-                    throw new \Exception($_language->module['unknown_match']);
+                    throw new \UnexpectedValueException($_language->module['unknown_match']);
                 }
 
                 $mapArray = (isset($_POST['map']) && validate_array($_POST['map'], true)) ?
@@ -144,7 +144,7 @@ try {
 
                 $mapCount = count($mapArray);
                 if ($mapCount < 1) {
-                    throw new \Exception($_language->module['unknown_match']);
+                    throw new \UnexpectedValueException($_language->module['unknown_match']);
                 }
 
                 $setMapsArray = array(
@@ -181,14 +181,14 @@ try {
                 );
 
                 if (!$updateQuery) {
-                    throw new \Exception($_language->module['query_update_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_update_failed']);
                 }
 
                 $text = 'Maps f&uuml;r Match gesetzt durch Admin';
                 $_SESSION['successArray'][] = $text;
 
             } else {
-                throw new \Exception($_language->module['unknown_action']);
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
             }
 
         } catch (Exception $e) {

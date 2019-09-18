@@ -8,7 +8,7 @@ $returnArray = array(
 try {
 
 	if (!isanyadmin($userID)) {
-		throw new \Exception('access_denied');
+		throw new \UnexpectedValueException('access_denied');
 	}
 
 	$actionArray = array(
@@ -17,22 +17,22 @@ try {
 	);
 
 	if (!in_array($getAction, $actionArray)) {
-		throw new \Exception('unknown_action');
+		throw new \UnexpectedValueException('unknown_action');
 	}
 
 	if ($getAction == 'changeSmurf') {
 
-		$gameaccount_id = (isset($_POST['gameacc_id']) && validate_int($_POST['gameacc_id'], true)) ? 
+		$gameaccount_id = (isset($_POST['gameacc_id']) && validate_int($_POST['gameacc_id'], true)) ?
 			(int)$_POST['gameacc_id'] : 0;
-		
+
 		if ($gameaccount_id < 1) {
-			throw new \Exception('unknown_gameaccount_id');
+			throw new \UnexpectedValueException('unknown_gameaccount_id');
 		}
 
 		$checkIf = mysqli_fetch_array(
 			mysqli_query(
 				$_database,
-				"SELECT 
+				"SELECT
 						COUNT(*) AS `exist`,
 						`smurf`
 					FROM `" . PREFIX . "cups_gameaccounts`
@@ -41,7 +41,7 @@ try {
 		);
 
 		if ($checkIf['exist'] != 1) {
-			throw new \Exception('unknown_gameaccount');
+			throw new \UnexpectedValueException('unknown_gameaccount');
 		}
 
 		$newSmurfValue = ($checkIf['smurf']) ? 0 : 1;
@@ -54,7 +54,7 @@ try {
 		);
 
 		if (!$query) {
-			throw new \Exception('query_update_failed');
+			throw new \UnexpectedValueException('query_update_failed');
 		}
 
 		$returnArray['status'] = TRUE;
@@ -62,12 +62,12 @@ try {
 
 	} else if ($getAction == 'deleteGameaccount') {
 
-		
-		$gameaccount_id = (isset($_POST['gameacc_id']) && validate_int($_POST['gameacc_id'], true)) ? 
+
+		$gameaccount_id = (isset($_POST['gameacc_id']) && validate_int($_POST['gameacc_id'], true)) ?
 			(int)$_POST['gameacc_id'] : 0;
-		
+
 		if($gameaccount_id < 1) {
-			throw new \Exception('unknown_gameaccount_id');
+			throw new \UnexpectedValueException('unknown_gameaccount_id');
 		}
 
 		$query = mysqli_query(
@@ -77,7 +77,7 @@ try {
 		);
 
 		if (!$query) {
-			throw new \Exception('query_delete_failed');
+			throw new \UnexpectedValueException('query_delete_failed');
 		}
 
 		$returnArray['status'] = TRUE;

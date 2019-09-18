@@ -41,7 +41,7 @@ if (isset($_GET[ 'action' ])) {
 try {
 
     if (!isset($id) || (getnickname($id) == '')) {
-        throw new \Exception($_language->module[ 'user_doesnt_exist' ]);
+        throw new \UnexpectedValueException($_language->module[ 'user_doesnt_exist' ]);
     }
 
     $showCupProfile = TRUE;

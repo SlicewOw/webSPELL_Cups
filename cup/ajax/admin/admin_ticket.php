@@ -11,7 +11,7 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $ticket_type = (isset($_GET['ticket_type']) && validate_int($_GET['ticket_type'], true)) ?
@@ -38,7 +38,7 @@ try {
     if ($category == 'category') {
 
         if ($ticket_type < 1) {
-            throw new \Exception($_language->module['unknown_ticket_type']);
+            throw new \UnexpectedValueException($_language->module['unknown_ticket_type']);
         }
 
         $categories = getticketcategories($value);
@@ -107,7 +107,7 @@ try {
                 "SELECT
                         `team1`,
                         `team2`
-                    FROM `" . PREFIX . "cups_matches_playoff` 
+                    FROM `" . PREFIX . "cups_matches_playoff`
                     WHERE `matchID` = " . $value
             )
         );
@@ -138,7 +138,7 @@ try {
             );
 
             if (!$playerQuery) {
-                throw new \Exception($_language->module['query_select_failed']);
+                throw new \UnexpectedValueException($_language->module['query_select_failed']);
             }
 
             while ($subget = mysqli_fetch_array($playerQuery)) {
@@ -166,7 +166,7 @@ try {
         );
 
         if (!$selectQuery) {
-            throw new \Exception($_language->module['query_select_failed']);
+            throw new \UnexpectedValueException($_language->module['query_select_failed']);
         }
 
         $get = mysqli_fetch_array($selectQuery);
@@ -190,7 +190,7 @@ try {
         );
 
         if (!$selectQuery) {
-            throw new \Exception($_language->module['query_select_failed']);
+            throw new \UnexpectedValueException($_language->module['query_select_failed']);
         }
 
         while ($get = mysqli_fetch_array($selectQuery)) {

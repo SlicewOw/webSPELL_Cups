@@ -3,17 +3,17 @@
 try {
 
 	if (!$loggedin) {
-		throw new \Exception($_language->module['no_team']);
+		throw new \UnexpectedValueException($_language->module['no_team']);
 	}
 
-	$team_button = '<a href="index.php?site=teams&amp;action=add" class="btn btn-info btn-sm white darkshadow">'.$_language->module['add'].'</a><br /><br />';	
+	$team_button = '<a href="index.php?site=teams&amp;action=add" class="btn btn-info btn-sm white darkshadow">'.$_language->module['add'].'</a><br /><br />';
 
 	$query = mysqli_query(
 		$_database,
-		"SELECT * FROM `" . PREFIX . "cups_teams_member` 
+		"SELECT * FROM `" . PREFIX . "cups_teams_member`
 			WHERE `userID` = " . $userID . " AND `active` = 1"
 	);
-		
+
 	if (mysqli_num_rows($query) > 0) {
 
 		$teams = '';
@@ -23,17 +23,17 @@ try {
 
 			$db = mysqli_fetch_array(
 				mysqli_query(
-					$_database, 
-					"SELECT * FROM `" . PREFIX . "cups_teams` 
+					$_database,
+					"SELECT * FROM `" . PREFIX . "cups_teams`
 						WHERE `teamID` = " . $team_id
 				)
 			);
-            
+
 			if ($db['deleted'] == 0) {
 
 				if(isinteam($userID, $team_id, 'admin')) {
 					$url = 'index.php?site=teams&amp;action=admin&amp;id='.$team_id;
-				} else { 
+				} else {
 					$url = 'index.php?site=teams&amp;action=details&amp;id='.$team_id;
 				}
 
@@ -47,7 +47,7 @@ try {
 				$teams .= $GLOBALS["_template_cup"]->replaceTemplate("teams_list", $data_array);
 
 			}
-            
+
 		}
 
 	} else {
@@ -59,7 +59,7 @@ try {
 	$data_array['$teams'] 		= $teams;
 	$teams_home_list = $GLOBALS["_template_cup"]->replaceTemplate("teams_home_list", $data_array);
 	echo $teams_home_list;
-	
+
 } catch (Exception $e) {
 	echo showError($e->getMessage());
 }

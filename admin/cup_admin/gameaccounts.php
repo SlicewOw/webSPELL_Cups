@@ -5,7 +5,7 @@ try {
     $_language->readModule('gameaccounts', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     if (validate_array($_POST, true)) {
@@ -24,25 +24,25 @@ try {
                     (int)$_POST['gameaccount_id'] : 0;
 
                 if ($gameaccount_id < 1) {
-                    throw new \Exception($_language->module['unknown_gameaccount']);
+                    throw new \UnexpectedValueException($_language->module['unknown_gameaccount']);
                 }
 
                 $query = mysqli_query(
-                    $_database, 
-                    "UPDATE `" . PREFIX . "cups_gameaccounts` 
-                        SET active = 1 
+                    $_database,
+                    "UPDATE `" . PREFIX . "cups_gameaccounts`
+                        SET active = 1
                         WHERE gameaccID = " . $gameaccount_id . " AND deleted = 0"
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['query_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_failed']);
                 }
 
                 $user_id = (isset($_POST['user_id']) && validate_int($_POST['user_id'])) ?
                     (int)$_POST['user_id'] : 0;
 
                 if ($user_id < 1) {
-                    throw new \Exception($_language->module['unknown_user']);
+                    throw new \UnexpectedValueException($_language->module['unknown_user']);
                 }
 
                 $messageText = 'Dein Gameaccount wurde von ' . getnickname($userID) . ' aktiviert';
@@ -58,28 +58,28 @@ try {
                     (int)$_POST['gameaccount_id'] : 0;
 
                 if ($gameaccount_id < 1) {
-                    throw new \Exception($_language->module['unknown_gameaccount']);
+                    throw new \UnexpectedValueException($_language->module['unknown_gameaccount']);
                 }
 
                 $get = mysqli_fetch_array(
                     mysqli_query(
-                        $_database, 
-                        "SELECT userID FROM `".PREFIX."cups_gameaccounts` 
+                        $_database,
+                        "SELECT userID FROM `".PREFIX."cups_gameaccounts`
                             WHERE gameaccID = " . $gameaccount_id
                     )
                 );
 
                 $query = mysqli_query(
-                    $_database, 
-                    "UPDATE `" . PREFIX . "cups_gameaccounts` 
-                        SET active = 0, 
-                            deleted = 1, 
-                            deleted_seen = 0 
+                    $_database,
+                    "UPDATE `" . PREFIX . "cups_gameaccounts`
+                        SET active = 0,
+                            deleted = 1,
+                            deleted_seen = 0
                         WHERE gameaccID = " . $gameaccount_id
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['query_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_failed']);
                 }
 
                 $messageTitle = $_language->module['gameaccount_deleted_title'];
@@ -96,21 +96,21 @@ try {
                     (int)$_POST['user_id'] : 0;
 
                 if ($user_id < 1) {
-                    throw new \Exception($_language->module['unknown_user']);
+                    throw new \UnexpectedValueException($_language->module['unknown_user']);
                 }
 
                 $category = (isset($_POST['category'])) ?
                     getinput($_POST['category']) : '';
 
                 if (empty($category)) {
-                    throw new \Exception($_language->module['category_missing']);
-                } 
+                    throw new \UnexpectedValueException($_language->module['category_missing']);
+                }
 
                 $profile_url = (isset($_POST['profile_url']) && validate_url($_POST['profile_url'])) ?
                     getinput($_POST['profile_url']) : '';
 
                 if (empty($profile_url)) {
-                    throw new \Exception($_language->module['profile_url_missing']);
+                    throw new \UnexpectedValueException($_language->module['profile_url_missing']);
                 }
 
                 $query = mysqli_query(
@@ -132,7 +132,7 @@ try {
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['query_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_failed']);
                 }
 
                 $_SESSION['successArray'][] = $_language->module['query_saved'];
@@ -145,7 +145,7 @@ try {
                     (int)$_POST['bannedGame'] : 0;
 
                 if ($game_id < 1) {
-                    throw new \Exception($_language->module['unknown_game']);
+                    throw new \UnexpectedValueException($_language->module['unknown_game']);
                 }
 
                 $game_tag = getGame($game_id, 'tag');
@@ -154,7 +154,7 @@ try {
                     getinput($_POST['bannedValue']) : '';
 
                 if (empty($value)) {
-                    throw new \Exception($_language->module['unknown_value']);
+                    throw new \UnexpectedValueException($_language->module['unknown_value']);
                 }
 
                 $gameaccount = new \myrisk\gameaccount();
@@ -185,7 +185,7 @@ try {
                 );
 
                 if (!$insertQuery) {
-                    throw new \Exception($_language->module['query_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_failed']);
                 }
 
                 $parent_url .= '&action=bannedaccounts';
@@ -214,22 +214,22 @@ try {
 
         if ($getAction == 'active') {
 
-            $gameaccount_id = (isset($_GET['id']) && validate_int($_GET['id'])) ? 
+            $gameaccount_id = (isset($_GET['id']) && validate_int($_GET['id'])) ?
                 (int)$_GET['id'] : 0;
 
             if($gameaccount_id < 1) {
-                throw new \Exception($_language->module['unknown_gameaccount']);
+                throw new \UnexpectedValueException($_language->module['unknown_gameaccount']);
             }
 
             $infoQuery = mysqli_query(
-                $_database, 
+                $_database,
                 "SELECT * FROM `".PREFIX."cups_gameaccounts` c
                     JOIN `".PREFIX."user` u ON u.`userID` = c.`userID`
                     WHERE c.`gameaccID` = " . $gameaccount_id . " AND c.`deleted` = 0"
             );
 
             if(mysqli_num_rows($infoQuery) != 1) {
-                throw new \Exception($_language->module['unknown_gameaccount']);
+                throw new \UnexpectedValueException($_language->module['unknown_gameaccount']);
             }
 
             $ds = mysqli_fetch_array($infoQuery);
@@ -237,9 +237,9 @@ try {
             $gameaccountList = '';
 
             $old = mysqli_query(
-                $_database, 
-                "SELECT * FROM `".PREFIX."cups_gameaccounts` 
-                    WHERE category = '" . $ds['category'] . "' AND userID = " . $ds['userID'] . " AND deleted = 1 
+                $_database,
+                "SELECT * FROM `".PREFIX."cups_gameaccounts`
+                    WHERE category = '" . $ds['category'] . "' AND userID = " . $ds['userID'] . " AND deleted = 1
                     ORDER BY date DESC"
             );
             if(mysqli_num_rows($old)) {
@@ -281,7 +281,7 @@ try {
                     (int)$_GET['user_id'] : 0;
 
                 if($user_id < 1) {
-                    throw new \Exception($_language->module['unknown_user']);
+                    throw new \UnexpectedValueException($_language->module['unknown_user']);
                 }
 
                 $parent_url = 'admincenter.php?site=cup&mod=gameaccounts&action=log&profiles&user_id=' . $user_id;
@@ -290,7 +290,7 @@ try {
                     (int)$_GET['deleteProfile'] : 0;
 
                 if ($profile_id < 1) {
-                    throw new \Exception($_language->module['unknown_user']);
+                    throw new \UnexpectedValueException($_language->module['unknown_user']);
                 }
 
                 $get = mysqli_fetch_array(
@@ -309,7 +309,7 @@ try {
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['query_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_failed']);
                 }
 
                 $_SESSION['successArray'][] = $_language->module['query_saved'];
@@ -353,10 +353,10 @@ try {
 
             $gesamt = mysqli_num_rows(
                 mysqli_query(
-                    $_database, 
-                    "SELECT 
+                    $_database,
+                    "SELECT
                             a.`gameaccID` AS gameaccID
-                        FROM `".PREFIX."cups_gameaccounts` a 
+                        FROM `".PREFIX."cups_gameaccounts` a
                         ".$join_query."
                         WHERE (a.`deleted` = 0 OR a.`smurf` = 1)" . $cat
                 )
@@ -373,7 +373,7 @@ try {
 
                 if(!empty($getCat)) {
                     $pagelink = '&amp;cat='.$getCat;
-                } 
+                }
 
                 if(!empty($getShow)) {
                     $pagelink = '&amp;show='.$getShow;
@@ -388,18 +388,18 @@ try {
             $start = ($getPage == "1") ? 0 : (int)($getPage * $max - $max);
 
             $ergebnis = mysqli_query(
-                $_database, 
-                "SELECT * FROM `".PREFIX."cups_gameaccounts` a 
+                $_database,
+                "SELECT * FROM `".PREFIX."cups_gameaccounts` a
                     " . $join_query . "
-                    WHERE (a.`deleted` = 0 OR a.`smurf` = 1)".$cat." 
-                    ORDER BY a.`active` ASC, a.`date` DESC 
+                    WHERE (a.`deleted` = 0 OR a.`smurf` = 1)".$cat."
+                    ORDER BY a.`active` ASC, a.`date` DESC
                     LIMIT " . $start . ", " . $max
             );
 
             $games = '<option value="'.$base_url.'" selected="selected">Games</option>';
             $inf = mysqli_query(
-                $_database, 
-                "SELECT name, tag FROM ".PREFIX."games 
+                $_database,
+                "SELECT name, tag FROM ".PREFIX."games
                     WHERE active = 1
                     ORDER BY name ASC"
             );
@@ -409,8 +409,8 @@ try {
 
             if(!empty($getCat)) {
                 $games = str_replace(
-                    $getCat.'">', 
-                    $getCat.'" selected="selected">', 
+                    $getCat.'">',
+                    $getCat.'" selected="selected">',
                     $games
                 );
             }
@@ -427,16 +427,16 @@ try {
 
                         $get = mysqli_fetch_array(
                             mysqli_query(
-                                $_database, 
-                                "SELECT 
-                                    validated, 
-                                    date 
+                                $_database,
+                                "SELECT
+                                    validated,
+                                    date
                                 FROM `".PREFIX."cups_gameaccounts_csgo`
                                 WHERE gameaccID = " . $ds['gameaccID']
                             )
                         );
 
-                        $changed = (!empty($get['date']) && ($get['date'] > 0)) ? 
+                        $changed = (!empty($get['date']) && ($get['date'] > 0)) ?
                             getformatdatetime($get['date']) : '';
 
                         $admin .= ($get['validated']) ?

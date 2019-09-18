@@ -55,7 +55,7 @@ try {
     );
 
     if (!$admins) {
-        throw new \Exception($_language->module['query_select_failed']);
+        throw new \UnexpectedValueException($_language->module['query_select_failed']);
     }
 
     $userWhereClauseArray = array();
@@ -102,7 +102,7 @@ try {
     );
 
     if (!$users) {
-        throw new \Exception($_language->module['query_select_failed']);
+        throw new \UnexpectedValueException($_language->module['query_select_failed']);
     }
 
     if (mysqli_num_rows($users) > 0) {
@@ -132,7 +132,7 @@ try {
     );
 
     if (!$users) {
-        throw new \Exception($_language->module['query_select_failed']);
+        throw new \UnexpectedValueException($_language->module['query_select_failed']);
     }
 
     while ($db = mysqli_fetch_array($users)) {
@@ -210,7 +210,7 @@ try {
     );
 
     if (!$streams) {
-        throw new \Exception($_language->module['query_select_failed'] . ' (liveshow)');
+        throw new \UnexpectedValueException($_language->module['query_select_failed'] . ' (liveshow)');
     }
 
     while ($db = mysqli_fetch_array($streams)) {
@@ -281,7 +281,7 @@ try {
     );
 
     if (!$sponsors) {
-        throw new \Exception($_language->module['query_select_failed'] . ' (sponsor)');
+        throw new \UnexpectedValueException($_language->module['query_select_failed'] . ' (sponsor)');
     }
 
     while ($db = mysqli_fetch_array($sponsors)) {

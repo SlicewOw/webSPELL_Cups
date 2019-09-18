@@ -18,11 +18,11 @@ try {
                     (int)$_POST['stream_id'] : 0;
 
                 if ($stream_id < 1) {
-                    throw new \Exception($_language->module['error_unknown_id']);
+                    throw new \UnexpectedValueException($_language->module['error_unknown_id']);
                 }
 
                 if (!checkIfContentExists($stream_id, 'livID', 'liveshow')) {
-                    throw new \Exception($_language->module['error_unknown_id']);
+                    throw new \UnexpectedValueException($_language->module['error_unknown_id']);
                 }
 
                 $id = strtolower(getinput($_POST['twitch_id']));
@@ -51,7 +51,7 @@ try {
                 );
 
                 if (!$ergebnis) {
-                    throw new \Exception($_language->module['query_update_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_update_failed']);
                 }
 
                 $parent_url .= '&id=' . $stream_id;
@@ -72,15 +72,15 @@ try {
         if ($getAction == 'edit') {
 
             if (!iscupadmin($userID)) {
-                throw new \Exception($_language->module['access_denied']);
+                throw new \UnexpectedValueException($_language->module['access_denied']);
             }
 
             if ($stream_id < 1) {
-                throw new \Exception($_language->module['error_unknown_id']);
+                throw new \UnexpectedValueException($_language->module['error_unknown_id']);
             }
 
             if (!checkIfContentExists($stream_id, 'livID', 'liveshow')) {
-                throw new \Exception($_language->module['error_unknown_id']);
+                throw new \UnexpectedValueException($_language->module['error_unknown_id']);
             }
 
             $ds = mysqli_fetch_array(
@@ -106,15 +106,15 @@ try {
         } else if ($getAction == 'delete') {
 
             if (!iscupadmin($userID)) {
-                throw new \Exception($_language->module['access_denied']);
+                throw new \UnexpectedValueException($_language->module['access_denied']);
             }
 
             if ($stream_id < 1) {
-                throw new \Exception($_language->module['error_unknown_id']);
+                throw new \UnexpectedValueException($_language->module['error_unknown_id']);
             }
 
             if (!checkIfContentExists($stream_id, 'livID', 'liveshow')) {
-                throw new \Exception($_language->module['error_unknown_id']);
+                throw new \UnexpectedValueException($_language->module['error_unknown_id']);
             }
 
             $get = mysqli_fetch_array(
@@ -126,7 +126,7 @@ try {
             );
 
             if ($userID != $get['userID']) {
-                throw new \Exception($_language->module['access_denied']);
+                throw new \UnexpectedValueException($_language->module['access_denied']);
             }
 
             $deleteQuery = mysqli_query(
@@ -136,7 +136,7 @@ try {
             );
 
             if (!$deleteQuery) {
-                throw new \Exception($_language->module['query_delete_failed']);
+                throw new \UnexpectedValueException($_language->module['query_delete_failed']);
             }
 
             $text = 'Stream #'.$stream_id.' gel&ouml;scht';
@@ -147,7 +147,7 @@ try {
         } else if ($stream_id > 0) {
 
             if (!checkIfContentExists($stream_id, 'livID', 'liveshow')) {
-                throw new \Exception($_language->module['error_unknown_id']);
+                throw new \UnexpectedValueException($_language->module['error_unknown_id']);
             }
 
             $liveshow_show = '';
@@ -285,7 +285,7 @@ try {
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['query_select_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_select_failed']);
                 }
 
                 while ($db = mysqli_fetch_array($query)) {
@@ -330,7 +330,7 @@ try {
             );
 
             if (!$query) {
-                throw new \Exception($_language->module['query_select_failed']);
+                throw new \UnexpectedValueException($_language->module['query_select_failed']);
             }
 
             $anzOtherStreams = mysqli_num_rows($query);
@@ -403,7 +403,7 @@ try {
             );
 
             if (!$selectQuery) {
-                throw new \Exception($_language->module['query_select_failed']);
+                throw new \UnexpectedValueException($_language->module['query_select_failed']);
             }
 
             while ($da = mysqli_fetch_array($selectQuery)) {
@@ -574,7 +574,7 @@ try {
                             );
 
                             if (!$selectQuery) {
-                                throw new \Exception($_language->module['query_select_failed']);
+                                throw new \UnexpectedValueException($_language->module['query_select_failed']);
                             }
 
                             $get = mysqli_fetch_array($selectQuery);
@@ -595,7 +595,7 @@ try {
                             );
 
                             if (!$ergebnis) {
-                                throw new \Exception($_language->module['query_select_failed']);
+                                throw new \UnexpectedValueException($_language->module['query_select_failed']);
                             }
 
                             while ($ds=mysqli_fetch_array($ergebnis)) {

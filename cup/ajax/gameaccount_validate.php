@@ -16,7 +16,7 @@ try {
     $_language->readModule('gameaccounts');
 
     if (!isset($loggedin) || !$loggedin) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $getGame = (isset($_GET['game'])) ?
@@ -43,7 +43,7 @@ try {
     $get = mysqli_fetch_array($selectQuery);
 
     if ($get['exist'] != 1) {
-        throw new \Exception($_language->module['unknown_gameaccount']);
+        throw new \UnexpectedValueException($_language->module['unknown_gameaccount']);
     }
 
     $gameaccount_id = $get['gameaccount_id'];
@@ -55,21 +55,21 @@ try {
     $SteamDataArray = getCSGOAccountInfo($steam64_id);
 
     if (!validate_array($SteamDataArray)) {
-        throw new \Exception($_language->module['error_failed_steamrequest']);
+        throw new \UnexpectedValueException($_language->module['error_failed_steamrequest']);
     }
 
     if (!isset($SteamDataArray['status']) || ($SteamDataArray['status'] != 1)) {
-        throw new \Exception($_language->module['error_failed_steamrequest']);
+        throw new \UnexpectedValueException($_language->module['error_failed_steamrequest']);
     }
 
     //
     // Steam API Data
     if (!is_array($SteamDataArray)) {
-        throw new \Exception($_language->module['error_failed_steamrequest']);
+        throw new \UnexpectedValueException($_language->module['error_failed_steamrequest']);
     }
 
     if (!isset($SteamDataArray['steam_profile'])) {
-        throw new \Exception($_language->module['error_failed_steamrequest']);
+        throw new \UnexpectedValueException($_language->module['error_failed_steamrequest']);
     }
 
     //
@@ -82,7 +82,7 @@ try {
     } else {
 
         if (!in_array('error_profileurl', $returnArray['error'])) {
-            throw new \Exception($_language->module['error_profileurl']);
+            throw new \UnexpectedValueException($_language->module['error_profileurl']);
         }
 
     }
@@ -95,7 +95,7 @@ try {
     } else {
 
         if (!in_array('error_personaname', $returnArray['error'])) {
-            throw new \Exception($_language->module['error_personaname']);
+            throw new \UnexpectedValueException($_language->module['error_personaname']);
         }
 
     }
@@ -108,7 +108,7 @@ try {
     } else {
 
         if(!in_array('error_steamid', $returnArray['error'])) {
-            throw new \Exception($_language->module['error_steamid']);
+            throw new \UnexpectedValueException($_language->module['error_steamid']);
         }
 
     }

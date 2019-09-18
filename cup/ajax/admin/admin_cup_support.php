@@ -11,7 +11,7 @@ try {
     $_language->readModule('support', false, true);
 
     if (!iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $ticketStatus = (isset($_GET['status']) && validate_int($_GET['status'], true)) ?
@@ -26,7 +26,7 @@ try {
     if ($ticketStatus > 0) {
 
         if ($getAction != 'update') {
-            throw new \Exception($_language->module['unknown_action']);
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
         $whereClauseArray = array();
@@ -74,7 +74,7 @@ try {
         );
 
         if (!$ergebnis) {
-            throw new \Exception($_language->module['query_select_failed']);
+            throw new \UnexpectedValueException($_language->module['query_select_failed']);
         }
 
         if (mysqli_num_rows($ergebnis) > 0) {
@@ -128,14 +128,14 @@ try {
                 (int)$_POST['ticket_id'] : 0;
 
             if ($ticket_id < 1) {
-                throw new \Exception($_language->module['unknown_ticket']);
+                throw new \UnexpectedValueException($_language->module['unknown_ticket']);
             }
 
             $admin_id = (isset($_POST['admin_id']) && validate_int($_POST['admin_id'])) ?
                 (int)$_POST['admin_id'] : 0;
 
             if ($admin_id < 1) {
-                throw new \Exception($_language->module['unknown_admin']);
+                throw new \UnexpectedValueException($_language->module['unknown_admin']);
             }
 
             $query = mysqli_query(
@@ -148,7 +148,7 @@ try {
             );
 
             if (!$query) {
-                throw new \Exception($_language->module['query_update_failed']);
+                throw new \UnexpectedValueException($_language->module['query_update_failed']);
             }
 
             $insertQuery = mysqli_query(
@@ -169,7 +169,7 @@ try {
 
             if (!$insertQuery) {
                 print_r(mysqli_error($_database));
-                throw new \Exception($_language->module['query_insert_failed']);
+                throw new \UnexpectedValueException($_language->module['query_insert_failed']);
             }
 
             $adminName = getnickname($admin_id);
@@ -179,7 +179,7 @@ try {
             );
 
         } else {
-            throw new \Exception($_language->module['unknown_action']); 
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
     }

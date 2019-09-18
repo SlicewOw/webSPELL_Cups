@@ -11,21 +11,21 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ?
         (int)$_GET['cup_id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     $round_id = (isset($_GET['round_id']) && validate_int($_GET['round_id'], true)) ?
         (int)$_GET['round_id'] : 0;
 
     if ($round_id < 1) {
-        throw new \Exception($_language->module['unknown_round']);
+        throw new \UnexpectedValueException($_language->module['unknown_round']);
     }
 
     $returnArray['data'] = array(
@@ -37,7 +37,7 @@ try {
 
     $adminMatchesRoundInclude = __DIR__ . '/../../../admin/cup_admin/includes/matches_round.php';
     if (!file_exists($adminMatchesRoundInclude)) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $cupID = $cup_id;
@@ -54,7 +54,7 @@ try {
             $returnArray['message'] = $errorArray;
         }
 
-        throw new \Exception($_language->module['unknown_bracket']);
+        throw new \UnexpectedValueException($_language->module['unknown_bracket']);
 
     }
 

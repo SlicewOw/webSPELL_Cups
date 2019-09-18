@@ -32,7 +32,7 @@ try {
                 );
 
                 if (!$insertQuery) {
-                    throw new \Exception($_language->module['query_insert_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                 }
 
                 $category_id = mysqli_insert_id($_database);
@@ -55,7 +55,7 @@ try {
             );
 
             if (!$info) {
-                throw new \Exception($_language->module['query_select_failed']);
+                throw new \UnexpectedValueException($_language->module['query_select_failed']);
             }
 
             if (mysqli_num_rows($info) > 0) {
@@ -93,13 +93,13 @@ try {
     } else if ($getAction == 'edit') {
 
         if ($category_id < 1) {
-            throw new \Exception('unknown_id');
+            throw new \UnexpectedValueException('unknown_id');
         }
 
         if (isset($_POST['submitEditScreenshotCategory'])) {
 
             if ($category_id < 1) {
-                throw new \Exception($_language->module['unknown_category']);
+                throw new \UnexpectedValueException($_language->module['unknown_category']);
             }
 
             $name = (isset($_POST['name'])) ?
@@ -117,7 +117,7 @@ try {
             );
 
             if (!$updateQuery) {
-                throw new \Exception($_language->module['query_update_failed']);
+                throw new \UnexpectedValueException($_language->module['query_update_failed']);
             }
 
             header('Location: admincenter.php?site=cup&mod=categories&action=show&category=screenshot');
@@ -152,7 +152,7 @@ try {
     } else if ($getAction == 'delete') {
 
         if ($category_id < 1) {
-            throw new \Exception('unknown_id');
+            throw new \UnexpectedValueException('unknown_id');
         }
 
         if (isset($_POST['submitDeleteScreenshotCategory'])) {

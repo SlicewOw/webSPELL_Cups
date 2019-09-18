@@ -33,7 +33,7 @@ try {
                             try {
 
                                 if ($upload->hasError() !== false) {
-                                    throw new \Exception($upload->translateError());
+                                    throw new \UnexpectedValueException($upload->translateError());
                                 }
 
                                 $mime_types = array(
@@ -44,19 +44,19 @@ try {
                                 );
 
                                 if (!$upload->supportedMimeType($mime_types)) {
-                                    throw new \Exception($_language->module['unsupported_image_type']);
+                                    throw new \UnexpectedValueException($_language->module['unsupported_image_type']);
                                 }
 
                                 $imageInformation = getimagesize($upload->getTempFile());
 
                                 if (!is_array($imageInformation)) {
-                                    throw new \Exception($_language->module['broken_image']);
+                                    throw new \UnexpectedValueException($_language->module['broken_image']);
                                 }
 
                                 $filename = $cup_id . '_' . $image_key . '.' . $upload->getExtension();
 
                                 if (!$upload->saveAs($filepath . $filename, true)) {
-                                    throw new \Exception($_language->module['upload_failed']);
+                                    throw new \UnexpectedValueException($_language->module['upload_failed']);
                                 }
 
                                 $cupSetImagesArray[] = '`' . $image_key . '` = \'' . $filename . '\'';
@@ -114,7 +114,7 @@ try {
                 );
 
             } else {
-                throw new \Exception($_languages->module['unknown_action']);
+                throw new \UnexpectedValueException($_languages->module['unknown_action']);
             }
 
         } catch (Exception $e) {

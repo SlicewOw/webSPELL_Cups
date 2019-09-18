@@ -3,11 +3,11 @@
 try {
 
     if (!iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (!isset($teamID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (validate_array($_POST, true)) {
@@ -39,7 +39,7 @@ try {
                 );
 
                 if (!$insertQuery) {
-                    throw new \Exception($_language->module['query_insert_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                 }
 
             }
@@ -73,7 +73,7 @@ try {
             );
 
             if (!$selectQuery) {
-                throw new \Exception($_language->module['query_select_failed']);
+                throw new \UnexpectedValueException($_language->module['query_select_failed']);
             }
 
             while ($get = mysqli_fetch_array($selectQuery)) {

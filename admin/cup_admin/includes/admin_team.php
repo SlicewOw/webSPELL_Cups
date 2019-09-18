@@ -3,7 +3,7 @@
 $adminList = '';
 
 if(!iscupadmin($userID)) {
-	throw new \Exception($_language->module['access_denied']);
+	throw new \UnexpectedValueException($_language->module['access_denied']);
 }
 
 $checkIf = mysqli_fetch_array(

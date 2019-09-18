@@ -14,7 +14,7 @@ try {
         (int)$_GET['cj_id'] : 0;
 
     if ($cronjob_id < 1) {
-        throw new \Exception('unknown_cronjob');
+        throw new \UnexpectedValueException('unknown_cronjob');
     }
 
     $idArray = array();
@@ -33,7 +33,7 @@ try {
 
     $anzStreams = count($idArray);
     if ($anzStreams < 1) {
-        throw new \Exception('no_streams_available_cronjob_' . $cronjob_id);
+        throw new \UnexpectedValueException('no_streams_available_cronjob_' . $cronjob_id);
     }
 
     //
@@ -49,7 +49,7 @@ try {
     $result = getAPIData($json_url, 'twitch');
 
     if (validate_array($result)) {
-        throw new \Exception('unknown_attribute_result');
+        throw new \UnexpectedValueException('unknown_attribute_result');
     }
 
     //
@@ -103,7 +103,7 @@ try {
         if (!empty($pic)) {
 
             if (!validate_url($pic)) {
-                throw new \Exception('unknown_parameter_of_stream_thumb (`pic`=\'' . $pic . '\')');
+                throw new \UnexpectedValueException('unknown_parameter_of_stream_thumb (`pic`=\'' . $pic . '\')');
             } else if (@copy($pic, __DIR__ . '/../../images/cup/streams/' . $twitch_id . '.jpg')) {
                 $setValueArray[] = 'preview = \'' . addslashes($twitch_id) . '.jpg\'';
             } else {
@@ -164,7 +164,7 @@ try {
                 $twitch_id = $idArray[$x];
 
                 if (empty($twitch_id)) {
-                    throw new \Exception('unknown_twitch_id');
+                    throw new \UnexpectedValueException('unknown_twitch_id');
                 }
 
                 $json_url = 'https://api.twitch.tv/kraken/channels/' . $twitch_id;
@@ -172,7 +172,7 @@ try {
 
                     $twitchData = json_decode($json_data, TRUE);
                     if (!isset($twitchData['status']) || ($twitchData['status'] != '404')) {
-                        throw new \Exception('stream_is_existing_do_not_delete');
+                        throw new \UnexpectedValueException('stream_is_existing_do_not_delete');
                     }
 
                     $deleteQuery = cup_query(

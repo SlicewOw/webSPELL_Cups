@@ -5,7 +5,7 @@ try {
     $_language->readModule('streams', false, true);
 
     if (!ispageadmin($userID) || (mb_substr(basename($_SERVER[ 'REQUEST_URI' ]), 0, 15) != "admincenter.php")) {
-        throw new \Exception($_language->module['no_access']);
+        throw new \UnexpectedValueException($_language->module['no_access']);
     }
 
     $max_cronjobs = 5;
@@ -46,7 +46,7 @@ try {
                         (int)$_POST['stream_id'] : 0;
 
                     if ($liveshow_id < 1) {
-                        throw new \Exception($_language->module['unknown_stream']);
+                        throw new \UnexpectedValueException($_language->module['unknown_stream']);
                     }
 
                     $stream->setID($liveshow_id);
@@ -60,7 +60,7 @@ try {
                 }
 
             } else {
-                throw new \Exception($_language->module['unknown_stream']);
+                throw new \UnexpectedValueException($_language->module['unknown_stream']);
             }
 
         } catch (Exception $e) {
@@ -87,11 +87,11 @@ try {
 
         } else if ($getAction == "edit") {
 
-            $stream_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ? 
+            $stream_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
                 (int)$_GET['id'] : 0;
 
             if ($stream_id < 1) {
-                throw new \Exception($_language->module['unknown_stream']);
+                throw new \UnexpectedValueException($_language->module['unknown_stream']);
             }
 
             $ergebnis = mysqli_query(
@@ -101,11 +101,11 @@ try {
             );
 
             if (!$ergebnis) {
-                throw new \Exception($_language->module['query_failed']);
+                throw new \UnexpectedValueException($_language->module['query_failed']);
             }
 
             if (mysqli_num_rows($ergebnis) != 1) {
-                throw new \Exception($_language->module['unknown_stream']);
+                throw new \UnexpectedValueException($_language->module['unknown_stream']);
             }
 
             $ds = mysqli_fetch_array($ergebnis);
@@ -125,11 +125,11 @@ try {
 
         } else if ($getAction == "del") {
 
-            $stream_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ? 
+            $stream_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
                 (int)$_GET['id'] : 0;
 
             if ($stream_id < 1) {
-                throw new \Exception($_language->module['unknown_stream']);
+                throw new \UnexpectedValueException($_language->module['unknown_stream']);
             }
 
             $parent_url = 'admincenter.php?site=streams';
@@ -137,7 +137,7 @@ try {
             $db = mysqli_fetch_array(
                 mysqli_query(
                     $_database,
-                    "SELECT id, cronjobID, title FROM ".PREFIX."liveshow 
+                    "SELECT id, cronjobID, title FROM ".PREFIX."liveshow
                         WHERE livID = " . $stream_id
                 )
             );
@@ -149,7 +149,7 @@ try {
             );
 
             if (!$deleteQuery) {
-                throw new \Exception($_language->module['cannot_delete']);
+                throw new \UnexpectedValueException($_language->module['cannot_delete']);
             }
 
             $title = (!empty($db['title'])) ?
@@ -165,11 +165,11 @@ try {
 
             $parent_url = 'admincenter.php?site=streams';
 
-            $stream_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ? 
+            $stream_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
                 (int)$_GET['id'] : 0;
 
             if ($stream_id < 1) {
-                throw new \Exception($_language->module['unknown_stream']);
+                throw new \UnexpectedValueException($_language->module['unknown_stream']);
             }
 
             $db = mysqli_fetch_array(
@@ -186,7 +186,7 @@ try {
             );
 
             if ($db['is_existing'] != 1) {
-                throw new \Exception($_language->module['unknown_stream']);
+                throw new \UnexpectedValueException($_language->module['unknown_stream']);
             }
 
             if (!$db['active']) {
@@ -199,7 +199,7 @@ try {
                 );
 
                 if (!$updateQuery) {
-                    throw new \Exception($_language->module['query_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_failed']);
                 }
 
                 $_SESSION['successArray'][]  = $_language->module['activated'];
@@ -253,7 +253,7 @@ try {
             );
 
             if (!$info) {
-                throw new \Exception($_language->module['query_failed']);
+                throw new \UnexpectedValueException($_language->module['query_failed']);
             }
 
             $anzStreams = mysqli_num_rows($info);

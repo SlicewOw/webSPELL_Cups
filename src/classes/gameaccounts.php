@@ -68,7 +68,7 @@ class gameaccount {
     public function setGameaccountID($gameaccount_id) {
 
         if (is_null($gameaccount_id)|| !is_numeric($gameaccount_id) || ($gameaccount_id < 1)) {
-            throw new \Exception($this->lang->module['error_gameaccount_id_type']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_id_type']);
         }
 
         $this->gameaccount_id = $gameaccount_id;
@@ -78,14 +78,14 @@ class gameaccount {
     public function setGame($game_id = null) {
 
         if (is_null($game_id) || empty($game_id)) {
-            throw new \Exception($this->lang->module['error_gameaccount_game'] . ' (1)');
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_game'] . ' (1)');
         }
 
         if (!is_numeric($game_id)) {
 
             $gameIdLength = strlen($game_id);
             if ($gameIdLength < 2 || $gameIdLength > 3) {
-                throw new \Exception($this->lang->module['error_gameaccount_game_tag']);
+                throw new \UnexpectedValueException($this->lang->module['error_gameaccount_game_tag']);
             }
 
             $game_tag = $game_id;
@@ -93,11 +93,11 @@ class gameaccount {
             $game_id = getGame($game_tag, 'id');
 
         } else if (!validate_int($game_id)) {
-            throw new \Exception($this->lang->module['error_gameaccount_game'] . ' (2)');
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_game'] . ' (2)');
         }
 
         if ($game_id < 1) {
-            throw new \Exception($this->lang->module['error_gameaccount_game'] . ' (3)');
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_game'] . ' (3)');
         }
 
         global $_database;
@@ -113,7 +113,7 @@ class gameaccount {
         //
         // Game ID exisitert?
         if ($checkIf['exist'] != 1) {
-            throw new \Exception($this->lang->module['error_gameaccount_game']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_game']);
         }
 
         //
@@ -145,7 +145,7 @@ class gameaccount {
     public function setValue($var_value) {
 
         if (is_null($var_value) || empty($var_value)) {
-            throw new \Exception($this->lang->module['error_gameaccount_value']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_value']);
         }
 
         //
@@ -161,7 +161,7 @@ class gameaccount {
             //
             // Kontrolle, ob korrekter Steam Gameaccount
             if (!$this->checkSteamAccount()) {
-                throw new \Exception($this->lang->module['error_steam_value_url']);
+                throw new \UnexpectedValueException($this->lang->module['error_steam_value_url']);
             }
 
             $this->value = $this->value_tmp;
@@ -183,11 +183,11 @@ class gameaccount {
         // FALSE	: ist nicht gesperrt
 
         if(is_null($this->value)) {
-            throw new \Exception($this->lang->module['error_gameaccount_value']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_value']);
         }
 
         if(is_null($this->game_tag)) {
-            throw new \Exception($this->lang->module['error_gameaccount_game_tag']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_game_tag']);
         }
 
         global $_database;
@@ -206,7 +206,7 @@ class gameaccount {
                 // Steam Community ID (SteamID64)
                 $value = SteamID2CommunityID($this->value);
                 if(strlen($value) != 17) {
-                    throw new \Exception($this->lang->module['wrong_steam64_id']);
+                    throw new \UnexpectedValueException($this->lang->module['wrong_steam64_id']);
                 }
 
             }
@@ -237,7 +237,7 @@ class gameaccount {
                     $_database,
                     "SELECT
                             `description`
-                        FROM `" . PREFIX . "cups_gameaccounts_banned` 
+                        FROM `" . PREFIX . "cups_gameaccounts_banned`
                         WHERE " . $whereClause
                 )
             );
@@ -248,7 +248,7 @@ class gameaccount {
                 $this->lang->module['error_gameaccount_banned']
             );
 
-            throw new \Exception(getinput($exceptionMessage));
+            throw new \UnexpectedValueException(getinput($exceptionMessage));
 
         }
 
@@ -257,11 +257,11 @@ class gameaccount {
     public function setSteamIDUnique() {
 
         if (!$this->isCheckedSteamAccount) {
-            throw new \Exception($this->lang->module['error_gameaccount_value']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_value']);
         }
 
         if (!validate_int($this->gameaccount_id)) {
-            throw new \Exception($this->lang->module['unknown_gameaccount']);
+            throw new \UnexpectedValueException($this->lang->module['unknown_gameaccount']);
         }
 
         global $_database;
@@ -309,7 +309,7 @@ class gameaccount {
         }
 
         if (is_null($this->value_tmp)) {
-            throw new \Exception($this->lang->module['error_gameaccount_value']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_value']);
         }
 
         $steamAccountArray = array(
@@ -337,7 +337,7 @@ class gameaccount {
     public function checkSteamAccount() {
 
         if (is_null($this->value_tmp)) {
-            throw new \Exception($this->lang->module['error_gameaccount_value']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_value']);
         }
 
         if (!$this->isSteamAccount) {
@@ -351,7 +351,7 @@ class gameaccount {
             if(strlen($this->value_tmp) == 17) {
                 $steam64_id = $this->value_tmp;
             } else {
-                throw new \Exception($this->lang->module['error_steam_value_url'] . ' (1)');
+                throw new \UnexpectedValueException($this->lang->module['error_steam_value_url'] . ' (1)');
             }
 
         }
@@ -370,7 +370,7 @@ class gameaccount {
             );
 
             if(!isset($getTypeOfURL) || !in_array($getTypeOfURL, $getTypeOfURLArray)) {
-                throw new \Exception($this->lang->module['error_steam_value_url'] . ' (2)');
+                throw new \UnexpectedValueException($this->lang->module['error_steam_value_url'] . ' (2)');
             }
 
             $valueArray = explode('/', $this->value_tmp);
@@ -397,7 +397,7 @@ class gameaccount {
                     $steam64IdIsSet = TRUE;
 
                 } else {
-                    throw new \Exception($this->lang->module['error_failed_steamrequest']);
+                    throw new \UnexpectedValueException($this->lang->module['error_failed_steamrequest']);
                 }
 
             }
@@ -423,11 +423,11 @@ class gameaccount {
     public function setMojangUnique() {
 
         if(is_null($this->value)) {
-            throw new \Exception($this->lang->module['error_gameaccount_value']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_value']);
         }
 
         if(is_null($this->gameaccount_id)) {
-            throw new \Exception($this->lang->module['unknown_gameaccount']);
+            throw new \UnexpectedValueException($this->lang->module['unknown_gameaccount']);
         }
 
         $curl_url = 'https://api.mojang.com/users/profiles/minecraft/' . strtolower($this->value);
@@ -485,23 +485,23 @@ class gameaccount {
         global $_database, $userID;
 
         if (is_null($this->game_tag)) {
-            throw new \Exception($this->lang->module['error_gameaccount_game_tag']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_game_tag']);
         }
 
         $checkIf = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS exist FROM `".PREFIX."cups_gameaccounts` 
+                $_database,
+                "SELECT COUNT(*) AS exist FROM `".PREFIX."cups_gameaccounts`
                     WHERE userID = ".$userID." AND category = '".$this->game_tag."' AND deleted = 0"
             )
         );
 
         if($checkIf['exist'] == 1) {
-            throw new \Exception($this->lang->module['error_gameaccount_existing_user']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_existing_user']);
         }
 
         if(is_null($this->value)) {
-            throw new \Exception('unknown value');
+            throw new \UnexpectedValueException('unknown value');
         }
 
         $checkIf = mysqli_fetch_array(
@@ -515,7 +515,7 @@ class gameaccount {
         );
 
         if($checkIf['exist'] == 1) {
-            throw new \Exception($this->lang->module['error_gameaccount_existing']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_existing']);
         }
 
         return TRUE;
@@ -531,7 +531,7 @@ class gameaccount {
         global $_database;
 
         if (is_null($this->gameaccount_id)) {
-            throw new \Exception($this->lang->module['unknown_gameaccount']);
+            throw new \UnexpectedValueException($this->lang->module['unknown_gameaccount']);
         }
 
         $checkIf = mysqli_fetch_array(
@@ -551,7 +551,7 @@ class gameaccount {
     public function deleteGameaccount() {
 
         if (!$this->isGameaccount('cups_gameaccounts')) {
-            throw new \Exception($this->lang->module['unknown_gameaccount']);
+            throw new \UnexpectedValueException($this->lang->module['unknown_gameaccount']);
         }
 
         global $_database, $userID;
@@ -582,12 +582,12 @@ class gameaccount {
         );
 
         if (!$selectUserPenaltiesQuery) {
-            throw new \Exception($this->lang->module['error_delete_penalty_user']);
+            throw new \UnexpectedValueException($this->lang->module['error_delete_penalty_user']);
         }
 
         $get = mysqli_fetch_array($selectUserPenaltiesQuery);
         if ($get['user_penalties'] > 0) {
-            throw new \Exception($this->lang->module['error_delete_penalty_user']);
+            throw new \UnexpectedValueException($this->lang->module['error_delete_penalty_user']);
         }
 
         $selectCupTeamsQuery = mysqli_query(
@@ -599,7 +599,7 @@ class gameaccount {
         );
 
         if (!$selectCupTeamsQuery) {
-            throw new \Exception($this->lang->module['error_delete_penalty_user']);
+            throw new \UnexpectedValueException($this->lang->module['error_delete_penalty_user']);
         }
 
         $teamArray = array();
@@ -625,12 +625,12 @@ class gameaccount {
         );
 
         if (!$selectTeamPenaltiesQuery) {
-            throw new \Exception($this->lang->module['error_delete_penalty_team']);
+            throw new \UnexpectedValueException($this->lang->module['error_delete_penalty_team']);
         }
 
         $get = mysqli_fetch_array($selectTeamPenaltiesQuery);
         if ($get['team_penalties'] > 0) {
-            throw new \Exception($this->lang->module['error_delete_penalty_team']);
+            throw new \UnexpectedValueException($this->lang->module['error_delete_penalty_team']);
         }
 
         $whereClauseArray = array();
@@ -653,12 +653,12 @@ class gameaccount {
         );
 
         if (!$selectQuery) {
-            throw new \Exception($this->lang->module['error_active_cups']);
+            throw new \UnexpectedValueException($this->lang->module['error_active_cups']);
         }
 
         $get = mysqli_fetch_array($selectQuery);
         if ($get['active_cups'] > 0) {
-            throw new \Exception($this->lang->module['error_active_cups']);
+            throw new \UnexpectedValueException($this->lang->module['error_active_cups']);
         }
 
         /**
@@ -681,7 +681,7 @@ class gameaccount {
         );
 
         if (!$updateQuery) {
-            throw new \Exception($this->lang->module['query_failed_delete']);
+            throw new \UnexpectedValueException($this->lang->module['query_failed_delete']);
         }
 
         $this->gameaccount_id = null;
@@ -732,17 +732,17 @@ class gameaccount {
     public function saveGameaccount($gameaccount_id = null, $redirect = TRUE) {
 
         if (is_null($this->game_id) || !validate_int($this->game_id)) {
-            throw new \Exception($this->lang->module['error_gameaccount_game']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_game']);
         }
 
         if (is_null($this->value)) {
-            throw new \Exception($this->lang->module['error_gameaccount_value']);
+            throw new \UnexpectedValueException($this->lang->module['error_gameaccount_value']);
         }
 
         if (!is_null($gameaccount_id)) {
 
             if (!validate_int($gameaccount_id)) {
-                throw new \Exception($this->lang->module['error_gameaccount_id_type']);
+                throw new \UnexpectedValueException($this->lang->module['error_gameaccount_id_type']);
             }
 
             //
@@ -790,7 +790,7 @@ class gameaccount {
             );
 
             if (!$query) {
-                throw new \Exception($this->lang->module['query_failed_insert']);
+                throw new \UnexpectedValueException($this->lang->module['query_failed_insert']);
             }
 
             //

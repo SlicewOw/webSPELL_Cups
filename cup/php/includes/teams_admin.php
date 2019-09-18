@@ -3,7 +3,7 @@
 try {
 
     if (!isset($_GET['id']) || !validate_int($_GET['id'])) {
-        throw new \Exception($_language->module['not_loggedin']);
+        throw new \UnexpectedValueException($_language->module['not_loggedin']);
     }
 
     $unique_id = (int)$_GET['id'];
@@ -16,16 +16,16 @@ try {
         $ds = mysqli_fetch_array(
             mysqli_query(
                 $_database,
-                "SELECT * FROM `" . PREFIX . "cups_teams` 
+                "SELECT * FROM `" . PREFIX . "cups_teams`
                     WHERE teamID = " . $team_id . " AND deleted = 0"
             )
         );
 
-        $showMessage = (isset($_GET['message'])) ? 
+        $showMessage = (isset($_GET['message'])) ?
             showMessage($_language->module[$_GET['message']]) : '';
 
         if (($ds['deleted'] == 1) && !iscupadmin($userID)) {
-            throw new \Exception($_language->module['no_access']);
+            throw new \UnexpectedValueException($_language->module['no_access']);
         }
 
         if ($ds['deleted'] == 1) {
@@ -186,7 +186,7 @@ try {
         }
 
     } else {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
 } catch (Exception $e) {

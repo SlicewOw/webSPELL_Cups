@@ -3,7 +3,7 @@
 try {
 
     if (!isset($cup_id)) {
-        throw new \Exception('unknown_cup_id');
+        throw new \UnexpectedValueException('unknown_cup_id');
     }
 
     if (!isset($cupArray) || !validate_array($cupArray, true)) {

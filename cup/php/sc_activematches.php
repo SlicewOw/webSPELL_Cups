@@ -3,7 +3,7 @@
 try {
 
     if (!$loggedin) {
-        throw new \Exception('access_denied');
+        throw new \UnexpectedValueException('access_denied');
     }
 
     $matchArray = array();
@@ -98,15 +98,15 @@ try {
         for ($x = 0; $x < $anzMatches; $x++) {
 
             if (!isset($matchArray[$x]['match_id'])) {
-                throw new \Exception('unknown_array_entry (`match_id`)');
+                throw new \UnexpectedValueException('unknown_array_entry (`match_id`)');
             }
 
             if (!isset($matchArray[$x]['cup_id'])) {
-                throw new \Exception('unknown_array_entry (`cup_id`)');
+                throw new \UnexpectedValueException('unknown_array_entry (`cup_id`)');
             }
 
             if (!isset($matchArray[$x]['opponent'])) {
-                throw new \Exception('unknown_array_entry (`opoonent`)');
+                throw new \UnexpectedValueException('unknown_array_entry (`opoonent`)');
             }
 
             $url = $base_url . $matchArray[$x]['cup_id'] . '&amp;mID=' . $matchArray[$x]['match_id'];

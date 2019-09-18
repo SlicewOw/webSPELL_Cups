@@ -5,7 +5,7 @@ try {
     $_language->readModule('support', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (validate_array($_POST, true)) {
@@ -16,7 +16,7 @@ try {
 
             if(isset($_POST['submitAddAdminTicket'])) {
 
-                $text = (isset($_POST['text'])) ? 
+                $text = (isset($_POST['text'])) ?
                     getinput($_POST['text']) : '';
 
                 if(isset($_POST['match_protest']) && is_numeric($_POST['match_protest']) && ($_POST['match_protest'] == 1)) {
@@ -73,11 +73,11 @@ try {
                 }
 
                 if(empty($name)) {
-                    throw new \Exception($_language->module['ticket_error_1']);   
+                    throw new \UnexpectedValueException($_language->module['ticket_error_1']);
                 }
 
                 if(empty($text)) {
-                    throw new \Exception($_language->module['ticket_error_2']);
+                    throw new \UnexpectedValueException($_language->module['ticket_error_2']);
                 }
 
                 $categoryID	= (isset($_POST['categoryID']) && validate_int($_POST['categoryID'])) ?
@@ -87,21 +87,21 @@ try {
                     $_SESSION['support']['category_id'] = $categoryID;
                 }
 
-                $cupID = (isset($_POST['selectCupID']) && validate_int($_POST['selectCupID'])) ? 
+                $cupID = (isset($_POST['selectCupID']) && validate_int($_POST['selectCupID'])) ?
                     (int)$_POST['selectCupID'] : 0;
 
                 if($cupID > 0) {
                     $_SESSION['support']['cup_id'] = $cupID;
                 }
 
-                $matchID = (isset($_POST['selectMatchID']) && validate_int($_POST['selectMatchID'])) ? 
+                $matchID = (isset($_POST['selectMatchID']) && validate_int($_POST['selectMatchID'])) ?
                     (int)$_POST['selectMatchID'] : 0;
 
                 if($matchID > 0) {
                     $_SESSION['support']['match_id'] = $matchID;
                 }
 
-                $teamAdminTeam1 = (isset($_POST['player']) && validate_int($_POST['player'])) ? 
+                $teamAdminTeam1 = (isset($_POST['player']) && validate_int($_POST['player'])) ?
                     (int)$_POST['player'] : 0;
 
                 if($teamAdminTeam1 > 0) {
@@ -120,7 +120,7 @@ try {
                     $_SESSION['support']['team_id'] = $team;
                 }
 
-                $opponentID	= (isset($_POST['team2_id']) && validate_int($_POST['team2_id'])) ? 
+                $opponentID	= (isset($_POST['team2_id']) && validate_int($_POST['team2_id'])) ?
                     (int)$_POST['team2_id'] : 0;
 
                 if($opponentID > 0) {
@@ -133,7 +133,7 @@ try {
                 }
 
                 if($teamAdminTeam1 < 1) {
-                    throw new \Exception($_language->module['ticket_error_3']);
+                    throw new \UnexpectedValueException($_language->module['ticket_error_3']);
                 }
 
                 $teamAdminTeam2 = 0;
@@ -144,34 +144,34 @@ try {
 
                 $saveQuery = mysqli_query(
                     $_database,
-                    "INSERT INTO ".PREFIX."cups_supporttickets 
-                        ( 
-                            `start_date`, 
-                            `userID`, 
-                            `opponent_adminID`, 
-                            `adminID`, 
-                            `name`, 
-                            `categoryID`, 
-                            `teamID`, 
-                            `cupID`, 
-                            `opponentID`, 
-                            `matchID`, 
-                            `text`, 
-                            `status`
-                        ) 
-                        VALUES 
+                    "INSERT INTO ".PREFIX."cups_supporttickets
                         (
-                            '".time()."', 
-                            '".$teamAdminTeam1."', 
-                            '".$teamAdminTeam2."', 
-                            '".$userID."', 
-                            '".$name."', 
-                            '".$categoryID."', 
-                            '".$team."', 
-                            '".$cupID."', 
-                            '".$opponentID."', 
-                            '".$matchID."', 
-                            '".$text."', 
+                            `start_date`,
+                            `userID`,
+                            `opponent_adminID`,
+                            `adminID`,
+                            `name`,
+                            `categoryID`,
+                            `teamID`,
+                            `cupID`,
+                            `opponentID`,
+                            `matchID`,
+                            `text`,
+                            `status`
+                        )
+                        VALUES
+                        (
+                            '".time()."',
+                            '".$teamAdminTeam1."',
+                            '".$teamAdminTeam2."',
+                            '".$userID."',
+                            '".$name."',
+                            '".$categoryID."',
+                            '".$team."',
+                            '".$cupID."',
+                            '".$opponentID."',
+                            '".$matchID."',
+                            '".$text."',
                             2
                         )"
                 );
@@ -179,7 +179,7 @@ try {
                 if(!$saveQuery) {
 
                     $parent_url = 'admincenter.php?site=cup&mod=support&action=admin_add';
-                    throw new \Exception($_language->module['query_insert_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_insert_failed']);
 
                 }
 
@@ -221,8 +221,8 @@ try {
                         if(move_uploaded_file($_FILES['screenshot']['tmp_name'],$path.$filename)) {
                             mysqli_query(
                                 $_database,
-                                "UPDATE ".PREFIX."cups_supporttickets 
-                                    SET screenshot = '".$filename."' 
+                                "UPDATE ".PREFIX."cups_supporttickets
+                                    SET screenshot = '".$filename."'
                                     WHERE ticketID = ".$ticketID
                             );
                         }
@@ -284,25 +284,25 @@ try {
 
             $matches = '<option value="0">- / -</option>';
             $match = safe_query(
-                "SELECT 
-                        `matchID`, 
-                        `team1`, 
-                        `team1_freilos`, 
-                        `team2`, 
-                        `team2_freilos` 
-                    FROM `" . PREFIX . "cups_matches_playoff` 
-                    WHERE `cupID` = " . $cupID . " 
+                "SELECT
+                        `matchID`,
+                        `team1`,
+                        `team1_freilos`,
+                        `team2`,
+                        `team2_freilos`
+                    FROM `" . PREFIX . "cups_matches_playoff`
+                    WHERE `cupID` = " . $cupID . "
                     ORDER BY `matchID` DESC"
             );
             while($dx = mysqli_fetch_array($match)) {
                 $team1 = '';
-                if ($dx['team1'] > 0) { 
-                    $team1 = getteam($dx['team1'], 'name'); 
+                if ($dx['team1'] > 0) {
+                    $team1 = getteam($dx['team1'], 'name');
                 }
 
                 $team2 = '';
-                if ($dx['team2'] > 0) { 
-                    $team2 = getteam($dx['team2'], 'name'); 
+                if ($dx['team2'] > 0) {
+                    $team2 = getteam($dx['team2'], 'name');
                 }
 
                 if (!empty($team1) && !empty($team2)) {
@@ -314,10 +314,10 @@ try {
             if (!empty($matchID)) {
 
                 $matches = str_replace(
-                    'value="'.$matchID.'"', 
-                    'value="'.$matchID.'" selected="selected"', 
+                    'value="'.$matchID.'"',
+                    'value="'.$matchID.'" selected="selected"',
                     $matches
-                );	
+                );
 
                 $team_array = getteam($matchID, 'team_ids');
                 $teams = '<option value="0" class="italic">'.$_language->module['ticket_no_team'].'</option>';
@@ -325,21 +325,21 @@ try {
                 $teams .= '<option value="'.$team_array[1].'" class="italic">'.getteam($team_array[1], 'name').'</option>';
 
                 if(!empty($teamID)) {
-                    $teams = str_replace('value="'.$teamID.'"', 'value="'.$teamID.'" selected="selected"', $teams);	
+                    $teams = str_replace('value="'.$teamID.'"', 'value="'.$teamID.'" selected="selected"', $teams);
                 }
 
                 if(!empty($teamID)) {
-                    $teams = str_replace('value="'.$teamID.'"', 'value="'.$teamID.'" selected="selected"', $teams);	
+                    $teams = str_replace('value="'.$teamID.'"', 'value="'.$teamID.'" selected="selected"', $teams);
 
                     $info = safe_query("SELECT userID FROM ".PREFIX."cups_teams_member WHERE teamID = '".$teamID."' ORDER BY userID");
                     if(mysqli_num_rows($info)) {
                         while($ds = mysqli_fetch_array($info)) {
-                            $users .= '<option value="'.$ds['userID'].'">'.getnickname($ds['userID']).'</option>';	
+                            $users .= '<option value="'.$ds['userID'].'">'.getnickname($ds['userID']).'</option>';
                         }
                     }
 
                     if(!empty($user_id)) {
-                        $users = str_replace('value="'.$user_id.'"', 'value="'.$user_id.'" selected="selected"', $users);	
+                        $users = str_replace('value="'.$user_id.'"', 'value="'.$user_id.'" selected="selected"', $users);
                     }
 
                 }
@@ -353,7 +353,7 @@ try {
         }
 
         if(empty($users)) {
-            $users = getuserlist();	
+            $users = getuserlist();
             if(!empty($user_id)) {
                 $users = str_replace(
                     'value="'.$user_id.'"',

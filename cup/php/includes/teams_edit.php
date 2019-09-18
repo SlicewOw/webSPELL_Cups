@@ -21,7 +21,7 @@ if ($loggedin) {
 try {
 
     if (!isset($team_id) || !validate_int($team_id)) {
-        throw new \Exception($_language->module['not_loggedin']);
+        throw new \UnexpectedValueException($_language->module['not_loggedin']);
     }
 
     if (!isinteam($userID, $team_id, 'admin')) {
@@ -31,13 +31,13 @@ try {
     $checkIf = mysqli_fetch_array(
         mysqli_query(
             $_database,
-            "SELECT COUNT(*) AS exist FROM `".PREFIX."cups_teams` 
+            "SELECT COUNT(*) AS exist FROM `".PREFIX."cups_teams`
                 WHERE teamID = " . $team_id
         )
     );
 
     if ($checkIf['exist'] != 1) {
-        throw new \Exception($_language->module['no_team']);
+        throw new \UnexpectedValueException($_language->module['no_team']);
     }
 
     if (isset($_POST['submitEditTeam'])) {

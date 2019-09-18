@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     if ($getAction == 'status') {
@@ -14,7 +14,7 @@ try {
             (int)$_GET['id'] : 0;
 
         if ($status_id < 1) {
-            throw new \Exception($_language->module['access_denied']);
+            throw new \UnexpectedValueException($_language->module['access_denied']);
         }
 
         $ergebnis = cup_query(
@@ -25,7 +25,7 @@ try {
         );
 
         if (!mysqli_num_rows($ergebnis)) {
-            throw new \Exception($_language->module['no_cup']);
+            throw new \UnexpectedValueException($_language->module['no_cup']);
         }
 
         while ($ds = mysqli_fetch_array($ergebnis)) {
@@ -64,11 +64,11 @@ try {
             (int)$_GET['id'] : 0;
 
         if ($cup_id < 1) {
-            throw new \Exception($_language->module['access_denied']);
+            throw new \UnexpectedValueException($_language->module['access_denied']);
         }
 
         if (!checkIfContentExists($cup_id, 'cupID', 'cups')) {
-            throw new \Exception($_language->module['unknown_cup']);
+            throw new \UnexpectedValueException($_language->module['unknown_cup']);
         }
 
         $getPage = (isset($_GET['page'])) ?
@@ -86,7 +86,7 @@ try {
         );
 
         if (!in_array($getPage, $pageArray)) {
-            throw new \Exception($_language->module['access_denied']);
+            throw new \UnexpectedValueException($_language->module['access_denied']);
         }
 
         if (($getPage == 'home') && validate_array($_POST, true)) {
@@ -107,7 +107,7 @@ try {
                     );
 
                     if (!$updateQuery) {
-                        throw new \Exception($_language->module['query_select_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_select_failed']);
                     }
 
                 } else if (isset($_POST['submit_user_to_admin'])) {
@@ -116,7 +116,7 @@ try {
                         (int)$_POST['admin_id'] : 0;
 
                     if ($user_id < 1) {
-                        throw new \Exception($_language->module['unknown_admin']);
+                        throw new \UnexpectedValueException($_language->module['unknown_admin']);
                     }
 
                     $ergebnis = mysqli_query(
@@ -136,7 +136,7 @@ try {
                     );
 
                     if (!$ergebnis) {
-                        throw new \Exception($_language->module['query_insert_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                     }
 
                 } else if (isset($_POST['submit_streams'])) {
@@ -145,7 +145,7 @@ try {
                         (int)$_POST['stream_id'] : 0;
 
                     if ($stream_id < 1) {
-                        throw new \Exception($_language->module['unknown_stream']);
+                        throw new \UnexpectedValueException($_language->module['unknown_stream']);
                     }
 
                     $ergebnis = mysqli_query(
@@ -163,7 +163,7 @@ try {
                     );
 
                     if (!$ergebnis) {
-                        throw new \Exception($_language->module['query_insert_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                     }
 
                 } else if (isset($_POST['submit_sponsor'])) {
@@ -172,7 +172,7 @@ try {
                         (int)$_POST['sponsor_id'] : 0;
 
                     if ($sponsor_id < 1) {
-                        throw new \Exception($_language->module['unknown_sponsor']);
+                        throw new \UnexpectedValueException($_language->module['unknown_sponsor']);
                     }
 
                     $ergebnis = mysqli_query(
@@ -190,7 +190,7 @@ try {
                     );
 
                     if (!$ergebnis) {
-                        throw new \Exception($_language->module['query_insert_failed']);
+                        throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                     }
 
                 } else {
@@ -239,7 +239,7 @@ try {
                         );
 
                         if (!$deleteQuery) {
-                            throw new \Exception($_language->module['query_insert_failed']);
+                            throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                         }
 
                     } else if ($deleteAction == 'deleteSponsor') {
@@ -255,7 +255,7 @@ try {
                         );
 
                         if (!$deleteQuery) {
-                            throw new \Exception($_language->module['query_insert_failed']);
+                            throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                         }
 
                     } else if ($deleteAction == 'deleteAdmin') {
@@ -271,7 +271,7 @@ try {
                         );
 
                         if (!$deleteQuery) {
-                            throw new \Exception($_language->module['query_insert_failed']);
+                            throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                         }
 
                     } else if ($deleteAction == 'deleteTeam') {
@@ -287,7 +287,7 @@ try {
                         );
 
                         if (!$deleteQuery) {
-                            throw new \Exception($_language->module['query_insert_failed']);
+                            throw new \UnexpectedValueException($_language->module['query_insert_failed']);
                         }
 
                     }

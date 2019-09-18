@@ -5,14 +5,14 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $cup_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
         (int)$_GET['id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     $parent_url = 'admincenter.php?site=cup&mod=cup&action=cup&id=' . $cup_id;
@@ -32,7 +32,7 @@ try {
         // Bracket zu gross?
         $anzTeams = $cupArray['teams']['checked_in'];
         if ($anzTeams < 1) {
-            throw new \Exception($_language->module['no_teams_checkedin']);
+            throw new \UnexpectedValueException($_language->module['no_teams_checkedin']);
         }
 
         if ($anzTeams < 3) {
@@ -78,7 +78,7 @@ try {
         // Bracket erstellen
         $createBracket = __DIR__ . '/cup_start_playoffs_bracket.php';
         if (!file_exists($createBracket)) {
-            throw new \Exception($_language->module['unknown_file']);
+            throw new \UnexpectedValueException($_language->module['unknown_file']);
         }
 
         include($createBracket);

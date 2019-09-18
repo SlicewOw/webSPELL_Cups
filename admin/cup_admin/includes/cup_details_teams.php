@@ -7,7 +7,7 @@ try {
     }
 
     if (!isset($cupArray) || !validate_array($cupArray, true)) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $teams = '';

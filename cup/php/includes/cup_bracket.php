@@ -16,7 +16,7 @@ try {
     }
 
     if (($cup_id < 1) || !validate_array($cupArray, true)) {
-        throw new \Exception($_language->module['no_cup']);
+        throw new \UnexpectedValueException($_language->module['no_cup']);
     }
 
     $match_class = 'cup_bracket_' . $cupArray['size'] . '_match';

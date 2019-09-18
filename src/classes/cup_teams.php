@@ -105,7 +105,7 @@ class cup_team {
     public function setId($team_id) {
 
         if (!validate_int($team_id, true)) {
-            throw new \Exception($this->lang->module['wrong_parameter_id']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_id']);
         }
 
         $this->team_id = (int)$team_id;
@@ -115,7 +115,7 @@ class cup_team {
     public function setName($name) {
 
         if (empty($name)) {
-            throw new \Exception($this->lang->module['wrong_parameter_name']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_name']);
         }
 
         $name = trim($name);
@@ -127,7 +127,7 @@ class cup_team {
     public function setTag($tag) {
 
         if (empty($tag)) {
-            throw new \Exception($this->lang->module['wrong_parameter_tag']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_tag']);
         }
 
         $tag = trim($tag);
@@ -184,11 +184,11 @@ class cup_team {
         }
 
         if (!is_array($image)) {
-            throw new \Exception($this->lang->module['wrong_parameter_icon'] . ' (uploadLogotype)');
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_icon'] . ' (uploadLogotype)');
         }
 
         if (is_null($this->logotype_path)) {
-            throw new \Exception($this->lang->module['wrong_logotype_path']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_logotype_path']);
         }
 
         $upload = new \webspell\HttpUpload('logotype');
@@ -197,23 +197,23 @@ class cup_team {
         }
 
         if ($upload->hasError() !== false) {
-            throw new \Exception($upload->translateError());
+            throw new \UnexpectedValueException($upload->translateError());
         }
 
         $mime_types = array('image/jpeg', 'image/png', 'image/gif');
 
         if (!$upload->supportedMimeType($mime_types)) {
-            throw new \Exception($this->lang->module['unsupported_image_type']);
+            throw new \UnexpectedValueException($this->lang->module['unsupported_image_type']);
         }
 
         $imageInformation = getimagesize($upload->getTempFile());
 
         if (!is_array($imageInformation)) {
-            throw new \Exception($this->lang->module['broken_image']);
+            throw new \UnexpectedValueException($this->lang->module['broken_image']);
         }
 
         if (!imagemaxsize($upload->getTempFile(), $this->logotype_max_size, $this->logotype_max_size)) {
-            throw new \Exception($this->lang->module['wrong_parameter_icon_size']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_icon_size']);
         }
 
         switch ($imageInformation[2]) {
@@ -281,7 +281,7 @@ class cup_team {
         // false    : Team existiert nicht
 
         if (is_null($this->team_id) || ($this->team_id < 1)) {
-            throw new \Exception($this->lang->module['wrong_parameter_id']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_id']);
         }
 
         $selectQuery = cup_query(
@@ -309,11 +309,11 @@ class cup_team {
         // false    : Team existiert nicht
 
         if (is_null($this->team_name)) {
-            throw new \Exception($this->lang->module['wrong_parameter_name']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_name']);
         }
 
         if(is_null($this->team_tag)) {
-            throw new \Exception($this->lang->module['wrong_parameter_tag']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_tag']);
         }
 
         global $_database;
@@ -329,7 +329,7 @@ class cup_team {
             );
 
             if ($checkIf['exist'] > 0) {
-                throw new \Exception($this->lang->module['wrong_team_name_in_use']);
+                throw new \UnexpectedValueException($this->lang->module['wrong_team_name_in_use']);
             }
 
             $checkIf = mysqli_fetch_array(
@@ -341,7 +341,7 @@ class cup_team {
             );
 
             if ($checkIf['exist'] > 0) {
-                throw new \Exception($this->lang->module['wrong_team_tag_in_use']);
+                throw new \UnexpectedValueException($this->lang->module['wrong_team_tag_in_use']);
             }
 
         } else {
@@ -355,7 +355,7 @@ class cup_team {
             );
 
             if ($checkIf['exist'] > 0) {
-                throw new \Exception($this->lang->module['wrong_team_name_in_use']);
+                throw new \UnexpectedValueException($this->lang->module['wrong_team_name_in_use']);
             }
 
             $checkIf = mysqli_fetch_array(
@@ -367,7 +367,7 @@ class cup_team {
             );
 
             if ($checkIf['exist'] > 0) {
-                throw new \Exception($this->lang->module['wrong_team_tag_in_use']);
+                throw new \UnexpectedValueException($this->lang->module['wrong_team_tag_in_use']);
             }
 
         }
@@ -377,17 +377,17 @@ class cup_team {
     public function insertTeam() {
 
         if (is_null($this->team_name)) {
-            throw new \Exception($this->lang->module['wrong_parameter_name']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_name']);
         }
 
         if (is_null($this->team_tag)) {
-            throw new \Exception($this->lang->module['wrong_parameter_tag']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_tag']);
         }
 
         if ($this->cup_team_logotype_is_required) {
 
             if (empty($this->team_logotype)) {
-                throw new \Exception($this->lang->module['wrong_parameter_icon']);
+                throw new \UnexpectedValueException($this->lang->module['wrong_parameter_icon']);
             }
 
         } else if (is_null($this->team_logotype)) {
@@ -395,7 +395,7 @@ class cup_team {
         }
 
         if (is_null($this->team_admin)) {
-            throw new \Exception($this->lang->module['wrong_parameter_admin_id']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_admin_id']);
         }
 
         //
@@ -478,11 +478,11 @@ class cup_team {
     public function updateTeam() {
 
         if (is_null($this->team_id)) {
-            throw new \Exception($this->lang->module['wrong_parameter_id']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_id']);
         }
 
         if (!$this->isTeam()) {
-            throw new \Exception($this->lang->module['team_not_found']);
+            throw new \UnexpectedValueException($this->lang->module['team_not_found']);
         }
 
         //
@@ -542,7 +542,7 @@ class cup_team {
     public function deleteTeam() {
 
         if (is_null($this->team_id)) {
-            throw new \Exception($this->lang->module['wrong_parameter_id']);
+            throw new \UnexpectedValueException($this->lang->module['wrong_parameter_id']);
         }
 
         cup_query(

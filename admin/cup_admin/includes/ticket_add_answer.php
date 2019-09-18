@@ -10,17 +10,17 @@ try {
         (int)$_GET['id'] : 0;
 
     if ($ticket_id < 1) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     if (!checkIfContentExists($ticket_id, 'ticketID', 'cups_supporttickets')) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $cupAdminAcess = iscupadmin($userID);
 
     if (!iscupadmin($userID) || mb_substr(basename($_SERVER[ 'REQUEST_URI' ]), 0, 15) != "admincenter.php") {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $temp_status = 1;
@@ -38,62 +38,62 @@ try {
                     (int)$_POST['adminID'] : 0;
 
                 if ($admin_id < 1) {
-                    throw new \Exception($_language->module['login']);
+                    throw new \UnexpectedValueException($_language->module['login']);
                 }
 
                 $query = mysqli_query(
                     $_database,
-                    "UPDATE `" . PREFIX . "cups_supporttickets` 
+                    "UPDATE `" . PREFIX . "cups_supporttickets`
                         SET `take_date` = " . time() . ",
-                            `adminID` = " . $admin_id . ", 
+                            `adminID` = " . $admin_id . ",
                             `status` = 2
                         WHERE `ticketID` = " . $ticket_id
                 );
 
                 if (!$query) {
-                    throw new \Exception('Query failed - Update');
+                    throw new \UnexpectedValueException('Query failed - Update');
                 }
 
             } else if (isset($_POST['close_submit'])) {
 
                 $query = mysqli_query(
                     $_database,
-                    "UPDATE `" . PREFIX . "cups_supporttickets` 
-                        SET `closed_date` = " . time() . ", 
+                    "UPDATE `" . PREFIX . "cups_supporttickets`
+                        SET `closed_date` = " . time() . ",
                             `closed_by_id` = " . $userID . ",
                             `status` = " . $maxStatus . "
                         WHERE `ticketID` = " . $ticket_id
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['cannot_close_ticket']);
+                    throw new \UnexpectedValueException($_language->module['cannot_close_ticket']);
                 }
 
             } else if (isset($_POST['submitTicketAnswer'])) {
 
                 if (!isset($_POST['text']) || empty($_POST['text'])) {
-                    throw new \Exception($_language->module['ticket_error_2']);
+                    throw new \UnexpectedValueException($_language->module['ticket_error_2']);
                 }
 
                 $setAdmin = (!getticket($ticket_id, 'admin')) ?
                     ', take_date = ' . time() . ', adminID = ' . $userID :
-                    ''; 
+                    '';
 
                 $updateQuery = mysqli_query(
                     $_database,
-                    "UPDATE `".PREFIX."cups_supporttickets` 
-                        SET 	status = 2" . $setAdmin . " 
+                    "UPDATE `".PREFIX."cups_supporttickets`
+                        SET 	status = 2" . $setAdmin . "
                         WHERE 	ticketID = " . $ticket_id
                 );
 
                 if (!$updateQuery) {
-                    throw new \Exception($_language->module['ticket_not_saved']);
+                    throw new \UnexpectedValueException($_language->module['ticket_not_saved']);
                 }
 
                 $db = mysqli_fetch_array(
                     mysqli_query(
                         $_database,
-                        "SELECT * FROM ".PREFIX."cups_supporttickets 
+                        "SELECT * FROM ".PREFIX."cups_supporttickets
                             WHERE ticketID = " . $ticket_id
                     )
                 );
@@ -121,46 +121,46 @@ try {
 
                 $query = mysqli_query(
                     $_database,
-                    "INSERT INTO `" . PREFIX . "cups_supporttickets_content` 
+                    "INSERT INTO `" . PREFIX . "cups_supporttickets_content`
                         (
-                            `ticketID`, 
-                            `date`, 
-                            `userID`, 
+                            `ticketID`,
+                            `date`,
+                            `userID`,
                             `text`
-                        ) 
-                        VALUES 
+                        )
+                        VALUES
                         (
-                            " . $ticket_id . ", 
-                            " . time() . ", 
-                            " . $userID . ", 
+                            " . $ticket_id . ",
+                            " . time() . ",
+                            " . $userID . ",
                             '" . getinput($_POST['text']) . "'
                         )"
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['ticket_not_saved']);
-                } 
+                    throw new \UnexpectedValueException($_language->module['ticket_not_saved']);
+                }
 
                 $_SESSION['successArray'][] = $_language->module['ticket_saved'];
 
             } else if (isset($_POST['reopen_ticket'])) {
 
-                $ticket_id = (isset($_POST['ticket_id']) && validate_int($_POST['ticket_id'])) ? 
+                $ticket_id = (isset($_POST['ticket_id']) && validate_int($_POST['ticket_id'])) ?
                     (int)$_POST['ticket_id'] : 0;
 
                 if ($ticket_id < 1) {
-                    throw new \Exception($_language->module['ticket_not_saved']);
+                    throw new \UnexpectedValueException($_language->module['ticket_not_saved']);
                 }
 
                 $query = mysqli_query(
                     $_database,
-                    "UPDATE `" . PREFIX . "cups_supporttickets` 
+                    "UPDATE `" . PREFIX . "cups_supporttickets`
                         SET `status` = 2
                         WHERE `ticketID` = " . $ticket_id
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['ticket_not_saved']);
+                    throw new \UnexpectedValueException($_language->module['ticket_not_saved']);
                 }
 
                 $nickname = getnickname($userID);
@@ -184,7 +184,7 @@ try {
                 );
 
                 if (!$subquery) {
-                    throw new \Exception($_language->module['ticket_not_saved']);
+                    throw new \UnexpectedValueException($_language->module['ticket_not_saved']);
                 }
 
                 $_SESSION['successArray'][] = $_language->module['ticket_saved'];
@@ -286,11 +286,11 @@ try {
         // Ticket Info Details
         $ticketInfoArray = array();
 
-        if (!empty($db['ticket_screenshot'])) { 
+        if (!empty($db['ticket_screenshot'])) {
             if (file_exists(__DIR__ . '/../../images/cup/ticket_screenshots/' . $db['ticket_screenshot'])) {
                 $ticketInfoArray[] = 'Screenshot: <a href="' . $imageLink . $db['ticket_screenshot'] . '" target="_blank" class="blue">' . $db['ticket_screenshot'] . '</a>';
             } else {
-                $ticketInfoArray[] = 'Screenshot: <del>' . $db['ticket_screenshot'] . '</del>'; 
+                $ticketInfoArray[] = 'Screenshot: <del>' . $db['ticket_screenshot'] . '</del>';
             }
         }
 
@@ -298,7 +298,7 @@ try {
             $ticketInfoArray[] = 'Team: <a target="_blank" href="' . $teamLink . $db['ticket_teamID'] . '" class="blue">' . getteam($db['ticket_teamID'], 'name') . '</a>';
         }
 
-        if ($db['ticket_opponentID'] > 0) { 
+        if ($db['ticket_opponentID'] > 0) {
             $ticketInfoArray[] = 'Opponent: <a target="_blank" href="' . $teamLink . $db['ticket_opponentID'] . '" class="blue">' . getteam($db['ticket_opponentID'], 'name') . '</a>';
         }
 
@@ -331,13 +331,13 @@ try {
                     `date`,
                     `userID`,
                     `text`
-                FROM `" . PREFIX . "cups_supporttickets_content` 
-                WHERE ticketID = " . $ticket_id . " 
+                FROM `" . PREFIX . "cups_supporttickets_content`
+                WHERE ticketID = " . $ticket_id . "
                 ORDER BY date ASC"
         );
 
         if (!$info) {
-            throw new \Exception($_language->module['query_select_failed']);
+            throw new \UnexpectedValueException($_language->module['query_select_failed']);
         }
 
         while ($ds = mysqli_fetch_array($info)) {

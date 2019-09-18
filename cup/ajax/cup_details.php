@@ -4,11 +4,11 @@ try {
 
     $_language->readModule('cups');
 
-    $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'])) ? 
+    $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'])) ?
         (int)$_GET['cup_id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['no_cup']);
+        throw new \UnexpectedValueException($_language->module['no_cup']);
     }
 
     //

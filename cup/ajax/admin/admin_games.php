@@ -10,18 +10,18 @@ try {
     $_language->readModule('games', false, true);
 
     if (!ispageadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (empty($getAction)) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $game_id = (isset($_GET['game_id']) && validate_int($_GET['game_id'], true)) ?
         (int)$_GET['game_id'] : 0;
 
     if ($game_id < 1) {
-        throw new \Exception($_language->module['unknown_game']);
+        throw new \UnexpectedValueException($_language->module['unknown_game']);
     }
 
     if ($getAction == 'setActiveMode' || $getAction == 'setAutoActiveMode') {
@@ -50,7 +50,7 @@ try {
         );
 
         if (!$query) {
-            throw new \Exception($_language->module['query_update_failed']);
+            throw new \UnexpectedValueException($_language->module['query_update_failed']);
         }
 
         $returnArray['value'] = $new_value;
@@ -72,7 +72,7 @@ try {
         );
 
         if ($get['exist'] != 1) {
-            throw new \Exception($_language->module['unknown_game']);
+            throw new \UnexpectedValueException($_language->module['unknown_game']);
         }
 
         $imageTypeArray = array(
@@ -94,7 +94,7 @@ try {
         );
 
     } else {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $returnArray['status'] = TRUE;

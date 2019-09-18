@@ -5,7 +5,7 @@ try {
     $_language->readModule('support', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $status = (isset($_GET['status']) && validate_int($_GET['status'], true)) ?

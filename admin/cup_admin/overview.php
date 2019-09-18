@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $cup_url = 'admincenter.php?site=cup&amp;mod=cup&amp;action=cup&amp;id=';

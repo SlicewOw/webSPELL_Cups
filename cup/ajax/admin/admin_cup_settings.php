@@ -10,18 +10,18 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     if (!validate_array($_POST, true)) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $postAction = (isset($_POST['action'])) ?
         getinput($_POST['action']) : '';
 
     if (empty($postAction)) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     if ($postAction == 'saveCupSettings') {
@@ -30,7 +30,7 @@ try {
             (int)$_POST['cup_id'] : 0;
 
         if ($cup_id < 1) {
-            throw new \Exception('unknown_cup_id');
+            throw new \UnexpectedValueException('unknown_cup_id');
         }
 
         $registration = (isset($_POST['registerFormat'])) ?
@@ -101,7 +101,7 @@ try {
             (int)$_POST['cup_id'] : 0;
 
         if ($cup_id < 1) {
-            throw new \Exception('unknown_cup_id');
+            throw new \UnexpectedValueException('unknown_cup_id');
         }
 
         $activate_challonge_api = (isset($_POST['activate_challonge']) && validate_int($_POST['activate_challonge'])) ?
@@ -128,7 +128,7 @@ try {
         }
 
         if (count($setValuesArray) < 1) {
-            throw new \Exception('cannot_set_any_value');
+            throw new \UnexpectedValueException('cannot_set_any_value');
         }
 
         $updateQuery = cup_query(
@@ -141,7 +141,7 @@ try {
         $returnArray['message'][] = $_language->module['cup_settings_saved_challonge'];
 
     } else {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     $returnArray['status'] = TRUE;

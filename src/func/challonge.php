@@ -5,17 +5,17 @@ function getChallongeApiKey() {
     $settingsFile = __DIR__ . '/../../cup/settings.php';
 
     if (!file_exists($settingsFile)) {
-        throw new \Exception('unknown_settings_file');
+        throw new \UnexpectedValueException('unknown_settings_file');
     }
 
     include($settingsFile);
 
     if (!isset($challonge_api_key)) {
-        throw new \Exception('unknown_challonge_api_key');
+        throw new \UnexpectedValueException('unknown_challonge_api_key');
     }
 
     if (empty($challonge_api_key)) {
-        throw new \Exception('challonge_api_key_is_not_set');
+        throw new \UnexpectedValueException('challonge_api_key_is_not_set');
     }
 
     return $challonge_api_key;
@@ -36,7 +36,7 @@ function getChallongeApiObject() {
 function getChallongeUrl($cup_id) {
 
     if (!validate_int($cup_id, true)) {
-        throw new \Exception('unknown_cup_id');
+        throw new \UnexpectedValueException('unknown_cup_id');
     }
 
     $selectQuery = cup_query(
@@ -56,7 +56,7 @@ function getChallongeUrl($cup_id) {
 function getChallongeTournamentId($challonge_url) {
 
     if (is_null($challonge_url) || empty($challonge_url)) {
-        throw new \Exception('unknown_challonge_url');
+        throw new \UnexpectedValueException('unknown_challonge_url');
     }
 
     $tournament_id = '';

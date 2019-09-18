@@ -20,14 +20,14 @@ try {
                     getinput($_POST['name']) : '';
 
                 if(empty($name)) {
-                    throw new \Exception($_language->module[ 'error_position_name' ]);
+                    throw new \UnexpectedValueException($_language->module[ 'error_position_name' ]);
                 }
 
                 $tag = (isset($_POST['tag'])) ?
                     getinput($_POST['tag']) : '';
 
                 if(empty($tag) || ($tag > 2)) {
-                    throw new \Exception($_language->module[ 'error_position_tag' ]);
+                    throw new \UnexpectedValueException($_language->module[ 'error_position_tag' ]);
                 }
 
                 $tag = strtolower($tag);
@@ -42,8 +42,8 @@ try {
                 $get = mysqli_fetch_array(
                     mysqli_query(
                         $_database,
-                        "SELECT 
-                                COUNT(*) AS `anz` 
+                        "SELECT
+                                COUNT(*) AS `anz`
                             FROM `" . PREFIX . "user_position_static`"
                     )
                 );
@@ -52,32 +52,32 @@ try {
 
                 if (isset($_POST['saveAddPosition'])) {
 
-                    $setGameColumn = (is_null($game_id)) ? 
+                    $setGameColumn = (is_null($game_id)) ?
                         '' : '`game_id`,';
 
-                    $setGameValue = (is_null($game_id)) ? 
+                    $setGameValue = (is_null($game_id)) ?
                         '' : $game_id . ',';
 
                     $query = mysqli_query(
                         $_database,
                         "INSERT INTO `" . PREFIX . "user_position_static`
                             (
-                                `name`, 
-                                `tag`, 
-                                " . $setGameColumn . " 
+                                `name`,
+                                `tag`,
+                                " . $setGameColumn . "
                                 `sort`
                             )
                             VALUES
                             (
-                                '" . $name . "', 
-                                '" . $tag . "', 
+                                '" . $name . "',
+                                '" . $tag . "',
                                 " . $setGameValue . "
                                 " . $sort . "
                             )"
                     );
 
                     if (!$query) {
-                        throw new \Exception($_language->module[ 'query_failed' ]);
+                        throw new \UnexpectedValueException($_language->module[ 'query_failed' ]);
                     }
 
                     $position_id = mysqli_insert_id($_database);
@@ -88,23 +88,23 @@ try {
                         (int)$_POST['position_id'] : 0;
 
                     if ($position_id < 1) {
-                        throw new \Exception($_language->module[ 'unknown_position' ]);
+                        throw new \UnexpectedValueException($_language->module[ 'unknown_position' ]);
                     }
 
-                    $setGameValue = (is_null($game_id)) ? 
+                    $setGameValue = (is_null($game_id)) ?
                         'game_id = NULL' : 'game_id = ' . $game_id;
 
                     $query = mysqli_query(
                         $_database,
-                        "UPDATE `" . PREFIX . "user_position_static` 
-                            SET name = '".$name."', 
+                        "UPDATE `" . PREFIX . "user_position_static`
+                            SET name = '".$name."',
                                 tag = '".$tag."',
                                 " . $setGameValue . "
                             WHERE positionID = " . $position_id
                     );
 
                     if (!$query) {
-                        throw new \Exception($_language->module[ 'query_failed' ]);
+                        throw new \UnexpectedValueException($_language->module[ 'query_failed' ]);
                     }
 
                 }
@@ -117,19 +117,19 @@ try {
                     (int)$_POST['position_id'] : 0;
 
                 if ($position_id < 1) {
-                    throw new \Exception($_language->module[ 'unknown_position' ]);
+                    throw new \UnexpectedValueException($_language->module[ 'unknown_position' ]);
                 }
 
                 $name = getoutput($_POST['name']);
 
                 $query = mysqli_query(
                     $_database,
-                    "DELETE FROM `" . PREFIX . "user_position_static` 
+                    "DELETE FROM `" . PREFIX . "user_position_static`
                         WHERE positionID = " . $position_id
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module[ 'query_failed' ]);
+                    throw new \UnexpectedValueException($_language->module[ 'query_failed' ]);
                 }
 
                 $_SESSION['successArray'][] = $_language->module[ 'query_deleted' ];
@@ -139,7 +139,7 @@ try {
                 $errorCount = 0;
 
                 if (!isset($_POST['positionArray']) || is_array($_POST['positionArray'])) {
-                    throw new \Exception($_language->module[ 'unknown_action' ]);
+                    throw new \UnexpectedValueException($_language->module[ 'unknown_action' ]);
                 }
 
                 $positionArray = explode(',', $_POST['positionArray']);
@@ -152,13 +152,13 @@ try {
 
                         $query = mysqli_query(
                             $_database,
-                            "UPDATE `".PREFIX."user_position_static` 
-                                SET sort = " . $_POST[$position_id] . " 
+                            "UPDATE `".PREFIX."user_position_static`
+                                SET sort = " . $_POST[$position_id] . "
                                 WHERE positionID = " . $position_id
                         );
 
                         if(!$query) {
-                            throw new \Exception($_language->module[ 'query_failed' ]);
+                            throw new \UnexpectedValueException($_language->module[ 'query_failed' ]);
                         }
 
                     }
@@ -168,7 +168,7 @@ try {
                 $_SESSION['successArray'][] = $_language->module[ 'query_saved' ];
 
             } else {
-                throw new \Exception($_language->module[ 'unknown_action' ]);
+                throw new \UnexpectedValueException($_language->module[ 'unknown_action' ]);
             }
 
         } catch (Exception $e) {
@@ -183,17 +183,17 @@ try {
 
         if ($getAction == 'edit') {
 
-            $position_id = (isset($_GET['id']) && validate_int($_GET['id'])) ? 
+            $position_id = (isset($_GET['id']) && validate_int($_GET['id'])) ?
                 (int)$_GET['id'] : 0;
 
             if($position_id < 1) {
-                throw new \Exception($_language->module[ 'access_denied' ]);
+                throw new \UnexpectedValueException($_language->module[ 'access_denied' ]);
             }
 
             $get = mysqli_fetch_array(
                 mysqli_query(
                     $_database,
-                    "SELECT positionID, name, tag, game_id FROM `".PREFIX."user_position_static` 
+                    "SELECT positionID, name, tag, game_id FROM `".PREFIX."user_position_static`
                         WHERE positionID = " . $position_id
                 )
             );
@@ -220,17 +220,17 @@ try {
 
         } else if ($getAction == 'delete') {
 
-            $position_id = (isset($_GET['id']) && validate_int($_GET['id'])) ? 
+            $position_id = (isset($_GET['id']) && validate_int($_GET['id'])) ?
                 (int)$_GET['id'] : 0;
 
             if($position_id < 1) {
-                throw new \Exception($_language->module[ 'access_denied' ]);
+                throw new \UnexpectedValueException($_language->module[ 'access_denied' ]);
             }
 
             $get = mysqli_fetch_array(
                 mysqli_query(
                     $_database,
-                    "SELECT positionID, name, tag FROM `" . PREFIX . "user_position_static` 
+                    "SELECT positionID, name, tag FROM `" . PREFIX . "user_position_static`
                         WHERE positionID = " . $position_id
                 )
             );
@@ -251,7 +251,7 @@ try {
 
             $query = mysqli_query(
                 $_database,
-                "SELECT * FROM `" . PREFIX . "user_position_static` 
+                "SELECT * FROM `" . PREFIX . "user_position_static`
                     ORDER BY `sort` ASC"
             );
             if(mysqli_num_rows($query) > 0) {

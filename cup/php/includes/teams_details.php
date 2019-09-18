@@ -6,7 +6,7 @@ try {
         (int)$_GET['id'] : 0;
 
     if ($team_id < 1) {
-        throw new \Exception($_language->module['no_team']);
+        throw new \UnexpectedValueException($_language->module['no_team']);
     }
 
     if (validate_array($_POST, true)) {
@@ -20,13 +20,13 @@ try {
                 $get = mysqli_fetch_array(
                     mysqli_query(
                         $_database,
-                        "SELECT `name`, `userID` FROM `" . PREFIX . "cups_teams` 
+                        "SELECT `name`, `userID` FROM `" . PREFIX . "cups_teams`
                             WHERE `teamID` = " . $team_id
                     )
                 );
 
                 if ($get['userID'] == $admin_id) {
-                    throw new \Exception($_language->module['error_still_admin']);
+                    throw new \UnexpectedValueException($_language->module['error_still_admin']);
                 }
 
                 $updateQuery = mysqli_query(
@@ -37,7 +37,7 @@ try {
                 );
 
                 if (!$updateQuery) {
-                    throw new \Exception($_language->module['query_update_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_update_failed']);
                 }
 
                 $updateQuery = mysqli_query(
@@ -48,18 +48,18 @@ try {
                 );
 
                 if (!$updateQuery) {
-                    throw new \Exception($_language->module['query_update_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_update_failed']);
                 }
 
                 $updateQuery = mysqli_query(
                     $_database,
-                    "UPDATE `" . PREFIX . "cups_teams_member` 
-                        SET position = 3 
+                    "UPDATE `" . PREFIX . "cups_teams_member`
+                        SET position = 3
                         WHERE teamID = " . $team_id . " AND userID = " . $userID
                 );
 
                 if (!$updateQuery) {
-                    throw new \Exception($_language->module['query_update_failed']);
+                    throw new \UnexpectedValueException($_language->module['query_update_failed']);
                 }
 
                 setPlayerLog($admin_id, $team_id, 'cup_team_admin');
@@ -69,7 +69,7 @@ try {
                 $_SESSION['successArray'][] = $_language->module['leader_transfer_saved'];
 
             } else {
-                throw new \Exception($_language->module['unknown_action']);
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
             }
 
         } catch (Exception $e) {
@@ -82,18 +82,18 @@ try {
 
         $info = mysqli_query(
             $_database,
-            "SELECT * FROM `" . PREFIX . "cups_teams` 
+            "SELECT * FROM `" . PREFIX . "cups_teams`
              WHERE `teamID` = " . $team_id
         );
 
         if (mysqli_num_rows($info) != 1) {
-            throw new \Exception($_language->module['no_team']);
+            throw new \UnexpectedValueException($_language->module['no_team']);
         }
 
         $ds = mysqli_fetch_array($info);
 
         if (!(($ds['deleted'] == 0) || (($ds['deleted'] == 1) && (iscupadmin($userID))))) {
-            throw new \Exception($_language->module['deleted']);
+            throw new \UnexpectedValueException($_language->module['deleted']);
         }
 
         if (($ds['deleted'] == 1) && (iscupadmin($userID))) {
@@ -159,7 +159,7 @@ try {
         );
 
         if (!$memberQuery) {
-            throw new \Exception($_language->module['query_select_failed']);
+            throw new \UnexpectedValueException($_language->module['query_select_failed']);
         }
 
         if (mysqli_num_rows($memberQuery) < 1) {
@@ -224,7 +224,7 @@ try {
                     b.points AS penalty_points,
                     b.lifetime AS penalty_lifetime
                 FROM `" . PREFIX . "cups_penalty` a
-                JOIN `".PREFIX."cups_penalty_category` b ON a.reasonID = b.reasonID 
+                JOIN `".PREFIX."cups_penalty_category` b ON a.reasonID = b.reasonID
                 WHERE a.duration_time > " . $time_now . " AND a.teamID = " . $team_id . " AND a.deleted = 0"
         );
         if (mysqli_num_rows($get_pp)) {
@@ -269,8 +269,8 @@ try {
                         b.lifetime AS penalty_lifetime,
                         c.nickname AS nickname
                     FROM `" . PREFIX . "cups_penalty` a
-                    JOIN `".PREFIX."cups_penalty_category` b ON a.reasonID = b.reasonID 
-                    JOIN `".PREFIX."user` c ON a.userID = c.userID 
+                    JOIN `".PREFIX."cups_penalty_category` b ON a.reasonID = b.reasonID
+                    JOIN `".PREFIX."user` c ON a.userID = c.userID
                     WHERE a.duration_time > " . $time_now . " AND a.userID IN (" . $memberList . ") AND a.deleted = 0"
             );
             if (mysqli_num_rows($get_pp)) {

@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $maxPrizes = 6;
@@ -34,24 +34,24 @@ try {
             );
 
             if (!isset($_POST['add'])) {
-                throw new \Exception($_language->module['unknown_action']);   
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
             }
 
             if (isset($_POST['challonge_url'])) {
-                
+
                 $challonge_url = (validate_url($_POST['challonge_url'])) ?
                     getinput($_POST['challonge_url']) : '';
-                
+
                 if (empty($challonge_url)) {
-                    throw new \Exception($_language->module['error_challonge_url']);
+                    throw new \UnexpectedValueException($_language->module['error_challonge_url']);
                 }
-                
+
                 $challonge_id = getChallongeTournamentId($challonge_url);
 
                 $challonge_tournament = getChallongeTournament($challonge_id);
 
                 if (empty($challonge_tournament)) {
-                    throw new \Exception($_language->module['error_challonge_url']);
+                    throw new \UnexpectedValueException($_language->module['error_challonge_url']);
                 }
 
                 $cupname = (String)$challonge_tournament->{'name'}[0];
@@ -59,51 +59,51 @@ try {
                 $platform = 'PC';
                 $priority = 'normal';
                 $registration = 'closed';
-                
+
                 $date_checkin = convertStringToMktime((String)$challonge_tournament->{'created-at'}[0]);
                 $date_start = convertStringToMktime((String)$challonge_tournament->{'started-at'}[0]);
 
                 $game_name = (String)$challonge_tournament->{'game-name'}[0];
 
                 if (empty($game_name)) {
-                    throw new \Exception($_language->module['unknown_game']);
+                    throw new \UnexpectedValueException($_language->module['unknown_game']);
                 }
 
                 $game_tag = getgametag($game_name);
 
                 if (empty($game_tag)) {
-                    throw new \Exception($_language->module['unknown_game_tag']);
+                    throw new \UnexpectedValueException($_language->module['unknown_game_tag']);
                 }
 
                 $gameArray = getGame($game_tag);
 
                 if (validate_array($gameArray, true)) {
-                    $game_id = $gameArray['id'];    
+                    $game_id = $gameArray['id'];
                 } else {
                     $game_id = 0;
                 }
-                
+
                 if (preg_match('/double/', (String)$challonge_tournament->{'tournament-type'}[0])) {
                     $elimination = 'double';
                 } else {
                     $elimination = 'single';
                 }
-                
+
                 if ((String)$challonge_tournament->{'teams'}[0]) {
                     $mode = '5on5';
                 } else {
                     $mode = '1on1';
                 }
-                
+
                 $rule_id = 0;
                 $size = (int)$challonge_tournament->{'signup-cap'}[0];
                 $pps = 12;
                 $admin_visible = 0;
-                    
+
             } else {
 
                 if (!isset($_POST['cupname']) || empty($_POST['cupname'])) {
-                    throw new \Exception($_language->module['cup_no_name']);
+                    throw new \UnexpectedValueException($_language->module['cup_no_name']);
                 }
 
                 $cupname = getinput($_POST['cupname']);
@@ -129,7 +129,7 @@ try {
                     $_POST['game'] : '';
 
                 if (empty($game_tag)) {
-                    throw new \Exception($_language->module['unknown_game_tag']);
+                    throw new \UnexpectedValueException($_language->module['unknown_game_tag']);
                 }
 
                 $gameArray = getGame($game_tag);
@@ -138,7 +138,7 @@ try {
 
                 $platform = (isset($_POST['platform'])) ?
                     getinput($_POST['platform']) : 'PC';
-                
+
                 $mode = (isset($_POST['mode'])) ? $_POST['mode'] : '5on5';
 
                 $rule_id = (isset($_POST['ruleID']) && validate_int($_POST['ruleID'])) ?
@@ -154,7 +154,7 @@ try {
                     (int)$_POST['admin_visible'] : 0;
 
             }
-            
+
             $insertValueArray = array(
                 '\'' . $priority . '\'',
                 '\'' . $cupname . '\'',
@@ -199,9 +199,9 @@ try {
                 savePrize($cup_id, $prize, $x);
 
             }
-            
+
             if (isset($challonge_url)) {
-                
+
                 $updateQuery = cup_query(
                     "UPDATE `" . PREFIX . "cups`
                         SET `challonge_api` = 1,
@@ -209,7 +209,7 @@ try {
                         WHERE `cupID` = " . $cup_id,
                     __FILE__
                 );
-                
+
             }
 
             $parent_url = 'admincenter.php?site=cup&mod=cup&action=cup&id=' . $cup_id;

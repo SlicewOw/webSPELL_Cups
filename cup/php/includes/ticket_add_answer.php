@@ -10,15 +10,15 @@ try {
         (int)$_GET['id'] : 0;
 
     if ($ticket_id < 1) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     if (!checkIfContentExists($ticket_id, 'ticketID', 'cups_supporttickets')) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     if (!$loggedin || !getTicketAccess($ticket_id)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $temp_status = 1;
@@ -42,18 +42,18 @@ try {
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['cannot_close_ticket']);
+                    throw new \UnexpectedValueException($_language->module['cannot_close_ticket']);
                 }
 
             } else if (isset($_POST['submitTicketAnswer'])) {
 
                 if (!isset($_POST['text']) || empty($_POST['text'])) {
-                    throw new \Exception($_language->module['ticket_error_2']);
+                    throw new \UnexpectedValueException($_language->module['ticket_error_2']);
                 }
 
                 $query = mysqli_query(
                     $_database,
-                    "INSERT INTO `" . PREFIX . "cups_supporttickets_content` 
+                    "INSERT INTO `" . PREFIX . "cups_supporttickets_content`
                         (
                             `ticketID`,
                             `date`,
@@ -70,29 +70,29 @@ try {
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['ticket_not_saved']);
+                    throw new \UnexpectedValueException($_language->module['ticket_not_saved']);
                 }
 
                 $_SESSION['successArray'][] = $_language->module['ticket_saved'];
 
             } else if (isset($_POST['reopen_ticket'])) {
 
-                $ticket_id = (isset($_POST['ticket_id']) && validate_int($_POST['ticket_id'])) ? 
+                $ticket_id = (isset($_POST['ticket_id']) && validate_int($_POST['ticket_id'])) ?
                     (int)$_POST['ticket_id'] : 0;
 
                 if ($ticket_id < 1) {
-                    throw new \Exception($_language->module['ticket_not_saved']);
+                    throw new \UnexpectedValueException($_language->module['ticket_not_saved']);
                 }
 
                 $query = mysqli_query(
                     $_database,
-                    "UPDATE `" . PREFIX . "cups_supporttickets` 
+                    "UPDATE `" . PREFIX . "cups_supporttickets`
                         SET `status` = 2
                         WHERE `ticketID` = " . $ticket_id
                 );
 
                 if (!$query) {
-                    throw new \Exception($_language->module['ticket_not_saved']);
+                    throw new \UnexpectedValueException($_language->module['ticket_not_saved']);
                 }
 
                 $nickname = getnickname($userID);
@@ -116,7 +116,7 @@ try {
                 );
 
                 if (!$subquery) {
-                    throw new \Exception($_language->module['ticket_not_saved']);
+                    throw new \UnexpectedValueException($_language->module['ticket_not_saved']);
                 }
 
                 $_SESSION['successArray'][] = $_language->module['ticket_saved'];
@@ -155,7 +155,7 @@ try {
         );
 
         if (!$selectQuery) {
-            throw new \Exception($_language->module['query_select_failed']);
+            throw new \UnexpectedValueException($_language->module['query_select_failed']);
         }
 
         $db = mysqli_fetch_array($selectQuery);
@@ -263,7 +263,7 @@ try {
         );
 
         if (!$info) {
-            throw new \Exception($_language->module['query_select_failed']);
+            throw new \UnexpectedValueException($_language->module['query_select_failed']);
         }
 
         while ($ds = mysqli_fetch_array($info)) {

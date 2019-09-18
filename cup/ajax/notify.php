@@ -8,21 +8,21 @@ $returnArray = array(
 try {
 
     if (!$loggedin) {
-        throw new \Exception('access_denied');
+        throw new \UnexpectedValueException('access_denied');
     }
 
     $postAction = (isset($_POST['action'])) ?
         getinput($_POST['action']) : '';
 
     if (empty($postAction) || ($postAction != 'seen')) {
-        throw new \Exception('unknown_action');
+        throw new \UnexpectedValueException('unknown_action');
     }
 
     $notify_id = (isset($_POST['notify_id']) && validate_int($_POST['notify_id'], true)) ?
         (int)$_POST['notify_id'] : 0;
 
     if ($notify_id < 1) {
-        throw new \Exception('unknown_notification');
+        throw new \UnexpectedValueException('unknown_notification');
     }
 
     $returnArray['notifyID'] = $notify_id;
@@ -38,7 +38,7 @@ try {
     $get = mysqli_fetch_array($query);
 
     if ($userID != $get['receiver_id']) {
-        throw new \Exception('update_notification_failed_different_user');
+        throw new \UnexpectedValueException('update_notification_failed_different_user');
     }
 
     $updateQuery = cup_query(

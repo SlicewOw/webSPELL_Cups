@@ -10,7 +10,7 @@ $returnArray = array(
 try {
 
     if (empty($getAction)) {
-        throw new \Exception('unknown_action');
+        throw new \UnexpectedValueException('unknown_action');
     }
 
     if ($getAction == 'cup_update') {
@@ -34,7 +34,7 @@ try {
             (int)$_GET['cup_id'] : 0;
 
         if ($cup_id < 1) {
-            throw new \Exception('unknown_cup');
+            throw new \UnexpectedValueException('unknown_cup');
         }
 
         //
@@ -75,7 +75,7 @@ try {
         $isRegistered = mysqli_fetch_array($selectQuery);
 
         if ($isRegistered['checkValue'] < 1) {
-            throw new \Exception('error_checkValue');
+            throw new \UnexpectedValueException('error_checkValue');
         }
 
         $team_id = $isRegistered['team_id'];
@@ -121,18 +121,18 @@ try {
             'html' => ''
         );
 
-        $team_id = (isset($_GET['team_id']) && validate_int($_GET['team_id'], true)) ? 
+        $team_id = (isset($_GET['team_id']) && validate_int($_GET['team_id'], true)) ?
             (int)$_GET['team_id'] : 0;
 
         if ($team_id < 1) {
-            throw new \Exception('unknown_team');
+            throw new \UnexpectedValueException('unknown_team');
         }
 
-        $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ? 
+        $cup_id = (isset($_GET['cup_id']) && validate_int($_GET['cup_id'], true)) ?
             (int)$_GET['cup_id'] : 0;
 
         if ($cup_id < 1) {
-            throw new \Exception('unknown_team');
+            throw new \UnexpectedValueException('unknown_team');
         }
 
         //
@@ -243,7 +243,7 @@ try {
         }
 
     } else {
-        throw new \Exception('unknown_action');
+        throw new \UnexpectedValueException('unknown_action');
     }
 
     $returnArray['status'] = TRUE;

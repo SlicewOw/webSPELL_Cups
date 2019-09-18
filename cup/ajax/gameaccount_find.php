@@ -17,14 +17,14 @@ try {
         getinput($_GET['value']) : '';
 
     if (empty($value)) {
-        throw new \Exception('no_value');
+        throw new \UnexpectedValueException('no_value');
     }
 
     $state = (isset($_GET['state'])) ?
         getinput($_GET['state']) : '';
 
     if (empty($state)) {
-        throw new \Exception('no_state');
+        throw new \UnexpectedValueException('no_state');
     }
 
     $stateArray = array(
@@ -33,7 +33,7 @@ try {
     );
 
     if (!in_array($state, $stateArray)) {
-        throw new \Exception('wrong_state');
+        throw new \UnexpectedValueException('wrong_state');
     }
 
     if ($state == 'intern') {
@@ -143,7 +143,7 @@ try {
 
                 if (!is_null($get['value'])) {
                     $active = ($get['active']) ?
-                        '<span class="btn btn-success btn-xs white darkshadow">' . $_language->module['yes'] . '</span>' : 
+                        '<span class="btn btn-success btn-xs white darkshadow">' . $_language->module['yes'] . '</span>' :
                         '<span class="btn btn-danger btn-xs white darkshadow">' . $_language->module['no'] . '</span>';
                 } else {
                     $active = '<span class="btn btn-info btn-xs white darkshadow">' . $_language->module['no_gameaccount'] . '</span>';
@@ -215,7 +215,7 @@ try {
         }
 
         if (strlen($steam64_id) != 17) {
-            throw new \Exception('wrong_steam64_id');
+            throw new \UnexpectedValueException('wrong_steam64_id');
         }
 
         $returnArray['htmlData'] .= '<div class="list-group-item">Steam ID:';

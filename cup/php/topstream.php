@@ -16,11 +16,11 @@ try {
     );
 
     if (!$topstream) {
-        throw new \Exception('liveshow_query_select_failed');
+        throw new \UnexpectedValueException('liveshow_query_select_failed');
     }
 
     if (mysqli_num_rows($topstream) < 1) {
-        throw new \Exception('no_stream_available');
+        throw new \UnexpectedValueException('no_stream_available');
     }
 
     $tops = mysqli_fetch_array($topstream);

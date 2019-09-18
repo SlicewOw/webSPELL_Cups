@@ -20,7 +20,7 @@ try {
     );
 
     if (!$selectQuery) {
-        throw new \Exception($_language->module['query_select_failed']);
+        throw new \UnexpectedValueException($_language->module['query_select_failed']);
     }
 
     if (mysqli_num_rows($selectQuery) > 0) {

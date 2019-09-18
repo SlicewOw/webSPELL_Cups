@@ -11,7 +11,7 @@ function getCupDefaultLanguage() {
     $settingsFile = __DIR__ . '/../../cup/settings.php';
 
     if (!file_exists($settingsFile)) {
-        throw new \Exception('unknown_settings_file');
+        throw new \UnexpectedValueException('unknown_settings_file');
     }
 
     include($settingsFile);
@@ -131,17 +131,17 @@ function getDiscordCredentials() {
     $settingsFile = __DIR__ . '/../../cup/settings.php';
 
     if (!file_exists($settingsFile)) {
-        throw new \Exception('unknown_settings_file');
+        throw new \UnexpectedValueException('unknown_settings_file');
     }
 
     include($settingsFile);
 
     if (!isset($discord_client_id) || empty($discord_client_id)) {
-        throw new \Exception('unknown_discord_client_id');
+        throw new \UnexpectedValueException('unknown_discord_client_id');
     }
 
     if (!isset($discord_client_secret) || empty($discord_client_secret)) {
-        throw new \Exception('unknown_discord_client_secret');
+        throw new \UnexpectedValueException('unknown_discord_client_secret');
     }
 
     $discordArray = array(
@@ -200,7 +200,7 @@ function cup_query($query, $file, $line = 0) {
 
         if (!$result) {
             setLog($query, 'Query failed!', addslashes($file), $line);
-            throw new \Exception($_language->module['query_failed']);
+            throw new \UnexpectedValueException($_language->module['query_failed']);
         }
 
         return $result;
@@ -378,17 +378,17 @@ function checkCupDetails($cup_array, $cup_id) {
     $_language->readModule('cups', true);
 
     if (!validate_array($cup_array)) {
-        throw new \Exception($_language->module['no_cup']);
+        throw new \UnexpectedValueException($_language->module['no_cup']);
     }
 
     if (!isset($cup_array['id']) || ($cup_array['id'] != $cup_id)) {
-        throw new \Exception($_language->module['no_cup']);
+        throw new \UnexpectedValueException($_language->module['no_cup']);
     }
 
     global $userID;
 
     if (($cup_array['admin'] == 1) && !iscupadmin($userID)) {
-        throw new \Exception($_language->module['no_cup']);
+        throw new \UnexpectedValueException($_language->module['no_cup']);
     }
 
     return TRUE;
@@ -646,7 +646,7 @@ function getsponsor($sponsor_id, $cat = '') {
 
     $info = mysqli_query(
         $_database,
-        "SELECT * FROM `" . PREFIX . "sponsors` 
+        "SELECT * FROM `" . PREFIX . "sponsors`
             WHERE `sponsorID` = " . $sponsor_id
     );
 
@@ -688,7 +688,7 @@ function getSponsorsAsOptions($selected_id = 0, $addEmptySponsorOption = TRUE, $
 
         $sponsorQuery = mysqli_query(
             $_database,
-            "SELECT 
+            "SELECT
                     sq.`sponsor_id` AS `sponsor_id`
                 FROM `" . PREFIX . "squads_sponsor` sq
                 WHERE sq.`squad_id` = " . $squadIdToSkipSponsors
@@ -715,7 +715,7 @@ function getSponsorsAsOptions($selected_id = 0, $addEmptySponsorOption = TRUE, $
 
     $selectQuery = mysqli_query(
         $_database,
-        "SELECT * FROM `" . PREFIX . "sponsors` 
+        "SELECT * FROM `" . PREFIX . "sponsors`
             " . $whereClause . "
             ORDER BY `displayed` DESC, `name` ASC"
     );
@@ -846,15 +846,15 @@ function setHits($table, $primary_key, $parent_id, $only_trending = FALSE) {
     try {
 
         if (empty($primary_key)) {
-            throw new \Exception('unknown_primary_key');
+            throw new \UnexpectedValueException('unknown_primary_key');
         }
 
         if (!validate_int($parent_id, true)) {
-            throw new \Exception('unknown_parent_id');
+            throw new \UnexpectedValueException('unknown_parent_id');
         }
 
         if (!is_bool($only_trending)) {
-            throw new \Exception('unknown_parameter_trending');
+            throw new \UnexpectedValueException('unknown_parameter_trending');
         }
 
         global $_database, $getSite;
@@ -886,7 +886,7 @@ function setHits($table, $primary_key, $parent_id, $only_trending = FALSE) {
         );
 
         if (!$query) {
-            throw new \Exception('update_query_failed');
+            throw new \UnexpectedValueException('update_query_failed');
         }
 
     } catch (Exception $e) {}
@@ -958,7 +958,7 @@ function getParentIdByValue($value_name, $isIntegerParentId = TRUE) {
     if ($isIntegerParentId) {
 
         if (!validate_int($_GET[$value_name], true)) {
-            throw new \Exception($_language->module['unknown_unique_id_type']);
+            throw new \UnexpectedValueException($_language->module['unknown_unique_id_type']);
         }
 
     }
@@ -981,16 +981,16 @@ function checkIfContentExists($primary_id, $primary_name, $table) {
                 return FALSE;
             }
 
-            throw new \Exception('unknown_parameter_primary_id');
+            throw new \UnexpectedValueException('unknown_parameter_primary_id');
 
         }
 
         if (!isset($primary_name) || empty($primary_name)) {
-            throw new \Exception('unknown_parameter_primary_name');
+            throw new \UnexpectedValueException('unknown_parameter_primary_name');
         }
 
         if (!isset($table) || empty($table)) {
-            throw new \Exception('unknown_parameter_table');
+            throw new \UnexpectedValueException('unknown_parameter_table');
         }
 
         global $_database;
@@ -1009,7 +1009,7 @@ function checkIfContentExists($primary_id, $primary_name, $table) {
         );
 
         if (!$query) {
-            throw new \Exception('query_failed (table=' . $table . ', ' . $whereClause . ')');
+            throw new \UnexpectedValueException('query_failed (table=' . $table . ', ' . $whereClause . ')');
         }
 
         $checkIf = mysqli_fetch_array($query);
@@ -1053,8 +1053,8 @@ function updateUserVisitorStatistic($user_id) {
 
     $selectQuery = mysqli_query(
         $_database,
-        "SELECT 
-                `visitID` 
+        "SELECT
+                `visitID`
             FROM `" . PREFIX . "user_visitors`
             WHERE " . $whereClause
     );
@@ -1071,7 +1071,7 @@ function updateUserVisitorStatistic($user_id) {
 
             $updateQuery = mysqli_query(
                 $_database,
-                "UPDATE `" . PREFIX . "user_visitors` 
+                "UPDATE `" . PREFIX . "user_visitors`
                     SET date = " . $date . "
                     WHERE " . $whereClause
             );
@@ -1080,16 +1080,16 @@ function updateUserVisitorStatistic($user_id) {
 
             $insertQuery = mysqli_query(
                 $_database,
-                "INSERT INTO `" . PREFIX . "user_visitors` 
+                "INSERT INTO `" . PREFIX . "user_visitors`
                     (
-                        userID, 
-                        visitor, 
+                        userID,
+                        visitor,
                         date
                     )
-                    VALUES 
+                    VALUES
                     (
-                        " . $user_id . ", 
-                        " . $userID . ", 
+                        " . $user_id . ",
+                        " . $userID . ",
                         " . $date . "
                     )"
             );
@@ -1179,9 +1179,9 @@ function getuserlist($selected = '') {
 
     $users = '<option value="0">-- / --</option>';
     $user_id = mysqli_query(
-        $_database, 
-        "SELECT userID, nickname FROM ".PREFIX."user 
-            WHERE banned IS NULL 
+        $_database,
+        "SELECT userID, nickname FROM ".PREFIX."user
+            WHERE banned IS NULL
             ORDER BY nickname ASC"
     );
 
@@ -1191,8 +1191,8 @@ function getuserlist($selected = '') {
 
     if(!empty($selected)) {
         $users = str_replace(
-            'value="'.$selected.'"', 
-            'value="'.$selected.'" selected="selected"', 
+            'value="'.$selected.'"',
+            'value="'.$selected.'" selected="selected"',
             $users
         );
     }
@@ -1213,7 +1213,7 @@ function getPlayerPosition($position, $cat = '', $game_id = NULL, $addPublicOpti
 
         $whereClauseArray = array();
 
-        $whereClauseArray[] = (validate_int($position, true)) ? 
+        $whereClauseArray[] = (validate_int($position, true)) ?
             'positionID = ' . (int)$position : 'tag = \'' . $position . '\'';
 
         if (validate_int($game_id, true)) {
@@ -1340,7 +1340,7 @@ function getPlayerPosition($position, $cat = '', $game_id = NULL, $addPublicOpti
         } else if (strlen($position) == 2) {
             $whereClauseArray[] = '`tag` = \'' . $position . '\'';
         } else {
-            throw new \Exception('unknown_parameter_position');
+            throw new \UnexpectedValueException('unknown_parameter_position');
         }
 
         if (validate_int($game_id, true)) {
@@ -1397,7 +1397,7 @@ function SteamID2CommunityID($steamid) {
         );
 
         if (count($parts) != 3) {
-            throw new \Exception('wrong_steamid_format');
+            throw new \UnexpectedValueException('wrong_steamid_format');
         }
 
         $unique_id = bcadd(bcadd(bcmul($parts[2] + '', '2'), '76561197960265728'), $parts[1] + '');
@@ -1408,7 +1408,7 @@ function SteamID2CommunityID($steamid) {
         }
 
         if (strlen($unique_id) != 17) {
-            throw new \Exception('wrong_steamid_length');
+            throw new \UnexpectedValueException('wrong_steamid_length');
         }
 
         return $unique_id;
@@ -1537,11 +1537,11 @@ function getcup($id, $cat = '') {
     try {
 
         if (!validate_int($id, true)) {
-            throw new \Exception('error_unknown_parameter_cup_id');
+            throw new \UnexpectedValueException('error_unknown_parameter_cup_id');
         }
 
         if (!checkIfContentExists($id, 'cupID', 'cups')) {
-            throw new \Exception('unknown_cup (' . $id . ', ' . $cat . ')');
+            throw new \UnexpectedValueException('unknown_cup (' . $id . ', ' . $cat . ')');
         }
 
         global $_database, $userID;
@@ -1571,7 +1571,7 @@ function getcup($id, $cat = '') {
             );
 
             if (!$selectQuery) {
-                throw new \Exception('cups_teilnehmer_query_select_failed');
+                throw new \UnexpectedValueException('cups_teilnehmer_query_select_failed');
             }
 
             $anz = mysqli_num_rows($selectQuery);
@@ -1608,7 +1608,7 @@ function getcup($id, $cat = '') {
             );
 
             if (!$info) {
-                throw new \Exception('cups_teilnehmer_query_select_failed');
+                throw new \UnexpectedValueException('cups_teilnehmer_query_select_failed');
             }
 
             $getTeamCountCheckedIn = mysqli_num_rows($info);
@@ -1643,7 +1643,7 @@ function getcup($id, $cat = '') {
             );
 
             if (!$selectQuery) {
-                throw new \Exception('cups_query_select_failed');
+                throw new \UnexpectedValueException('cups_query_select_failed');
             }
 
             $get = mysqli_fetch_array($selectQuery);
@@ -1666,7 +1666,7 @@ function getcup($id, $cat = '') {
             $get = mysqli_fetch_array($query);
 
             if (!validate_int($get['cupID'], true)) {
-                throw new \Exception('unknown_cup_id (all, ' . $whereClause . ')');
+                throw new \UnexpectedValueException('unknown_cup_id (all, ' . $whereClause . ')');
             }
 
             $cup_id = $get['cupID'];
@@ -1824,19 +1824,19 @@ function getcups($cat = '', $selected = '') {
 
     if (empty($cat)) {
 
-        $where_clause = (!iscupadmin($userID)) ? 
+        $where_clause = (!iscupadmin($userID)) ?
             ' WHERE a.admin_visible = \'0\'' : '';
 
         $ergebnis = mysqli_query(
-            $_database, 
-            "SELECT 
-                    a.cupID AS cup_id, 
+            $_database,
+            "SELECT
+                    a.cupID AS cup_id,
                     a.name AS cup_name,
                     a.admin_visible AS cup_isVisible,
                     b.name AS game_name
                 FROM `".PREFIX."cups` a
                 JOIN `".PREFIX."games` b ON a.gameID = b.gameID
-                ".$where_clause." 
+                ".$where_clause."
                 ORDER BY a.gameID ASC, a.admin_visible ASC, a.name ASC"
         );
 
@@ -1867,14 +1867,14 @@ function getcups($cat = '', $selected = '') {
 
         $ergebnis = mysqli_query(
             $_database,
-            "SELECT 
-                    a.cupID AS cup_id, 
+            "SELECT
+                    a.cupID AS cup_id,
                     a.name AS cup_name,
                     a.admin_visible AS cup_isVisible,
                     b.name AS game_name
                 FROM `".PREFIX."cups` a
                 JOIN `".PREFIX."games` b ON a.gameID = b.gameID
-                WHERE start_date >= '".time()."'".$where_clause." 
+                WHERE start_date >= '".time()."'".$where_clause."
                 ORDER BY a.gameID ASC, a.admin_visible ASC, a.name ASC"
         );
 
@@ -2010,8 +2010,8 @@ function cup($cupID, $teamID, $cat) {
 
         $cup = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT game, mode FROM `".PREFIX."cups` 
+                $_database,
+                "SELECT game, mode FROM `".PREFIX."cups`
                     WHERE cupID = ".$cupID
             )
         );
@@ -2024,7 +2024,7 @@ function cup($cupID, $teamID, $cat) {
 
             $get = mysqli_fetch_array(
                 mysqli_query(
-                    $_database, "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts` 
+                    $_database, "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts`
                         WHERE ".$where_clause
                 )
             );
@@ -2037,8 +2037,8 @@ function cup($cupID, $teamID, $cat) {
         } else {
 
             $ergebnis = mysqli_query(
-                $_database, 
-                "SELECT userID FROM `".PREFIX."cups_teams_member` 
+                $_database,
+                "SELECT userID FROM `".PREFIX."cups_teams_member`
                     WHERE teamID = ".$teamID." AND kickID = 0 AND active = 1"
             );
             while($ds = mysqli_fetch_array($ergebnis)) {
@@ -2047,7 +2047,7 @@ function cup($cupID, $teamID, $cat) {
 
                 $get = mysqli_fetch_array(
                     mysqli_query(
-                        $_database, "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts` 
+                        $_database, "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts`
                             WHERE ".$where_clause
                     )
                 );
@@ -2073,7 +2073,7 @@ function getteam($id, $cat = '') {
     if ($cat == 'admin') {
         $info = mysqli_query(
             $_database,
-            "SELECT userID FROM `".PREFIX."cups_teams` 
+            "SELECT userID FROM `".PREFIX."cups_teams`
                 WHERE teamID = " . $id . " AND deleted = 0"
         );
         if (mysqli_num_rows($info)) {
@@ -2233,7 +2233,7 @@ function getteam($id, $cat = '') {
 
             $info = mysqli_query(
                 $_database,
-                "SELECT * FROM `".PREFIX."cups_teams` 
+                "SELECT * FROM `".PREFIX."cups_teams`
                     WHERE teamID = " . $id
             );
             if (mysqli_num_rows($info) == 1) {
@@ -2258,8 +2258,8 @@ function getteam($id, $cat = '') {
 
                 $query = mysqli_query(
                     $_database,
-                    "SELECT 
-                            `userID` 
+                    "SELECT
+                            `userID`
                         FROM `" . PREFIX . "cups_teams_member`
                         WHERE `teamID` = " . $team_id . " AND `active` = 1
                         ORDER BY `position` DESC"
@@ -2301,24 +2301,24 @@ function getteam($id, $cat = '') {
 
 }
 function getteams($selected = '') {
-    
+
 	global $_database;
-		
+
 	$info = mysqli_query(
 		$_database,
-		"SELECT teamID, name FROM `".PREFIX."cups_teams` 
+		"SELECT teamID, name FROM `".PREFIX."cups_teams`
 			ORDER BY name ASC"
 	);
-	
+
 	$teams = '<option value="0">-- / --</option>';
 	if(mysqli_num_rows($info)) {
 		while($ds = mysqli_fetch_array($info)) {
-			$teams .= '<option value="'.$ds['teamID'].'">'.$ds['name'].'</option>';	
+			$teams .= '<option value="'.$ds['teamID'].'">'.$ds['name'].'</option>';
 		}
 	}
-		
+
     return selectOptionByValue($teams, $selected, true);
-	
+
 }
 function getcupteams($user_id = '', $default = '') {
 	global $_database;
@@ -2362,43 +2362,43 @@ function setCupTeamLog($team_id, $team_name, $text, $kicked_id = 0, $parent_id =
 
 
 function getScreenshotCategoriesAsOptions($game_id, $showEmptyOption = FALSE, $selected_id = 0) {
-    
+
     $returnValue = '';
-    
+
     if (!validate_int($game_id, true)) {
         return '<option value="0">-- / --</option>';
     }
-    
+
     if ($showEmptyOption) {
         $returnValue .= '<option value="0">-- / --</option>';
     }
-    
+
     global $_database;
-    
+
     $selectQuery = mysqli_query(
-        $_database, 
-        "SELECT 
-                `categoryID`, 
-                `name` 
-            FROM `" . PREFIX . "cups_matches_playoff_screens_category` 
+        $_database,
+        "SELECT
+                `categoryID`,
+                `name`
+            FROM `" . PREFIX . "cups_matches_playoff_screens_category`
             WHERE game_id = " . $game_id . "
             ORDER BY `name` ASC"
     );
-    
+
     if (!$selectQuery) {
         return '<option value="0">-- / --</option>';
     }
-    
+
     if (mysqli_num_rows($selectQuery) < 1) {
         $returnValue .= '<option value="0">-- / --</option>';
     }
-    
+
     while ($get = mysqli_fetch_array($selectQuery)) {
         $returnValue .= '<option value="' . $get['categoryID'] . '">' . $get['name'] . '</option>';
     }
-    
+
     return selectOptionByValue($returnValue, $selected_id, true);
-    
+
 }
 
 /* Gameaccount Informationen */
@@ -2409,36 +2409,36 @@ function gameaccount($userID, $value, $game) {
 
         $get = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts` 
+                $_database,
+                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts`
                     WHERE userID = '".$userID."' AND category = '".$game."' AND deleted = 0"
             )
         );
 
-        $returnValue = ($get['anz'] > 0) ? TRUE : FALSE; 
+        $returnValue = ($get['anz'] > 0) ? TRUE : FALSE;
 
     } elseif($value == 'still_exist') {
 
         $get = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts` 
+                $_database,
+                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts`
                     WHERE category = '".$game."' AND value = '".$userID."' AND deleted = 0"
             )
         );
 
-        $returnValue = ($get['anz'] > 0) ? TRUE : FALSE; 
+        $returnValue = ($get['anz'] > 0) ? TRUE : FALSE;
 
     } elseif($value == 'deleted_seen') {
 
         $updateQuery = mysqli_query(
-            $_database, 
-            "UPDATE `".PREFIX."cups_gameaccounts` 
-                SET deleted_seen = '1' 
+            $_database,
+            "UPDATE `".PREFIX."cups_gameaccounts`
+                SET deleted_seen = '1'
                 WHERE userID = '".$userID."' AND deleted = '1'"
         );
 
-        $returnValue = ($updateQuery) ? TRUE : FALSE; 
+        $returnValue = ($updateQuery) ? TRUE : FALSE;
 
     } elseif($value == 'not_active') {
 
@@ -2446,11 +2446,11 @@ function gameaccount($userID, $value, $game) {
 
             $ds = mysqli_fetch_array(
                 mysqli_query(
-                    $_database, 
-                    "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts` 
+                    $_database,
+                    "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts`
                         WHERE active = 0 AND deleted = 1"
                 )
-            ); 
+            );
 
             $returnValue = $ds['anz'];
 
@@ -2462,11 +2462,11 @@ function gameaccount($userID, $value, $game) {
 
         $ds = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts` 
+                $_database,
+                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts`
                     WHERE userID = ".$userID." AND active = 1 AND deleted = 0"
             )
-        ); 
+        );
 
         $returnValue = $ds['anz'];
 
@@ -2474,18 +2474,18 @@ function gameaccount($userID, $value, $game) {
 
         $get = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT value FROM `".PREFIX."cups_gameaccounts` 
-                    WHERE 
-                            userID = '".$userID."' 
-                        AND 
-                            category = '".$game."' 
-                        AND 
-                            active = '1' 
-                        AND 
+                $_database,
+                "SELECT value FROM `".PREFIX."cups_gameaccounts`
+                    WHERE
+                            userID = '".$userID."'
+                        AND
+                            category = '".$game."'
+                        AND
+                            active = '1'
+                        AND
                             deleted = '0'"
             )
-        ); 
+        );
 
         return $get['value'];
 
@@ -2493,18 +2493,18 @@ function gameaccount($userID, $value, $game) {
 
         $get = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT `value` FROM `".PREFIX."cups_gameaccounts` 
-                    WHERE 
-                            userID = " . $userID . " 
-                        AND 
-                            category = 'csg' 
-                        AND 
-                            active = 1 
-                        AND 
+                $_database,
+                "SELECT `value` FROM `".PREFIX."cups_gameaccounts`
+                    WHERE
+                            userID = " . $userID . "
+                        AND
+                            category = 'csg'
+                        AND
+                            active = 1
+                        AND
                             deleted = 0"
             )
-        ); 
+        );
 
         return $get['value'];
 
@@ -2512,7 +2512,7 @@ function gameaccount($userID, $value, $game) {
 
         $get = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
+                $_database,
                 "SELECT
                         b.validated AS isValidated
                     FROM `".PREFIX."cups_gameaccounts` a
@@ -2531,13 +2531,13 @@ function gameaccount($userID, $value, $game) {
 
         $get = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts` 
+                $_database,
+                "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_gameaccounts`
                     WHERE value = '".$value."' AND active = '1' AND deleted = '0'"
             )
         );
 
-        $returnValue = ($get['anz'] > 0) ? TRUE : FALSE; 
+        $returnValue = ($get['anz'] > 0) ? TRUE : FALSE;
 
     }
     return $returnValue;
@@ -2565,7 +2565,7 @@ function getCSGOAccountInfo($steam64_id, $multipleAccounts = FALSE) {
         }
 
         if(!validate_array($steamCommunityIdArray, true)) {
-            throw new \Exception('unknown_steam_id_array');
+            throw new \UnexpectedValueException('unknown_steam_id_array');
         }
 
         $anzSteamAccount = count($steamCommunityIdArray);
@@ -2575,7 +2575,7 @@ function getCSGOAccountInfo($steam64_id, $multipleAccounts = FALSE) {
         include(__DIR__ . '/../../cup/settings.php');
 
         if (empty($steam_api_key)) {
-            throw new \Exception('unknown_steam_api_key');
+            throw new \UnexpectedValueException('unknown_steam_api_key');
         }
 
         //
@@ -2590,7 +2590,7 @@ function getCSGOAccountInfo($steam64_id, $multipleAccounts = FALSE) {
             $steam64_id = $steamCommunityIdArray[$n];
 
             if (strlen($steam64_id) != 17) {
-                throw new \Exception('wrong_steam64_id_length, ' . $steam64_id);
+                throw new \UnexpectedValueException('wrong_steam64_id_length, ' . $steam64_id);
             }
 
         }
@@ -2692,7 +2692,7 @@ function updateCSGOGameaccount($user_id) {
 
         $checkIf = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
+                $_database,
                 "SELECT COUNT(*) AS `exist` FROM `".PREFIX."cups_gameaccounts` a
                     WHERE " . $whereClause
             )
@@ -2703,8 +2703,8 @@ function updateCSGOGameaccount($user_id) {
         }
 
         $selectQuery = mysqli_query(
-            $_database, 
-            "SELECT 
+            $_database,
+            "SELECT
                     a.`gameaccID` AS `gameaccount_id`,
                     a.`value` AS `steam64_id`
                 FROM `" . PREFIX . "cups_gameaccounts` a
@@ -2713,7 +2713,7 @@ function updateCSGOGameaccount($user_id) {
         );
 
         if (!$selectQuery) {
-            throw new \Exception('cups_gameaccounts_query_failed_select (' . $whereClause . ')');
+            throw new \UnexpectedValueException('cups_gameaccounts_query_failed_select (' . $whereClause . ')');
         }
 
         $getAccount = mysqli_fetch_array($selectQuery);
@@ -2721,14 +2721,14 @@ function updateCSGOGameaccount($user_id) {
         $gameaccount_id = $getAccount['gameaccount_id'];
 
         if (!validate_int($gameaccount_id, true)) {
-            throw new \Exception('unknown_gameaccount_id');
+            throw new \UnexpectedValueException('unknown_gameaccount_id');
         }
 
         $steam64_id = $getAccount['steam64_id'];
 
         $accountDetails = getCSGOAccountInfo($steam64_id);
         if (!isset($accountDetails['status']) || !$accountDetails['status']) {
-            throw new \Exception('getCSGOAccountInfo_failed');
+            throw new \UnexpectedValueException('getCSGOAccountInfo_failed');
         }
 
         $hours_played = $accountDetails['csgo_stats']['time_played']['hours'];
@@ -2744,9 +2744,9 @@ function updateCSGOGameaccount($user_id) {
 
         $get = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT 
-                        COUNT(*) AS `anz` 
+                $_database,
+                "SELECT
+                        COUNT(*) AS `anz`
                     FROM `" . PREFIX . "cups_gameaccounts_csgo`
                     WHERE `gameaccID` = " . $gameaccount_id
             )
@@ -2755,7 +2755,7 @@ function updateCSGOGameaccount($user_id) {
         if ($get['anz'] != 1) {
 
             $query = mysqli_query(
-                $_database, 
+                $_database,
                 "INSERT INTO `" . PREFIX . "cups_gameaccounts_csgo`
                     (
                         `gameaccID`
@@ -2767,7 +2767,7 @@ function updateCSGOGameaccount($user_id) {
             );
 
             if (!query) {
-                throw new \Exception('query_failed_insert (empty_csgo_account)');
+                throw new \UnexpectedValueException('query_failed_insert (empty_csgo_account)');
             }
 
         }
@@ -2784,14 +2784,14 @@ function updateCSGOGameaccount($user_id) {
         $insertValues = implode(', ', $insertValuesArray);
 
         $query = mysqli_query(
-            $_database, 
+            $_database,
             "UPDATE `" . PREFIX . "cups_gameaccounts_csgo`
                 SET " . $insertValues . "
                 WHERE `gameaccID` = " . $gameaccount_id
         );
 
         if (!$query) {
-            throw new \Exception('cups_gameaccounts_csgo_query_failed_update (' . $insertValues . ')');
+            throw new \UnexpectedValueException('cups_gameaccounts_csgo_query_failed_update (' . $insertValues . ')');
         }
 
     } catch(Exception $e) {
@@ -2864,7 +2864,7 @@ function getrules($rule_id = 0, $cat = '', $throwOnFailure = FALSE) {
         if($checkIf['exist'] < 1) {
 
             if($throwOnFailure) {
-                throw new \Exception($_language->module['no_rules']);
+                throw new \UnexpectedValueException($_language->module['no_rules']);
             } else {
                 return '';
             }
@@ -2913,8 +2913,8 @@ function getrules($rule_id = 0, $cat = '', $throwOnFailure = FALSE) {
 
         $ds = mysqli_fetch_array(
             mysqli_query(
-                $_database, 
-                "SELECT ruleID, name, text, date FROM `".PREFIX."cups_rules` 
+                $_database,
+                "SELECT ruleID, name, text, date FROM `".PREFIX."cups_rules`
                     WHERE ruleID = " . $rule_id
             )
         );
@@ -2943,7 +2943,7 @@ function getrulecategories() {
     $reasons = '';
     $reason_id = mysqli_query(
         $_database,
-        "SELECT reasonID, name_de, name_uk, points FROM `".PREFIX."cups_penalty_category` 
+        "SELECT reasonID, name_de, name_uk, points FROM `".PREFIX."cups_penalty_category`
             ORDER BY points DESC"
     );
     while ($ds = mysqli_fetch_array($reason_id)) {
@@ -2965,10 +2965,10 @@ function getUserPenalty($user_id) {
     global $_database;
 
     $get_pp = mysqli_query(
-        $_database, 
-        "SELECT 
-                reasonID 
-            FROM ".PREFIX."cups_penalty 
+        $_database,
+        "SELECT
+                reasonID
+            FROM ".PREFIX."cups_penalty
             WHERE duration_time > " . $time_now . " AND userID = " . $user_id . " AND deleted = 0"
     );
     if(mysqli_num_rows($get_pp) < 1) {
@@ -2991,12 +2991,12 @@ function getPenaltyCategories($selected = 0) {
 
     $ds = mysqli_query(
         $_database,
-        "SELECT 
-                `reasonID`, 
-                `name_de`, 
-                `lifetime`, 
-                `points` 
-            FROM `" . PREFIX . "cups_penalty_category` 
+        "SELECT
+                `reasonID`,
+                `name_de`,
+                `lifetime`,
+                `points`
+            FROM `" . PREFIX . "cups_penalty_category`
             ORDER BY `lifetime` ASC, `points` ASC"
     );
 
@@ -3027,7 +3027,7 @@ function getPenaltyCategory($id, $cat = '') {
     $ds = mysqli_fetch_array(
         mysqli_query(
             $_database,
-            "SELECT * FROM `" . PREFIX . "cups_penalty_category` 
+            "SELECT * FROM `" . PREFIX . "cups_penalty_category`
                 WHERE `reasonID` = " . (int)$id
         )
     );
@@ -3066,9 +3066,9 @@ function getpenalty($id, $cat = '') {
 
         $ds = mysqli_query(
             $_database,
-            "SELECT 
-                    `reasonID` 
-                FROM `" . PREFIX . "cups_penalty` 
+            "SELECT
+                    `reasonID`
+                FROM `" . PREFIX . "cups_penalty`
                 WHERE " . $whereClause . " AND deleted = 0"
         );
 
@@ -3082,7 +3082,7 @@ function getpenalty($id, $cat = '') {
             $dx = mysqli_fetch_array(
                 mysqli_query(
                     $_database,
-                    "SELECT SUM(points) AS `counter` FROM `".PREFIX."cups_penalty_category` 
+                    "SELECT SUM(points) AS `counter` FROM `".PREFIX."cups_penalty_category`
                         WHERE reasonID IN (" . implode(',', $reasonArray) . ")"
                 )
             );
@@ -3097,7 +3097,7 @@ function getpenalty($id, $cat = '') {
 
         $selectQuery = mysqli_query(
             $_database,
-            "SELECT 
+            "SELECT
                     cp.*,
                     cpc.`points`,
                     cpc.`lifetime`,
@@ -3254,15 +3254,15 @@ function getMappool($pool_id = 0, $cat = 'list') {
 function savePrize($cup_id, $prize, $placement) {
 
     if (!validate_int($cup_id, true)) {
-        throw new \Exception('unknown_cup_id');
+        throw new \UnexpectedValueException('unknown_cup_id');
     }
 
     if (empty($prize)) {
-        throw new \Exception('unknown_prize');
+        throw new \UnexpectedValueException('unknown_prize');
     }
 
     if (!validate_int($placement, true)) {
-        throw new \Exception('unknown_placemenet');
+        throw new \UnexpectedValueException('unknown_placemenet');
     }
 
     $insertQuery = cup_query(
@@ -3414,11 +3414,11 @@ function getticket_anz($status, $user_id, $cat) {
 
     $query = mysqli_query(
         $_database,
-        "SELECT 
-                `ticketID`, 
-                `categoryID`, 
-                `status` 
-            FROM `" . PREFIX . "cups_supporttickets` 
+        "SELECT
+                `ticketID`,
+                `categoryID`,
+                `status`
+            FROM `" . PREFIX . "cups_supporttickets`
             WHERE " . $whereClause
     );
 
@@ -3444,9 +3444,9 @@ function getticket_anz($status, $user_id, $cat) {
 
         $selectQuery = mysqli_query(
             $_database,
-            "SELECT 
+            "SELECT
                     `ticket_seen_date`
-                FROM `" . PREFIX . "cups_supporttickets_status` 
+                FROM `" . PREFIX . "cups_supporttickets_status`
                 WHERE " . $whereClause
         );
 
@@ -3474,9 +3474,9 @@ function getticket_anz($status, $user_id, $cat) {
 
             $selectQuery = mysqli_query(
                 $_database,
-                "SELECT 
+                "SELECT
                         `date`
-                    FROM `" . PREFIX . "cups_supporttickets_content` 
+                    FROM `" . PREFIX . "cups_supporttickets_content`
                     WHERE " . $whereClause . "
                     ORDER BY date DESC
                     LIMIT 0, 1"
@@ -3512,7 +3512,7 @@ function getticketcategories($selected = '', $addEmptyOption = TRUE) {
 
     $info = mysqli_query(
         $_database,
-        "SELECT categoryID, name_de FROM `".PREFIX."cups_supporttickets_category` 
+        "SELECT categoryID, name_de FROM `".PREFIX."cups_supporttickets_category`
         ORDER BY name_de ASC"
     );
 
@@ -3525,14 +3525,14 @@ function getticketcategories($selected = '', $addEmptyOption = TRUE) {
     }
 
     while($ds = mysqli_fetch_array($info)) {
-        $categories .= '<option value="' . $ds['categoryID'] . '">' . $ds['name_de'] . '</option>';	
+        $categories .= '<option value="' . $ds['categoryID'] . '">' . $ds['name_de'] . '</option>';
     }
 
     if (validate_int($selected, true)) {
 
         $categories = str_replace(
-            'value="' . $selected . '"', 
-            'value="' . $selected . '" selected="selected"', 
+            'value="' . $selected . '"',
+            'value="' . $selected . '" selected="selected"',
             $categories
         );
 
@@ -3602,12 +3602,12 @@ function getTicketSeenDate($ticket_id, $primary_id, $admin = 0) {
         "SELECT
                 COUNT(*) AS `exists`,
                 `ticket_seen_date`
-            FROM `" . PREFIX . "cups_supporttickets_status` 
+            FROM `" . PREFIX . "cups_supporttickets_status`
             WHERE " . $whereClause
     );
 
     if (!$selectQuery) {
-        throw new \Exception($_language->module['query_select_failed']);
+        throw new \UnexpectedValueException($_language->module['query_select_failed']);
     }
 
     $checkIf = mysqli_fetch_array($selectQuery);
@@ -3635,25 +3635,25 @@ function insertTicketStatus($ticket_id, $primary_id, $admin = 0, $date = 1) {
     }
 
     $insertQuery = mysqli_query(
-        $_database, 
-        "INSERT INTO `" . PREFIX . "cups_supporttickets_status` 
+        $_database,
+        "INSERT INTO `" . PREFIX . "cups_supporttickets_status`
             (
                 `ticket_id`,
                 `primary_id`,
                 `admin`
                 " . $ticket_seen_attribute . "
-            ) 
-            VALUES 
+            )
+            VALUES
             (
-                " . $ticket_id . ", 
-                " . $primary_id . ", 
+                " . $ticket_id . ",
+                " . $primary_id . ",
                 " . $admin . "
                 " . $ticket_seen_date . "
             )"
     );
 
     if (!$insertQuery) {
-        throw new \Exception($_language->module['query_insert_failed']);
+        throw new \UnexpectedValueException($_language->module['query_insert_failed']);
     }
 
 }
@@ -3669,15 +3669,15 @@ function setTicketSeenDate($ticket_id, $primary_id, $admin = 0) {
     $whereClause = implode(' AND ', $whereClauseArray);
 
     $selectQuery = mysqli_query(
-        $_database, 
+        $_database,
         "SELECT
                 COUNT(*) AS `exists`
-            FROM `" . PREFIX . "cups_supporttickets_status` 
+            FROM `" . PREFIX . "cups_supporttickets_status`
             WHERE " . $whereClause
     );
 
     if (!$selectQuery) {
-        throw new \Exception($_language->module['query_select_failed']);
+        throw new \UnexpectedValueException($_language->module['query_select_failed']);
     }
 
     $checkIf = mysqli_fetch_array($selectQuery);
@@ -3687,14 +3687,14 @@ function setTicketSeenDate($ticket_id, $primary_id, $admin = 0) {
     }
 
     $updateQuery = mysqli_query(
-        $_database, 
-        "UPDATE `" . PREFIX . "cups_supporttickets_status` 
+        $_database,
+        "UPDATE `" . PREFIX . "cups_supporttickets_status`
             SET `ticket_seen_date` = " . time() . "
             WHERE " . $whereClause
     );
 
     if (!$updateQuery) {
-        throw new \Exception($_language->module['query_update_failed']);
+        throw new \UnexpectedValueException($_language->module['query_update_failed']);
     }
 
 }

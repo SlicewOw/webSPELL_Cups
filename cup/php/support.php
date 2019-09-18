@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups');
 
     if (!$loggedin) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     if ($getAction == 'new_ticket') {
@@ -17,11 +17,11 @@ try {
             (int)$_GET['id'] : 0;
 
         if ($ticket_id < 1) {
-            throw new \Exception($_language->module['no_ticket_access']);
+            throw new \UnexpectedValueException($_language->module['no_ticket_access']);
         }
 
         if (!getTicketAccess($ticket_id)) {
-            throw new \Exception($_language->module['no_ticket_access']);
+            throw new \UnexpectedValueException($_language->module['no_ticket_access']);
         }
 
         include(__DIR__ . '/includes/ticket_add_answer.php');
@@ -35,8 +35,8 @@ try {
 
             $teamString = implode(', ', $teamArray);
 
-            $whereClause .= ' OR a.teamID IN ('.$teamString.')'; 
-            $whereClause .= ' OR a.opponentID IN ('.$teamString.')'; 
+            $whereClause .= ' OR a.teamID IN ('.$teamString.')';
+            $whereClause .= ' OR a.opponentID IN ('.$teamString.')';
 
         }
 

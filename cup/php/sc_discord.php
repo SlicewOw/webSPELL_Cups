@@ -22,7 +22,7 @@ try {
         );
 
         if (!isset($token->access_token)) {
-            throw new \Exception($_language->module['invalid_access_token']);
+            throw new \UnexpectedValueException($_language->module['invalid_access_token']);
         }
 
         $_SESSION['access_token'] = $token->access_token;
@@ -117,7 +117,7 @@ try {
         }
 
         if (!isset($user_id) || !validate_int($user_id, true)) {
-            throw new \Exception();
+            throw new \UnexpectedValueException();
         }
 
         //cookie

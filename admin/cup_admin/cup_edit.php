@@ -5,18 +5,18 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $cup_id = (isset($_GET['id']) && validate_int($_GET['id'])) ?
         (int)$_GET['id'] : 0;
 
     if ($cup_id < 1) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     if (!checkIfContentExists($cup_id, 'cupID', 'cups')) {
-        throw new \Exception($_language->module['unknown_cup_id']);
+        throw new \UnexpectedValueException($_language->module['unknown_cup_id']);
     }
 
     $maxPrices = 6;
@@ -28,35 +28,35 @@ try {
         try {
 
             if (!isset($_POST['edit'])) {
-                throw new \Exception($_language->module['unknown_action']);
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
             }
 
             $setValueArray = array();
 
             if (isset($_POST['challonge_url'])) {
-                
+
                 $challonge_url = (validate_url($_POST['challonge_url'])) ?
                     getinput($_POST['challonge_url']) : '';
-                
+
                 if (empty($challonge_url)) {
-                    
+
                     $setValueArray[] = '`challonge_api` = 0';
                     $setValueArray[] = '`challonge_url` = NULL';
-                    
+
                 } else {
-                    
+
                     $setValueArray[] = '`challonge_api` = 1';
                     $setValueArray[] = '`challonge_url` = \'' . $challonge_url . '\'';
 
                 }
 
             } else {
-                
+
                 $cupname = (isset($_POST['cupname']) && !empty($_POST['cupname'])) ?
                     getinput($_POST['cupname']) : '';
 
                 if (empty($cupname)) {
-                    throw new \Exception($_language->module['cup_noname']);
+                    throw new \UnexpectedValueException($_language->module['cup_noname']);
                 }
 
                 $setValueArray[] = '`name` = \'' . $cupname . '\'';
@@ -84,11 +84,11 @@ try {
 
                 $setValueArray[] = '`start_date` = ' . $date_start;
 
-                $game_tag = (isset($_POST['game'])) ? 
+                $game_tag = (isset($_POST['game'])) ?
                     getinput($_POST['game']) : '';
 
                 if (empty($game_tag)) {
-                    throw new \Exception($_language->module['unknown_game_tag']);
+                    throw new \UnexpectedValueException($_language->module['unknown_game_tag']);
                 }
 
                 $gameArray = getGame($game_tag);
@@ -96,12 +96,12 @@ try {
                 $setValueArray[] = '`game` = \'' . $gameArray['tag'] . '\'';
                 $setValueArray[] = '`gameID` = ' . $gameArray['id'];
 
-                $platform = (isset($_POST['platform'])) ? 
+                $platform = (isset($_POST['platform'])) ?
                     getinput($_POST['platform']) : 'PC';
 
                 $setValueArray[] = '`platform` = \'' . $platform . '\'';
 
-                $mode = (isset($_POST['mode'])) ? 
+                $mode = (isset($_POST['mode'])) ?
                     getinput($_POST['mode']) : '5on5';
 
                 $setValueArray[] = '`mode` = \'' . $mode . '\'';
@@ -129,7 +129,7 @@ try {
             }
 
             if (!validate_array($setValueArray, true)) {
-                throw new \Exception($_language->module['unexpected_empty_array']);
+                throw new \UnexpectedValueException($_language->module['unexpected_empty_array']);
             }
 
             $query = cup_query(

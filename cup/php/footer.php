@@ -11,7 +11,7 @@ try {
         $cup_id = getParentIdByValue('id', true);
 
         if ($cup_id < 1) {
-            throw new \Exception('unknown_cup');
+            throw new \UnexpectedValueException('unknown_cup');
         }
 
         if (!isset($cupArray) || !validate_array($cupArray, true)) {
@@ -19,15 +19,15 @@ try {
         }
 
         if (!isset($cupArray['phase'])) {
-            throw new \Exception('unknown_cup_phase');
+            throw new \UnexpectedValueException('unknown_cup_phase');
         }
 
         if (!isset($cupArray['checkin'])) {
-            throw new \Exception('unknown_cup_date_checkin');
+            throw new \UnexpectedValueException('unknown_cup_date_checkin');
         }
 
         if (!isset($cupArray['start'])) {
-            throw new \Exception('unknown_cup_date_start');
+            throw new \UnexpectedValueException('unknown_cup_date_start');
         }
 
         if (preg_match('/register/', $cupArray['phase'])) {
@@ -62,7 +62,7 @@ try {
         );
 
         if (!$selectQuery) {
-            throw new \Exception('query_select_failed');
+            throw new \UnexpectedValueException('query_select_failed');
         }
 
         if (mysqli_num_rows($selectQuery) > 0) {
@@ -80,11 +80,11 @@ try {
     }
 
     if (!isset($date)) {
-        throw new \Exception('no_date_value');
+        throw new \UnexpectedValueException('no_date_value');
     }
 
     if (empty($date)) {
-        throw new \Exception('invalid_date_value');
+        throw new \UnexpectedValueException('invalid_date_value');
     }
 
     $data_array = array();

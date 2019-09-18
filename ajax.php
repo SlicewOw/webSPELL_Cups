@@ -34,7 +34,7 @@ try {
     }
 
     if (!$getAccess) {
-        throw new \Exception("access_denied");
+        throw new \UnexpectedValueException("access_denied");
     }
 
     $fileLocation .= $getSite;

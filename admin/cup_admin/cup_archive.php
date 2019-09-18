@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $whereClauseArray = array();
@@ -27,7 +27,7 @@ try {
     );
 
     if (!$ergebnis) {
-        throw new \Exception($_language->module['query_select_failed']);
+        throw new \UnexpectedValueException($_language->module['query_select_failed']);
     }
 
     if (mysqli_num_rows($ergebnis) > 0) {

@@ -124,7 +124,7 @@ class stream {
                     $subget = mysqli_fetch_array(
                         mysqli_query(
                             $_database,
-                            "SELECT COUNT(*) AS `streamCount` FROM `".PREFIX."liveshow` 
+                            "SELECT COUNT(*) AS `streamCount` FROM `".PREFIX."liveshow`
                                 WHERE cronjobID = " . $x
                         )
                     );
@@ -143,8 +143,8 @@ class stream {
             $get = mysqli_fetch_array(
                 mysqli_query(
                     $_database,
-                    "SELECT cronjobID FROM `".PREFIX."liveshow` 
-                        GROUP BY cronjobID 
+                    "SELECT cronjobID FROM `".PREFIX."liveshow`
+                        GROUP BY cronjobID
                         ORDER BY COUNT(*) ASC
                         LIMIT 0, 1"
                 )
@@ -162,7 +162,7 @@ class stream {
     public function setValue($var_value) {
 
         if (is_null($var_value) || empty($var_value)) {
-            throw new \Exception($this->lang->module['error_missing_value']);
+            throw new \UnexpectedValueException($this->lang->module['error_missing_value']);
         }
 
         $var_value = getinput($var_value);
@@ -178,7 +178,7 @@ class stream {
             $this->value = $this->value_tmp;
 
         } else {
-            throw new \Exception($this->lang->module['error_cannot_convert']);
+            throw new \UnexpectedValueException($this->lang->module['error_cannot_convert']);
         }
 
     }
@@ -186,11 +186,11 @@ class stream {
     public function isTwitchAccount() {
 
         if (is_null($this->value_tmp) || empty($this->value_tmp)) {
-            throw new \Exception($this->lang->module['error_missing_value']);
+            throw new \UnexpectedValueException($this->lang->module['error_missing_value']);
         }
 
         if (!validate_url($this->value_tmp)) {
-            throw new \Exception($this->lang->module['error_url_expected']);
+            throw new \UnexpectedValueException($this->lang->module['error_url_expected']);
         }
 
         if (preg_match('/twitch.tv/i', $this->value_tmp)) {
@@ -205,7 +205,7 @@ class stream {
     public function convert2twitch() {
 
         if (is_null($this->value_tmp)) {
-            throw new \Exception($this->lang->module['error_missing_value']);
+            throw new \UnexpectedValueException($this->lang->module['error_missing_value']);
         }
 
         $searchArray = array(
@@ -325,7 +325,7 @@ class stream {
 
                 $twitchData = json_decode($json_data, TRUE);
                 if (!isset($twitchData['status']) || ($twitchData['status'] == '404')) {
-                    throw new \Exception($this->lang->module['error_getting_twitch_data_2']);
+                    throw new \UnexpectedValueException($this->lang->module['error_getting_twitch_data_2']);
                 }
 
                 if (isset($twitchData['display_name'])) {
@@ -344,7 +344,7 @@ class stream {
                 $this->stream_date = time();
 
             } else {
-                throw new \Exception($this->lang->module['error_getting_twitch_data_1']);
+                throw new \UnexpectedValueException($this->lang->module['error_getting_twitch_data_1']);
             }
 
         } catch (Exception $e) {
@@ -358,7 +358,7 @@ class stream {
         if (!validate_int($stream_id) && !validate_int($this->stream_id)) {
 
             if ($this->checkStream()) {
-                throw new \Exception($this->lang->module['unknown_stream']);
+                throw new \UnexpectedValueException($this->lang->module['unknown_stream']);
             }
 
         }
@@ -413,7 +413,7 @@ class stream {
             );
 
             if (!$insertQuery) {
-                throw new \Exception($this->lang->module['query_failed_insert']);
+                throw new \UnexpectedValueException($this->lang->module['query_failed_insert']);
             }
 
             $this->stream_id = mysqli_insert_id($_database);
@@ -423,7 +423,7 @@ class stream {
         } else {
 
             if (!validate_int($this->stream_id, true)) {
-                throw new \Exception($this->lang->module['error_unknown_id']);
+                throw new \UnexpectedValueException($this->lang->module['error_unknown_id']);
             }
 
             // Twitch Stream Details
@@ -436,7 +436,7 @@ class stream {
             ************/
             $updateQuery = mysqli_query(
                 $_database,
-                "UPDATE " . PREFIX . "liveshow 
+                "UPDATE " . PREFIX . "liveshow
                     SET	`cronjobID` = " . $this->cronjob . ",
                         `title` = '" . $this->stream_title  . "',
                         `id` = '" . $this->value . "',
@@ -451,7 +451,7 @@ class stream {
             );
 
             if (!$updateQuery) {
-                throw new \Exception($this->lang->module['query_failed_update']);
+                throw new \UnexpectedValueException($this->lang->module['query_failed_update']);
             }
 
             $_SESSION['successArray'][] = $this->lang->module['query_saved'];

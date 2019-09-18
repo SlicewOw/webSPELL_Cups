@@ -5,7 +5,7 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!iscupadmin($userID) || (mb_substr(basename($_SERVER['REQUEST_URI']), 0, 15) != "admincenter.php")) {
-        throw new \Exception($_language->module[ 'access_denied' ]);
+        throw new \UnexpectedValueException($_language->module[ 'access_denied' ]);
     }
 
     $category = (isset($_GET['category'])) ?
@@ -26,7 +26,7 @@ try {
         if (file_exists($includePath)) {
             include($includePath);
         } else {
-            throw new \Exception($_language->module['unknown_action']);
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
     }

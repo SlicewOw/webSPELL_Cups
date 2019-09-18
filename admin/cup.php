@@ -10,7 +10,7 @@ try {
     $_language->readModule('cups', false, true);
 
     if (!$loggedin || !iscupadmin($userID)) {
-        throw new \Exception($_language->module['login']);
+        throw new \UnexpectedValueException($_language->module['login']);
     }
 
     $mod = (isset($_GET['mod'])) ?
@@ -53,7 +53,7 @@ try {
                 // Cup starten und Gruppen erstellen
                 include(__DIR__ . '/cup_admin/includes/cup_start_groupstage.php');
             } else {
-                throw new \Exception($_language->module['access_denied']);
+                throw new \UnexpectedValueException($_language->module['access_denied']);
             }
 
         } else if ( $getAction == "finish" && !empty($getStatus) && isset($_GET['id']) ) {
@@ -78,7 +78,7 @@ try {
     } else if (file_exists(__DIR__ . '/cup_admin/' . $mod . '.php')) {
         include(__DIR__ . '/cup_admin/' . $mod . '.php');
     } else {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
 } catch (Exception $e) {

@@ -3,7 +3,7 @@
 try {
 
     if(!$loggedin) {
-        throw new \Exception($_language->module['not_loggedin']);
+        throw new \UnexpectedValueException($_language->module['not_loggedin']);
     }
 
     if (validate_array($_POST, true)) {

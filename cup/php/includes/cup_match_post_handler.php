@@ -7,17 +7,17 @@ if (validate_array($_POST, true)) {
     try {
 
         if (!isset($teamAdminAccess) && !isset($cupAdminAccess)) {
-            throw new \Exception($_language->module['access_denied']);
+            throw new \UnexpectedValueException($_language->module['access_denied']);
         }
 
         if (!($teamAdminAccess || $cupAdminAccess)) {
-            throw new \Exception($_language->module['access_denied']);
+            throw new \UnexpectedValueException($_language->module['access_denied']);
         }
 
         if (isset($_POST['submitMatchReset'])) {
 
             if (!$cupAdminAccess) {
-                throw new \Exception($_language->module['access_denied']);
+                throw new \UnexpectedValueException($_language->module['access_denied']);
             }
 
             //
@@ -49,7 +49,7 @@ if (validate_array($_POST, true)) {
         } else if (isset($_POST['submitMapvoteReset'])) {
 
             if (!$cupAdminAccess) {
-                throw new \Exception($_language->module['access_denied']);
+                throw new \UnexpectedValueException($_language->module['access_denied']);
             }
 
             //
@@ -76,7 +76,7 @@ if (validate_array($_POST, true)) {
                 (int)$_POST['match_id'] : 0;
 
             if ($match_id < 1) {
-                throw new \Exception($_language->module['no_match']);
+                throw new \UnexpectedValueException($_language->module['no_match']);
             }
 
             if (!isset($_POST['team'])) {
@@ -322,7 +322,7 @@ if (validate_array($_POST, true)) {
                 }
 
             } else {
-                throw new \Exception($_language->module['unknown_action']);
+                throw new \UnexpectedValueException($_language->module['unknown_action']);
             }
 
         } else if (isset($_POST['submitScreenUpload'])) {
@@ -331,25 +331,25 @@ if (validate_array($_POST, true)) {
                 (int)$_POST['match_id'] : 0;
 
             if ($match_id < 1) {
-                throw new \Exception($_language->module['no_match']);
+                throw new \UnexpectedValueException($_language->module['no_match']);
             }
 
             $category_id = (isset($_POST['screenshot_category']) && validate_int($_POST['screenshot_category'], true)) ?
                 (int)$_POST['screenshot_category'] : 0;
 
             if ($category_id < 1) {
-                throw new \Exception($_language->module['no_category']);
+                throw new \UnexpectedValueException($_language->module['no_category']);
             }
 
             $_language->readModule('formvalidation', true);
 
             $upload = new \webspell\HttpUpload('screenshot_status');
             if (!$upload->hasFile()) {
-                throw new \Exception($_language->module['no_image']);
+                throw new \UnexpectedValueException($_language->module['no_image']);
             }
 
             if ($upload->hasError() !== false) {
-                throw new \Exception($_language->module['broken_image']);
+                throw new \UnexpectedValueException($_language->module['broken_image']);
             }
 
             $mime_types = array(
@@ -359,13 +359,13 @@ if (validate_array($_POST, true)) {
             );
 
             if (!$upload->supportedMimeType($mime_types)) {
-                throw new \Exception($_language->module['unsupported_image_type']);
+                throw new \UnexpectedValueException($_language->module['unsupported_image_type']);
             }
 
             $imageInformation = getimagesize($upload->getTempFile());
 
             if (!is_array($imageInformation)) {
-                throw new \Exception($_language->module['broken_image']);
+                throw new \UnexpectedValueException($_language->module['broken_image']);
             }
 
             switch ($imageInformation[2]) {
@@ -384,7 +384,7 @@ if (validate_array($_POST, true)) {
             $file = convert2filename($match_id . '_' . $category_id, true, true) . $endung;
 
             if (!$upload->saveAs($filepath . $file, true)) {
-                throw new \Exception($_language->module['broken_image']);
+                throw new \UnexpectedValueException($_language->module['broken_image']);
             }
 
             @chmod($filepath . $file, $new_chmod);
@@ -408,7 +408,7 @@ if (validate_array($_POST, true)) {
             );
 
         } else {
-            throw new \Exception($_language->module['unknown_action']);
+            throw new \UnexpectedValueException($_language->module['unknown_action']);
         }
 
     } catch (Exception $e) {

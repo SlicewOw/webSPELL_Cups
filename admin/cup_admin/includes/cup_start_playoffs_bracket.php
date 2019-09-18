@@ -1,26 +1,26 @@
 <?php
 
 if (!$loggedin || !iscupadmin($userID)) {
-    throw new \Exception($_language->module['access_denied']);
+    throw new \UnexpectedValueException($_language->module['access_denied']);
 }
 
 if (!validate_int($cup_id, true)) {
-    throw new \Exception($_language->module['access_denied']);
+    throw new \UnexpectedValueException($_language->module['access_denied']);
 }
 
 if (!isset($cupArray) || !validate_array($cupArray, true)) {
-    throw new \Exception($_language->module['access_denied']);
+    throw new \UnexpectedValueException($_language->module['access_denied']);
 }
 
 if (!isset($cupArray['id']) || ($cup_id != $cupArray['id'])) {
-    throw new \Exception($_language->module['access_denied']);
+    throw new \UnexpectedValueException($_language->module['access_denied']);
 }
 
 $cup_teams = getcup($cup_id, 'rand_teams');
 
 $arrlen = count($cup_teams);
 if ($arrlen < 1) {
-    throw new \Exception($_language->module['no_teams']);
+    throw new \UnexpectedValueException($_language->module['no_teams']);
 }
 
 $breakTimer = 0;
@@ -51,7 +51,7 @@ while ($break_while == true) {
     }
 
     if ($breakTimer > $maxBreakTimer) {
-        throw new \Exception('rand_teams failed');
+        throw new \UnexpectedValueException('rand_teams failed');
     }
 
     $breakTimer++;

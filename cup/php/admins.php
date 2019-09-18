@@ -20,14 +20,14 @@ try {
     );
 
     if (!$query) {
-        throw new \Exception($_language->module['query_select_failed']);
+        throw new \UnexpectedValueException($_language->module['query_select_failed']);
     }
 
     $adminList = '';
     $activePosition = '';
 
     if (mysqli_num_rows($query) < 1) {
-        throw new \Exception($_language->module['no_admin']);
+        throw new \UnexpectedValueException($_language->module['no_admin']);
     }
 
     while ($get = mysqli_fetch_array($query)) {

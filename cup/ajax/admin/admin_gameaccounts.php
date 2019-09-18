@@ -10,14 +10,14 @@ try {
     $_language->readModule('gameaccounts', false, true);
 
     if (!iscupadmin($userID)) {
-        throw new \Exception($_language->module['access_denied']);
+        throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
     $postAction = (isset($_POST['action'])) ?
         getinput($_POST['action']) : '';
 
     if (empty($postAction)) {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
 
     //
@@ -25,14 +25,14 @@ try {
     systeminc('classes/gameaccounts');
 
     if ($postAction == 'deleteBannedAccount') {
-        
+
         $banned_id = (isset($_POST['banned_id']) && validate_int($_POST['banned_id'], true)) ?
             (int)$_POST['banned_id'] : 0;
-        
+
         if ($banned_id < 1) {
-            throw new \Exception($_language->module['unknown_gameaccount']);
+            throw new \UnexpectedValueException($_language->module['unknown_gameaccount']);
         }
-        
+
         $deleteQuery = mysqli_query(
             $_database,
             "DELETE FROM `" . PREFIX . "cups_gameaccounts_banned`
@@ -40,34 +40,34 @@ try {
         );
 
         if (!$deleteQuery) {
-            throw new \Exception($_language->module['query_delete_failed']);
+            throw new \UnexpectedValueException($_language->module['query_delete_failed']);
         }
 
         $returnArray['message'][] = $_language->module['query_deleted'];
 
     } else if ($postAction == 'addSmurf') {
 
-		$smurfValue = (isset($_POST['smurfValue'])) ? 
+		$smurfValue = (isset($_POST['smurfValue'])) ?
 			getinput($_POST['smurfValue']) : '';
-		
+
 		if (empty($smurfValue)) {
-			throw new \Exception('unknown_value');
+			throw new \UnexpectedValueException('unknown_value');
 		}
 
-		$smurfGame = (isset($_POST['smurfGame']) && (strlen($_POST['smurfGame']) == 3)) ? 
+		$smurfGame = (isset($_POST['smurfGame']) && (strlen($_POST['smurfGame']) == 3)) ?
 			$_POST['smurfGame'] : '';
 
 		if (empty($smurfGame)) {
-			throw new \Exception('unknown_game');
-		} 
-
-		$user_id = (isset($_POST['user_id']) && validate_int($_POST['user_id'])) ? 
-			(int)$_POST['user_id'] : 0;
-		
-		if ($user_id < 1) {
-			throw new \Exception('unknown_user');
+			throw new \UnexpectedValueException('unknown_game');
 		}
-        
+
+		$user_id = (isset($_POST['user_id']) && validate_int($_POST['user_id'])) ?
+			(int)$_POST['user_id'] : 0;
+
+		if ($user_id < 1) {
+			throw new \UnexpectedValueException('unknown_user');
+		}
+
         $gameaccount = new \myrisk\gameaccount();
         $gameaccount->setGame($smurfGame);
         $gameaccount->setValue($smurfValue);
@@ -101,7 +101,7 @@ try {
 		);
 
 		if (!$query) {
-			throw new \Exception('query_insert_failed');
+			throw new \UnexpectedValueException('query_insert_failed');
 		}
 
 		$gameaccount_id = mysqli_insert_id($_database);
@@ -127,17 +127,17 @@ try {
 			);
 
 			if (!$subquery) {
-				throw new \Exception('query_insert_failed');
+				throw new \UnexpectedValueException('query_insert_failed');
 			}
 
 		}
 
 	} else {
-        throw new \Exception($_language->module['unknown_action']);
+        throw new \UnexpectedValueException($_language->module['unknown_action']);
     }
-    
+
     $returnArray['status'] = TRUE;
-    
+
 } catch (Exception $e) {
     $returnArray['message'][] = $e->getMessage();
 }
