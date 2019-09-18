@@ -102,7 +102,7 @@ try {
 
         //
         // Team Hits
-        setHits('cups_teams', 'teamID', $team_id, false);
+        setHits('cups_teams', getConstNameTeamId(), $team_id, false);
 
         //
         // Team-Admin Rechte

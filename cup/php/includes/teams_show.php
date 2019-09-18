@@ -19,7 +19,7 @@ try {
 		$teams = '';
 		while ($ds = mysqli_fetch_array($query)) {
 
-			$team_id = $ds['teamID'];
+			$team_id = $ds[getConstNameTeamId()];
 
 			$db = mysqli_fetch_array(
 				mysqli_query(

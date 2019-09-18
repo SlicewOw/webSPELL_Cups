@@ -469,7 +469,7 @@ try {
                     WHERE a.userID = " . $db['ticket_userID'] . " AND active = 1"
             );
             while ($get = mysqli_fetch_array($query)) {
-                $admin_info .= '<a href="'.$teamDetailsLink.$get['team_id'].'" target="_blank" class="list-group-item">'.$get['name'].'</a>';
+                $admin_info .= '<a href="'.$teamDetailsLink.$get[getConstNameTeamIdWithUnderscore()].'" target="_blank" class="list-group-item">'.$get['name'].'</a>';
             }
 
             $data_array['$admin_info'] = $admin_info;

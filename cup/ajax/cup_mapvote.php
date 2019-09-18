@@ -50,8 +50,8 @@ try {
                 throw new \UnexpectedValueException('error_match-id');
             }
 
-            $team_id = (isset($_POST['team_id']) && preg_match('/team/', $_POST['team_id'])) ?
-                getinput($_POST['team_id']) : '';
+            $team_id = (isset($_POST[getConstNameTeamIdWithUnderscore()]) && preg_match('/team/', $_POST[getConstNameTeamIdWithUnderscore()])) ?
+                getinput($_POST[getConstNameTeamIdWithUnderscore()]) : '';
 
             if (strlen($team_id) == 0) {
                 throw new \UnexpectedValueException('error_team-id');

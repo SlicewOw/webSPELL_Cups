@@ -23,7 +23,7 @@ try {
 
     while ($get = mysqli_fetch_array($selectQuery)) {
 
-        $team_id = $get['teamID'];
+        $team_id = $get[getConstNameTeamId()];
 
         $whereClause = $whereClause_base . ' AND (`team1` = ' . $team_id . ' OR `team2` = ' . $team_id . ')';
         $whereClause .= ' AND `mode` != \'1on1\'';

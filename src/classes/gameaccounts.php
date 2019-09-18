@@ -604,7 +604,7 @@ class gameaccount {
 
         $teamArray = array();
         while($get = mysqli_fetch_array($selectCupTeamsQuery)) {
-            $teamArray[] = $get['teamID'];
+            $teamArray[] = $get[getConstNameTeamId()];
         }
 
         $whereClauseArray = array();

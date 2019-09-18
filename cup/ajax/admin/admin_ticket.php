@@ -120,7 +120,7 @@ try {
 
             $returnArray['data']['team'][$x] = array(
                 'name' => getteam($team_id, 'name'),
-                'team_id' => $team_id
+                getConstNameTeamIdWithUnderscore() => $team_id
             );
 
             if (!isset($returnArray['data']['player'][$x])) {

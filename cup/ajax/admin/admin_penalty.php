@@ -60,7 +60,7 @@ try {
             $receiver_url = $hp_url . '/index.php?site=profile&amp;id=' . $get['userID'];
             $receiver_name = $get['nickname'];
         } else {
-            $receiver_url = $hp_url . '/index.php?site=teams&amp;action=details&amp;id=' . $get['teamID'];
+            $receiver_url = $hp_url . '/index.php?site=teams&amp;action=details&amp;id=' . $get[getConstNameTeamId()];
             $receiver_name = $get['team_name'];
         }
 

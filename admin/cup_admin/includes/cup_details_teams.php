@@ -41,19 +41,19 @@ try {
             // max_mode = 1, wenn Cup Modus 1on1
             if ($cupArray['max_mode'] == 1) {
 
-                $user_id = $db['teamID'];
+                $user_id = $db[getConstNameTeamId()];
                 $team_name = getnickname($user_id);
 
                 $admin_info = '';
                 $cup_counter = '';
                 $match_counter = '';
 
-                $detail_url = $profile_url . $db['teamID'];
+                $detail_url = $profile_url . $db[getConstNameTeamId()];
                 $delete_team_from_cup = 'deleteTeam_' . $cup_id . '_' . $user_id;
 
             } else {
 
-                $team_id = $db['teamID'];
+                $team_id = $db[getConstNameTeamId()];
 
                 $teamArray = getteam($team_id);
                 $team_name = $teamArray['name'];

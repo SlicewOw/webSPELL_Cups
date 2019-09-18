@@ -145,7 +145,7 @@ try {
         $logText = '';
         if ($get['isActivePlayer']) {
 
-            $teams .= '<a href="'.$teamLink.$get['team_id'].'" target="_blank" class="list-group-item">'.$get['name'].'</a>';
+            $teams .= '<a href="'.$teamLink.$get[getConstNameTeamIdWithUnderscore()].'" target="_blank" class="list-group-item">'.$get['name'].'</a>';
             $logText = getformatdatetime($get['join_date']);
 
             $anzTeams++;
@@ -164,7 +164,7 @@ try {
 
         }
 
-        $log .= '<a href="'.$teamLink.$get['team_id'].'" target="_blank" class="list-group-item">';
+        $log .= '<a href="'.$teamLink.$get[getConstNameTeamIdWithUnderscore()].'" target="_blank" class="list-group-item">';
         $log .= $get['name'];
         $log .= '<span class="pull-right">'.$logText.'</span>';
         $log .= '</a>';

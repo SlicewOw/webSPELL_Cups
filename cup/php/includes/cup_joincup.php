@@ -203,8 +203,8 @@ try {
                 );
                 while($db = mysqli_fetch_array($info)) {
 
-                    if(getteam($db['teamID'], 'anz_member') >= $minMember) {
-                        $teams .= '<option value="'.$db['teamID'].'">'.$db['name'].'</option>';
+                    if(getteam($db[getConstNameTeamId()], 'anz_member') >= $minMember) {
+                        $teams .= '<option value="'.$db[getConstNameTeamId()].'">'.$db['name'].'</option>';
                     }
 
                 }

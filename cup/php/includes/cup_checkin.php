@@ -126,14 +126,14 @@ try {
             $query = mysqli_query(
                 $_database,
                 "SELECT teamID FROM `" . PREFIX . "cups_teams_member`
-                    WHERE userID = " . $userID . " AND teamID = " . $te['teamID'] . " AND active = 1"
+                    WHERE userID = " . $userID . " AND teamID = " . $te[getConstNameTeamId()] . " AND active = 1"
             );
             $anz = mysqli_num_rows($query);
             if ($anz == 1) {
 
                 $get_team = mysqli_fetch_array($query);
 
-                $teamID = $get_team['teamID'];
+                $teamID = $get_team[getConstNameTeamId()];
 
                 $mode = $cupArray['max_mode'];
                 if (($mode == '2') && (getteam($teamID, 'anz_member') == '2')) {

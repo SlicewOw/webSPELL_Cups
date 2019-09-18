@@ -71,7 +71,7 @@ function deleteImageFromDatabase($table_name, $column_banner_name, $column_activ
 
     $updateQuery = mysqli_query(
         $_database,
-        "UPDATE `" . PREFIX . $table_name . "` 
+        "UPDATE `" . PREFIX . $table_name . "`
             SET " . $setValue . "
             WHERE `" . $primary_key_name . "` = " . $primary_key_id
     );
@@ -296,7 +296,7 @@ function getCupTeamImage($team_id, $returnAsFullImageLink = TRUE) {
     $filePath = __DIR__ . '/../../images' . $imagePath;
 
     if (!file_exists($filePath)) {
-        deleteImageFromDatabase('cups_teams', 'logotype', '', 'teamID', $team_id);
+        deleteImageFromDatabase('cups_teams', 'logotype', '', getConstNameTeamId(), $team_id);
         return $default_image;
     }
 
@@ -317,18 +317,18 @@ function getCupBanner($cup_id, $returnAsFullImageLink = TRUE) {
 }
 
 function getCupImage($cup_id, $category, $returnAsFullImageLink) {
-    
+
     $default_image = '';
 
     $allowedCategoryArray = array(
         'cup_icon',
         'cup_banner'
     );
-    
+
     if (empty($category) || !in_array($category, $allowedCategoryArray)) {
         return $default_image;
     }
-    
+
     $selectQuery = cup_query(
         "SELECT
                 `" . $category . "`
@@ -336,7 +336,7 @@ function getCupImage($cup_id, $category, $returnAsFullImageLink) {
             WHERE `cupID` = " . $cup_id,
         __FILE__
     );
-    
+
     $get = mysqli_fetch_array($selectQuery);
 
     $iconExtensionsAllowed = array(

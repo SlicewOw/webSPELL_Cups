@@ -28,7 +28,7 @@ try {
 
     } else {
 
-        $teamArray = getteam($userID, 'teamID');
+        $teamArray = getteam($userID, getConstNameTeamId());
 
         $whereClause = '';
         if (validate_array($teamArray, true)) {

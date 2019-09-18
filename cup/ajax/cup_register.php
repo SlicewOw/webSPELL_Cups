@@ -21,7 +21,7 @@ try {
             ),
             'team_details' => array(
                 'isRegistered' => FALSE,
-                'team_id' => 0,
+                getConstNameTeamIdWithUnderscore() => 0,
                 'html' => ''
             ),
             'policy_confirm' => array(
@@ -78,10 +78,10 @@ try {
             throw new \UnexpectedValueException('error_checkValue');
         }
 
-        $team_id = $isRegistered['team_id'];
+        $team_id = $isRegistered[getConstNameTeamIdWithUnderscore()];
 
         $returnArray['team_details']['isRegistered'] = TRUE;
-        $returnArray['team_details']['team_id'] = $team_id;
+        $returnArray['team_details'][getConstNameTeamIdWithUnderscore()] = $team_id;
 
         //
         // Team Data Array
@@ -121,8 +121,8 @@ try {
             'html' => ''
         );
 
-        $team_id = (isset($_GET['team_id']) && validate_int($_GET['team_id'], true)) ?
-            (int)$_GET['team_id'] : 0;
+        $team_id = (isset($_GET[getConstNameTeamIdWithUnderscore()]) && validate_int($_GET[getConstNameTeamIdWithUnderscore()], true)) ?
+            (int)$_GET[getConstNameTeamIdWithUnderscore()] : 0;
 
         if ($team_id < 1) {
             throw new \UnexpectedValueException('unknown_team');

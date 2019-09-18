@@ -49,7 +49,7 @@ try {
 
             while ($db = mysqli_fetch_array($selectQuery)) {
 
-                $team_id = $db['teamID'];
+                $team_id = $db[getConstNameTeamId()];
 
                 $url = 'index.php?site=teams&amp;action=details&amp;id=' . $team_id;
 

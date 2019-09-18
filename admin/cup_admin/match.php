@@ -106,7 +106,7 @@ try {
                 ORDER BY name ASC"
         );
         while($db = mysqli_fetch_array($query)) {
-            $teams .= '<option value="'.$db['teamID'].'">'.$db['name'].'</option>';
+            $teams .= '<option value="'.$db[getConstNameTeamId()].'">'.$db['name'].'</option>';
         }
 
         $data_array = array();

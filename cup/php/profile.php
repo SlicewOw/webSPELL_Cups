@@ -238,7 +238,7 @@ try {
 
             while ( $db = mysqli_fetch_array($teamSelectQuery) ) {
 
-                $team_id = $db['teamID'];
+                $team_id = $db[getConstNameTeamId()];
 
                 $teamInfo = getteam($team_id, 'name');
                 $teamInfo .= '<span class="pull-right">' . getformatdatetime($db['join_date']) . '</span>';

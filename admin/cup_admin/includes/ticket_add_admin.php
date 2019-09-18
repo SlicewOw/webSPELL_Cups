@@ -117,7 +117,7 @@ try {
                 }
 
                 if($team > 0) {
-                    $_SESSION['support']['team_id'] = $team;
+                    $_SESSION['support'][getConstNameTeamIdWithUnderscore()] = $team;
                 }
 
                 $opponentID	= (isset($_POST['team2_id']) && validate_int($_POST['team2_id'])) ?
@@ -246,7 +246,7 @@ try {
         $catID = isset($_GET['catID']) ? (int)$_GET['catID'] : '0';
         $cupID 		= isset($_GET[getConstNameCupId()]) ? (int)$_GET[getConstNameCupId()] : '0';
         $matchID 	= isset($_GET['mID']) ? (int)$_GET['mID'] : '0';
-        $teamID 	= isset($_GET['teamID']) ? (int)$_GET['teamID'] : '0';
+        $teamID 	= isset($_GET[getConstNameTeamId()]) ? (int)$_GET[getConstNameTeamId()] : '0';
         $user_id 	= isset($_GET['userID']) ? (int)$_GET['userID'] : '0';
 
         $select_cup_visible = 'ticket_form_invisble';
@@ -397,11 +397,11 @@ try {
 
             }
 
-            if(isset($_SESSION['support']['team_id'])) {
+            if(isset($_SESSION['support'][getConstNameTeamIdWithUnderscore()])) {
 
                 $teams = str_replace(
-                    'value="'.$_SESSION['support']['team_id'].'"',
-                    'value="'.$_SESSION['support']['team_id'].'" selected="selected"',
+                    'value="'.$_SESSION['support'][getConstNameTeamIdWithUnderscore()].'"',
+                    'value="'.$_SESSION['support'][getConstNameTeamIdWithUnderscore()].'" selected="selected"',
                     $teams
                 );
 

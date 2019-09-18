@@ -22,7 +22,7 @@ if ($loggedin && ($team_id > 0) && ($user_id < 1) && isinteam($userID, $team_id,
         mysqli_query(
             $_database,
             "SELECT COUNT(*) AS anz FROM `".PREFIX."cups_teams_member`
-                WHERE teamID = ".$ds['teamID']." AND active = 1"
+                WHERE teamID = ".$ds[getConstNameTeamId()]." AND active = 1"
         )
     );
 

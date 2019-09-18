@@ -78,7 +78,7 @@ try {
 
                         while ($db = mysqli_fetch_array($team)) {
 
-                            $user_id = $db['teamID'];
+                            $user_id = $db[getConstNameTeamId()];
 
                             $url = 'index.php?site=profile&id=' . $user_id . '#content';
 
@@ -94,7 +94,7 @@ try {
 
                         while ($db = mysqli_fetch_array($team)) {
 
-                            $team_id = $db['teamID'];
+                            $team_id = $db[getConstNameTeamId()];
 
                             $teamArray = getteam($team_id, '');
                             $url = 'index.php?site=teams&amp;action=details&amp;id=' . $team_id;

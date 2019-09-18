@@ -14,8 +14,8 @@ try {
         throw new \UnexpectedValueException($_language->module['access_denied']);
     }
 
-    $team_id = (isset($_POST['team_id']) && validate_int($_POST['team_id'], true)) ?
-        (int)$_POST['team_id'] : 0;
+    $team_id = (isset($_POST[getConstNameTeamIdWithUnderscore()]) && validate_int($_POST[getConstNameTeamIdWithUnderscore()], true)) ?
+        (int)$_POST[getConstNameTeamIdWithUnderscore()] : 0;
 
     if ($team_id < 1) {
         throw new \UnexpectedValueException($_language->module['team_not_found']);

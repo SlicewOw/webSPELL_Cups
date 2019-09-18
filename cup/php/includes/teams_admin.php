@@ -169,11 +169,11 @@ try {
 
             $name = $ds['name'];
             $date = getformatdatetime($ds['date']);
-            $link = $hp_url . '/index.php?site=teams&amp;action=join&amp;id='.$ds['teamID'].'&amp;pw='.$ds['password'];
+            $link = $hp_url . '/index.php?site=teams&amp;action=join&amp;id='.$ds[getConstNameTeamId()].'&amp;pw='.$ds['password'];
 
             $adminArray = array();
-            $adminArray[] = '<a href="index.php?site=teams&amp;action=details&amp;id='.$ds['teamID'].'">'.$_language->module['team_view'].'</a>';
-            $adminArray[] =  '<a href="index.php?site=teams&amp;action=leave&amp;id='.$ds['teamID'].'">'.$_language->module['team_leave'].'</a>';
+            $adminArray[] = '<a href="index.php?site=teams&amp;action=details&amp;id='.$ds[getConstNameTeamId()].'">'.$_language->module['team_view'].'</a>';
+            $adminArray[] =  '<a href="index.php?site=teams&amp;action=leave&amp;id='.$ds[getConstNameTeamId()].'">'.$_language->module['team_leave'].'</a>';
 
             $data_array = array();
             $data_array['$name'] = $name;

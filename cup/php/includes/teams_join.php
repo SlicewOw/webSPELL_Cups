@@ -44,7 +44,7 @@ try {
         mysqli_query(
             $_database,
             "SELECT memberID FROM ".PREFIX."cups_teams_member
-                WHERE userID = ".$userID." AND teamID = ".$ds['teamID']." AND active = 1"
+                WHERE userID = ".$userID." AND teamID = ".$ds[getConstNameTeamId()]." AND active = 1"
         )
     );
 

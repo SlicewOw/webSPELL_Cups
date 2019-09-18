@@ -30,7 +30,7 @@ try {
         } else if (isset($_POST['submitRegisterLogoff'])) {
 
             $cup_id = (int)$_POST['cupCupID'];
-            $team_id = (int)$_POST['team_id'];
+            $team_id = (int)$_POST[getConstNameTeamIdWithUnderscore()];
 
             $query = cup_query(
                 "DELETE FROM `" . PREFIX . "cups_teilnehmer`
@@ -229,14 +229,14 @@ try {
                 }
 
                 $teamArray[$subget['platzierung'] - 1]['name'] = $name;
-                $teamArray[$subget['platzierung'] - 1]['id'] = $subget['team_id'];
+                $teamArray[$subget['platzierung'] - 1]['id'] = $subget[getConstNameTeamIdWithUnderscore()];
                 $teamArray[$subget['platzierung'] - 1]['tag'] = $subget['team_tag'];
                 $teamArray[$subget['platzierung'] - 1]['visible'] = '';
 
                 if ($get['mode'] == '1on1') {
-                    $logotype = getuserpic($subget['team_id'], true);
+                    $logotype = getuserpic($subget[getConstNameTeamIdWithUnderscore()], true);
                 } else {
-                    $logotype = getCupTeamImage($subget['team_id'], true);
+                    $logotype = getCupTeamImage($subget[getConstNameTeamIdWithUnderscore()], true);
                 }
 
                 $imageAttributeArray = array();

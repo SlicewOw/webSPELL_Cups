@@ -27,8 +27,8 @@ try {
                 $user_id = (isset($_POST['user_id']) && validate_int($_POST['user_id'], true)) ?
                     (int)$_POST['user_id'] : 0;
 
-                $team_id = (isset($_POST['team_id']) && validate_int($_POST['team_id'], true)) ?
-                    (int)$_POST['team_id'] : 0;
+                $team_id = (isset($_POST[getConstNameTeamIdWithUnderscore()]) && validate_int($_POST[getConstNameTeamIdWithUnderscore()], true)) ?
+                    (int)$_POST[getConstNameTeamIdWithUnderscore()] : 0;
 
                 if (($user_id < 1) && ($team_id < 1)) {
                     throw new \UnexpectedValueException($_language->module['error_penalty_no_parent_id']);
@@ -462,8 +462,8 @@ try {
 
                         $penalty_id = $ds['ppID'];
 
-                        if ($ds['teamID'] > 0) {
-                            $profile = 'admincenter.php?site=cup&amp;mod=teams&amp;action=active&amp;teamID=' . $ds['teamID'];
+                        if ($ds[getConstNameTeamId()] > 0) {
+                            $profile = 'admincenter.php?site=cup&amp;mod=teams&amp;action=active&amp;teamID=' . $ds[getConstNameTeamId()];
                             $name = $ds['team_name'];
                         } else {
                             $profile = 'admincenter.php?site=cup&amp;mod=gameaccounts&amp;action=log&amp;user_id=' . $ds['userID'];
@@ -479,7 +479,7 @@ try {
                         $data_array['$admin'] = $ds['adminname'];
                         $data_array['$duration'] = getformatdatetime($ds['duration_time']);
 
-                        if ($ds['teamID'] > 0) {
+                        if ($ds[getConstNameTeamId()] > 0) {
                             $team_penalty_list .= $GLOBALS["_template_cup"]->replaceTemplate("penalty_list", $data_array);
                             $team_counter++;
                         } else {

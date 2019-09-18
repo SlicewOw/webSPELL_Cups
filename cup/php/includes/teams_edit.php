@@ -4,10 +4,10 @@ if ($loggedin) {
 
     if (isset($_POST['submit_team_edit'])) {
 
-        if (isset($_POST['team_id'])) {
-            $team_id = $_POST['team_id'];
-        } else if (isset($_POST['teamID'])) {
-            $team_id = $_POST['teamID'];
+        if (isset($_POST[getConstNameTeamIdWithUnderscore()])) {
+            $team_id = $_POST[getConstNameTeamIdWithUnderscore()];
+        } else if (isset($_POST[getConstNameTeamId()])) {
+            $team_id = $_POST[getConstNameTeamId()];
         } else {
             $team_id = 0;
         }

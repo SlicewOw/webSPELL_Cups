@@ -55,7 +55,7 @@ while ($ds = mysqli_fetch_array($info)) {
 
     $detailed_info = '<span class="pull-right grey">' . $ds['hits'] . ' ' . $detailed_info_txt . '</span>';
 
-    $teams_list .= '<a href="' . $base_team_url . $ds['teamID'] . '" class="list-group-item">' . $ds['name'] . $detailed_info . '</a>';
+    $teams_list .= '<a href="' . $base_team_url . $ds[getConstNameTeamId()] . '" class="list-group-item">' . $ds['name'] . $detailed_info . '</a>';
 
 }
 
@@ -84,6 +84,6 @@ while ($ds = mysqli_fetch_array($info)) {
 
     $detailed_info = '<span class="pull-right grey">' . $ds['anz'] . ' ' . $detailed_info_txt . '</span>';
 
-    $team_member_list .= '<a href="' . $base_team_url . $ds['teamID'] . '" class="list-group-item">' . getteam($ds['teamID'], 'name') . $detailed_info . '</a>';
+    $team_member_list .= '<a href="' . $base_team_url . $ds[getConstNameTeamId()] . '" class="list-group-item">' . getteam($ds[getConstNameTeamId()], 'name') . $detailed_info . '</a>';
 
 }

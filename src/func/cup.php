@@ -37,7 +37,7 @@ function updateCupStatistics() {
 
     while ($get = mysqli_fetch_array($query)) {
 
-        $team_id = $get['teamID'];
+        $team_id = $get[getConstNameTeamId()];
 
         $updateCupAwardsCategories = array(
             'anz_cups',
@@ -98,7 +98,7 @@ function updateCupStatistics() {
                 __FILE__
             );
 
-            $teamname = getteam($get['teamID'], 'name');
+            $teamname = getteam($get[getConstNameTeamId()], 'name');
 
             setCupTeamLog($team_id, $teamname, 'award_received_' . $award_id);
 
@@ -1510,7 +1510,7 @@ function cup_checkin($cup_id, $user_id, $cat = '') {
                     "SELECT
                             COUNT(*) AS `anz`
                         FROM `".PREFIX."cups_teams_member`
-                        WHERE `userID` = " . $user_id . " AND `teamID` = " . $te['teamID'] . " AND `active` = 1"
+                        WHERE `userID` = " . $user_id . " AND `teamID` = " . $te[getConstNameTeamId()] . " AND `active` = 1"
                 )
             );
 
@@ -1620,7 +1620,7 @@ function getcup($id, $cat = '') {
 
             $i=0;
             while ($ds = mysqli_fetch_array($info)) {
-                $arr[$i++] = $ds['teamID'];
+                $arr[$i++] = $ds[getConstNameTeamId()];
             }
 
             shuffle($arr);
@@ -1985,7 +1985,7 @@ function cup($cupID, $teamID, $cat) {
                                 "SELECT
                                         COUNT(*) AS `anz`
                                     FROM `" . PREFIX . "cups_teilnehmer`
-                                    WHERE `cupID` = " . $cupID . " AND `teamID` = " . $dx['teamID']
+                                    WHERE `cupID` = " . $cupID . " AND `teamID` = " . $dx[getConstNameTeamId()]
                             )
                         );
 
@@ -2079,7 +2079,7 @@ function getteam($id, $cat = '') {
         } else {
             $returnValue = FALSE;
         }
-    } else if ($cat == 'teamID') {
+    } else if ($cat == getConstNameTeamId()) {
 
         $info = mysqli_query(
             $_database,
@@ -2092,7 +2092,7 @@ function getteam($id, $cat = '') {
         if (mysqli_num_rows($info)) {
             $IDs = array();
             while ($ds = mysqli_fetch_array($info)) {
-                $IDs[] = $ds['teamID'];
+                $IDs[] = $ds[getConstNameTeamId()];
             }
             $returnValue = $IDs;
         } else {
@@ -2240,7 +2240,7 @@ function getteam($id, $cat = '') {
                     $isVisible = 1;
                 }
 
-                $team_id	= $ds['teamID'];
+                $team_id	= $ds[getConstNameTeamId()];
                 $date		= $ds['date'];
                 $name		= $ds['name'];
                 $tag		= $ds['tag'];
@@ -2310,7 +2310,7 @@ function getteams($selected = '') {
 	$teams = '<option value="0">-- / --</option>';
 	if(mysqli_num_rows($info)) {
 		while($ds = mysqli_fetch_array($info)) {
-			$teams .= '<option value="'.$ds['teamID'].'">'.$ds['name'].'</option>';
+			$teams .= '<option value="'.$ds[getConstNameTeamId()].'">'.$ds['name'].'</option>';
 		}
 	}
 
@@ -2323,7 +2323,7 @@ function getcupteams($user_id = '', $default = '') {
 	$teams = (empty($default)) ? '<option value="0">- / -</option>' : '';
 	$team_id = mysqli_query($_database, "SELECT teamID, name FROM `".PREFIX."cups_teams`".$where_clause." ORDER BY name");
 	while($ds = mysqli_fetch_array($team_id)) {
-		$teams .= '<option value="'.$ds['teamID'].'">'.$ds['name'].' (ID: '.$ds['teamID'].')</option>';
+		$teams .= '<option value="'.$ds[getConstNameTeamId()].'">'.$ds['name'].' (ID: '.$ds[getConstNameTeamId()].')</option>';
 	}
 	return $teams;
 }
@@ -3117,7 +3117,7 @@ function getpenalty($id, $cat = '') {
             "admin_id" => $ds['adminID'],
             "date" => $ds['date'],
             "expires" => $ds['duration_time'],
-            "team_id" => $ds['teamID'],
+            "team_id" => $ds[getConstNameTeamId()],
             "user_id" => $ds['userID'],
             "reason_id" => $ds['reasonID'],
             "comment" => $ds['comment'],
@@ -3373,7 +3373,7 @@ function getticket_anz($status, $user_id, $cat) {
 
         $whereClause = '(userID = '.$user_id;
 
-        $teamArray = getteam($user_id, 'teamID');
+        $teamArray = getteam($user_id, getConstNameTeamId());
         if (validate_array($teamArray, true)) {
 
             $teamString = implode(', ', $teamArray);
@@ -3544,7 +3544,7 @@ function getTicketAccess($ticket_id) {
 
     $returnValue = FALSE;
 
-    $teamArray = getteam($userID, 'teamID');
+    $teamArray = getteam($userID, getConstNameTeamId());
 
     $andWhereClauseArray = array();
     $andWhereClauseArray[] = '`ticketID` = '.$ticket_id;
@@ -3867,12 +3867,12 @@ function getStatistic($cat, $minValue, $maxValue, $anz = 5, $arrayAsReturn = TRU
         while($get = mysqli_fetch_array($query)) {
 
             $name = '';
-            if($get['team_id'] > 0) {
-                $name = getteam($get['team_id'], 'name');
+            if($get[getConstNameTeamIdWithUnderscore()] > 0) {
+                $name = getteam($get[getConstNameTeamIdWithUnderscore()], 'name');
             }
 
             $returnArray[] = array(
-                'id'    => $get['team_id'],
+                'id'    => $get[getConstNameTeamIdWithUnderscore()],
                 'name'  => $name,
                 'count' => $get['count_anz']
             );

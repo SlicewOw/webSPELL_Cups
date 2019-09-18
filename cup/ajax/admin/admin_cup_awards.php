@@ -119,8 +119,8 @@ try {
                     $award_id = $get['awardID'];
 
                     $id = 0;
-                    if($get['teamID'] > 0) {
-                        $id = $get['teamID'];
+                    if($get[getConstNameTeamId()] > 0) {
+                        $id = $get[getConstNameTeamId()];
                         $teamArray = getteam($id);
                         $detail_url = 'admincenter.php?site=cup&amp;mod=teams&amp;action=active&amp;teamID='.$id;
                     } else if($get['userID'] > 0) {

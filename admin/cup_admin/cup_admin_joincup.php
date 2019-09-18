@@ -183,7 +183,7 @@ try {
             );
 
             while ($get = mysqli_fetch_array($selectParticipantsQuery)) {
-                $registeredParticipantArray[] = $get['teamID'];
+                $registeredParticipantArray[] = $get[getConstNameTeamId()];
             }
 
             $teams = '';
@@ -252,13 +252,13 @@ try {
 
                 while ($db = mysqli_fetch_array($info)) {
 
-                    if (($maxMode == 2) && (getteam($db['teamID'], 'anz_member') == $maxMode)) {
+                    if (($maxMode == 2) && (getteam($db[getConstNameTeamId()], 'anz_member') == $maxMode)) {
 
-                        $teams .= '<option value="'.$db['teamID'].'">'.$db['name'].'</option>';
+                        $teams .= '<option value="'.$db[getConstNameTeamId()].'">'.$db['name'].'</option>';
 
-                    } else if (($maxMode != 2) && getteam($db['teamID'], 'anz_member') >= $maxMode) {
+                    } else if (($maxMode != 2) && getteam($db[getConstNameTeamId()], 'anz_member') >= $maxMode) {
 
-                        $teams .= '<option value="'.$db['teamID'].'">'.$db['name'].'</option>';
+                        $teams .= '<option value="'.$db[getConstNameTeamId()].'">'.$db['name'].'</option>';
 
                     }
 

@@ -425,7 +425,7 @@ try {
                     $nickname = $getGameaccount['nickname'];
 
                     $returnArray['player'][$team] = array(
-                        'team_id' => $user_id,
+                        getConstNameTeamIdWithUnderscore() => $user_id,
                         'details' => array(
                             'name' => $nickname,
                             'tag' => $nickname
@@ -601,7 +601,7 @@ try {
                     }
 
                     $returnArray['player'][$team] = array(
-                        'team_id' => $team_id,
+                        getConstNameTeamIdWithUnderscore() => $team_id,
                         'details' => array(
                             'name' => $subget['name'],
                             'tag' => $subget['tag']
@@ -617,7 +617,7 @@ try {
             } else {
 
                 $returnArray['player'][$team] = array(
-                    'team_id' => 0,
+                    getConstNameTeamIdWithUnderscore() => 0,
                     'details' => array(
                         'name' => 'freilos',
                         'tag' => 'freilos'

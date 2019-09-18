@@ -26,8 +26,8 @@ try {
                 $category_id = (isset($_POST['categoryID']) && validate_int($_POST['categoryID'])) ?
                     (int)$_POST['categoryID'] : 0;
 
-                $team_id = (isset($_POST['teamID']) && validate_int($_POST['teamID'])) ?
-                    (int)$_POST['teamID'] : 0;
+                $team_id = (isset($_POST[getConstNameTeamId()]) && validate_int($_POST[getConstNameTeamId()])) ?
+                    (int)$_POST[getConstNameTeamId()] : 0;
 
                 $opponent_id = (isset($_POST['opponentID']) && validate_int($_POST['opponentID'])) ?
                     (int)$_POST['opponentID'] : 0;

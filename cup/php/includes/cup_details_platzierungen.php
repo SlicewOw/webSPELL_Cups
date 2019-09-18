@@ -39,7 +39,7 @@ try {
 
         while ($get = mysqli_fetch_array($getCupPlacementsQuery)) {
 
-            $team_id = $get['team_id'];
+            $team_id = $get[getConstNameTeamIdWithUnderscore()];
 
             if ($get['cup_mode'] == '1on1') {
                 $url = 'index.php?site=profile&amp;id=' . $team_id;
