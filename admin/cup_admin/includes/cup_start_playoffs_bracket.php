@@ -77,7 +77,7 @@ for ($n = 1; $n < ($anzRunden + 1); $n++) {
             //
             // 15min nach Cup-Start
             // start_date + (runde * 1h) + 15min
-            $date = $cupArray['start'] + ((($n - 1) * 3600) + 900);
+            $date = $cupArray[getConstNameStart()] + ((($n - 1) * 3600) + 900);
 
             //
             // Map Pool

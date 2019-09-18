@@ -237,17 +237,17 @@ try {
             $minutes
         );
 
-        $date_start = date('Y-m-d', $cupArray['start']);
+        $date_start = date('Y-m-d', $cupArray[getConstNameStart()]);
 
         $hours_sd = str_replace(
-            'value="'.date('H', $cupArray['start']).'"',
-            'value="'.date('H', $cupArray['start']).'" selected="selected"',
+            'value="'.date('H', $cupArray[getConstNameStart()]).'"',
+            'value="'.date('H', $cupArray[getConstNameStart()]).'" selected="selected"',
             $hours
         );
 
         $minutes_sd = str_replace(
-            'value="'.date('i', $cupArray['start']).'"',
-            'value="'.date('i', $cupArray['start']).'" selected="selected"',
+            'value="'.date('i', $cupArray[getConstNameStart()]).'"',
+            'value="'.date('i', $cupArray[getConstNameStart()]).'" selected="selected"',
             $minutes
         );
 

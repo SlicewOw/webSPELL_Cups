@@ -28,9 +28,9 @@ try {
     if (preg_match('/register/', $cupArray[getConstNamePhase()])) {
         $timeLeft = $cupArray['checkin'] - $timeNow;
     } else if (preg_match('/checkin/', $cupArray[getConstNamePhase()]) || $cupArray[getConstNamePhase()] == 'finished') {
-        $timeLeft = $cupArray['start'] - $timeNow;
-    } else if (($cupArray['start'] - $timeNow) > 0) {
-        $timeLeft = $cupArray['start'] - $timeNow;
+        $timeLeft = $cupArray[getConstNameStart()] - $timeNow;
+    } else if (($cupArray[getConstNameStart()] - $timeNow) > 0) {
+        $timeLeft = $cupArray[getConstNameStart()] - $timeNow;
     }
 
     $data_array = array();
@@ -42,7 +42,7 @@ try {
     $data_array['$anz_teams'] = getcup($cup_id, 'anz_teams');
     $data_array['$anz_teams_checkedin'] = getcup($cup_id, 'anz_teams_checkedin');
     $data_array['$date_checkin'] = getformatdatetime($cupArray['checkin']);
-    $data_array['$date_start'] = getformatdatetime($cupArray['start']);
+    $data_array['$date_start'] = getformatdatetime($cupArray[getConstNameStart()]);
     $detailList = $GLOBALS["_template_cup"]->replaceTemplate("home_upcomingcup_details", $data_array);
 
     $data_array = array();

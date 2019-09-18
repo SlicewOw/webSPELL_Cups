@@ -32,7 +32,7 @@ try {
     $info .= '<span class="list-group-item">' . $_language->module['platform'] . ': ' . $cupArray['platform'] . '</span>';
     $info .= '<span class="list-group-item">' . $_language->module['mode'] . ': ' . $cupArray['mode'] . '</span>';
     $info .= '<span class="list-group-item">Check-In: ' . getformatdatetime($cupArray['checkin']) . '</span>';
-    $info .= '<span class="list-group-item">Start: ' . getformatdatetime($cupArray['start']) . '</span>';
+    $info .= '<span class="list-group-item">Start: ' . getformatdatetime($cupArray[getConstNameStart()]) . '</span>';
     if (preg_match('/register/', $cupArray[getConstNamePhase()])) {
         $info .= '<span class="list-group-item">' . $_language->module['teams_registered'] . ': ' . getcup($cup_id, 'anz_teams') . ' / ' . $cupArray['size'] . '</span>';
     } else if (preg_match('/checkin/', $cupArray[getConstNamePhase()]) || $cupArray[getConstNamePhase()] == 'finished') {

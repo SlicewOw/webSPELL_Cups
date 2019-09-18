@@ -91,9 +91,9 @@ try {
             if (preg_match('/register/', $cupArray[getConstNamePhase()])) {
                 $timeLeft = $cupArray['checkin'] - $timeNow;
             } else if (preg_match('/checkin/', $cupArray[getConstNamePhase()]) || $cupArray[getConstNamePhase()] == 'finished') {
-                $timeLeft = $cupArray['start'] - $timeNow;
-            } else if (($cupArray['start'] - $timeNow) > 0) {
-                $timeLeft = $cupArray['start'] - $timeNow;
+                $timeLeft = $cupArray[getConstNameStart()] - $timeNow;
+            } else if (($cupArray[getConstNameStart()] - $timeNow) > 0) {
+                $timeLeft = $cupArray[getConstNameStart()] - $timeNow;
             }
 
             $detailList .= '<div class="list-group-item">' . $_language->module['teams_registered'] . ': ' . $cupArray['teams']['registered'] . ' / '.$cupArray['size'].'</div>';
@@ -104,7 +104,7 @@ try {
             if (empty($upcomingCup)) {
 
                 $detailList .= '<div class="list-group-item">Check-In: '.getformatdatetime($cupArray['checkin']).'</div>';
-                $detailList .= '<div class="list-group-item">Start: '.getformatdatetime($cupArray['start']).'</div>';
+                $detailList .= '<div class="list-group-item">Start: '.getformatdatetime($cupArray[getConstNameStart()]).'</div>';
 
                 $detailList .= '<div class="list-group-item">';
                 $detailList .= '<a class="btn btn-info btn-sm white darkshadow" href="index.php?site=cup&amp;action=details&amp;id='.$cup_id.'">';

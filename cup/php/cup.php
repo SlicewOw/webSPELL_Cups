@@ -107,7 +107,7 @@ try {
                     $date = getformatdatetime($cupArray['checkin']);
                 } else {
                     $size = $cupArray['teams']['checked_in'] . ' / ' . $cupArray['size'];
-                    $date = getformatdatetime($cupArray['start']);
+                    $date = getformatdatetime($cupArray[getConstNameStart()]);
                 }
 
                 $cup_game_tag = $cupArray['game'];

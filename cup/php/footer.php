@@ -26,14 +26,14 @@ try {
             throw new \UnexpectedValueException('unknown_cup_date_checkin');
         }
 
-        if (!isset($cupArray['start'])) {
+        if (!isset($cupArray[getConstNameStart()])) {
             throw new \UnexpectedValueException('unknown_cup_date_start');
         }
 
         if (preg_match('/register/', $cupArray[getConstNamePhase()])) {
             $date = date('Y/m/d H:i:s', $cupArray['checkin']);
         } else if (preg_match('/checkin/', $cupArray[getConstNamePhase()])) {
-            $date = date('Y/m/d H:i:s', $cupArray['start']);
+            $date = date('Y/m/d H:i:s', $cupArray[getConstNameStart()]);
         }
 
     } else if (empty($getSite) || ($getSite == 'home')) {
