@@ -75,11 +75,9 @@ $(document).ready(function () {
 
                         var varData = JSON.parse(data);
                         if (varData.results > 0) {
-                            $("#steamListContainer").html(varData.htmlData);
-                            //$("#saveToGameaccount").css('display', 'block');
+                            $("#steamListContainer").html(varData.html);
                         } else {
                             $("#steamListContainer").html('<div class="list-group-item">%unknown_gameaccount%</div>');
-                            //$("#saveToGameaccount").css('display', 'none');
                         }
 
                     }

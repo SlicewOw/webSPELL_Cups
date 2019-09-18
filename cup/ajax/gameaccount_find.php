@@ -1,11 +1,6 @@
 <?php
 
-$returnArray = array(
-    'status' => FALSE,
-    'message' => array(),
-    'results' => 0,
-    'htmlData' => ''
-);
+$returnArray = getDefaultReturnArray();
 
 try {
 
@@ -94,7 +89,7 @@ try {
                     $data_array['$game'] = $get['game_name'];
                     $data_array['$value'] = $get['value'];
                     $data_array['$active'] = $active;
-                    $returnArray['htmlData'] .= $GLOBALS["_template_cup"]->replaceTemplate("gameaccount_find_list", $data_array);
+                    $returnArray['html'] .= $GLOBALS["_template_cup"]->replaceTemplate("gameaccount_find_list", $data_array);
 
                     $returnArray['results']++;
 
@@ -163,7 +158,7 @@ try {
                 $data_array['$value'] = (is_null($get['value'])) ?
                     '' : $get['value'];
                 $data_array['$active'] = $active;
-                $returnArray['htmlData'] .= $GLOBALS["_template_cup"]->replaceTemplate("gameaccount_find_list", $data_array);
+                $returnArray['html'] .= $GLOBALS["_template_cup"]->replaceTemplate("gameaccount_find_list", $data_array);
 
                 $returnArray['results']++;
 
@@ -218,8 +213,8 @@ try {
             throw new \UnexpectedValueException('wrong_steam64_id');
         }
 
-        $returnArray['htmlData'] .= '<div class="list-group-item">Steam ID:';
-        $returnArray['htmlData'] .= '<span class="pull-right">' . $steam64_id . '</span></div>';
+        $returnArray['html'] .= '<div class="list-group-item">Steam ID:';
+        $returnArray['html'] .= '<span class="pull-right">' . $steam64_id . '</span></div>';
 
         $accountDetails = getCSGOAccountInfo($steam64_id);
 
@@ -228,48 +223,48 @@ try {
         $csgoStatsData = $accountDetails['csgo_stats'];
 
         if (isset($steamProfileData['personaname'])) {
-            $returnArray['htmlData'] .= '<div class="list-group-item">Steam Name:';
-            $returnArray['htmlData'] .= '<span class="pull-right">'.$steamProfileData['personaname'].'</span></div>';
+            $returnArray['html'] .= '<div class="list-group-item">Steam Name:';
+            $returnArray['html'] .= '<span class="pull-right">'.$steamProfileData['personaname'].'</span></div>';
         }
 
         if ($varPage == 'admin') {
 
             if (isset($steamProfileData['realname'])) {
-                $returnArray['htmlData'] .= '<div class="list-group-item">Name:';
-                $returnArray['htmlData'] .= '<span class="pull-right">'.$steamProfileData['realname'].'</span></div>';
+                $returnArray['html'] .= '<div class="list-group-item">Name:';
+                $returnArray['html'] .= '<span class="pull-right">'.$steamProfileData['realname'].'</span></div>';
             }
 
             if (isset($steamProfileData['timecreated'])) {
-                $returnArray['htmlData'] .= '<div class="list-group-item">Erstellt am:';
-                $returnArray['htmlData'] .= '<span class="pull-right">'.getformatdatetime($steamProfileData['timecreated']).'</span></div>';
+                $returnArray['html'] .= '<div class="list-group-item">Erstellt am:';
+                $returnArray['html'] .= '<span class="pull-right">'.getformatdatetime($steamProfileData['timecreated']).'</span></div>';
             }
 
-            $returnArray['htmlData'] .= '<div class="list-group-item">Steam64 ID:';
-            $returnArray['htmlData'] .= '<span class="pull-right">'.$steam64_id.'</span></div>';
+            $returnArray['html'] .= '<div class="list-group-item">Steam64 ID:';
+            $returnArray['html'] .= '<span class="pull-right">'.$steam64_id.'</span></div>';
 
-            $returnArray['htmlData'] .= '<div class="list-group-item">Community Banned?';
+            $returnArray['html'] .= '<div class="list-group-item">Community Banned?';
             if(empty($vacStatusData['CommunityBanned'])) {
-                $returnArray['htmlData'] .= '<span class="pull-right">nein</span></div>';
+                $returnArray['html'] .= '<span class="pull-right">nein</span></div>';
             } else {
-                $returnArray['htmlData'] .= '<span class="pull-right alert-danger">ja</span></div>';
+                $returnArray['html'] .= '<span class="pull-right alert-danger">ja</span></div>';
             }
 
-            $returnArray['htmlData'] .= '<div class="list-group-item">VAC Banned?';
+            $returnArray['html'] .= '<div class="list-group-item">VAC Banned?';
             if(empty($vacStatusData['VACBanned'])) {
-                $returnArray['htmlData'] .= '<span class="pull-right">nein</span></div>';
+                $returnArray['html'] .= '<span class="pull-right">nein</span></div>';
             } else {
-                $returnArray['htmlData'] .= '<span class="pull-right alert-danger">ja</span></div>';
-                $returnArray['htmlData'] .= '<div class="list-group-item">Letzter Bann vor';
-                $returnArray['htmlData'] .= '<span class="pull-right">' . $vacStatusData['DaysSinceLastBan'] . ' Tagen</span></div>';
+                $returnArray['html'] .= '<span class="pull-right alert-danger">ja</span></div>';
+                $returnArray['html'] .= '<div class="list-group-item">Letzter Bann vor';
+                $returnArray['html'] .= '<span class="pull-right">' . $vacStatusData['DaysSinceLastBan'] . ' Tagen</span></div>';
             }
 
-            $returnArray['htmlData'] .= '<div class="list-group-item">Echte Spielzeit:';
-            $returnArray['htmlData'] .= '<span class="pull-right">' . $csgoStatsData['time_played']['hours'] . ' Stunden</span></div>';
+            $returnArray['html'] .= '<div class="list-group-item">Echte Spielzeit:';
+            $returnArray['html'] .= '<span class="pull-right">' . $csgoStatsData['time_played']['hours'] . ' Stunden</span></div>';
 
         }
 
         $extern_url = 'https://steamcommunity.com/profiles/' . $steam64_id;
-        $returnArray['htmlData'] .= '<a href="' . $extern_url . '" target="_blank" class="list-group-item">&raquo; Steam Community Profile</a>';
+        $returnArray['html'] .= '<a href="' . $extern_url . '" target="_blank" class="list-group-item">&raquo; Steam Community Profile</a>';
 
         $selectQuery = cup_query(
             "SELECT
@@ -296,13 +291,13 @@ try {
                 $get = mysqli_fetch_array($subSelectQuery);
 
                 $intern_url = 'admincenter.php?site=cup&amp;mod=gameaccounts&amp;action=log&amp;user_id=' . $get['userID'];
-                $returnArray['htmlData'] .= '<a href="' . $intern_url . '" class="list-group-item">&raquo; '.getnickname($get['userID']).'</a>';
+                $returnArray['html'] .= '<a href="' . $intern_url . '" class="list-group-item">&raquo; '.getnickname($get['userID']).'</a>';
 
             }
 
         }
 
-        $returnArray['htmlData'] .= '<input type="hidden" name="steam64_id" id="hidden_Steam64_ID" value="' . $steam64_id . '" />';
+        $returnArray['html'] .= '<input type="hidden" name="steam64_id" id="hidden_Steam64_ID" value="' . $steam64_id . '" />';
 
         $returnArray['results']++;
 

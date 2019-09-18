@@ -1,17 +1,15 @@
 <?php
 
-$returnArray = array(
-    'status' => 0,
-    'error' => array(),
-    'data' => array(
+$returnArray = getDefaultReturnArray();
+
+try {
+
+    $returnArray['data'] = array(
         'gameaccount' => '',
         'gameaccID' => 0,
         'steamcommunity_id' => '',
         'admin' => array()
-    )
-);
-
-try {
+    );
 
     $_language->readModule('gameaccounts');
 

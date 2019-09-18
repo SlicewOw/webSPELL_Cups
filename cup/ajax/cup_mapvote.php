@@ -1,16 +1,14 @@
 <?php
 
-$returnArray = array(
-    'status' => FALSE,
-    'error' => array(),
-    'veto' => array(
+$returnArray = getDefaultReturnArray();
+
+try {
+
+    $returnArray['veto'] = array(
         'status' => 'error',
         'maps' => '',
         'info' => ''
-    )
-);
-
-try {
+    );
 
     $_language->readModule('cups', true, false);
 

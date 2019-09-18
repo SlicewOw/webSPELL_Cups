@@ -2,10 +2,7 @@
 
 header('Content-Type: application/json');
 
-$returnArray = array(
-    'status' => FALSE,
-    'message' => array()
-);
+$returnArray = getDefaultReturnArray();
 
 try {
 

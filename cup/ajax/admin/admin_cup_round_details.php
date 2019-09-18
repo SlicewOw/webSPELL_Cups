@@ -1,10 +1,6 @@
 <?php
 
-$returnArray = array(
-    'status' => FALSE,
-    'message' => array(),
-    'html' => ''
-);
+$returnArray = getDefaultReturnArray();
 
 try {
 

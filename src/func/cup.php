@@ -4,6 +4,16 @@
  * General
  **/
 
+function getDefaultReturnArray() {
+    return array(
+        'status' => FALSE,
+        'message' => array(),
+        'error' => array(),
+        'html' => '',
+        'results' => 0
+    );
+}
+
 function getCupDefaultLanguage() {
 
     $fallback_language = 'de';

@@ -89,7 +89,7 @@
                         </button>
                     </div>
                     <div class="pull-right">
-                        <button type="button" class="btn btn-default btn-sm" 
+                        <button type="button" class="btn btn-default btn-sm"
                                 data-dismiss="modal">
                             %close%
                         </button>
@@ -185,7 +185,7 @@ $(document).ready(function () {
 
                         varData = JSON.parse(data);
                         if (varData.results > 0) {
-                            $("#steamListContainer").html(varData.htmlData);
+                            $("#steamListContainer").html(varData.html);
                         } else {
                             $("#steamListContainer").html('<div class="list-group-item">%no_gameaccount%</div>');
                         }
@@ -259,7 +259,7 @@ function findGameaccount(value) {
                         } else if (varData.results > 0) {
 
                             $("#resultContainer").fadeOut('slow', function() {
-                                $("#resultContainer").html(varData.htmlData);
+                                $("#resultContainer").html(varData.html);
                                 $("#resultContainer").fadeIn('slow');
                             });
 

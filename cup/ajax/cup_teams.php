@@ -1,10 +1,6 @@
 <?php
 
-$returnArray = array(
-    'status' => FALSE,
-    'error' => array(),
-    'errorStr' => ''
-);
+$returnArray = getDefaultReturnArray();
 
 try {
 
@@ -48,10 +44,6 @@ try {
 } catch (Exception $e) {
     setLog('', $e->getMessage(), __FILE__, $e->getLine());
     $returnArray['error'][] = $e->getMessage();
-}
-
-if (count($returnArray['error']) > 0) {
-    $returnArray['errorStr'] = implode('<br />', $returnArray['error']);
 }
 
 echo json_encode($returnArray);

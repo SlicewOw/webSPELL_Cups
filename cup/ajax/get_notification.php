@@ -1,15 +1,13 @@
 <?php
 
-$returnArray = array(
-    'status' => FALSE,
-    'message' => array(),
-    'notification' => array(
-        'badge' => 0,
-        'container' => ''
-    )
-);
+$returnArray = getDefaultReturnArray();
 
 try {
+
+    $returnArray['notification'] = array(
+        'badge' => 0,
+        'container' => ''
+    );
 
     $_language->readModule('login');
 

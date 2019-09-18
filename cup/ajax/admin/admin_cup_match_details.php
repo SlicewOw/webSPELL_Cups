@@ -1,10 +1,6 @@
 <?php
 
-$returnArray = array(
-    'status' => FALSE,
-    'text' => '',
-    'message' => array()
-);
+$returnArray = getDefaultReturnArray();
 
 try {
 
@@ -149,7 +145,7 @@ try {
         $data_array['$bannedTeam1'] = $bannedMaps[1];
         $data_array['$bannedTeam2'] = $bannedMaps[2];
         $mapData = $GLOBALS["_template_cup"]->replaceTemplate("cup_match_details_maps", $data_array);
-        $returnArray['text'] = $mapData;
+        $returnArray['html'] = $mapData;
 
         if ($get['cup_mappool'] > 0) {
 
@@ -158,7 +154,7 @@ try {
             $data_array['$match_id'] = $match_id;
             $data_array['$runde'] = $get['runde'];
             $admin_set_maps = $GLOBALS["_template_cup"]->replaceTemplate("cup_match_details_maps_bo" . $getMapsToBePlayed, $data_array);
-            $returnArray['text'] .= $admin_set_maps;
+            $returnArray['html'] .= $admin_set_maps;
 
         }
 
