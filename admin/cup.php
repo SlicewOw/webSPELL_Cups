@@ -49,9 +49,6 @@ try {
             if ($getStatus == "playoffs") {
                 // Cup starten und Playoffs erstellen
                 include(__DIR__ . '/cup_admin/includes/cup_start_playoffs.php');
-            } else if ($getStatus == "groupstage") {
-                // Cup starten und Gruppen erstellen
-                include(__DIR__ . '/cup_admin/includes/cup_start_groupstage.php');
             } else {
                 throw new \UnexpectedValueException($_language->module['access_denied']);
             }
