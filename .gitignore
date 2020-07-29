@@ -13,11 +13,10 @@ languages/*
 _plugins/
 components/
 node_modules/
+vendor/
 !cups/*
 !cups/**/*.php
 !cups/**/*.html
-!package.json
-package-lock.json
 
 # webSPELL #
 ############
