@@ -1,0 +1,24 @@
+{
+    "name": "webspell_ng/cup_addon_frontend",
+    "description": "Composer package of my Cup Add-on for webSPELL NG - front-end only",
+    "authors": [
+        {
+            "name": "SlicewOw",
+            "email": "slicewow@cup-addon.de"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7.4",
+        "webspell_ng/query_builder": "dev-master",
+        "webspell_ng/data_structures": "dev-master",
+        "myrisk/webspell_cup_addon": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.2",
+        "phpstan/phpstan": "^0.12.36"
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

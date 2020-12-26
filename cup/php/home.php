@@ -1,5 +1,7 @@
 <?php
 
+use myrisk\Cup\Enum\CupEnums;
+
 try {
 
     // Cup System written by SlicewOw - myRisk
@@ -188,7 +190,7 @@ try {
                 )
             );
 
-            if ($get['mode'] == '1on1') {
+            if ($get['mode'] == CupEnums::CUP_MODE_1ON1) {
 
                 $subquery = cup_query(
                     "SELECT
@@ -233,7 +235,7 @@ try {
                 $teamArray[$subget['platzierung'] - 1]['tag'] = $subget['team_tag'];
                 $teamArray[$subget['platzierung'] - 1]['visible'] = '';
 
-                if ($get['mode'] == '1on1') {
+                if ($get['mode'] == CupEnums::CUP_MODE_1ON1) {
                     $logotype = getuserpic($subget[getConstNameTeamIdWithUnderscore()], true);
                 } else {
                     $logotype = getCupTeamImage($subget[getConstNameTeamIdWithUnderscore()], true);
@@ -262,17 +264,17 @@ try {
             $data_array['$cupLink'] = 'index.php?site=cup&amp;action=details&amp;id='.$cup_id;
             $data_array['$cupName'] = $get['cup_name'];
             $data_array['$isVisible1'] = $teamArray[0]['visible'];
-            $data_array['$teamLink1'] = ($get['mode'] == '1on1') ?
+            $data_array['$teamLink1'] = ($get['mode'] == CupEnums::CUP_MODE_1ON1) ?
                 $userLink.$teamArray[0]['id'] : $teamLink.$teamArray[0]['id'];
             $data_array['$teamLogotype1'] = $teamArray[0]['logotype'];
             $data_array['$teamName1'] = $teamArray[0]['name'];
             $data_array['$isVisible2'] = $teamArray[1]['visible'];
-            $data_array['$teamLink2'] = ($get['mode'] == '1on1') ?
+            $data_array['$teamLink2'] = ($get['mode'] == CupEnums::CUP_MODE_1ON1) ?
                 $userLink.$teamArray[1]['id'] : $teamLink.$teamArray[1]['id'];
             $data_array['$teamLogotype2'] = $teamArray[1]['logotype'];
             $data_array['$teamName2'] = $teamArray[1]['name'];
             $data_array['$isVisible3'] = $teamArray[2]['visible'];
-            $data_array['$teamLink3'] = ($get['mode'] == '1on1') ?
+            $data_array['$teamLink3'] = ($get['mode'] == CupEnums::CUP_MODE_1ON1) ?
                 $userLink.$teamArray[2]['id'] : $teamLink.$teamArray[2]['id'];
             $data_array['$teamLogotype3'] = $teamArray[2]['logotype'];
             $data_array['$teamName3'] = $teamArray[2]['name'];
