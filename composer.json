@@ -15,8 +15,8 @@
         "myrisk/webspell_cup_addon": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.2",
-        "phpstan/phpstan": "^0.12.36"
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^0.12.90"
     },
     "scripts": {
         "test": "phpunit"

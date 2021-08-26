@@ -1,5 +1,10 @@
 <?php
 
+use webspell_ng\UserSession;
+
+use myrisk\Cup\Handler\TeamHandler;
+
+
 try {
 
     $team_id = (isset($_GET['id']) && validate_int($_GET['id'], true)) ?
@@ -80,23 +85,13 @@ try {
 
     } else {
 
-        $info = mysqli_query(
-            $_database,
-            "SELECT * FROM `" . PREFIX . "cups_teams`
-             WHERE `teamID` = " . $team_id
-        );
+        $team = TeamHandler::getTeamByTeamId($team_id);
 
-        if (mysqli_num_rows($info) != 1) {
-            throw new \UnexpectedValueException($_language->module['no_team']);
-        }
-
-        $ds = mysqli_fetch_array($info);
-
-        if (!(($ds['deleted'] == 0) || (($ds['deleted'] == 1) && (iscupadmin($userID))))) {
+        if (!$team->isDeleted() || ($team->isDeleted() && UserSession::isCupAdmin())) {
             throw new \UnexpectedValueException($_language->module['deleted']);
         }
 
-        if (($ds['deleted'] == 1) && (iscupadmin($userID))) {
+        if ($team->isDeleted() && UserSession::isCupAdmin()) {
             echo showInfo($_language->module['deleted']);
         }
 
@@ -106,17 +101,15 @@ try {
 
         //
         // Team-Admin Rechte
-        $teamAdminAccess = ($userID == $ds['userID']) ? TRUE : FALSE;
+        $teamAdminAccess = ($userID == $team->getTeamAdmin()->getUser()->getUserId()) ? TRUE : FALSE;
 
         if ($teamAdminAccess) {
             echo '<a href="index.php?site=teams&amp;action=admin&amp;id=' . $team_id . '" class="btn btn-info btn-sm white darkshadow">Team Admin</a>';
             echo '<br /><br />';
         }
 
-        $name = $ds['name'];
-
         $detailArray = array();
-        $detailArray[] = $_language->module['created'] . ' ' . getformatdatetime($ds['date']);
+        $detailArray[] = $_language->module['created'] . ' ' . getformatdatetime($team->getCreationDate()->getTimestamp());
 
         if (getteam($team_id, 'anz_matches') == 1) {
             $detailArray[] = '1 ' . $_language->module['match_played1'];
@@ -130,10 +123,10 @@ try {
             $detailArray[] = getteam($team_id, 'anz_cups') . ' ' . $_language->module['cups_played'];
         }
 
-        $detailArray[] = 'Admin: <a href="index.php?site=profile&amp;id=' . $ds['userID'] . '">' . getnickname($ds['userID']) . '</a>';
+        $detailArray[] = 'Admin: <a href="index.php?site=profile&amp;id=' . $team->getTeamAdmin()->getUser()->getUserId() . '">' . $team->getTeamAdmin()->getUser()->getUsername() . '</a>';
 
         $data_array = array();
-        $data_array['$name'] = $name;
+        $data_array['$name'] = $team->getName();
         $data_array['$details'] = implode(' / ', $detailArray);
         $teams_list = $GLOBALS["_template_cup"]->replaceTemplate("teams_details_head", $data_array);
         echo $teams_list;
@@ -142,50 +135,32 @@ try {
 
         $memberArray = array();
 
-        $memberQuery = mysqli_query(
-            $_database,
-            "SELECT
-                    a.`userID` AS `user_id`,
-                    a.`join_date` AS `date_join`,
-                    b.`name` AS `position`,
-                    c.`nickname` AS `nickname`,
-                    c.`firstname` AS `firstname`,
-                    c.`lastname` AS `lastname`
-                FROM `" . PREFIX . "cups_teams_member` a
-                LEFT JOIN `" . PREFIX . "cups_teams_position` b ON a.`position` = b.`positionID`
-                JOIN `" . PREFIX . "user` c ON a.`userID` = c.`userID`
-                WHERE `teamID` = " . $team_id . " AND `active` = 1
-                ORDER BY b.`sort` ASC, a.`join_date` ASC"
-        );
+        $team_members = $team->getMembers();
 
-        if (!$memberQuery) {
-            throw new \UnexpectedValueException($_language->module['query_select_failed']);
-        }
-
-        if (mysqli_num_rows($memberQuery) < 1) {
+        if (empty($team_members)) {
             $members = '<tr><td>' . showInfo($_language->module['no_member']) . '</td></tr>';
         } else {
 
             $members = '';
 
-            while ($dc = mysqli_fetch_array($memberQuery)) {
+            foreach ($team_members as $team_member) {
 
-                $user_id = $dc['user_id'];
+                $user_id = $team_member->getUser()->getUserId();
 
                 $name = '';
 
-                if (!empty($dc['firstname'])) {
-                    $name .= $dc['firstname'] . ' "';
+                if (!empty($team_member->getUser()->getFirstname())) {
+                    $name .= $team_member->getUser()->getFirstname() . ' "';
                 }
 
-                $name .= '<a href="index.php?site=profile&amp;id=' . $user_id . '" class="blue">' . $dc['nickname'] . '</a>';
+                $name .= '<a href="index.php?site=profile&amp;id=' . $user_id . '" class="blue">' . $team_member->getUser()->getUsername() . '</a>';
 
-                if (!empty($dc['firstname'])) {
+                if (!empty($team_member->getUser()->getFirstname)) {
                     $name .= '"';
                 }
 
                 $links = '';
-                if ($loggedin && ($user_id == $userID) && !isinteam($userID, $team_id, 'admin')) {
+                if ($loggedin && ($user_id == $userID) && !$teamAdminAccess) {
 
                     $teamLeaveURL = 'index.php?site=teams&amp;action=delete&amp;id=' . $team_id;
                     $links .= ' <a href="' . $teamLeaveURL . '&amp;player=left" class="btn btn-default btn-xs">' . $_language->module['team_leave'] . '</a>';
@@ -197,8 +172,8 @@ try {
                 $data_array = array();
                 $data_array['$user_id'] = $user_id;
                 $data_array['$name'] = $name;
-                $data_array['$position'] = $dc['position'];
-                $data_array['$date'] = getformatdate($dc['date_join']);
+                $data_array['$position'] = $team_member->getPosition()->getPosition();
+                $data_array['$date'] = getformatdate($team_member->getJoinDate()->getTimestamp());
                 $data_array['$links'] = $links;
                 $members .= $GLOBALS["_template_cup"]->replaceTemplate("teams_details_member", $data_array);
 
