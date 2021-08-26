@@ -1,9 +1,10 @@
 <?php
 
 use webspell_ng\UserSession;
+use webspell_ng\Utils\DateUtils;
 
+use myrisk\Cup\Handler\CupPenaltyHandler;
 use myrisk\Cup\Handler\TeamHandler;
-
 
 try {
 
@@ -14,6 +15,8 @@ try {
         throw new \UnexpectedValueException($_language->module['no_team']);
     }
 
+    $team = TeamHandler::getTeamByTeamId($team_id);
+
     if (validate_array($_POST, true)) {
 
         try {
@@ -22,15 +25,7 @@ try {
 
                 $admin_id = (int)$_POST['changeAdminSelect'];
 
-                $get = mysqli_fetch_array(
-                    mysqli_query(
-                        $_database,
-                        "SELECT `name`, `userID` FROM `" . PREFIX . "cups_teams`
-                            WHERE `teamID` = " . $team_id
-                    )
-                );
-
-                if ($get['userID'] == $admin_id) {
+                if ($team->getTeamAdmin()->getUser()->getUserId() == $admin_id) {
                     throw new \UnexpectedValueException($_language->module['error_still_admin']);
                 }
 
@@ -85,8 +80,6 @@ try {
 
     } else {
 
-        $team = TeamHandler::getTeamByTeamId($team_id);
-
         if (!$team->isDeleted() || ($team->isDeleted() && UserSession::isCupAdmin())) {
             throw new \UnexpectedValueException($_language->module['deleted']);
         }
@@ -109,7 +102,7 @@ try {
         }
 
         $detailArray = array();
-        $detailArray[] = $_language->module['created'] . ' ' . getformatdatetime($team->getCreationDate()->getTimestamp());
+        $detailArray[] = $_language->module['created'] . ' ' . DateUtils::getFormattedDateTime($team->getCreationDate());
 
         if (getteam($team_id, 'anz_matches') == 1) {
             $detailArray[] = '1 ' . $_language->module['match_played1'];
@@ -173,7 +166,7 @@ try {
                 $data_array['$user_id'] = $user_id;
                 $data_array['$name'] = $name;
                 $data_array['$position'] = $team_member->getPosition()->getPosition();
-                $data_array['$date'] = getformatdate($team_member->getJoinDate()->getTimestamp());
+                $data_array['$date'] = DateUtils::getFormattedDate($team_member->getJoinDate());
                 $data_array['$links'] = $links;
                 $members .= $GLOBALS["_template_cup"]->replaceTemplate("teams_details_member", $data_array);
 
@@ -189,46 +182,36 @@ try {
         // Leere Initialisierung
         $penaltyArray = array();
 
-        $time_now = time();
-        $get_pp = mysqli_query(
-            $_database,
-            "SELECT
-                    a.duration_time AS date_duration,
-                    b.name_de AS penalty_name_de,
-                    b.name_uk AS penalty_name_uk,
-                    b.points AS penalty_points,
-                    b.lifetime AS penalty_lifetime
-                FROM `" . PREFIX . "cups_penalty` a
-                JOIN `".PREFIX."cups_penalty_category` b ON a.reasonID = b.reasonID
-                WHERE a.duration_time > " . $time_now . " AND a.teamID = " . $team_id . " AND a.deleted = 0"
-        );
-        if (mysqli_num_rows($get_pp)) {
+        $penalties_of_team = CupPenaltyHandler::getPenaltiesOfTeam($team);
 
-            $penalty = '';
-            while ($get = mysqli_fetch_array($get_pp)) {
+        foreach ($penalties_of_team as $penalty_of_team) {
 
-                if ($get['penalty_points'] == 1) {
-                    $pen = '1 ' . $_language->module['penalty'];
-                } else {
-                    $pen = $get['penalty_points'] . ' ' . $_language->module['penalties'];
-                }
-
-                $penalty = '';
-                $penalty .= '<span class="bold">' . $pen . ':</span>';
-
-                if (isset($_SESSION['language']) && ($_SESSION['language'] == 'de')) {
-                    $penalty .= ' ' . $get['penalty_name_de'];
-                } else {
-                    $penalty .= ' ' . $get['penalty_name_uk'];
-                }
-
-                $penalty .= ' (' . $_language->module['penalty_until'] . ' ' . getformatdatetime($get['date_duration']) . ')';
-
-                $penaltyArray[] = $penalty;
-
+            if (!$penalty_of_team->isActive()) {
+                continue;
             }
 
+            if ($penalty_of_team->getPenaltyCategory()->getPenaltyPoints() == 1) {
+                $pen = '1 ' . $_language->module['penalty'];
+            } else {
+                $pen = $penalty_of_team->getPenaltyCategory()->getPenaltyPoints() . ' ' . $_language->module['penalties'];
+            }
+
+            $penalty = '';
+            $penalty .= '<span class="bold">' . $pen . ':</span>';
+
+            if (isset($_SESSION['language']) && ($_SESSION['language'] == 'de')) {
+                $penalty .= ' ' . $penalty_of_team->getPenaltyCategory()->getNameInGerman();
+            } else {
+                $penalty .= ' ' . $penalty_of_team->getPenaltyCategory()->getNameInEnglish();
+            }
+
+            $penalty .= ' (' . $_language->module['penalty_until'] . ' ' . DateUtils::getFormattedDateTime($penalty_of_team->getDateUntilPenaltyIsActive()) . ')';
+
+            $penaltyArray[] = $penalty;
+
         }
+
+        $time_now = time();
 
         if (validate_array($memberArray, true)) {
 
@@ -237,38 +220,33 @@ try {
             $get_pp = mysqli_query(
                 $_database,
                 "SELECT
-                        a.duration_time AS date_duration,
-                        b.name_de AS penalty_name_de,
-                        b.name_uk AS penalty_name_uk,
-                        b.points AS penalty_points,
-                        b.lifetime AS penalty_lifetime,
-                        c.nickname AS nickname
+                        a.ppID
                     FROM `" . PREFIX . "cups_penalty` a
-                    JOIN `".PREFIX."cups_penalty_category` b ON a.reasonID = b.reasonID
-                    JOIN `".PREFIX."user` c ON a.userID = c.userID
                     WHERE a.duration_time > " . $time_now . " AND a.userID IN (" . $memberList . ") AND a.deleted = 0"
             );
             if (mysqli_num_rows($get_pp)) {
 
                 while ($get = mysqli_fetch_array($get_pp)) {
 
-                    if ($get['penalty_points'] == 1) {
+                    $penalty_of_team_member = CupPenaltyHandler::getPenaltyByPenaltyId((int) $get['ppID']);
+
+                    if ($penalty_of_team_member->getPenaltyCategory()->getPenaltyPoints() == 1) {
                         $pen = '1 ' . $_language->module['penalty'];
                     } else {
-                        $pen = $get['penalty_points'] . ' ' . $_language->module['penalties'];
+                        $pen = $penalty_of_team_member->getPenaltyCategory()->getPenaltyPoints() . ' ' . $_language->module['penalties'];
                     }
 
                     $penalty = '';
                     $penalty .= '<span class="bold">' . $pen . ':</span>';
-                    $penalty .= ' ' . $get['nickname'] . ' -';
 
                     if (isset($_SESSION['language']) && ($_SESSION['language'] == 'de')) {
-                        $penalty .= ' ' . $get['penalty_name_de'];
+                        $penalty .= ' ' . $penalty_of_team_member->getPenaltyCategory()->getNameInGerman();
                     } else {
-                        $penalty .= ' ' . $get['penalty_name_uk'];
+                        $penalty .= ' ' . $penalty_of_team_member->getPenaltyCategory()->getNameInEnglish();
                     }
 
-                    $penalty .= ' (' . $_language->module['penalty_until'] . ' ' . getformatdatetime($get['date_duration']) . ')';
+                    $penalty .= ' (' . $_language->module['penalty_until'] . ' ' . DateUtils::getFormattedDateTime($penalty_of_team_member->getDateUntilPenaltyIsActive()) . ')';
+
 
                     $penaltyArray[] = $penalty;
 

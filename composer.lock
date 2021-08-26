@@ -706,12 +706,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SlicewOw/webSPELL_Cup_AddOn.git",
-                "reference": "a90ad0cb0dbcaf38422ffe00a823e5f2519042c8"
+                "reference": "2aae4b23f503ef12b9c4c20df35f1c63cd8c65cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SlicewOw/webSPELL_Cup_AddOn/zipball/a90ad0cb0dbcaf38422ffe00a823e5f2519042c8",
-                "reference": "a90ad0cb0dbcaf38422ffe00a823e5f2519042c8",
+                "url": "https://api.github.com/repos/SlicewOw/webSPELL_Cup_AddOn/zipball/2aae4b23f503ef12b9c4c20df35f1c63cd8c65cb",
+                "reference": "2aae4b23f503ef12b9c4c20df35f1c63cd8c65cb",
                 "shasum": ""
             },
             "require": {
@@ -751,7 +751,7 @@
                 "issues": "https://github.com/SlicewOw/webSPELL_Cup_AddOn/issues",
                 "source": "https://github.com/SlicewOw/webSPELL_Cup_AddOn/tree/master"
             },
-            "time": "2021-08-24T11:34:24+00:00"
+            "time": "2021-08-26T11:12:21+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -1933,12 +1933,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SlicewOw/webSPELL_NG_DataStructures.git",
-                "reference": "9620d4eeff2df859bffe1ff0b60056b0c9afd4db"
+                "reference": "38fd74445fe4dd258363120b8e6197e8169b5710"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SlicewOw/webSPELL_NG_DataStructures/zipball/9620d4eeff2df859bffe1ff0b60056b0c9afd4db",
-                "reference": "9620d4eeff2df859bffe1ff0b60056b0c9afd4db",
+                "url": "https://api.github.com/repos/SlicewOw/webSPELL_NG_DataStructures/zipball/38fd74445fe4dd258363120b8e6197e8169b5710",
+                "reference": "38fd74445fe4dd258363120b8e6197e8169b5710",
                 "shasum": ""
             },
             "require": {
@@ -1973,7 +1973,7 @@
                 "issues": "https://github.com/SlicewOw/webSPELL_NG_DataStructures/issues",
                 "source": "https://github.com/SlicewOw/webSPELL_NG_DataStructures/tree/master"
             },
-            "time": "2021-06-26T20:20:21+00:00"
+            "time": "2021-08-26T11:09:24+00:00"
         },
         {
             "name": "webspell_ng/query_builder",
